@@ -193,6 +193,91 @@
     cursor:pointer;
   }
 
+  /* ---------- Macro summary + bars ---------- */
+  .macro-summary-card{margin-bottom:16px;}
+  .macro-cal-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
+  .macro-cal-row .num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
+  .macro-cal-row .num span{font-size:14px;font-weight:500;color:var(--text-faint);}
+  .macro-bar-row{margin-bottom:10px;}
+  .macro-bar-row:last-child{margin-bottom:0;}
+  .macro-bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);margin-bottom:4px;}
+  .macro-bar-label b{color:var(--text);}
+  .macro-bar-track{height:6px;border-radius:var(--radius-pill);background:var(--panel-3);overflow:hidden;}
+  .macro-bar-fill{height:100%;border-radius:var(--radius-pill);background:var(--accent);}
+  .macro-bar-fill.protein{background:var(--success);}
+  .macro-bar-fill.carbs{background:#5fa8d6;}
+  .macro-bar-fill.fat{background:var(--accent-2);}
+
+  /* ---------- Quick-add meal form ---------- */
+  .add-meal-card .field-row{display:flex;gap:8px;margin-bottom:8px;}
+  .add-meal-card input{
+    flex:1;
+    min-width:0;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    color:var(--text);
+    font-size:14px;
+    padding:10px 12px;
+  }
+  .add-meal-card input:focus{outline:none;border-color:var(--accent);}
+  .add-meal-card input::placeholder{color:var(--text-faint);}
+
+  /* ---------- Meal list rows ---------- */
+  .meal-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    gap:10px;
+  }
+  .meal-row:last-child{border-bottom:none;}
+  .meal-row-name{font-size:14px;color:var(--text);flex:1;min-width:0;}
+  .meal-row-macros{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);white-space:nowrap;}
+  .meal-row-cal{font-family:'Oswald',sans-serif;font-weight:700;color:var(--accent);white-space:nowrap;}
+  .meal-row-del{
+    background:none;border:none;color:var(--text-faint);
+    font-size:18px;line-height:1;padding:4px 6px;cursor:pointer;
+  }
+
+  /* ---------- History day groups ---------- */
+  .history-day-card .history-day-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:8px;
+  }
+  .history-day-head .date{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--text);}
+  .history-day-head .total{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);}
+
+  /* ---------- Insights bars ---------- */
+  .insight-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .insight-bar-day{width:34px;font-size:11px;color:var(--text-faint);flex-shrink:0;}
+  .insight-bar-track{flex:1;height:16px;background:var(--panel-3);border-radius:var(--radius-xs);overflow:hidden;}
+  .insight-bar-fill{height:100%;background:var(--accent);border-radius:var(--radius-xs);}
+  .insight-bar-val{width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0;}
+
+  /* ---------- Settings ---------- */
+  .settings-group{margin-bottom:18px;}
+  .settings-group h3{
+    font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;
+    letter-spacing:0.05em;text-transform:uppercase;color:var(--text-faint);
+    margin:0 0 10px;
+  }
+  .settings-goal-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;}
+  .settings-goal-row label{font-size:13px;color:var(--text-dim);}
+  .settings-goal-row input{
+    width:80px;text-align:right;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);
+    color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;padding:7px 8px;
+  }
+  .settings-goal-row input:focus{outline:none;border-color:var(--accent);}
+  .btn-danger{
+    display:block;width:100%;background:none;border:1px solid var(--accent-2);
+    color:var(--accent-2);border-radius:var(--radius-xl);font-family:'Oswald',sans-serif;
+    font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;
+    padding:12px;cursor:pointer;
+  }
+
   .hidden{display:none !important;}
 
   .boot-loading{
@@ -244,39 +329,295 @@
 
 <script>
   // =========================================================
-  // SAVIORFUEL — starter scaffold
-  // Visual shell (colors, fonts, tab bar, cards, buttons, fade
-  // transition) copied to match SaviorFit Logger. Everything
-  // below is placeholder: no Firebase, no auth, no real food-
-  // logging logic yet. Next real decisions before this is a
-  // working app:
-  //   1. New Firebase project, or reuse the existing iron-ledge one?
-  //   2. What does a logged meal actually store (name, calories,
-  //      macros, photo, serving size)?
-  //   3. Auth: same email/password + Google pattern as SaviorFit
-  //      Logger, or something simpler to start?
+  // SAVIORFUEL — local-state working version
+  // Visual shell copied from SaviorFit Logger. Data layer here
+  // is 100% local (in-memory + localStorage) — no Firebase, no
+  // auth, no sync across devices yet. That's intentional: this
+  // is meant to prove out the actual product before wiring up a
+  // backend. Data model (meal shape, settings shape) is written
+  // to already look like what would eventually go in Firestore,
+  // so swapping in real persistence later is mostly mechanical.
+  //
+  // Storage key: everything lives under one localStorage key,
+  // 'saviorfuel_local_v1'. Bump the version suffix if the shape
+  // of STORE ever changes in a way that would break old data.
   // =========================================================
 
+  var STORAGE_KEY = 'saviorfuel_local_v1';
+
+  var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65 };
+
+  var STORE = loadStore();
   var state = { tab: 'log' };
+  var ui = { historyOpenDay: null };
 
-  var TAB_EMPTY_STATES = {
-    log: 'Nothing logged yet.<br>Add your first meal to get started.',
-    history: 'No meal history yet.<br>Logged meals will show up here.',
-    insights: 'Nothing to chart yet.<br>Log a few meals and your macro trends will appear here.',
-    settings: 'Settings — coming soon.'
-  };
+  function loadStore(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS) };
+      var parsed = JSON.parse(raw);
+      if (!parsed.goals) parsed.goals = Object.assign({}, DEFAULT_GOALS);
+      if (!parsed.meals) parsed.meals = [];
+      return parsed;
+    } catch (e){
+      console.error('SaviorFuel: failed to load local store, starting fresh —', e);
+      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS) };
+    }
+  }
 
+  function saveStore(){
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(STORE));
+    } catch (e){
+      console.error('SaviorFuel: failed to save local store —', e);
+    }
+  }
+
+  function esc(str){
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  function dateKey(ts){
+    var d = new Date(ts);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function todayKey(){ return dateKey(Date.now()); }
+
+  function formatDateLabel(key){
+    var today = todayKey();
+    var yesterday = dateKey(Date.now() - 86400000);
+    if (key === today) return 'Today';
+    if (key === yesterday) return 'Yesterday';
+    var d = new Date(key + 'T00:00:00');
+    return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  function mealsForDay(key){
+    return STORE.meals.filter(function(m){ return dateKey(m.loggedAt) === key; });
+  }
+
+  function totalsFor(meals){
+    var t = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+    meals.forEach(function(m){
+      t.calories += m.calories || 0;
+      t.protein += m.protein || 0;
+      t.carbs += m.carbs || 0;
+      t.fat += m.fat || 0;
+    });
+    return t;
+  }
+
+  function pct(value, goal){
+    if (!goal) return 0;
+    return Math.max(0, Math.min(100, Math.round((value / goal) * 100)));
+  }
+
+  /* =========================================================
+     RENDER — LOG TAB
+     ========================================================= */
+  function renderLog(){
+    var todayMeals = mealsForDay(todayKey()).sort(function(a,b){ return b.loggedAt - a.loggedAt; });
+    var totals = totalsFor(todayMeals);
+    var g = STORE.goals;
+
+    var html = '<div class="card macro-summary-card">' +
+      '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div></div>' +
+      macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
+      macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
+      macroBarHtml('Fat', totals.fat, g.fat, 'fat') +
+    '</div>';
+
+    html += '<div class="card add-meal-card">' +
+      '<div class="field-row"><input type="text" id="mealName" placeholder="Meal name"></div>' +
+      '<div class="field-row">' +
+        '<input type="number" inputmode="numeric" id="mealCal" placeholder="kcal">' +
+        '<input type="number" inputmode="numeric" id="mealProtein" placeholder="protein g">' +
+      '</div>' +
+      '<div class="field-row">' +
+        '<input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g">' +
+        '<input type="number" inputmode="numeric" id="mealFat" placeholder="fat g">' +
+      '</div>' +
+      '<button class="btn-primary" data-action="add-meal">+ Add Meal</button>' +
+    '</div>';
+
+    if (todayMeals.length === 0){
+      html += '<div class="empty tab-empty-state"><div class="glyph">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+          '<path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path>' +
+        '</svg></div><p>Nothing logged yet today.<br>Add your first meal above.</p></div>';
+    } else {
+      html += '<div class="card">' + todayMeals.map(mealRowHtml).join('') + '</div>';
+    }
+
+    document.getElementById('view').innerHTML = html;
+  }
+
+  function macroBarHtml(label, value, goal, cls){
+    return '<div class="macro-bar-row">' +
+      '<div class="macro-bar-label"><span>' + label + '</span><b>' + Math.round(value) + 'g / ' + goal + 'g</b></div>' +
+      '<div class="macro-bar-track"><div class="macro-bar-fill ' + cls + '" style="width:' + pct(value, goal) + '%"></div></div>' +
+    '</div>';
+  }
+
+  function mealRowHtml(m){
+    return '<div class="meal-row">' +
+      '<div class="meal-row-name">' + esc(m.name) +
+        '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
+      '</div>' +
+      '<div class="meal-row-cal">' + m.calories + '</div>' +
+      '<button class="meal-row-del" data-action="delete-meal" data-id="' + m.id + '" aria-label="Delete">&times;</button>' +
+    '</div>';
+  }
+
+  function addMealFromForm(){
+    var name = document.getElementById('mealName').value.trim();
+    var cal = parseInt(document.getElementById('mealCal').value, 10) || 0;
+    var protein = parseInt(document.getElementById('mealProtein').value, 10) || 0;
+    var carbs = parseInt(document.getElementById('mealCarbs').value, 10) || 0;
+    var fat = parseInt(document.getElementById('mealFat').value, 10) || 0;
+
+    if (!name || cal <= 0) return; // require at least a name + calories
+
+    STORE.meals.push({
+      id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      name: name,
+      calories: cal,
+      protein: protein,
+      carbs: carbs,
+      fat: fat,
+      loggedAt: Date.now()
+    });
+    saveStore();
+    renderApp();
+  }
+
+  function deleteMeal(id){
+    STORE.meals = STORE.meals.filter(function(m){ return m.id !== id; });
+    saveStore();
+    renderApp();
+  }
+
+  /* =========================================================
+     RENDER — HISTORY TAB
+     ========================================================= */
+  function renderHistory(){
+    if (STORE.meals.length === 0){
+      document.getElementById('view').innerHTML =
+        '<div class="empty tab-empty-state"><div class="glyph">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path>' +
+          '</svg></div><p>No meal history yet.<br>Logged meals will show up here.</p></div>';
+      return;
+    }
+
+    var byDay = {};
+    STORE.meals.forEach(function(m){
+      var key = dateKey(m.loggedAt);
+      if (!byDay[key]) byDay[key] = [];
+      byDay[key].push(m);
+    });
+    var days = Object.keys(byDay).sort().reverse();
+
+    var html = days.map(function(key){
+      var meals = byDay[key].sort(function(a,b){ return b.loggedAt - a.loggedAt; });
+      var totals = totalsFor(meals);
+      var isOpen = ui.historyOpenDay === key;
+      var inner = isOpen ? meals.map(mealRowHtml).join('') : '';
+      return '<div class="card history-day-card">' +
+        '<div class="history-day-head" data-action="toggle-history-day" data-day="' + key + '" style="cursor:pointer;">' +
+          '<span class="date">' + formatDateLabel(key) + '</span>' +
+          '<span class="total">' + totals.calories + ' kcal</span>' +
+        '</div>' +
+        inner +
+      '</div>';
+    }).join('');
+
+    document.getElementById('view').innerHTML = html;
+  }
+
+  /* =========================================================
+     RENDER — INSIGHTS TAB
+     ========================================================= */
+  function renderInsights(){
+    var days = [];
+    for (var i = 6; i >= 0; i--){
+      days.push(dateKey(Date.now() - i * 86400000));
+    }
+    var dayTotals = days.map(function(key){
+      return { key: key, total: totalsFor(mealsForDay(key)).calories };
+    });
+    var maxVal = Math.max(STORE.goals.calories, Math.max.apply(null, dayTotals.map(function(d){ return d.total; })), 1);
+
+    if (STORE.meals.length === 0){
+      document.getElementById('view').innerHTML =
+        '<div class="empty tab-empty-state"><div class="glyph">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path>' +
+          '</svg></div><p>Nothing to chart yet.<br>Log a few meals and your trends will appear here.</p></div>';
+      return;
+    }
+
+    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Last 7 days — calories</h3>';
+    html += dayTotals.map(function(d){
+      var label = new Date(d.key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' });
+      return '<div class="insight-bar-row">' +
+        '<div class="insight-bar-day">' + label + '</div>' +
+        '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct(d.total, maxVal) + '%"></div></div>' +
+        '<div class="insight-bar-val">' + d.total + '</div>' +
+      '</div>';
+    }).join('');
+    html += '</div>';
+
+    document.getElementById('view').innerHTML = html;
+  }
+
+  /* =========================================================
+     RENDER — SETTINGS TAB
+     ========================================================= */
+  function renderSettings(){
+    var g = STORE.goals;
+    var html = '<div class="settings-group"><h3>Daily goals</h3><div class="card">' +
+      settingsGoalRow('Calories', 'goalCalories', g.calories) +
+      settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
+      settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
+      settingsGoalRow('Fat (g)', 'goalFat', g.fat) +
+    '</div></div>' +
+    '<div class="settings-group"><h3>Data</h3>' +
+      '<button class="btn-danger" data-action="clear-data">Erase all data</button>' +
+    '</div>';
+    document.getElementById('view').innerHTML = html;
+  }
+
+  function settingsGoalRow(label, id, value){
+    return '<div class="settings-goal-row"><label>' + label + '</label>' +
+      '<input type="number" inputmode="numeric" id="' + id + '" value="' + value + '" data-action-change="save-goal">' +
+    '</div>';
+  }
+
+  function saveGoalsFromInputs(){
+    STORE.goals = {
+      calories: parseInt(document.getElementById('goalCalories').value, 10) || DEFAULT_GOALS.calories,
+      protein: parseInt(document.getElementById('goalProtein').value, 10) || DEFAULT_GOALS.protein,
+      carbs: parseInt(document.getElementById('goalCarbs').value, 10) || DEFAULT_GOALS.carbs,
+      fat: parseInt(document.getElementById('goalFat').value, 10) || DEFAULT_GOALS.fat
+    };
+    saveStore();
+  }
+
+  /* =========================================================
+     RENDER DISPATCH
+     ========================================================= */
   function renderApp(){
     document.querySelectorAll('.tabbar button').forEach(function(btn){
       btn.classList.toggle('active', btn.dataset.tab === state.tab);
     });
-    var html =
-      '<div class="empty tab-empty-state"><div class="glyph">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-          '<path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path>' +
-        '</svg>' +
-      '</div><p>' + TAB_EMPTY_STATES[state.tab] + '</p></div>';
-    document.getElementById('view').innerHTML = html;
+    if (state.tab === 'log') renderLog();
+    else if (state.tab === 'history') renderHistory();
+    else if (state.tab === 'insights') renderInsights();
+    else if (state.tab === 'settings') renderSettings();
   }
 
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
@@ -311,6 +652,28 @@
     var action = el.dataset.action;
     if (action === 'set-tab'){
       switchTab(el.dataset.tab);
+    } else if (action === 'add-meal'){
+      addMealFromForm();
+    } else if (action === 'delete-meal'){
+      deleteMeal(el.dataset.id);
+    } else if (action === 'toggle-history-day'){
+      var day = el.dataset.day;
+      ui.historyOpenDay = (ui.historyOpenDay === day) ? null : day;
+      renderApp();
+    } else if (action === 'clear-data'){
+      if (window.confirm('Erase all logged meals and reset goals? This can\'t be undone.')){
+        STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS) };
+        saveStore();
+        renderApp();
+      }
+    }
+  });
+
+  // Goal inputs save on change (blur/enter), not on every keystroke —
+  // avoids writing to localStorage on every digit typed.
+  document.addEventListener('change', function(e){
+    if (e.target.dataset && e.target.dataset.actionChange === 'save-goal'){
+      saveGoalsFromInputs();
     }
   });
 
