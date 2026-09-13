@@ -763,6 +763,57 @@
   }
 
   var searchRequestId = 0; // guards against a slow older request overwriting a newer one's results
+  var USDA_API_KEY = 'DcPJpdzm8AjRDIpzmzfL3fJavbtVWsAY6bGtEQYi';
+
+  // Normalizes a USDA FoodData Central food into the same shape as an
+  // Open Food Facts product, so the rest of the search/pick pipeline
+  // (pickFoodResult, applySelectedFoodToForm) doesn't need to know or
+  // care which source a result came from.
+  function usdaToProductShape(food){
+    var n = {};
+    (food.foodNutrients || []).forEach(function(fn){
+      if (fn.nutrientName === 'Energy' && fn.unitName === 'KCAL') n['energy-kcal_100g'] = fn.value;
+      else if (fn.nutrientName === 'Protein') n['proteins_100g'] = fn.value;
+      else if (fn.nutrientName === 'Carbohydrate, by difference') n['carbohydrates_100g'] = fn.value;
+      else if (fn.nutrientName === 'Total lipid (fat)') n['fat_100g'] = fn.value;
+    });
+    return { product_name: food.description, brands: food.brandOwner || '', nutriments: n, _source: 'usda' };
+  }
+
+  // Foundation + SR Legacy are USDA's generic/whole-food datasets —
+  // exactly the "plain chicken breast," "egg" category Open Food Facts
+  // is weakest at, since OFF mostly covers branded/packaged items.
+  function fetchUSDA(query){
+    var url = 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + USDA_API_KEY +
+      '&query=' + encodeURIComponent(query) + '&pageSize=10&dataType=Foundation,SR%20Legacy';
+    return fetch(url)
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        return (data.foods || [])
+          .map(usdaToProductShape)
+          .filter(function(p){ return p.product_name && p.nutriments['energy-kcal_100g'] != null; });
+      })
+      .catch(function(err){
+        console.error('SaviorFuel: USDA search failed —', err);
+        return [];
+      });
+  }
+
+  function fetchOpenFoodFacts(query){
+    var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' +
+      encodeURIComponent(query) + '&search_simple=1&action=process&json=1&page_size=15';
+    return fetch(url)
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        return (data.products || [])
+          .map(function(p){ p._source = 'off'; return p; })
+          .filter(function(p){ return p.product_name && p.nutriments && p.nutriments['energy-kcal_100g'] != null; });
+      })
+      .catch(function(err){
+        console.error('SaviorFuel: Open Food Facts search failed —', err);
+        return [];
+      });
+  }
 
   function runFoodSearch(query){
     var resultsEl = document.getElementById('foodSearchResults');
@@ -779,16 +830,13 @@
       resultsEl.insertAdjacentHTML('afterbegin', '<div class="food-suggest-status">Updating...</div>');
     }
 
-    var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' +
-      encodeURIComponent(query) + '&search_simple=1&action=process&json=1&page_size=15';
-
-    fetch(url)
-      .then(function(res){ return res.json(); })
-      .then(function(data){
+    // USDA results (generic foods) listed first, then Open Food Facts
+    // (branded/packaged) — each source can fail independently without
+    // taking the other down with it.
+    Promise.all([fetchUSDA(query), fetchOpenFoodFacts(query)])
+      .then(function(results){
         if (thisRequest !== searchRequestId) return; // a newer search has since superseded this one
-        var products = (data.products || []).filter(function(p){
-          return p.product_name && p.nutriments && p.nutriments['energy-kcal_100g'] != null;
-        });
+        var products = results[0].concat(results[1]);
         if (products.length === 0){
           resultsEl.innerHTML = '<div class="food-suggest-status">No results — try a different search, or just type it in manually below.</div>';
           return;
