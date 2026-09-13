@@ -676,16 +676,32 @@
   function searchFoodDebounced(query){
     clearTimeout(ui.searchDebounce);
     if (!query || query.trim().length < 2){
-      document.getElementById('foodSearchResults').innerHTML = '';
+      var resultsEl = document.getElementById('foodSearchResults');
+      if (resultsEl) resultsEl.innerHTML = '';
       return;
     }
-    ui.searchDebounce = setTimeout(function(){ runFoodSearch(query.trim()); }, 400);
+    // Shorter debounce than you might expect for a network call — paired
+    // with not blanking the list below, this is the closest a remote
+    // search can feel to SaviorFit Logger's instant local exercise search.
+    ui.searchDebounce = setTimeout(function(){ runFoodSearch(query.trim()); }, 250);
   }
+
+  var searchRequestId = 0; // guards against a slow older request overwriting a newer one's results
 
   function runFoodSearch(query){
     var resultsEl = document.getElementById('foodSearchResults');
     if (!resultsEl) return;
-    resultsEl.innerHTML = '<div class="food-search-status">Searching...</div>';
+    var thisRequest = ++searchRequestId;
+
+    // Don't blank existing results while the new query is in flight —
+    // keep whatever's already showing and just add a small "updating"
+    // line above it, so typing doesn't cause a flash-to-empty each
+    // keystroke the way replacing the whole list would.
+    if (!resultsEl.querySelector('.food-search-row')){
+      resultsEl.innerHTML = '<div class="food-search-status">Searching...</div>';
+    } else if (!resultsEl.querySelector('.food-search-status')){
+      resultsEl.insertAdjacentHTML('afterbegin', '<div class="food-search-status">Updating...</div>');
+    }
 
     var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' +
       encodeURIComponent(query) + '&search_simple=1&action=process&json=1&page_size=15';
@@ -693,6 +709,7 @@
     fetch(url)
       .then(function(res){ return res.json(); })
       .then(function(data){
+        if (thisRequest !== searchRequestId) return; // a newer search has since superseded this one
         var products = (data.products || []).filter(function(p){
           return p.product_name && p.nutriments && p.nutriments['energy-kcal_100g'] != null;
         });
@@ -712,6 +729,7 @@
         ui.lastSearchProducts = products; // stashed so pick-food can look up by index without re-fetching
       })
       .catch(function(err){
+        if (thisRequest !== searchRequestId) return;
         console.error('SaviorFuel food search failed —', err);
         resultsEl.innerHTML = '<div class="food-search-status">Search failed — check your connection, or type the meal in manually below.</div>';
       });
