@@ -325,6 +325,37 @@
     font-size:12px;padding:5px 6px;text-align:center;
   }
 
+  /* ---------- Barcode scanner overlay ---------- */
+  .scan-btn{
+    display:block;width:100%;background:var(--panel-2);border:1px solid var(--line);
+    color:var(--text);border-radius:var(--radius-sm);font-family:'Oswald',sans-serif;
+    font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;
+    padding:11px;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .scan-btn svg{width:16px;height:16px;}
+  .scan-overlay{
+    position:fixed;inset:0;background:#000;z-index:999;
+    display:flex;flex-direction:column;
+  }
+  .scan-overlay video{flex:1;width:100%;object-fit:cover;}
+  .scan-overlay-status{
+    position:absolute;top:calc(18px + var(--safe-bottom));left:0;right:0;
+    text-align:center;color:#fff;font-size:13px;padding:0 20px;
+    text-shadow:0 1px 3px rgba(0,0,0,0.6);
+  }
+  .scan-overlay-frame{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:80%;max-width:320px;aspect-ratio:2/1;
+    border:2px solid var(--accent);border-radius:var(--radius-md);
+    box-shadow:0 0 0 2000px rgba(0,0,0,0.4);
+  }
+  .scan-overlay-cancel{
+    position:absolute;bottom:calc(30px + var(--safe-bottom));left:50%;transform:translateX(-50%);
+    background:var(--panel);color:var(--text);border:1px solid var(--line);
+    border-radius:var(--radius-pill);font-family:'Oswald',sans-serif;font-size:13px;
+    font-weight:700;letter-spacing:0.03em;text-transform:uppercase;padding:12px 28px;cursor:pointer;
+  }
+
   .hidden{display:none !important;}
 
   .boot-loading{
@@ -372,6 +403,13 @@
       Settings
     </button>
   </nav>
+</div>
+
+<div id="scanOverlay" class="scan-overlay hidden">
+  <video id="scanVideo" playsinline autoplay muted></video>
+  <div class="scan-overlay-status" id="scanStatus">Point camera at a barcode</div>
+  <div class="scan-overlay-frame"></div>
+  <button class="scan-overlay-cancel" data-action="close-scanner">Cancel</button>
 </div>
 
 <script>
@@ -501,6 +539,10 @@
     html += '<div class="card food-search-card">' +
       '<input type="text" id="foodSearchInput" placeholder="Search a food (e.g. chicken breast, oats)...">' +
       '<div id="foodSearchResults" class="food-search-results"></div>' +
+      '<button class="scan-btn" data-action="open-scanner">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 8h4M17 8h4M3 16h4M17 16h4"/></svg>' +
+        'Scan Barcode' +
+      '</button>' +
     '</div>';
 
     html += '<div class="card add-meal-card">' +
@@ -640,6 +682,105 @@
   function clearFoodSelection(){
     ui.selectedFood = null;
     ui.prefillName = ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat = null;
+  }
+
+  /* =========================================================
+     BARCODE SCANNER — native BarcodeDetector API (best support
+     is Chrome/Chrome-based browsers on Android, which is exactly
+     what the installed Play Store app runs on). No external
+     library — if the API isn't available, we just tell the
+     person to search by name instead rather than failing silently.
+     ========================================================= */
+  var scanState = { stream: null, loopId: null, detector: null };
+
+  function openScanner(){
+    if (typeof BarcodeDetector === 'undefined'){
+      alert('Barcode scanning isn\'t supported in this browser. Try the installed app, or search by name instead.');
+      return;
+    }
+    var overlay = document.getElementById('scanOverlay');
+    var video = document.getElementById('scanVideo');
+    var statusEl = document.getElementById('scanStatus');
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then(function(stream){
+        scanState.stream = stream;
+        video.srcObject = stream;
+        overlay.classList.remove('hidden');
+        scanState.detector = new BarcodeDetector({
+          formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128']
+        });
+        statusEl.textContent = 'Point camera at a barcode';
+        scanLoop();
+      })
+      .catch(function(err){
+        console.error('SaviorFuel: camera access failed —', err);
+        alert('Couldn\'t access the camera. Check camera permission for this app in your phone settings, or search by name instead.');
+      });
+  }
+
+  function scanLoop(){
+    var video = document.getElementById('scanVideo');
+    if (!scanState.stream) return; // scanner was closed mid-loop
+    scanState.detector.detect(video)
+      .then(function(codes){
+        if (codes.length > 0){
+          onBarcodeDetected(codes[0].rawValue);
+        } else {
+          scanState.loopId = requestAnimationFrame(scanLoop);
+        }
+      })
+      .catch(function(){
+        // detect() can throw transiently (e.g. video not ready yet) — just keep trying
+        scanState.loopId = requestAnimationFrame(scanLoop);
+      });
+  }
+
+  function closeScanner(){
+    if (scanState.stream){
+      scanState.stream.getTracks().forEach(function(t){ t.stop(); });
+    }
+    if (scanState.loopId) cancelAnimationFrame(scanState.loopId);
+    scanState.stream = null;
+    scanState.loopId = null;
+    document.getElementById('scanOverlay').classList.add('hidden');
+  }
+
+  function onBarcodeDetected(code){
+    var statusEl = document.getElementById('scanStatus');
+    statusEl.textContent = 'Found ' + code + ' — looking it up...';
+    if (scanState.loopId) cancelAnimationFrame(scanState.loopId);
+    scanState.loopId = null;
+
+    fetch('https://world.openfoodfacts.org/api/v2/product/' + encodeURIComponent(code) + '.json')
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        closeScanner();
+        if (data.status !== 1 || !data.product || !data.product.nutriments){
+          alert('That barcode isn\'t in the food database. Try searching by name instead.');
+          return;
+        }
+        var p = data.product;
+        var n = p.nutriments;
+        ui.selectedFood = {
+          name: p.product_name || 'Scanned item',
+          brand: p.brands ? p.brands.split(',')[0] : '',
+          per100g: {
+            cal: n['energy-kcal_100g'] || 0,
+            protein: n['proteins_100g'] || 0,
+            carbs: n['carbohydrates_100g'] || 0,
+            fat: n['fat_100g'] || 0
+          }
+        };
+        ui.grams = 100;
+        applySelectedFoodToForm();
+        renderApp();
+      })
+      .catch(function(err){
+        console.error('SaviorFuel: barcode lookup failed —', err);
+        closeScanner();
+        alert('Lookup failed — check your connection and try again, or search by name instead.');
+      });
   }
 
   function addMealFromForm(){
@@ -875,6 +1016,7 @@
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
   function switchTab(newTab){
     if (newTab === state.tab) return;
+    closeScanner(); // safety: release the camera if it was somehow left open
     var viewEl = document.getElementById('view');
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -922,6 +1064,10 @@
       pickFoodResult(parseInt(el.dataset.index, 10));
     } else if (action === 'calculate-plan'){
       calculatePlanFromForm();
+    } else if (action === 'open-scanner'){
+      openScanner();
+    } else if (action === 'close-scanner'){
+      closeScanner();
     }
   });
 
