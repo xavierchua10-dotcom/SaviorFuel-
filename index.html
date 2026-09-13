@@ -278,6 +278,42 @@
     padding:12px;cursor:pointer;
   }
 
+  /* ---------- Food search ---------- */
+  .food-search-card{margin-bottom:14px;}
+  .food-search-card input{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    color:var(--text);
+    font-size:14px;
+    padding:11px 12px;
+  }
+  .food-search-card input:focus{outline:none;border-color:var(--accent);}
+  .food-search-card input::placeholder{color:var(--text-faint);}
+  .food-search-results{margin-top:10px;max-height:260px;overflow-y:auto;}
+  .food-search-row{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer;
+  }
+  .food-search-row:last-child{border-bottom:none;}
+  .food-search-row:active{background:var(--panel-2);}
+  .food-search-row-name{font-size:13px;color:var(--text);flex:1;min-width:0;}
+  .food-search-row-name .brand{display:block;font-size:11px;color:var(--text-faint);}
+  .food-search-row-cal{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);white-space:nowrap;}
+  .food-search-status{font-size:12px;color:var(--text-faint);padding:8px 0;}
+  .selected-food-banner{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--panel-3);border-radius:var(--radius-sm);
+    padding:8px 10px;margin-bottom:8px;font-size:12px;color:var(--text-dim);
+  }
+  .selected-food-banner b{color:var(--text);}
+  .selected-food-banner .grams-input{
+    width:60px;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:var(--radius-xs);color:var(--text);font-family:'JetBrains Mono',monospace;
+    font-size:12px;padding:5px 6px;text-align:center;
+  }
+
   .hidden{display:none !important;}
 
   .boot-loading{
@@ -349,7 +385,13 @@
 
   var STORE = loadStore();
   var state = { tab: 'log' };
-  var ui = { historyOpenDay: null };
+  var ui = {
+    historyOpenDay: null,
+    selectedFood: null,   // { name, brand, per100g: {cal,protein,carbs,fat} } once a search result is tapped
+    grams: 100,            // serving size in grams, scales the selected food's macros
+    prefillName: null, prefillCal: null, prefillProtein: null, prefillCarbs: null, prefillFat: null,
+    searchDebounce: null
+  };
 
   function loadStore(){
     try {
@@ -430,15 +472,21 @@
       macroBarHtml('Fat', totals.fat, g.fat, 'fat') +
     '</div>';
 
+    html += '<div class="card food-search-card">' +
+      '<input type="text" id="foodSearchInput" placeholder="Search a food (e.g. chicken breast, oats)...">' +
+      '<div id="foodSearchResults" class="food-search-results"></div>' +
+    '</div>';
+
     html += '<div class="card add-meal-card">' +
-      '<div class="field-row"><input type="text" id="mealName" placeholder="Meal name"></div>' +
+      (ui.selectedFood ? selectedFoodBannerHtml() : '') +
+      '<div class="field-row"><input type="text" id="mealName" placeholder="Meal name" value="' + esc(ui.prefillName || '') + '"></div>' +
       '<div class="field-row">' +
-        '<input type="number" inputmode="numeric" id="mealCal" placeholder="kcal">' +
-        '<input type="number" inputmode="numeric" id="mealProtein" placeholder="protein g">' +
+        '<input type="number" inputmode="numeric" id="mealCal" placeholder="kcal" value="' + (ui.prefillCal != null ? ui.prefillCal : '') + '">' +
+        '<input type="number" inputmode="numeric" id="mealProtein" placeholder="protein g" value="' + (ui.prefillProtein != null ? ui.prefillProtein : '') + '">' +
       '</div>' +
       '<div class="field-row">' +
-        '<input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g">' +
-        '<input type="number" inputmode="numeric" id="mealFat" placeholder="fat g">' +
+        '<input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g" value="' + (ui.prefillCarbs != null ? ui.prefillCarbs : '') + '">' +
+        '<input type="number" inputmode="numeric" id="mealFat" placeholder="fat g" value="' + (ui.prefillFat != null ? ui.prefillFat : '') + '">' +
       '</div>' +
       '<button class="btn-primary" data-action="add-meal">+ Add Meal</button>' +
     '</div>';
@@ -472,6 +520,102 @@
     '</div>';
   }
 
+  function selectedFoodBannerHtml(){
+    var f = ui.selectedFood;
+    return '<div class="selected-food-banner">' +
+      '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span>' +
+      '<span>' +
+        '<input type="number" class="grams-input" id="foodGrams" value="' + ui.grams + '" data-action-change="rescale-food"> g' +
+      '</span>' +
+    '</div>';
+  }
+
+  /* =========================================================
+     FOOD SEARCH — Open Food Facts (free, no API key required)
+     https://world.openfoodfacts.org
+     ========================================================= */
+  function searchFoodDebounced(query){
+    clearTimeout(ui.searchDebounce);
+    if (!query || query.trim().length < 2){
+      document.getElementById('foodSearchResults').innerHTML = '';
+      return;
+    }
+    ui.searchDebounce = setTimeout(function(){ runFoodSearch(query.trim()); }, 400);
+  }
+
+  function runFoodSearch(query){
+    var resultsEl = document.getElementById('foodSearchResults');
+    if (!resultsEl) return;
+    resultsEl.innerHTML = '<div class="food-search-status">Searching...</div>';
+
+    var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' +
+      encodeURIComponent(query) + '&search_simple=1&action=process&json=1&page_size=15';
+
+    fetch(url)
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        var products = (data.products || []).filter(function(p){
+          return p.product_name && p.nutriments && p.nutriments['energy-kcal_100g'] != null;
+        });
+        if (products.length === 0){
+          resultsEl.innerHTML = '<div class="food-search-status">No results — try a different search, or just type it in manually below.</div>';
+          return;
+        }
+        resultsEl.innerHTML = products.map(function(p, i){
+          var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
+          return '<div class="food-search-row" data-action="pick-food" data-index="' + i + '">' +
+            '<div class="food-search-row-name">' + esc(p.product_name) +
+              (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
+            '</div>' +
+            '<div class="food-search-row-cal">' + cal + ' kcal/100g</div>' +
+          '</div>';
+        }).join('');
+        ui.lastSearchProducts = products; // stashed so pick-food can look up by index without re-fetching
+      })
+      .catch(function(err){
+        console.error('SaviorFuel food search failed —', err);
+        resultsEl.innerHTML = '<div class="food-search-status">Search failed — check your connection, or type the meal in manually below.</div>';
+      });
+  }
+
+  function pickFoodResult(index){
+    var p = ui.lastSearchProducts && ui.lastSearchProducts[index];
+    if (!p) return;
+    var n = p.nutriments;
+    ui.selectedFood = {
+      name: p.product_name,
+      brand: p.brands ? p.brands.split(',')[0] : '',
+      per100g: {
+        cal: n['energy-kcal_100g'] || 0,
+        protein: n['proteins_100g'] || 0,
+        carbs: n['carbohydrates_100g'] || 0,
+        fat: n['fat_100g'] || 0
+      }
+    };
+    ui.grams = 100;
+    applySelectedFoodToForm();
+    document.getElementById('foodSearchResults').innerHTML = '';
+    document.getElementById('foodSearchInput').value = '';
+    renderApp();
+  }
+
+  // Recomputes the prefill macro values from the selected food's
+  // per-100g numbers scaled to the current gram amount.
+  function applySelectedFoodToForm(){
+    var f = ui.selectedFood;
+    var factor = (ui.grams || 0) / 100;
+    ui.prefillName = f.name;
+    ui.prefillCal = Math.round(f.per100g.cal * factor);
+    ui.prefillProtein = Math.round(f.per100g.protein * factor);
+    ui.prefillCarbs = Math.round(f.per100g.carbs * factor);
+    ui.prefillFat = Math.round(f.per100g.fat * factor);
+  }
+
+  function clearFoodSelection(){
+    ui.selectedFood = null;
+    ui.prefillName = ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat = null;
+  }
+
   function addMealFromForm(){
     var name = document.getElementById('mealName').value.trim();
     var cal = parseInt(document.getElementById('mealCal').value, 10) || 0;
@@ -491,6 +635,7 @@
       loggedAt: Date.now()
     });
     saveStore();
+    clearFoodSelection();
     renderApp();
   }
 
@@ -666,14 +811,29 @@
         saveStore();
         renderApp();
       }
+    } else if (action === 'pick-food'){
+      pickFoodResult(parseInt(el.dataset.index, 10));
+    }
+  });
+
+  // Live food search as you type (debounced inside searchFoodDebounced).
+  document.addEventListener('input', function(e){
+    if (e.target.id === 'foodSearchInput'){
+      searchFoodDebounced(e.target.value);
     }
   });
 
   // Goal inputs save on change (blur/enter), not on every keystroke —
-  // avoids writing to localStorage on every digit typed.
+  // avoids writing to localStorage on every digit typed. Same event
+  // also handles the "grams" field on a selected search result, which
+  // just recomputes the prefill macros rather than saving anything.
   document.addEventListener('change', function(e){
     if (e.target.dataset && e.target.dataset.actionChange === 'save-goal'){
       saveGoalsFromInputs();
+    } else if (e.target.id === 'foodGrams'){
+      ui.grams = parseInt(e.target.value, 10) || 0;
+      applySelectedFoodToForm();
+      renderApp();
     }
   });
 
