@@ -356,6 +356,68 @@
     font-weight:700;letter-spacing:0.03em;text-transform:uppercase;padding:12px 28px;cursor:pointer;
   }
 
+  /* ---------- Settings — same structural classes as SaviorFit Logger ---------- */
+  .section-label{
+    font-family:'Oswald',sans-serif;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin:22px 0 8px;
+  }
+  .section-label:first-child{margin-top:0;}
+  .settings-group{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:6px 14px;
+    margin-bottom:16px;
+  }
+  .settings-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 0;
+    border-top:1px solid var(--line);
+    gap:12px;
+  }
+  .settings-row:first-child{border-top:none;}
+  .settings-row .sr-label{font-size:14px;color:var(--text);font-weight:600;}
+  .settings-row .sr-sub{font-size:11.5px;color:var(--text-faint);margin-top:4px;line-height:1.4;}
+  .settings-row .sr-action{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--accent);
+    border-radius:var(--radius-sm);
+    padding:8px 14px;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+    flex-shrink:0;
+  }
+  .settings-row .sr-action-danger{color:var(--accent-2);border-color:var(--accent-2-dim);}
+  .settings-row .seg{display:flex;background:var(--panel-2);border-radius:var(--radius-sm);padding:3px;flex-shrink:0;}
+  .settings-row .seg button{
+    background:none;border:none;color:var(--text-faint);
+    padding:6px 14px;border-radius:var(--radius-xs);font-size:12px;font-weight:700;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .settings-row .seg button.active{background:var(--accent);color:#1c1500;}
+  .settings-version{text-align:center;color:var(--text-faint);font-size:11px;padding:16px 0 4px;letter-spacing:0.02em;}
+  .danger-zone-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+  .danger-zone-toggle .dz-chevron{font-size:10px;color:var(--text-faint);transition:transform 0.15s ease;}
+  .danger-zone-toggle.open .dz-chevron{transform:rotate(180deg);}
+
+  /* ---------- Density + corner-style overrides (Appearance settings) ---------- */
+  body[data-density="compact"] .meal-row{padding:6px 0;}
+  body[data-density="compact"] .card{padding:10px 10px 8px;}
+  body[data-corners="sharp"]{
+    --radius-xs:2px; --radius-sm:2px; --radius:2px;
+    --radius-md:2px; --radius-lg:2px; --radius-xl:2px; --radius-pill:2px;
+  }
+
   .hidden{display:none !important;}
 
   .boot-loading{
@@ -432,6 +494,13 @@
 
   var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65 };
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
+  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded' };
+  var APP_VERSION = '0.1.0';
+
+  function cmToIn(cm){ return cm / 2.54; }
+  function inToCm(inches){ return inches * 2.54; }
+  function kgToLb(kg){ return kg * 2.20462; }
+  function lbToKg(lb){ return lb / 2.20462; }
 
   var ACTIVITY_LEVELS = [
     { id: 'sedentary', label: 'Sedentary (little/no exercise)', mult: 1.2 },
@@ -453,21 +522,23 @@
     selectedFood: null,   // { name, brand, per100g: {cal,protein,carbs,fat} } once a search result is tapped
     grams: 100,            // serving size in grams, scales the selected food's macros
     prefillName: null, prefillCal: null, prefillProtein: null, prefillCarbs: null, prefillFat: null,
-    searchDebounce: null
+    searchDebounce: null,
+    dangerZoneOpen: false
   };
 
   function loadStore(){
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE) };
+      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS) };
       var parsed = JSON.parse(raw);
       if (!parsed.goals) parsed.goals = Object.assign({}, DEFAULT_GOALS);
       if (!parsed.meals) parsed.meals = [];
       if (!parsed.profile) parsed.profile = Object.assign({}, DEFAULT_PROFILE);
+      if (!parsed.appSettings) parsed.appSettings = Object.assign({}, DEFAULT_APP_SETTINGS);
       return parsed;
     } catch (e){
       console.error('SaviorFuel: failed to load local store, starting fresh —', e);
-      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE) };
+      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS) };
     }
   }
 
@@ -803,6 +874,7 @@
     });
     saveStore();
     clearFoodSelection();
+    maybeVibrate();
     renderApp();
   }
 
@@ -920,6 +992,9 @@
 
   function profileFormHtml(){
     var p = STORE.profile;
+    var imperial = STORE.appSettings.unit === 'imperial';
+    var heightVal = imperial ? Math.round(cmToIn(p.heightCm)) : p.heightCm;
+    var weightVal = imperial ? Math.round(kgToLb(p.weightKg)) : p.weightKg;
     return '<div class="settings-group"><h3>Your profile</h3><div class="card">' +
       '<div class="settings-goal-row"><label>Sex</label>' +
         '<select id="profSex">' +
@@ -929,10 +1004,10 @@
       '</div>' +
       '<div class="settings-goal-row"><label>Age</label>' +
         '<input type="number" inputmode="numeric" id="profAge" value="' + p.age + '"></div>' +
-      '<div class="settings-goal-row"><label>Height (cm)</label>' +
-        '<input type="number" inputmode="numeric" id="profHeight" value="' + p.heightCm + '"></div>' +
-      '<div class="settings-goal-row"><label>Bodyweight (kg)</label>' +
-        '<input type="number" inputmode="numeric" id="profWeight" value="' + p.weightKg + '"></div>' +
+      '<div class="settings-goal-row"><label>Height (' + (imperial ? 'in' : 'cm') + ')</label>' +
+        '<input type="number" inputmode="numeric" id="profHeight" value="' + heightVal + '"></div>' +
+      '<div class="settings-goal-row"><label>Bodyweight (' + (imperial ? 'lb' : 'kg') + ')</label>' +
+        '<input type="number" inputmode="numeric" id="profWeight" value="' + weightVal + '"></div>' +
       '<div class="settings-goal-row"><label>Activity level</label>' +
         '<select id="profActivity">' + selectOptionsHtml(ACTIVITY_LEVELS, p.activityLevel) + '</select>' +
       '</div>' +
@@ -944,11 +1019,14 @@
   }
 
   function calculatePlanFromForm(){
+    var imperial = STORE.appSettings.unit === 'imperial';
+    var rawHeight = parseFloat(document.getElementById('profHeight').value) || (imperial ? cmToIn(DEFAULT_PROFILE.heightCm) : DEFAULT_PROFILE.heightCm);
+    var rawWeight = parseFloat(document.getElementById('profWeight').value) || (imperial ? kgToLb(DEFAULT_PROFILE.weightKg) : DEFAULT_PROFILE.weightKg);
     var profile = {
       sex: document.getElementById('profSex').value,
       age: parseInt(document.getElementById('profAge').value, 10) || DEFAULT_PROFILE.age,
-      heightCm: parseInt(document.getElementById('profHeight').value, 10) || DEFAULT_PROFILE.heightCm,
-      weightKg: parseInt(document.getElementById('profWeight').value, 10) || DEFAULT_PROFILE.weightKg,
+      heightCm: Math.round(imperial ? inToCm(rawHeight) : rawHeight),
+      weightKg: Math.round(imperial ? lbToKg(rawWeight) : rawWeight),
       activityLevel: document.getElementById('profActivity').value,
       goal: document.getElementById('profGoal').value
     };
@@ -982,6 +1060,7 @@
 
   function renderSettings(){
     var g = STORE.goals;
+    var s = STORE.appSettings;
     var html = profileFormHtml();
 
     if (STORE.lastPlanTdee){
@@ -993,16 +1072,128 @@
       settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
       settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
       settingsGoalRow('Fat (g)', 'goalFat', g.fat) +
-    '</div></div>' +
-    '<div class="settings-group"><h3>Data</h3>' +
-      '<button class="btn-danger" data-action="clear-data">Erase all data</button>' +
-    '</div>';
+    '</div></div>';
+
+    html += '<div class="section-label">Preferences</div>';
+    html += '<div class="settings-group">';
+    html += '<div class="settings-row"><div><div class="sr-label">Units</div><div class="sr-sub">Applies to height and bodyweight above</div></div>' +
+              '<div class="seg">' +
+                '<button data-action="set-unit" data-unit="metric" class="' + (s.unit === 'metric' ? 'active' : '') + '">METRIC</button>' +
+                '<button data-action="set-unit" data-unit="imperial" class="' + (s.unit === 'imperial' ? 'active' : '') + '">IMPERIAL</button>' +
+              '</div></div>';
+    html += '<div class="settings-row"><div><div class="sr-label">Haptic feedback</div><div class="sr-sub">Short vibration when you log a meal</div></div>' +
+              '<div class="seg">' +
+                '<button data-action="toggle-haptic" data-val="on" class="' + (s.haptic !== false ? 'active' : '') + '">ON</button>' +
+                '<button data-action="toggle-haptic" data-val="off" class="' + (s.haptic === false ? 'active' : '') + '">OFF</button>' +
+              '</div></div>';
+    html += '</div>';
+
+    html += '<div class="section-label">Appearance</div>';
+    html += '<div class="settings-group">';
+    html += '<div class="settings-row"><div><div class="sr-label">Density</div><div class="sr-sub">Fit more on screen in Log &amp; History</div></div>' +
+              '<div class="seg">' +
+                '<button data-action="set-density" data-density="comfortable" class="' + (s.density === 'comfortable' ? 'active' : '') + '">Comfortable</button>' +
+                '<button data-action="set-density" data-density="compact" class="' + (s.density === 'compact' ? 'active' : '') + '">Compact</button>' +
+              '</div></div>';
+    html += '<div class="settings-row"><div><div class="sr-label">Corners</div><div class="sr-sub">Rounded or sharp edges throughout the app</div></div>' +
+              '<div class="seg">' +
+                '<button data-action="set-corner-style" data-style="rounded" class="' + (s.corners === 'rounded' ? 'active' : '') + '">Rounded</button>' +
+                '<button data-action="set-corner-style" data-style="sharp" class="' + (s.corners === 'sharp' ? 'active' : '') + '">Sharp</button>' +
+              '</div></div>';
+    html += '</div>';
+
+    html += '<div class="section-label">Your data</div>';
+    html += '<div class="settings-group">';
+    html += '<div class="settings-row"><div><div class="sr-label">' + STORE.meals.length + ' meal' + (STORE.meals.length === 1 ? '' : 's') + ' logged</div>' +
+              '<div class="sr-sub">Stored only on this device — no account or sync yet</div></div></div>';
+    html += '<div class="settings-row"><div><div class="sr-label">Export backup</div><div class="sr-sub">Download a JSON file of your log</div></div>' +
+              '<button class="sr-action" data-action="export-data">Export</button></div>';
+    html += '<div class="settings-row"><div><div class="sr-label">Import backup</div><div class="sr-sub">Restore from a JSON file</div></div>' +
+              '<button class="sr-action" data-action="import-data">Import</button></div>';
+    html += '</div>';
+
+    html += '<div class="section-label">Support</div>';
+    html += '<div class="settings-group">';
+    html += '<div class="settings-row"><div><div class="sr-label">Instagram</div><div class="sr-sub">@im.savior_</div></div>' +
+              '<a class="sr-action" href="https://instagram.com/im.savior_" target="_blank" rel="noopener">Open</a></div>';
+    html += '<div class="settings-row"><div><div class="sr-label">Email</div><div class="sr-sub">xavierchua10@gmail.com</div></div>' +
+              '<a class="sr-action" href="mailto:xavierchua10@gmail.com">Email</a></div>';
+    html += '</div>';
+    html += '<div class="settings-version">SaviorFuel v' + APP_VERSION + '</div>';
+
+    var dzOpen = !!ui.dangerZoneOpen;
+    html += '<div class="section-label danger-zone-toggle' + (dzOpen ? ' open' : '') + '" data-action="toggle-danger-zone">' +
+              '<span>Danger zone</span><span class="dz-chevron">&#9660;</span>' +
+            '</div>';
+    if (dzOpen){
+      html += '<button class="btn-danger" data-action="clear-data">Erase all data</button>';
+    }
+
+    html += '<input type="file" id="importFile" accept="application/json" style="display:none;">';
+
     document.getElementById('view').innerHTML = html;
+    var importInput = document.getElementById('importFile');
+    if (importInput) importInput.addEventListener('change', handleImportFile);
   }
 
   /* =========================================================
      RENDER DISPATCH
      ========================================================= */
+  /* =========================================================
+     APP SETTINGS — density/corners (Appearance) applied as body
+     data-attributes so the CSS overrides near the top of the file
+     pick them up; haptic feedback fires directly where relevant
+     (see addMealFromForm). Export/import is a straight JSON
+     dump/restore of the whole STORE object.
+     ========================================================= */
+  function applyAppearanceSettings(){
+    document.body.dataset.density = STORE.appSettings.density || 'comfortable';
+    document.body.dataset.corners = STORE.appSettings.corners || 'rounded';
+  }
+
+  function maybeVibrate(){
+    if (STORE.appSettings.haptic === false) return;
+    if (navigator.vibrate) navigator.vibrate(15);
+  }
+
+  function exportData(){
+    var blob = new Blob([JSON.stringify(STORE, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'saviorfuel-backup-' + todayKey() + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function handleImportFile(e){
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      try {
+        var parsed = JSON.parse(reader.result);
+        if (!parsed || !Array.isArray(parsed.meals)) throw new Error('Not a valid SaviorFuel backup file');
+        if (!window.confirm('Replace everything currently on this device with this backup?')) return;
+        STORE = {
+          meals: parsed.meals,
+          goals: parsed.goals || Object.assign({}, DEFAULT_GOALS),
+          profile: parsed.profile || Object.assign({}, DEFAULT_PROFILE),
+          appSettings: parsed.appSettings || Object.assign({}, DEFAULT_APP_SETTINGS)
+        };
+        saveStore();
+        applyAppearanceSettings();
+        renderApp();
+      } catch (err){
+        console.error('SaviorFuel: import failed —', err);
+        alert('That file doesn\'t look like a valid SaviorFuel backup.');
+      }
+    };
+    reader.readAsText(file);
+  }
+
   function renderApp(){
     document.querySelectorAll('.tabbar button').forEach(function(btn){
       btn.classList.toggle('active', btn.dataset.tab === state.tab);
@@ -1056,8 +1247,9 @@
       renderApp();
     } else if (action === 'clear-data'){
       if (window.confirm('Erase all logged meals and reset goals? This can\'t be undone.')){
-        STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE) };
+        STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS) };
         saveStore();
+        applyAppearanceSettings();
         renderApp();
       }
     } else if (action === 'pick-food'){
@@ -1068,6 +1260,31 @@
       openScanner();
     } else if (action === 'close-scanner'){
       closeScanner();
+    } else if (action === 'set-unit'){
+      STORE.appSettings.unit = el.dataset.unit;
+      saveStore();
+      renderApp();
+    } else if (action === 'toggle-haptic'){
+      STORE.appSettings.haptic = (el.dataset.val === 'on');
+      saveStore();
+      renderApp();
+    } else if (action === 'set-density'){
+      STORE.appSettings.density = el.dataset.density;
+      saveStore();
+      applyAppearanceSettings();
+      renderApp();
+    } else if (action === 'set-corner-style'){
+      STORE.appSettings.corners = el.dataset.style;
+      saveStore();
+      applyAppearanceSettings();
+      renderApp();
+    } else if (action === 'toggle-danger-zone'){
+      ui.dangerZoneOpen = !ui.dangerZoneOpen;
+      renderApp();
+    } else if (action === 'export-data'){
+      exportData();
+    } else if (action === 'import-data'){
+      document.getElementById('importFile').click();
     }
   });
 
@@ -1092,6 +1309,7 @@
     }
   });
 
+  applyAppearanceSettings();
   document.getElementById('bootLoading').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   renderApp();
