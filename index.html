@@ -724,6 +724,11 @@
 
   function selectedFoodBannerHtml(){
     var f = ui.selectedFood;
+    if (f.wholeServing){
+      return '<div class="selected-food-banner">' +
+        '<span>From Kalori: <b>' + esc(f.name) + '</b> — ' + esc(f.servingLabel || '1 serving') + '</span>' +
+      '</div>';
+    }
     return '<div class="selected-food-banner">' +
       '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span>' +
       '<span>' +
@@ -764,6 +769,45 @@
 
   var searchRequestId = 0; // guards against a slow older request overwriting a newer one's results
   var USDA_API_KEY = 'DcPJpdzm8AjRDIpzmzfL3fJavbtVWsAY6bGtEQYi';
+
+  var TECHAPI_KEY = 'tech_2f095b353334f3552fb2356065ca43bd9fe42e2e584fc76cda30555e984fb40c';
+
+  // Kalori (via techapi.my) — Malaysian food database. Response envelope
+  // is {success, data, meta}; exact nesting of the food list inside
+  // `data` wasn't confirmed from docs, so this checks a few reasonable
+  // shapes defensively rather than assuming one and silently returning
+  // nothing if it's wrong.
+  function fetchKalori(query){
+    var url = 'https://api.techapi.my/api/v2/kalori/foods/search?q=' + encodeURIComponent(query);
+    return fetch(url, { headers: { 'X-API-Key': TECHAPI_KEY } })
+      .then(function(res){ return res.json(); })
+      .then(function(json){
+        if (!json || json.success === false) return [];
+        var d = json.data;
+        var list = Array.isArray(d) ? d
+          : (d && (d.foods || d.results || d.items)) || [];
+        return list
+          .filter(function(f){ return f && f.name && f.calories != null; })
+          .map(function(f){
+            return {
+              product_name: f.name,
+              brands: f.category || '',
+              nutriments: {
+                'energy-kcal_100g': f.calories,
+                'proteins_100g': f.protein || 0,
+                'carbohydrates_100g': f.carbs || 0,
+                'fat_100g': f.fat || 0
+              },
+              _source: 'techapi',
+              _serving: f.serving || null
+            };
+          });
+      })
+      .catch(function(err){
+        console.error('SaviorFuel: Kalori (techapi.my) search failed —', err);
+        return [];
+      });
+  }
 
   // Normalizes a USDA FoodData Central food into the same shape as an
   // Open Food Facts product, so the rest of the search/pick pipeline
@@ -830,24 +874,28 @@
       resultsEl.insertAdjacentHTML('afterbegin', '<div class="food-suggest-status">Updating...</div>');
     }
 
-    // USDA results (generic foods) listed first, then Open Food Facts
+    // Kalori (Malaysian dishes) listed first since it's the most locally
+    // relevant, then USDA (generic foods), then Open Food Facts
     // (branded/packaged) — each source can fail independently without
-    // taking the other down with it.
-    Promise.all([fetchUSDA(query), fetchOpenFoodFacts(query)])
+    // taking the others down with it.
+    Promise.all([fetchKalori(query), fetchUSDA(query), fetchOpenFoodFacts(query)])
       .then(function(results){
         if (thisRequest !== searchRequestId) return; // a newer search has since superseded this one
-        var products = results[0].concat(results[1]);
+        var products = results[0].concat(results[1]).concat(results[2]);
         if (products.length === 0){
           resultsEl.innerHTML = '<div class="food-suggest-status">No results — try a different search, or just type it in manually below.</div>';
           return;
         }
         resultsEl.innerHTML = products.map(function(p, i){
           var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
+          var tag = (p._source === 'techapi')
+            ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
+            : cal + ' kcal/100g';
           return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
             '<div class="food-suggest-name">' + esc(p.product_name) +
               (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
             '</div>' +
-            '<div class="food-suggest-tag">' + cal + ' kcal/100g</div>' +
+            '<div class="food-suggest-tag">' + tag + '</div>' +
           '</div>';
         }).join('');
         ui.lastSearchProducts = products; // stashed so pick-food can look up by index without re-fetching
@@ -862,29 +910,54 @@
   function pickFoodResult(index){
     var p = ui.lastSearchProducts && ui.lastSearchProducts[index];
     if (!p) return;
-    var n = p.nutriments;
-    ui.selectedFood = {
-      name: p.product_name,
-      brand: p.brands ? p.brands.split(',')[0] : '',
-      per100g: {
-        cal: n['energy-kcal_100g'] || 0,
-        protein: n['proteins_100g'] || 0,
-        carbs: n['carbohydrates_100g'] || 0,
-        fat: n['fat_100g'] || 0
-      }
-    };
+
+    if (p._source === 'techapi'){
+      // Kalori's numbers are per-serving already (see the 'serving'
+      // field), not per-100g like OFF/USDA — log as-is, no scaling.
+      ui.selectedFood = {
+        name: p.product_name,
+        wholeServing: true,
+        servingLabel: p._serving || '1 serving',
+        whole: {
+          cal: p.nutriments['energy-kcal_100g'] || 0,
+          protein: p.nutriments['proteins_100g'] || 0,
+          carbs: p.nutriments['carbohydrates_100g'] || 0,
+          fat: p.nutriments['fat_100g'] || 0
+        }
+      };
+    } else {
+      var n = p.nutriments;
+      ui.selectedFood = {
+        name: p.product_name,
+        brand: p.brands ? p.brands.split(',')[0] : '',
+        per100g: {
+          cal: n['energy-kcal_100g'] || 0,
+          protein: n['proteins_100g'] || 0,
+          carbs: n['carbohydrates_100g'] || 0,
+          fat: n['fat_100g'] || 0
+        }
+      };
+    }
     ui.grams = 100;
     applySelectedFoodToForm();
     closeFoodSearchOverlay();
     renderApp();
   }
 
-  // Recomputes the prefill macro values from the selected food's
-  // per-100g numbers scaled to the current gram amount.
+  // Recomputes the prefill macro values from the selected food.
+  // Per-100g sources (OFF/USDA) scale by the current gram amount;
+  // whole-serving sources (Kalori) use the given numbers directly.
   function applySelectedFoodToForm(){
     var f = ui.selectedFood;
-    var factor = (ui.grams || 0) / 100;
     ui.prefillName = f.name;
+    if (f.wholeServing){
+      ui.prefillCal = Math.round(f.whole.cal);
+      ui.prefillProtein = Math.round(f.whole.protein);
+      ui.prefillCarbs = Math.round(f.whole.carbs);
+      ui.prefillFat = Math.round(f.whole.fat);
+      return;
+    }
+    var factor = (ui.grams || 0) / 100;
     ui.prefillCal = Math.round(f.per100g.cal * factor);
     ui.prefillProtein = Math.round(f.per100g.protein * factor);
     ui.prefillCarbs = Math.round(f.per100g.carbs * factor);
