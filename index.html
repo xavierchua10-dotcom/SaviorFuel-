@@ -239,21 +239,21 @@
   .macro-bar-fill.carbs{background:#5fa8d6;}
   .macro-bar-fill.fat{background:var(--accent-2);}
 
-  /* ---------- Quick-add meal form ---------- */
-  .add-meal-card .field-row{display:flex;gap:8px;margin-bottom:8px;}
+  /* ---------- Quick-add meal form (inside the Add Meal sheet) ---------- */
+  #addMealBody .field-row{display:flex;gap:8px;margin-bottom:8px;}
 
-  /* Brief glow on the add-meal card right after a food gets picked
-     from search/scan — confirms the fill worked without needing a
-     toast or alert. Class is only present for the one render right
-     after picking (see ui.justFilledFood), so it plays once. */
+  /* Brief glow on the sheet right after a food gets picked from
+     search/scan — confirms the fill worked without needing a toast
+     or alert. Class is added once by openAddMealOverlay() and
+     removed via setTimeout, so it plays once per open. */
   @keyframes addMealGlow{
     0%{ box-shadow:0 0 0 2px rgba(var(--accent-rgb),0.55), 0 0 18px 2px rgba(var(--accent-rgb),0.35); border-color:var(--accent); }
     100%{ box-shadow:0 0 0 0 rgba(var(--accent-rgb),0); border-color:var(--line); }
   }
-  .add-meal-card.glow-once{
+  .add-meal-sheet.glow-once{
     animation:addMealGlow 900ms ease-out;
   }
-  .add-meal-card input{
+  #addMealBody input{
     flex:1;
     min-width:0;
     background:var(--panel-2);
@@ -263,8 +263,8 @@
     font-size:14px;
     padding:10px 12px;
   }
-  .add-meal-card input:focus{outline:none;border-color:var(--accent);}
-  .add-meal-card input::placeholder{color:var(--text-faint);}
+  #addMealBody input:focus{outline:none;border-color:var(--accent);}
+  #addMealBody input::placeholder{color:var(--text-faint);}
 
   /* ---------- Meal list rows ---------- */
   .meal-row{
@@ -526,6 +526,47 @@
   @keyframes foodSearchBackdropIn{ 0%{opacity:0;} 100%{opacity:1;} }
   @keyframes foodSearchPanelIn{ 0%{opacity:0;transform:translateY(28px);} 100%{opacity:1;transform:translateY(0);} }
 
+  /* ---------- Add Meal overlay — bottom sheet, distinct from the
+     full-screen search overlay so the two don't feel like the same
+     pattern stacked twice ---------- */
+  .add-meal-overlay{
+    position:absolute; inset:0; z-index:95;
+  }
+  .add-meal-overlay.hidden{display:none;}
+  .add-meal-backdrop{
+    position:absolute; inset:0;
+    background:rgba(10,11,13,0.62);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    animation:foodSearchBackdropIn 0.2s ease;
+  }
+  .add-meal-sheet{
+    position:absolute; left:0; right:0; bottom:0;
+    max-height:88vh;
+    background:var(--panel);
+    border:1px solid var(--line); border-bottom:none;
+    border-radius:var(--radius-xl) var(--radius-xl) 0 0;
+    padding:16px 16px calc(20px + var(--safe-bottom));
+    display:flex; flex-direction:column;
+    animation:addMealSheetIn 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes addMealSheetIn{ 0%{transform:translateY(100%);} 100%{transform:translateY(0);} }
+  .add-meal-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .add-meal-head h2{
+    margin:0; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;
+    letter-spacing:0.04em; text-transform:uppercase; color:var(--text);
+  }
+  .add-meal-close{
+    width:30px;height:30px;flex-shrink:0;border-radius:50%;
+    background:var(--panel-3);border:none;color:var(--text-dim);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+  }
+  .add-meal-close svg{width:15px;height:15px;}
+  .add-meal-close:active{background:var(--panel-2);}
+  .add-meal-body{overflow-y:auto;}
+
   .hidden{display:none !important;}
 
   .boot-loading{
@@ -597,6 +638,30 @@
   <button class="scan-overlay-cancel" data-action="close-scanner">Cancel</button>
 </div>
 
+<div class="add-meal-overlay hidden" id="addMealOverlay">
+  <div class="add-meal-backdrop" data-action="close-add-meal-overlay"></div>
+  <div class="add-meal-sheet" id="addMealSheet">
+    <div class="add-meal-head">
+      <h2>Add Meal</h2>
+      <button class="add-meal-close" data-action="close-add-meal-overlay" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="add-meal-body" id="addMealBody">
+      <div class="field-row"><input type="text" id="mealName" placeholder="Meal name"></div>
+      <div class="field-row">
+        <input type="number" inputmode="numeric" id="mealCal" placeholder="kcal">
+        <input type="number" inputmode="numeric" id="mealProtein" placeholder="protein g">
+      </div>
+      <div class="field-row">
+        <input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g">
+        <input type="number" inputmode="numeric" id="mealFat" placeholder="fat g">
+      </div>
+      <button class="btn-primary" data-action="add-meal">+ Add Meal</button>
+    </div>
+  </div>
+</div>
+
 <script>
   // =========================================================
   // SAVIORFUEL — local-state working version
@@ -648,8 +713,7 @@
     searchDebounce: null,
     dangerZoneOpen: false,
     justFilledFood: false,
-    macroCardCollapsed: false,
-    showManualEntry: false // manual entry card is hidden until a food's picked or "Use custom name" is tapped
+    macroCardCollapsed: false
   };
 
   function loadStore(){
@@ -744,27 +808,8 @@
       '</button>' +
     '</div>';
 
-    var glowClass = ui.justFilledFood ? ' glow-once' : '';
-    ui.justFilledFood = false; // one-shot: only the render right after a pick gets the animation
-
-    if (ui.showManualEntry){
-      html += '<div class="card add-meal-card' + glowClass + '">' +
-        (ui.selectedFood ? selectedFoodBannerHtml() : '') +
-        '<div class="field-row"><input type="text" id="mealName" placeholder="Meal name" value="' + esc(ui.prefillName || '') + '"></div>' +
-        '<div class="field-row">' +
-          '<input type="number" inputmode="numeric" id="mealCal" placeholder="kcal" value="' + (ui.prefillCal != null ? ui.prefillCal : '') + '">' +
-          '<input type="number" inputmode="numeric" id="mealProtein" placeholder="protein g" value="' + (ui.prefillProtein != null ? ui.prefillProtein : '') + '">' +
-        '</div>' +
-        '<div class="field-row">' +
-          '<input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g" value="' + (ui.prefillCarbs != null ? ui.prefillCarbs : '') + '">' +
-          '<input type="number" inputmode="numeric" id="mealFat" placeholder="fat g" value="' + (ui.prefillFat != null ? ui.prefillFat : '') + '">' +
-        '</div>' +
-        '<button class="btn-primary" data-action="add-meal">+ Add Meal</button>' +
-      '</div>';
-    }
-    // No trigger shown when collapsed — reaching manual entry now goes
-    // through the search overlay's "Use [query]" custom-name option
-    // instead of a second visible button cluttering this screen.
+    // Add Meal now lives in its own overlay (see openAddMealOverlay) —
+    // nothing rendered inline here for it anymore.
 
     if (todayMeals.length === 0){
       html += '<div class="empty tab-empty-state"><div class="glyph">' +
@@ -827,6 +872,46 @@
 
   function closeFoodSearchOverlay(){
     document.getElementById('foodSearchOverlay').classList.add('hidden');
+  }
+
+  // Add Meal is a bottom-sheet overlay rather than an inline card —
+  // opened by picking a search/scan result, using "Use [query]" for
+  // a custom name, or (rarely) directly with nothing prefilled.
+  // Populates the real form fields (#mealName etc.) directly rather
+  // than going through a full renderApp(), since the sheet is its
+  // own layer on top of whatever the Log tab is currently showing.
+  function openAddMealOverlay(){
+    var bodyEl = document.getElementById('addMealBody');
+    var bannerHtml = ui.selectedFood ? selectedFoodBannerHtml() : '';
+    bodyEl.querySelectorAll('.selected-food-banner').forEach(function(el){ el.remove(); });
+    if (bannerHtml) bodyEl.insertAdjacentHTML('afterbegin', bannerHtml);
+
+    document.getElementById('mealName').value = ui.prefillName || '';
+    document.getElementById('mealCal').value = ui.prefillCal != null ? ui.prefillCal : '';
+    document.getElementById('mealProtein').value = ui.prefillProtein != null ? ui.prefillProtein : '';
+    document.getElementById('mealCarbs').value = ui.prefillCarbs != null ? ui.prefillCarbs : '';
+    document.getElementById('mealFat').value = ui.prefillFat != null ? ui.prefillFat : '';
+
+    var overlay = document.getElementById('addMealOverlay');
+    var sheet = document.getElementById('addMealSheet');
+    overlay.classList.remove('hidden');
+    if (ui.justFilledFood){
+      sheet.classList.add('glow-once');
+      setTimeout(function(){ sheet.classList.remove('glow-once'); }, 900);
+    }
+    ui.justFilledFood = false;
+
+    // Autofocus the name field only when it's empty (a fresh custom
+    // entry) — a prefilled pick from search doesn't need the keyboard
+    // popping up immediately.
+    if (!ui.prefillName){
+      document.getElementById('mealName').focus();
+    }
+  }
+
+  function closeAddMealOverlay(){
+    document.getElementById('addMealOverlay').classList.add('hidden');
+    clearFoodSelection();
   }
 
   function searchFoodDebounced(query){
@@ -1026,9 +1111,8 @@
     ui.grams = 100;
     applySelectedFoodToForm();
     ui.justFilledFood = true;
-    ui.showManualEntry = true;
     closeFoodSearchOverlay();
-    renderApp();
+    openAddMealOverlay();
   }
 
   // Recomputes the prefill macro values from the selected food.
@@ -1148,8 +1232,7 @@
         ui.grams = 100;
         applySelectedFoodToForm();
         ui.justFilledFood = true;
-        ui.showManualEntry = true;
-        renderApp();
+        openAddMealOverlay();
       })
       .catch(function(err){
         console.error('SaviorFuel: barcode lookup failed —', err);
@@ -1177,9 +1260,8 @@
       loggedAt: Date.now()
     });
     saveStore();
-    clearFoodSelection();
     maybeVibrate();
-    ui.showManualEntry = false; // collapse back to the trigger button now it's logged
+    closeAddMealOverlay(); // also clears the food selection state
     renderApp();
   }
 
@@ -1514,6 +1596,7 @@
     if (newTab === state.tab) return;
     closeScanner(); // safety: release the camera if it was somehow left open
     closeFoodSearchOverlay();
+    closeAddMealOverlay();
     var viewEl = document.getElementById('view');
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1545,6 +1628,8 @@
       switchTab(el.dataset.tab);
     } else if (action === 'add-meal'){
       addMealFromForm();
+    } else if (action === 'close-add-meal-overlay'){
+      closeAddMealOverlay();
     } else if (action === 'delete-meal'){
       deleteMeal(el.dataset.id);
     } else if (action === 'toggle-history-day'){
@@ -1566,10 +1651,9 @@
       ui.prefillName = el.dataset.name;
       ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat = null;
       ui.selectedFood = null;
-      ui.showManualEntry = true;
-      ui.justFilledFood = true;
+      ui.justFilledFood = false; // no real macro data was filled in, just the name — no glow needed
       closeFoodSearchOverlay();
-      renderApp();
+      openAddMealOverlay();
     } else if (action === 'close-food-search-overlay'){
       closeFoodSearchOverlay();
     } else if (action === 'toggle-macro-card'){
