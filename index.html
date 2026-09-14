@@ -513,12 +513,23 @@
     border:2px solid var(--accent);border-radius:var(--radius-md);
     box-shadow:0 0 0 2000px rgba(0,0,0,0.4);
   }
+  .scan-overlay-controls{
+    position:absolute;bottom:calc(30px + var(--safe-bottom));left:0;right:0;
+    display:flex;align-items:center;justify-content:center;gap:18px;
+  }
   .scan-overlay-cancel{
-    position:absolute;bottom:calc(30px + var(--safe-bottom));left:50%;transform:translateX(-50%);
     background:var(--panel);color:var(--text);border:1px solid var(--line);
     border-radius:var(--radius-pill);font-family:'Oswald',sans-serif;font-size:13px;
     font-weight:700;letter-spacing:0.03em;text-transform:uppercase;padding:12px 28px;cursor:pointer;
   }
+  .scan-overlay-capture{
+    width:52px;height:52px;border-radius:50%;flex-shrink:0;
+    background:var(--accent);color:#14161a;border:none;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .scan-overlay-capture svg{width:22px;height:22px;}
+  .scan-overlay-capture.loading{opacity:0.55;pointer-events:none;}
+  .scan-overlay-capture:active{opacity:0.85;}
 
   /* ---------- Settings — same structural classes as SaviorFit Logger ---------- */
   .section-label{
@@ -778,7 +789,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
       </button>
       <input type="text" class="food-search-overlay-input" id="foodSearchInput" placeholder="Search a food..." autocomplete="off">
-      <button class="food-search-scan-btn" data-action="open-scanner" aria-label="Scan barcode">
+      <button class="food-search-scan-btn" data-action="open-scanner" aria-label="Scan barcode or food photo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 8h4M17 8h4M3 16h4M17 16h4"/></svg>
       </button>
     </div>
@@ -788,9 +799,14 @@
 
 <div id="scanOverlay" class="scan-overlay hidden">
   <video id="scanVideo" playsinline autoplay muted></video>
-  <div class="scan-overlay-status" id="scanStatus">Point camera at a barcode</div>
+  <div class="scan-overlay-status" id="scanStatus">Point at a barcode, or snap a photo of the food</div>
   <div class="scan-overlay-frame"></div>
-  <button class="scan-overlay-cancel" data-action="close-scanner">Cancel</button>
+  <div class="scan-overlay-controls">
+    <button class="scan-overlay-cancel" data-action="close-scanner">Cancel</button>
+    <button class="scan-overlay-capture" id="scanCaptureBtn" data-action="capture-food-photo" aria-label="Identify food from photo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h1l1.5-2h7L17 4h1a2 2 0 0 1 2 2v2"></path><path d="M2 8h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"></path><circle cx="12" cy="14" r="4"></circle></svg>
+    </button>
+  </div>
 </div>
 
 <div class="add-meal-overlay hidden" id="addMealOverlay">
@@ -1538,7 +1554,7 @@
         scanState.detector = new BarcodeDetector({
           formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128']
         });
-        statusEl.textContent = 'Point camera at a barcode';
+        statusEl.textContent = 'Point at a barcode, or snap a photo of the food';
         scanLoop();
       })
       .catch(function(err){
@@ -1572,6 +1588,7 @@
     scanState.stream = null;
     scanState.loopId = null;
     document.getElementById('scanOverlay').classList.add('hidden');
+    document.getElementById('scanCaptureBtn').classList.remove('loading'); // reset for next open
   }
 
   function onBarcodeDetected(code){
@@ -1615,6 +1632,103 @@
         alert('Lookup failed — check your connection and try again, or search by name instead.');
       });
   }
+
+  /* =========================================================
+     ON-DEVICE FOOD PHOTO RECOGNITION — same camera view as the
+     barcode scanner above (one lens, one permission prompt): the
+     barcode loop keeps running in the background, and this button
+     lets you snap a frame instead when there's no barcode to find.
+     TFJS + MobileNet (Google's official, maintained pretrained
+     model — not a food-specific one, there isn't a reliably-hosted
+     one) load lazily from CDN the first time this is actually used,
+     not on every app load, and stay cached in memory for the rest
+     of the session once loaded. MobileNet only knows ImageNet's
+     1000 general categories, so its guess is fed into the existing
+     search rather than auto-logged — treat it as a head start on
+     typing, not a real identification, especially for Malaysian
+     dishes it has no concept of.
+     ========================================================= */
+  var foodClassifierState = { model: null, loading: null };
+
+  function loadScriptOnce(src){
+    return new Promise(function(resolve, reject){
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = function(){ resolve(); };
+      s.onerror = function(){ reject(new Error('Failed to load ' + src)); };
+      document.head.appendChild(s);
+    });
+  }
+
+  function loadFoodClassifier(){
+    if (foodClassifierState.model) return Promise.resolve(foodClassifierState.model);
+    if (foodClassifierState.loading) return foodClassifierState.loading;
+
+    foodClassifierState.loading = Promise.resolve()
+      .then(function(){
+        if (typeof tf === 'undefined') return loadScriptOnce('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs');
+      })
+      .then(function(){
+        if (typeof mobilenet === 'undefined') return loadScriptOnce('https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet');
+      })
+      .then(function(){ return mobilenet.load(); })
+      .then(function(model){
+        foodClassifierState.model = model;
+        foodClassifierState.loading = null;
+        return model;
+      })
+      .catch(function(err){
+        foodClassifierState.loading = null;
+        throw err;
+      });
+
+    return foodClassifierState.loading;
+  }
+
+  function captureFoodPhoto(){
+    if (!scanState.stream) return; // scanner already closed
+    var video = document.getElementById('scanVideo');
+    var statusEl = document.getElementById('scanStatus');
+    var captureBtn = document.getElementById('scanCaptureBtn');
+
+    // Stop only the barcode-detection loop, not the camera stream —
+    // the video keeps showing behind the status text while the model
+    // loads/runs, same as the "Found ... looking it up" moment in
+    // onBarcodeDetected(). The frame itself is grabbed right now
+    // regardless, so nothing changes about what gets classified.
+    if (scanState.loopId) cancelAnimationFrame(scanState.loopId);
+    scanState.loopId = null;
+    captureBtn.classList.add('loading');
+    statusEl.textContent = 'Loading food recognition...';
+
+    var canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+
+    loadFoodClassifier()
+      .then(function(model){
+        statusEl.textContent = 'Identifying...';
+        return model.classify(canvas);
+      })
+      .then(function(predictions){
+        closeScanner();
+        // MobileNet's ImageNet labels are comma-separated synonyms
+        // (e.g. "cheeseburger, hamburger") — just use the first.
+        var guess = predictions[0] ? predictions[0].className.split(',')[0].trim() : '';
+        openFoodSearchOverlay();
+        if (guess){
+          document.getElementById('foodSearchInput').value = guess;
+          runFoodSearch(guess);
+        }
+      })
+      .catch(function(err){
+        console.error('SaviorFuel: food photo recognition failed —', err);
+        closeScanner();
+        alert('Couldn\'t load food recognition — check your connection, or search by name instead.');
+      });
+  }
+
 
   function addMealFromForm(){
     var name = document.getElementById('mealName').value.trim();
@@ -2182,6 +2296,8 @@
       calculatePlanFromForm();
     } else if (action === 'open-scanner'){
       openScanner();
+    } else if (action === 'capture-food-photo'){
+      captureFoodPhoto();
     } else if (action === 'close-scanner'){
       closeScanner();
     } else if (action === 'set-unit'){
