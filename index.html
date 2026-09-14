@@ -401,6 +401,7 @@
   }
   .meal-row:last-child{border-bottom:none;}
   .meal-row-name{font-size:14px;color:var(--text);flex:1;min-width:0;}
+  .meal-row-name-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .meal-row-macros{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);}
   .meal-row-cal{font-family:'Oswald',sans-serif;font-weight:700;color:var(--accent);white-space:nowrap;}
   .meal-row-del{
@@ -1216,7 +1217,8 @@
 
   function mealRowHtml(m){
     return '<div class="meal-row">' +
-      '<div class="meal-row-name">' + esc(m.name) +
+      '<div class="meal-row-name">' +
+        '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(m.name) + '</div>' +
         '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
@@ -1386,7 +1388,12 @@
       // downstream (see pickFoodResult / onBarcodeDetected).
       else if (fn.nutrientName === 'Sodium, Na') n['sodium_100g_mg'] = fn.value;
     });
-    return { product_name: food.description, brands: food.brandOwner || '', nutriments: n, _source: 'usda' };
+    // USDA's bulk/commodity entries carry long bureaucratic annotations
+    // like "(Includes foods for USDA's Food Distribution Program)" —
+    // meaningless noise for a personal food log, so strip any
+    // parenthetical that mentions USDA rather than log it verbatim.
+    var name = (food.description || '').replace(/\s*\([^)]*USDA[^)]*\)/gi, '').trim();
+    return { product_name: name, brands: food.brandOwner || '', nutriments: n, _source: 'usda' };
   }
 
   // Foundation + SR Legacy are USDA's generic/whole-food datasets —
