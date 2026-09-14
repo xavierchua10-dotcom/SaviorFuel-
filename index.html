@@ -194,14 +194,23 @@
   }
 
   /* ---------- Macro summary + bars ---------- */
-  .macro-summary-card{
-    margin-bottom:22px;
-    padding:12px 14px 10px;
-    position:sticky;
-    top:0;
+  .macro-summary-wrap{
+    margin:-16px -16px 20px;
+    position:relative;
     z-index:5;
   }
-  .macro-cal-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .macro-summary-card{
+    margin-bottom:0;
+    padding:10px 16px 8px;
+    border-radius:0;
+    border-left:none;
+    border-right:none;
+    border-top:none;
+    position:sticky;
+    top:0;
+    background:var(--bg);
+  }
+  .macro-cal-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
   .macro-cal-row .num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
   .macro-cal-row .num span{font-size:14px;font-weight:500;color:var(--text-faint);}
   .macro-bar-row{margin-bottom:7px;}
@@ -673,12 +682,12 @@
     var totals = totalsFor(todayMeals);
     var g = STORE.goals;
 
-    var html = '<div class="card macro-summary-card">' +
+    var html = '<div class="macro-summary-wrap"><div class="card macro-summary-card">' +
       '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div></div>' +
       macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
       macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
       macroBarHtml('Fat', totals.fat, g.fat, 'fat') +
-    '</div>';
+    '</div></div>';
 
     html += '<button class="card food-search-trigger" data-action="open-food-search-overlay">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
