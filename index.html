@@ -47,6 +47,37 @@
     --radius-xl:20px;
     --radius-pill:999px;
     --safe-bottom:env(safe-area-inset-bottom, 0px);
+    /* Fixed, theme-independent — the header stays exactly as it was
+       in both themes, per request, so it does not reference any of
+       the swappable tokens above. */
+    --header-bg:rgba(16,18,21,0.72);
+    --header-text:#e9e6df;
+    --header-text-faint:#82878f;
+    --header-accent:#f2b134;
+    --header-line:#2e333b;
+  }
+
+  /* ---------- Light theme — swaps the neutral/surface tokens only.
+     --accent/--success/--accent-2 are deliberately darker here than
+     their dark-mode values (not just reused) since the originals
+     don't have enough contrast against a light background for text
+     use (tab labels, ring percentages, captions), not just fills. */
+  body[data-theme="light"]{
+    --bg:#f6f4f0;
+    --panel:#ffffff;
+    --panel-2:#f0eee7;
+    --panel-3:#e4e1d8;
+    --line:#ddd9cf;
+    --text:#22201c;
+    --text-dim:#6b6860;
+    --text-faint:#8a8578;
+    --accent:#a86c00;
+    --accent-dim:#f0dfb8;
+    --accent-rgb:168,108,0;
+    --accent-2:#a5372f;
+    --accent-2-dim:#f6dcda;
+    --success:#3f8f4f;
+    --success-dim:#e2f2e4;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -88,8 +119,8 @@
     align-items:center;
     justify-content:space-between;
     padding:18px 18px 14px;
-    border-bottom:1px solid var(--line);
-    background:rgba(16,18,21,0.72);
+    border-bottom:1px solid var(--header-line);
+    background:var(--header-bg);
   }
   .topbar h1{
     font-family:'Oswald',sans-serif;
@@ -98,9 +129,9 @@
     letter-spacing:0.08em;
     text-transform:uppercase;
     margin:0;
-    color:var(--text);
+    color:var(--header-text);
   }
-  .topbar h1 span{color:var(--accent);}
+  .topbar h1 span{color:var(--header-accent);}
   .topbar h1 small{
     display:inline-block;
     font-family:'Inter',sans-serif;
@@ -108,7 +139,7 @@
     font-weight:500;
     letter-spacing:0.02em;
     text-transform:none;
-    color:var(--text-faint);
+    color:var(--header-text-faint);
     margin-left:8px;
   }
   .topbar h1 small::before{content:'-\00A0';}
@@ -885,7 +916,7 @@
     return 'dinner';
   }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
-  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded' };
+  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark' };
   var APP_VERSION = '0.1.0';
 
   function cmToIn(cm){ return cm / 2.54; }
@@ -934,7 +965,9 @@
       parsed.goals = Object.assign({}, DEFAULT_GOALS, parsed.goals || {});
       if (!parsed.meals) parsed.meals = [];
       if (!parsed.profile) parsed.profile = Object.assign({}, DEFAULT_PROFILE);
-      if (!parsed.appSettings) parsed.appSettings = Object.assign({}, DEFAULT_APP_SETTINGS);
+      // Same merge reasoning as goals above — existing density/corners/
+      // unit choices are kept, newly-added settings (theme) backfill.
+      parsed.appSettings = Object.assign({}, DEFAULT_APP_SETTINGS, parsed.appSettings || {});
       return parsed;
     } catch (e){
       console.error('SaviorFuel: failed to load local store, starting fresh —', e);
@@ -2063,6 +2096,11 @@
 
     html += '<div class="section-label">Appearance</div>';
     html += '<div class="settings-group">';
+    html += '<div class="settings-row"><div><div class="sr-label">Theme</div><div class="sr-sub">Header always stays dark either way</div></div>' +
+              '<div class="seg">' +
+                '<button data-action="set-theme" data-theme="dark" class="' + (s.theme !== 'light' ? 'active' : '') + '">Dark</button>' +
+                '<button data-action="set-theme" data-theme="light" class="' + (s.theme === 'light' ? 'active' : '') + '">Light</button>' +
+              '</div></div>';
     html += '<div class="settings-row"><div><div class="sr-label">Density</div><div class="sr-sub">Fit more on screen in Log &amp; History</div></div>' +
               '<div class="seg">' +
                 '<button data-action="set-density" data-density="comfortable" class="' + (s.density === 'comfortable' ? 'active' : '') + '">Comfortable</button>' +
@@ -2122,6 +2160,7 @@
   function applyAppearanceSettings(){
     document.body.dataset.density = STORE.appSettings.density || 'comfortable';
     document.body.dataset.corners = STORE.appSettings.corners || 'rounded';
+    document.body.dataset.theme = STORE.appSettings.theme || 'dark';
   }
 
   function maybeVibrate(){
@@ -2154,7 +2193,7 @@
           meals: parsed.meals,
           goals: Object.assign({}, DEFAULT_GOALS, parsed.goals || {}),
           profile: parsed.profile || Object.assign({}, DEFAULT_PROFILE),
-          appSettings: parsed.appSettings || Object.assign({}, DEFAULT_APP_SETTINGS)
+          appSettings: Object.assign({}, DEFAULT_APP_SETTINGS, parsed.appSettings || {})
         };
         saveStore();
         applyAppearanceSettings();
@@ -2315,6 +2354,11 @@
       renderApp();
     } else if (action === 'set-corner-style'){
       STORE.appSettings.corners = el.dataset.style;
+      saveStore();
+      applyAppearanceSettings();
+      renderApp();
+    } else if (action === 'set-theme'){
+      STORE.appSettings.theme = el.dataset.theme;
       saveStore();
       applyAppearanceSettings();
       renderApp();
