@@ -391,19 +391,25 @@
   .insight-bar-fill{height:100%;background:var(--accent);border-radius:var(--radius-xs);}
   .insight-bar-val{width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0;}
 
-  /* ---------- Insights "Today" table ---------- */
-  .today-macro-table{width:100%;border-collapse:collapse;}
-  .today-macro-table th{
-    text-align:right; font-size:10.5px; font-weight:600; letter-spacing:0.03em;
-    text-transform:uppercase; color:var(--text-faint); padding:0 0 8px;
+  /* ---------- Insights "Today" macro rings ---------- */
+  .macro-ring-row{display:flex;justify-content:space-between;gap:8px;padding-top:2px;}
+  .macro-ring-item{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;}
+  .macro-ring-wrap{position:relative;width:76px;height:76px;}
+  .macro-ring-svg{width:76px;height:76px;transform:rotate(-90deg);}
+  .macro-ring-track{fill:none;stroke:var(--panel-3);stroke-width:7;}
+  .macro-ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 500ms ease;}
+  .macro-ring-fill.protein{stroke:var(--success);}
+  .macro-ring-fill.carbs{stroke:#5fa8d6;}
+  .macro-ring-fill.fat{stroke:var(--accent-2);}
+  .macro-ring-pct{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald',sans-serif; font-size:15px; font-weight:700; color:var(--text);
   }
-  .today-macro-table th:first-child, .today-macro-table td:first-child{text-align:left;}
-  .today-macro-table td{
-    text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px;
-    color:var(--text); padding:8px 0; border-top:1px solid var(--line);
+  .macro-ring-label{
+    margin-top:9px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim);
   }
-  .today-macro-table td:first-child{font-family:'Inter',sans-serif;font-size:14px;color:var(--text-dim);}
-  .today-macro-table tr:first-child td{border-top:none;}
+  .macro-ring-sub{margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-faint);}
 
   /* ---------- Settings ---------- */
   .settings-group{margin-bottom:18px;}
@@ -1002,8 +1008,27 @@
   // One row of the Insights "Today" table — plain consumed/goal/%
   // numbers, no bar, since this panel is meant to read as a quick
   // reference table rather than a repeat of the Log tab's bars.
-  function todayMacroRowHtml(label, value, goal){
-    return '<tr><td>' + label + '</td><td>' + Math.round(value) + 'g</td><td>' + goal + 'g</td><td>' + pct(value, goal) + '%</td></tr>';
+  // Ring circumference is fixed (r=32), so the stroke-dasharray is
+  // constant and only stroke-dashoffset moves to reveal the arc —
+  // same capped 0-100% used everywhere else via pct().
+  var MACRO_RING_R = 32;
+  var MACRO_RING_CIRCUMFERENCE = 2 * Math.PI * MACRO_RING_R;
+
+  function macroRingHtml(label, value, goal, colorClass){
+    var percent = pct(value, goal);
+    var offset = MACRO_RING_CIRCUMFERENCE * (1 - percent / 100);
+    return '<div class="macro-ring-item">' +
+      '<div class="macro-ring-wrap">' +
+        '<svg class="macro-ring-svg" viewBox="0 0 76 76">' +
+          '<circle class="macro-ring-track" cx="38" cy="38" r="' + MACRO_RING_R + '"></circle>' +
+          '<circle class="macro-ring-fill ' + colorClass + '" cx="38" cy="38" r="' + MACRO_RING_R + '" ' +
+            'style="stroke-dasharray:' + MACRO_RING_CIRCUMFERENCE.toFixed(2) + ';stroke-dashoffset:' + offset.toFixed(2) + ';"></circle>' +
+        '</svg>' +
+        '<div class="macro-ring-pct">' + percent + '%</div>' +
+      '</div>' +
+      '<div class="macro-ring-label">' + label + '</div>' +
+      '<div class="macro-ring-sub">' + Math.round(value) + ' / ' + goal + 'g</div>' +
+    '</div>';
   }
 
   function mealRowHtml(m){
@@ -1562,11 +1587,11 @@
     var g = STORE.goals;
 
     var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Today</h3>';
-    html += '<table class="today-macro-table"><thead><tr><th></th><th>Consumed</th><th>Goal</th><th>%</th></tr></thead><tbody>' +
-      todayMacroRowHtml('Protein', todayTotals.protein, g.protein) +
-      todayMacroRowHtml('Carbs', todayTotals.carbs, g.carbs) +
-      todayMacroRowHtml('Fat', todayTotals.fat, g.fat) +
-    '</tbody></table>';
+    html += '<div class="macro-ring-row">' +
+      macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
+      macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
+      macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
+    '</div>';
     html += '</div>';
 
     document.getElementById('view').innerHTML = html;
