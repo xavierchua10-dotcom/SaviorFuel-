@@ -436,6 +436,16 @@
     letter-spacing:0.03em; text-transform:uppercase; color:var(--text-faint); text-align:center;
   }
 
+  .insight-caption{
+    font-family:'Inter',sans-serif; font-size:12.5px; line-height:1.4;
+    color:var(--text-dim); margin:0 0 16px; padding:10px 12px;
+    background:var(--panel-3); border-radius:var(--radius-sm);
+  }
+  .insight-caption.balanced{color:var(--success);background:var(--success-dim);}
+  .insight-caption .cap-protein{color:var(--success);font-weight:700;}
+  .insight-caption .cap-carbs{color:#5fa8d6;font-weight:700;}
+  .insight-caption .cap-fat{color:var(--accent-2);font-weight:700;}
+
   /* ---------- Settings ---------- */
   .settings-group{margin-bottom:18px;}
   .settings-group h3{
@@ -1092,6 +1102,33 @@
     '</div>';
   }
 
+  // A one-line read on today's macros — calls out whichever macro is
+  // furthest behind its own goal, or says so if all three are
+  // tracking evenly. Recomputed fresh from today's actual totals on
+  // every render, so it always reflects the current numbers rather
+  // than being a static message.
+  function macroBalanceCaption(todayMeals, todayTotals, g){
+    if (todayMeals.length === 0){
+      return { text: 'Nothing logged yet today — log a meal to see how you\'re tracking.', tone: '' };
+    }
+    var macros = [
+      { name: 'Protein', pct: pct(todayTotals.protein, g.protein), cls: 'cap-protein' },
+      { name: 'Carbs', pct: pct(todayTotals.carbs, g.carbs), cls: 'cap-carbs' },
+      { name: 'Fat', pct: pct(todayTotals.fat, g.fat), cls: 'cap-fat' }
+    ];
+    var lowest = macros.reduce(function(a, b){ return b.pct < a.pct ? b : a; });
+    var highest = macros.reduce(function(a, b){ return b.pct > a.pct ? b : a; });
+    var spread = highest.pct - lowest.pct;
+
+    if (spread <= 15){
+      return { text: 'Balanced today — protein, carbs, and fat are all tracking evenly.', tone: 'balanced' };
+    }
+    return {
+      text: '<span class="' + lowest.cls + '">' + lowest.name + '</span> is lagging at ' + lowest.pct + '% of today\'s goal, furthest behind of the three.',
+      tone: ''
+    };
+  }
+
   function mealRowHtml(m){
     return '<div class="meal-row">' +
       '<div class="meal-row-name">' + esc(m.name) +
@@ -1648,6 +1685,8 @@
     var g = STORE.goals;
 
     var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Today</h3>';
+    var caption = macroBalanceCaption(todayMeals, todayTotals, g);
+    html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
     html += calorieRingHtml(todayTotals.calories, g.calories);
     html += '<div class="macro-ring-row">' +
       macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
