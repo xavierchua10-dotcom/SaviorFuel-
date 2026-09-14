@@ -1107,9 +1107,21 @@
   // tracking evenly. Recomputed fresh from today's actual totals on
   // every render, so it always reflects the current numbers rather
   // than being a static message.
+  // A calorie-% floor before making any balance claim — at very low
+  // intake (e.g. one small snack) every macro's % of goal is near
+  // zero, so the spread looks tiny and reads as "balanced" even
+  // though nothing meaningful has been logged yet. Below the floor,
+  // say so instead of drawing a conclusion from too little data.
+  var BALANCE_MIN_CALORIE_PCT = 15;
+  var BALANCE_SPREAD_THRESHOLD = 15;
+
   function macroBalanceCaption(todayMeals, todayTotals, g){
     if (todayMeals.length === 0){
       return { text: 'Nothing logged yet today — log a meal to see how you\'re tracking.', tone: '' };
+    }
+    var caloriePct = pct(todayTotals.calories, g.calories);
+    if (caloriePct < BALANCE_MIN_CALORIE_PCT){
+      return { text: 'Still early today — log a bit more to get a balance read.', tone: '' };
     }
     var macros = [
       { name: 'Protein', pct: pct(todayTotals.protein, g.protein), cls: 'cap-protein' },
@@ -1120,7 +1132,7 @@
     var highest = macros.reduce(function(a, b){ return b.pct > a.pct ? b : a; });
     var spread = highest.pct - lowest.pct;
 
-    if (spread <= 15){
+    if (spread <= BALANCE_SPREAD_THRESHOLD){
       return { text: 'Balanced today — protein, carbs, and fat are all tracking evenly.', tone: 'balanced' };
     }
     return {
