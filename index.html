@@ -108,9 +108,9 @@
 
   /* Every tab except Log needs the top inset #view no longer provides
      itself (removed so the Log tab's sticky header can sit flush at
-     the very top with no margin math). Excludes the sticky wrapper,
+     the very top with no margin math). Excludes the sticky card,
      which should stay flush. */
-  #view > *:first-child:not(.macro-summary-wrap){
+  #view > *:first-child:not(.macro-summary-card){
     margin-top:16px;
   }
 
@@ -202,13 +202,8 @@
   }
 
   /* ---------- Macro summary + bars ---------- */
-  .macro-summary-wrap{
-    margin:0 -16px 20px;
-    position:relative;
-    z-index:5;
-  }
   .macro-summary-card{
-    margin-bottom:0;
+    margin:0 -16px 20px;
     padding:10px 16px 8px;
     border-radius:0;
     border-left:none;
@@ -217,6 +212,7 @@
     position:sticky;
     top:0;
     background:var(--bg);
+    z-index:5;
   }
   .macro-cal-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
   .macro-cal-row .num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
@@ -690,7 +686,7 @@
     var totals = totalsFor(todayMeals);
     var g = STORE.goals;
 
-    var html = '<div class="macro-summary-wrap"><div class="card macro-summary-card">' +
+    var html = '<div class="card macro-summary-card">' +
       '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div></div>' +
       macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
       macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
@@ -699,7 +695,7 @@
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
         'Search or scan a food...' +
       '</button>' +
-    '</div></div>';
+    '</div>';
 
     html += '<div class="card add-meal-card">' +
       (ui.selectedFood ? selectedFoodBannerHtml() : '') +
