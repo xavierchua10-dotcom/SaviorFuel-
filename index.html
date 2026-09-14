@@ -510,6 +510,28 @@
   }
   .food-search-trigger svg{width:18px;height:18px;flex-shrink:0;color:var(--text-faint);}
 
+  /* Secondary, low-emphasis trigger for the manual-entry form, which
+     stays hidden until this is tapped or a food's picked from search —
+     dashed border matches SaviorFit Logger's "use custom name" style,
+     signalling "alternate path" rather than the primary action. */
+  .manual-entry-trigger{
+    display:block;width:100%;text-align:center;
+    background:transparent;border:1.5px dashed var(--line);
+    border-radius:var(--radius-lg);color:var(--text-faint);
+    font-size:13px;padding:12px;cursor:pointer;margin-bottom:14px;
+  }
+  .manual-entry-trigger:active{background:var(--panel);color:var(--text-dim);}
+
+  /* Same dashed-border pattern for the "use what I typed" option
+     pinned above search results when nothing's an exact match. */
+  .food-suggest-custom{
+    width:100%;text-align:left;background:transparent;
+    border:1.5px dashed var(--accent-dim);color:var(--accent);
+    font-size:13.5px;font-weight:600;padding:13px 14px;
+    border-radius:var(--radius);cursor:pointer;margin-bottom:8px;
+  }
+  .food-suggest-custom:active{background:var(--accent-dim);}
+
   @keyframes foodSearchBackdropIn{ 0%{opacity:0;} 100%{opacity:1;} }
   @keyframes foodSearchPanelIn{ 0%{opacity:0;transform:translateY(28px);} 100%{opacity:1;transform:translateY(0);} }
 
@@ -635,7 +657,8 @@
     searchDebounce: null,
     dangerZoneOpen: false,
     justFilledFood: false,
-    macroCardCollapsed: false
+    macroCardCollapsed: false,
+    showManualEntry: false // manual entry card is hidden until a food's picked or "Use custom name" is tapped
   };
 
   function loadStore(){
@@ -733,19 +756,23 @@
     var glowClass = ui.justFilledFood ? ' glow-once' : '';
     ui.justFilledFood = false; // one-shot: only the render right after a pick gets the animation
 
-    html += '<div class="card add-meal-card' + glowClass + '">' +
-      (ui.selectedFood ? selectedFoodBannerHtml() : '') +
-      '<div class="field-row"><input type="text" id="mealName" placeholder="Meal name" value="' + esc(ui.prefillName || '') + '"></div>' +
-      '<div class="field-row">' +
-        '<input type="number" inputmode="numeric" id="mealCal" placeholder="kcal" value="' + (ui.prefillCal != null ? ui.prefillCal : '') + '">' +
-        '<input type="number" inputmode="numeric" id="mealProtein" placeholder="protein g" value="' + (ui.prefillProtein != null ? ui.prefillProtein : '') + '">' +
-      '</div>' +
-      '<div class="field-row">' +
-        '<input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g" value="' + (ui.prefillCarbs != null ? ui.prefillCarbs : '') + '">' +
-        '<input type="number" inputmode="numeric" id="mealFat" placeholder="fat g" value="' + (ui.prefillFat != null ? ui.prefillFat : '') + '">' +
-      '</div>' +
-      '<button class="btn-primary" data-action="add-meal">+ Add Meal</button>' +
-    '</div>';
+    if (ui.showManualEntry){
+      html += '<div class="card add-meal-card' + glowClass + '">' +
+        (ui.selectedFood ? selectedFoodBannerHtml() : '') +
+        '<div class="field-row"><input type="text" id="mealName" placeholder="Meal name" value="' + esc(ui.prefillName || '') + '"></div>' +
+        '<div class="field-row">' +
+          '<input type="number" inputmode="numeric" id="mealCal" placeholder="kcal" value="' + (ui.prefillCal != null ? ui.prefillCal : '') + '">' +
+          '<input type="number" inputmode="numeric" id="mealProtein" placeholder="protein g" value="' + (ui.prefillProtein != null ? ui.prefillProtein : '') + '">' +
+        '</div>' +
+        '<div class="field-row">' +
+          '<input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g" value="' + (ui.prefillCarbs != null ? ui.prefillCarbs : '') + '">' +
+          '<input type="number" inputmode="numeric" id="mealFat" placeholder="fat g" value="' + (ui.prefillFat != null ? ui.prefillFat : '') + '">' +
+        '</div>' +
+        '<button class="btn-primary" data-action="add-meal">+ Add Meal</button>' +
+      '</div>';
+    } else {
+      html += '<button class="manual-entry-trigger" data-action="show-manual-entry">+ Add food manually</button>';
+    }
 
     if (todayMeals.length === 0){
       html += '<div class="empty tab-empty-state"><div class="glyph">' +
@@ -936,11 +963,21 @@
       .then(function(results){
         if (thisRequest !== searchRequestId) return; // a newer search has since superseded this one
         var products = results[0].concat(results[1]).concat(results[2]);
+        var trimmed = query.trim();
+        var exactMatch = products.some(function(p){ return p.product_name.toLowerCase() === trimmed.toLowerCase(); });
+        // Pinned above the list whenever what's typed isn't already an
+        // exact match below — same "use what I typed" pattern as
+        // SaviorFit Logger's custom-exercise option — so a genuinely
+        // uncommon or local dish can still be added in one tap even
+        // when none of the three sources have it.
+        var customBtn = exactMatch ? '' :
+          '<button type="button" class="food-suggest-custom" data-action="use-custom-food-name" data-name="' + esc(trimmed) + '">Use \u201c' + esc(trimmed) + '\u201d</button>';
+
         if (products.length === 0){
-          resultsEl.innerHTML = '<div class="food-suggest-status">No results — try a different search, or just type it in manually below.</div>';
+          resultsEl.innerHTML = customBtn + '<div class="food-suggest-status">No matches — add it as a custom food above, or type it in manually.</div>';
           return;
         }
-        resultsEl.innerHTML = products.map(function(p, i){
+        resultsEl.innerHTML = customBtn + products.map(function(p, i){
           var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
           var tag = (p._source === 'techapi')
             ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
@@ -995,6 +1032,7 @@
     ui.grams = 100;
     applySelectedFoodToForm();
     ui.justFilledFood = true;
+    ui.showManualEntry = true;
     closeFoodSearchOverlay();
     renderApp();
   }
@@ -1116,6 +1154,7 @@
         ui.grams = 100;
         applySelectedFoodToForm();
         ui.justFilledFood = true;
+        ui.showManualEntry = true;
         renderApp();
       })
       .catch(function(err){
@@ -1528,6 +1567,17 @@
       pickFoodResult(parseInt(el.dataset.index, 10));
     } else if (action === 'open-food-search-overlay'){
       openFoodSearchOverlay();
+    } else if (action === 'show-manual-entry'){
+      ui.showManualEntry = true;
+      renderApp();
+    } else if (action === 'use-custom-food-name'){
+      ui.prefillName = el.dataset.name;
+      ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat = null;
+      ui.selectedFood = null;
+      ui.showManualEntry = true;
+      ui.justFilledFood = true;
+      closeFoodSearchOverlay();
+      renderApp();
     } else if (action === 'close-food-search-overlay'){
       closeFoodSearchOverlay();
     } else if (action === 'toggle-macro-card'){
