@@ -242,6 +242,29 @@
   /* ---------- Quick-add meal form (inside the Add Meal sheet) ---------- */
   #addMealBody .field-row{display:flex;gap:8px;margin-bottom:8px;}
 
+  /* ---------- Meal category picker (inside Add Meal overlay) ---------- */
+  .category-picker{
+    display:flex; flex-wrap:wrap; gap:6px;
+    margin-bottom:12px;
+  }
+  .category-pill{
+    background:var(--panel-2); border:1px solid var(--line);
+    color:var(--text-dim); font-size:12px; font-weight:600;
+    padding:7px 12px; border-radius:var(--radius-pill); cursor:pointer;
+  }
+  .category-pill.active{background:var(--accent); border-color:var(--accent); color:#1c1500;}
+  .category-pill:active{filter:brightness(1.1);}
+
+  /* Small category tag shown on each meal row and as section headers
+     in the grouped Log/History lists. */
+  .category-section-label{
+    font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);
+    margin:16px 0 6px; padding:0 2px;
+  }
+  .category-section-label:first-child{margin-top:0;}
+  .category-section-total{float:right; color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-weight:400; letter-spacing:0;}
+
   /* Brief glow on the sheet right after a food gets picked from
      search/scan — confirms the fill worked without needing a toast
      or alert. Class is added once by openAddMealOverlay() and
@@ -650,6 +673,7 @@
       </button>
     </div>
     <div class="add-meal-body" id="addMealBody">
+      <div class="category-picker" id="categoryPicker"></div>
       <div class="field-row"><input type="text" id="mealName" placeholder="Meal name"></div>
       <div class="field-row">
         <input type="number" inputmode="numeric" id="mealCal" placeholder="kcal">
@@ -683,6 +707,26 @@
   var STORAGE_KEY = 'saviorfuel_local_v1';
 
   var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65 };
+
+  var MEAL_CATEGORIES = [
+    { id: 'breakfast', label: 'Breakfast' },
+    { id: 'morning-snack', label: 'Morning Snacks' },
+    { id: 'lunch', label: 'Lunch' },
+    { id: 'evening-snack', label: 'Evening Snacks' },
+    { id: 'dinner', label: 'Dinner' }
+  ];
+  var CATEGORY_LABELS = MEAL_CATEGORIES.reduce(function(acc, c){ acc[c.id] = c.label; return acc; }, {});
+
+  // Sensible default for whichever category button is pre-selected
+  // when the Add Meal overlay opens — always overridable by the user.
+  function suggestCategoryForNow(){
+    var h = new Date().getHours();
+    if (h < 10) return 'breakfast';
+    if (h < 12) return 'morning-snack';
+    if (h < 15) return 'lunch';
+    if (h < 18) return 'evening-snack';
+    return 'dinner';
+  }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
   var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded' };
   var APP_VERSION = '0.1.0';
@@ -715,7 +759,8 @@
     searchDebounce: null,
     dangerZoneOpen: false,
     justFilledFood: false,
-    macroCardCollapsed: false
+    macroCardCollapsed: false,
+    selectedCategory: 'breakfast' // set properly each time the Add Meal overlay opens
   };
 
   function loadStore(){
@@ -819,10 +864,42 @@
           '<path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path>' +
         '</svg></div><p>Nothing logged yet today.<br>Add your first meal above.</p></div>';
     } else {
-      html += '<div class="card">' + todayMeals.map(mealRowHtml).join('') + '</div>';
+      html += groupedMealsHtml(todayMeals);
     }
 
     document.getElementById('view').innerHTML = html;
+  }
+
+  // Groups a list of meals into category sections (Breakfast, Morning
+  // Snacks, Lunch, Evening Snacks, Dinner — in that fixed order) each
+  // with its own header, calorie subtotal, and card of rows. Meals
+  // logged before this feature existed have no category field, so
+  // they land in a trailing "Other" bucket rather than being hidden
+  // or crashing the grouping.
+  function groupedMealsHtml(meals){
+    var buckets = {};
+    MEAL_CATEGORIES.forEach(function(c){ buckets[c.id] = []; });
+    var other = [];
+    meals.forEach(function(m){
+      if (m.category && buckets[m.category]) buckets[m.category].push(m);
+      else other.push(m);
+    });
+
+    var html = '';
+    MEAL_CATEGORIES.forEach(function(c){
+      var group = buckets[c.id];
+      if (group.length === 0) return;
+      var subtotal = totalsFor(group).calories;
+      html += '<div class="category-section-label">' + c.label +
+        '<span class="category-section-total">' + subtotal + ' kcal</span></div>' +
+        '<div class="card">' + group.map(mealRowHtml).join('') + '</div>';
+    });
+    if (other.length > 0){
+      html += '<div class="category-section-label">Other' +
+        '<span class="category-section-total">' + totalsFor(other).calories + ' kcal</span></div>' +
+        '<div class="card">' + other.map(mealRowHtml).join('') + '</div>';
+    }
+    return html;
   }
 
   function macroBarHtml(label, value, goal, cls){
@@ -882,11 +959,22 @@
   // Populates the real form fields (#mealName etc.) directly rather
   // than going through a full renderApp(), since the sheet is its
   // own layer on top of whatever the Log tab is currently showing.
+  function renderCategoryPicker(){
+    var el = document.getElementById('categoryPicker');
+    if (!el) return;
+    el.innerHTML = MEAL_CATEGORIES.map(function(c){
+      return '<button type="button" class="category-pill' + (c.id === ui.selectedCategory ? ' active' : '') + '" data-action="select-meal-category" data-category="' + c.id + '">' + c.label + '</button>';
+    }).join('');
+  }
+
   function openAddMealOverlay(){
     var bodyEl = document.getElementById('addMealBody');
     var bannerHtml = ui.selectedFood ? selectedFoodBannerHtml() : '';
     bodyEl.querySelectorAll('.selected-food-banner').forEach(function(el){ el.remove(); });
     if (bannerHtml) bodyEl.insertAdjacentHTML('afterbegin', bannerHtml);
+
+    ui.selectedCategory = suggestCategoryForNow();
+    renderCategoryPicker();
 
     document.getElementById('mealName').value = ui.prefillName || '';
     document.getElementById('mealCal').value = ui.prefillCal != null ? ui.prefillCal : '';
@@ -1259,6 +1347,7 @@
       protein: protein,
       carbs: carbs,
       fat: fat,
+      category: ui.selectedCategory,
       loggedAt: Date.now()
     });
     saveStore();
@@ -1632,6 +1721,9 @@
       addMealFromForm();
     } else if (action === 'close-add-meal-overlay'){
       closeAddMealOverlay();
+    } else if (action === 'select-meal-category'){
+      ui.selectedCategory = el.dataset.category;
+      renderCategoryPicker();
     } else if (action === 'delete-meal'){
       deleteMeal(el.dataset.id);
     } else if (action === 'toggle-history-day'){
