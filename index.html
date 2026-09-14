@@ -316,28 +316,12 @@
   .reset-log-btn:active{background:var(--accent-2-dim);}
   .macro-cal-row .num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
   .macro-cal-row .num span{font-size:14px;font-weight:500;color:var(--text-faint);}
-  .macro-bar-row{margin-bottom:7px;}
+  .macro-bar-row{margin-bottom:5px;}
   .macro-bar-row:last-child{margin-bottom:0;}
 
-  /* ---------- Compact 3-column macro row for the sticky Log card —
-     same info as macro-bar-row above, side by side instead of
-     stacked, so the sticky card takes roughly a third the height. ---------- */
-  .macro-mini-row{display:flex;justify-content:space-between;gap:10px;margin:2px 0 10px;}
-  .macro-mini-item{flex:1;min-width:0;}
-  .macro-mini-item .lbl{
-    display:flex;justify-content:space-between;align-items:baseline;
-    font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:4px;
-  }
-  .macro-mini-item .lbl span{color:var(--text-faint);}
-  .macro-mini-item .lbl b{color:var(--text);font-weight:600;}
-  .macro-mini-track{height:5px;border-radius:var(--radius-pill);background:var(--panel-3);overflow:hidden;}
-  .macro-mini-fill{height:100%;border-radius:var(--radius-pill);}
-  .macro-mini-fill.protein{background:var(--success);}
-  .macro-mini-fill.carbs{background:#5fa8d6;}
-  .macro-mini-fill.fat{background:var(--accent-2);}
-  .macro-bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);margin-bottom:4px;}
+  .macro-bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);margin-bottom:3px;}
   .macro-bar-label b{color:var(--text);}
-  .macro-bar-track{height:6px;border-radius:var(--radius-pill);background:var(--panel-3);overflow:hidden;}
+  .macro-bar-track{height:5px;border-radius:var(--radius-pill);background:var(--panel-3);overflow:hidden;}
   .macro-bar-fill{height:100%;border-radius:var(--radius-pill);background:var(--accent);}
   .macro-bar-fill.protein{background:var(--success);}
   .macro-bar-fill.carbs{background:#5fa8d6;}
@@ -1064,11 +1048,9 @@
     var html = '<div class="card macro-summary-card">' +
       '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div><div class="macro-cal-row-actions">' + resetBtn + chevron + '</div></div>' +
       (collapsed ? '' :
-        '<div class="macro-mini-row">' +
-          macroMiniHtml('P', totals.protein, g.protein, 'protein') +
-          macroMiniHtml('C', totals.carbs, g.carbs, 'carbs') +
-          macroMiniHtml('F', totals.fat, g.fat, 'fat') +
-        '</div>'
+        macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
+        macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
+        macroBarHtml('Fat', totals.fat, g.fat, 'fat')
       ) +
       '<button class="food-search-trigger" data-action="open-food-search-overlay">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
@@ -1121,13 +1103,6 @@
         '<div class="card">' + other.map(mealRowHtml).join('') + '</div>';
     }
     return html;
-  }
-
-  function macroMiniHtml(letter, value, goal, cls){
-    return '<div class="macro-mini-item">' +
-      '<div class="lbl"><span>' + letter + '</span><b>' + Math.round(value) + '/' + goal + 'g</b></div>' +
-      '<div class="macro-mini-track"><div class="macro-mini-fill ' + cls + '" style="width:' + pct(value, goal) + '%"></div></div>' +
-    '</div>';
   }
 
   function macroBarHtml(label, value, goal, cls, unit){
