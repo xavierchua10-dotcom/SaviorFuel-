@@ -214,7 +214,15 @@
     background:var(--bg);
     z-index:5;
   }
-  .macro-cal-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+  .macro-cal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .macro-collapse-toggle{
+    background:var(--panel-3);border:none;border-radius:50%;
+    width:28px;height:28px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-dim);cursor:pointer;padding:0;
+  }
+  .macro-collapse-toggle svg{width:16px;height:16px;transition:transform 0.2s ease;}
+  .macro-collapse-toggle:active{background:var(--panel-2);}
   .macro-cal-row .num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
   .macro-cal-row .num span{font-size:14px;font-weight:500;color:var(--text-faint);}
   .macro-bar-row{margin-bottom:7px;}
@@ -622,7 +630,8 @@
     prefillName: null, prefillCal: null, prefillProtein: null, prefillCarbs: null, prefillFat: null,
     searchDebounce: null,
     dangerZoneOpen: false,
-    justFilledFood: false
+    justFilledFood: false,
+    macroCardCollapsed: false
   };
 
   function loadStore(){
@@ -699,11 +708,18 @@
     var totals = totalsFor(todayMeals);
     var g = STORE.goals;
 
+    var collapsed = ui.macroCardCollapsed;
+    var chevron = '<button class="macro-collapse-toggle" data-action="toggle-macro-card" aria-label="' + (collapsed ? 'Expand' : 'Collapse') + '">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(' + (collapsed ? '180deg' : '0deg') + ')"><polyline points="18 15 12 9 6 15"></polyline></svg>' +
+    '</button>';
+
     var html = '<div class="card macro-summary-card">' +
-      '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div></div>' +
-      macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
-      macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
-      macroBarHtml('Fat', totals.fat, g.fat, 'fat') +
+      '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div>' + chevron + '</div>' +
+      (collapsed ? '' :
+        macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
+        macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
+        macroBarHtml('Fat', totals.fat, g.fat, 'fat')
+      ) +
       '<button class="food-search-trigger" data-action="open-food-search-overlay">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
         'Search or scan a food...' +
@@ -1510,6 +1526,9 @@
       openFoodSearchOverlay();
     } else if (action === 'close-food-search-overlay'){
       closeFoodSearchOverlay();
+    } else if (action === 'toggle-macro-card'){
+      ui.macroCardCollapsed = !ui.macroCardCollapsed;
+      renderApp();
     } else if (action === 'calculate-plan'){
       calculatePlanFromForm();
     } else if (action === 'open-scanner'){
