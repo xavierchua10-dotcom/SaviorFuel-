@@ -156,10 +156,8 @@
     padding:0 16px calc(90px + var(--safe-bottom));
   }
 
-  /* Every tab needs the top inset #view no longer provides itself
-     (removed so the sticky header can still sit flush at the very
-     top of the scroll container when stuck, independent of this
-     margin — see .macro-summary-card). */
+  /* Every tab's first card needs the top inset #view no longer
+     provides itself. */
   #view > *:first-child{
     margin-top:16px;
   }
@@ -289,16 +287,10 @@
   }
 
   /* ---------- Macro summary + bars ---------- */
-  /* Used to be a full-bleed flat bar (negative margins, no radius,
-     no side borders) so it read as part of the header rather than a
-     card. Now just a normal .card that happens to stick to the top
-     while scrolling — same rounded corners/border/shadow as every
-     other card in the app. */
-  .macro-summary-card{
-    position:sticky;
-    top:0;
-    z-index:5;
-  }
+  /* No longer sticky/pinned — scrolls away with the rest of the
+     content like a normal card, now that it's styled like one
+     (rounded corners, border, shadow). Pinning it while everything
+     else scrolled underneath looked like it was floating oddly. */
   .macro-cal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
   .macro-collapse-toggle{
     background:var(--panel-3);border:none;border-radius:50%;
