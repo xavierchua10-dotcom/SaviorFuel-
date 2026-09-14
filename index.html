@@ -353,24 +353,17 @@
 
   /* Small category tag shown on each meal row and as section headers
      in the grouped Log/History lists. */
-  .category-group{
-    border:1px solid var(--line); border-radius:var(--radius-lg);
-    background:var(--panel); box-shadow:var(--card-shadow);
-    margin:16px 0 14px; overflow:hidden;
-  }
-  .category-group:first-child{margin-top:0;}
-  .category-group-header{
-    display:flex; justify-content:space-between; align-items:baseline;
+  .category-section-label{
     font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
     letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);
-    padding:10px 14px; border-bottom:1px solid var(--line);
+    margin:16px 0 6px; padding:0 2px;
   }
-  .category-group-total{color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-weight:400; letter-spacing:0;}
-  .category-group-body{padding:2px 14px 0;}
+  .category-section-label:first-child{margin-top:0;}
+  .category-section-total{float:right; color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-weight:400; letter-spacing:0;}
 
   /* Subtler in-card category label for History's single-list view —
-     just a small text row between groups of meal rows, no border box
-     of its own, unlike Log's bordered .category-group. */
+     just a small text row between groups of meal rows, no card/border
+     of its own, unlike Log's standalone .category-section-label. */
   .inline-category-label{
     font-family:'Oswald',sans-serif; font-size:10.5px; font-weight:700;
     letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);
@@ -1117,18 +1110,14 @@
       var group = buckets[c.id];
       if (group.length === 0) return;
       var subtotal = totalsFor(group).calories;
-      html += '<div class="category-group">' +
-        '<div class="category-group-header">' + c.label +
-          '<span class="category-group-total">' + subtotal + ' kcal</span></div>' +
-        '<div class="category-group-body">' + group.map(mealRowHtml).join('') + '</div>' +
-      '</div>';
+      html += '<div class="category-section-label">' + c.label +
+        '<span class="category-section-total">' + subtotal + ' kcal</span></div>' +
+        '<div class="card">' + group.map(mealRowHtml).join('') + '</div>';
     });
     if (other.length > 0){
-      html += '<div class="category-group">' +
-        '<div class="category-group-header">Other' +
-          '<span class="category-group-total">' + totalsFor(other).calories + ' kcal</span></div>' +
-        '<div class="category-group-body">' + other.map(mealRowHtml).join('') + '</div>' +
-      '</div>';
+      html += '<div class="category-section-label">Other' +
+        '<span class="category-section-total">' + totalsFor(other).calories + ' kcal</span></div>' +
+        '<div class="card">' + other.map(mealRowHtml).join('') + '</div>';
     }
     return html;
   }
