@@ -47,6 +47,10 @@
     --radius-xl:20px;
     --radius-pill:999px;
     --safe-bottom:env(safe-area-inset-bottom, 0px);
+    /* Subtle depth for cards — one soft, low-opacity shadow, not a
+       dramatic drop shadow. Same value in both themes; a plain dark
+       shadow reads fine against a light card too. */
+    --card-shadow:0 1px 2px rgba(0,0,0,0.14), 0 4px 10px rgba(0,0,0,0.10);
     /* Fixed, theme-independent — the header stays exactly as it was
        in both themes, per request, so it does not reference any of
        the swappable tokens above. */
@@ -264,6 +268,7 @@
     border-radius:var(--radius-lg);
     padding:14px 14px 12px;
     margin-bottom:14px;
+    box-shadow:var(--card-shadow);
   }
 
   /* ---------- Buttons (same pattern as SaviorFit Logger) ---------- */
@@ -483,8 +488,14 @@
   .insight-caption .cap-fat{color:var(--accent-2);font-weight:700;}
 
   /* ---------- Settings ---------- */
-  .settings-group{margin-bottom:18px;}
-  .settings-group h3{
+  /* Plain spacing wrapper — used only where a raw <h3> label sits
+     above its own already-boxed .card (Your profile, Daily goals),
+     so it stays unboxed instead of nesting a second box around the
+     .card's box (same background/border, so the inner border was
+     barely visible against its own parent — a real visual bug, not
+     a style choice). */
+  .settings-section{margin-bottom:18px;}
+  .settings-section h3{
     font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;
     letter-spacing:0.05em;text-transform:uppercase;color:var(--text-faint);
     margin:0 0 10px;
@@ -580,6 +591,7 @@
     border-radius:var(--radius);
     padding:6px 14px;
     margin-bottom:16px;
+    box-shadow:var(--card-shadow);
   }
   .settings-row{
     display:flex;
@@ -1968,7 +1980,7 @@
     var todayTotals = totalsFor(todayMeals);
     var g = STORE.goals;
 
-    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Today</h3>';
+    var html = '<div class="card"><h3 class="section-label">Today</h3>';
     html += calorieRingHtml(todayTotals.calories, g.calories);
     html += '<div class="macro-ring-row">' +
       macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
@@ -1981,7 +1993,7 @@
       remainingStatHtml('Carbs', todayTotals.carbs, g.carbs, 'g') +
       remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
     '</div>';
-    html += '<h3 class="section-label" style="margin:16px 0 10px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Other nutrients</h3>';
+    html += '<h3 class="section-label">Other nutrients</h3>';
     html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
       macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
       macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg');
@@ -2007,7 +2019,7 @@
     }
     var dayMax = Math.max(STORE.goals.calories, Math.max.apply(null, dayBuckets.map(function(d2){ return d2.total; })), 1);
 
-    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Last 7 days — daily calories</h3>';
+    var html = '<div class="card"><h3 class="section-label">Last 7 days — daily calories</h3>';
     html += dayBuckets.map(function(d3){
       return '<div class="insight-bar-row">' +
         '<div class="insight-bar-day">' + d3.label + '</div>' +
@@ -2060,7 +2072,7 @@
     var imperial = STORE.appSettings.unit === 'imperial';
     var heightVal = imperial ? Math.round(cmToIn(p.heightCm)) : p.heightCm;
     var weightVal = imperial ? Math.round(kgToLb(p.weightKg)) : p.weightKg;
-    return '<div class="settings-group"><h3>Your profile</h3><div class="card">' +
+    return '<div class="settings-section"><h3>Your profile</h3><div class="card">' +
       '<div class="settings-goal-row"><label>Sex</label>' +
         '<select id="profSex">' +
           '<option value="male"' + (p.sex === 'male' ? ' selected' : '') + '>Male</option>' +
@@ -2136,7 +2148,7 @@
       html += '<div class="plan-result-banner">Estimated maintenance (TDEE): <b>' + STORE.lastPlanTdee + ' kcal/day</b> — your goals below were calculated from this.</div>';
     }
 
-    html += '<div class="settings-group"><h3>Daily goals</h3><div class="card">' +
+    html += '<div class="settings-section"><h3>Daily goals</h3><div class="card">' +
       settingsGoalRow('Calories', 'goalCalories', g.calories) +
       settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
       settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
