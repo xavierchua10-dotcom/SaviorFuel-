@@ -510,18 +510,6 @@
   }
   .food-search-trigger svg{width:18px;height:18px;flex-shrink:0;color:var(--text-faint);}
 
-  /* Secondary, low-emphasis trigger for the manual-entry form, which
-     stays hidden until this is tapped or a food's picked from search —
-     dashed border matches SaviorFit Logger's "use custom name" style,
-     signalling "alternate path" rather than the primary action. */
-  .manual-entry-trigger{
-    display:block;width:100%;text-align:center;
-    background:transparent;border:1.5px dashed var(--line);
-    border-radius:var(--radius-lg);color:var(--text-faint);
-    font-size:13px;padding:12px;cursor:pointer;margin-bottom:14px;
-  }
-  .manual-entry-trigger:active{background:var(--panel);color:var(--text-dim);}
-
   /* Same dashed-border pattern for the "use what I typed" option
      pinned above search results when nothing's an exact match. */
   .food-suggest-custom{
@@ -770,9 +758,10 @@
         '</div>' +
         '<button class="btn-primary" data-action="add-meal">+ Add Meal</button>' +
       '</div>';
-    } else {
-      html += '<button class="manual-entry-trigger" data-action="show-manual-entry">+ Add food manually</button>';
     }
+    // No trigger shown when collapsed — reaching manual entry now goes
+    // through the search overlay's "Use [query]" custom-name option
+    // instead of a second visible button cluttering this screen.
 
     if (todayMeals.length === 0){
       html += '<div class="empty tab-empty-state"><div class="glyph">' +
@@ -1568,9 +1557,6 @@
       pickFoodResult(parseInt(el.dataset.index, 10));
     } else if (action === 'open-food-search-overlay'){
       openFoodSearchOverlay();
-    } else if (action === 'show-manual-entry'){
-      ui.showManualEntry = true;
-      renderApp();
     } else if (action === 'use-custom-food-name'){
       ui.prefillName = el.dataset.name;
       ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat = null;
