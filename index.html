@@ -427,28 +427,22 @@
   .insight-bar-fill{height:100%;background:var(--accent);border-radius:var(--radius-xs);}
   .insight-bar-val{width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0;}
 
-  /* ---------- Today hero — the one place in this screen that gets
-     real visual weight (bigger ring, gradient stroke, soft glow),
-     everything else on the page stays in the quiet, uniform .card
-     treatment on purpose, so this reads as the headline. Sits
-     directly on the page background, no card box around it. ---------- */
-  .today-hero{display:flex;flex-direction:column;align-items:center;padding:8px 0 22px;}
-  .calorie-ring-wrap{
-    position:relative;width:136px;height:136px;
-    filter:drop-shadow(0 0 20px rgba(var(--accent-rgb),0.35));
-  }
-  .calorie-ring-svg{width:136px;height:136px;transform:rotate(-90deg);}
-  .calorie-ring-track{fill:none;stroke:var(--panel-3);stroke-width:11;}
-  .calorie-ring-fill{fill:none;stroke:url(#calRingGrad);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset 500ms ease;}
+  /* ---------- Insights "Today" macro rings ---------- */
+  .calorie-ring-row{display:flex;justify-content:center;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);}
+  .calorie-ring-item{display:flex;flex-direction:column;align-items:center;}
+  .calorie-ring-wrap{position:relative;width:116px;height:116px;}
+  .calorie-ring-svg{width:116px;height:116px;transform:rotate(-90deg);}
+  .calorie-ring-track{fill:none;stroke:var(--panel-3);stroke-width:10;}
+  .calorie-ring-fill{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 500ms ease;}
   .calorie-ring-pct{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-family:'Oswald',sans-serif; font-size:32px; font-weight:700; color:var(--text);
+    font-family:'Oswald',sans-serif; font-size:22px; font-weight:700; color:var(--text);
   }
-  .calorie-ring-pct span{font-size:16px;font-weight:600;color:var(--text-faint);margin-left:1px;}
-  .today-hero-kcal{
-    margin-top:14px; font-family:'Inter',sans-serif; font-size:15px; font-weight:600; color:var(--text);
+  .calorie-ring-label{
+    margin-top:10px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim);
   }
-  .today-hero-kcal span{font-weight:500;color:var(--text-faint);}
+  .calorie-ring-sub{margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);}
 
   .macro-ring-row{display:flex;justify-content:space-between;gap:8px;padding-top:2px;}
   .macro-ring-item{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;}
@@ -1153,27 +1147,24 @@
   // Bigger hero ring above the macro rings, same technique but its
   // own radius/stroke and the accent gold color rather than a macro
   // color, so calories reads as the headline stat.
-  var CALORIE_RING_R = 60;
+  var CALORIE_RING_R = 48;
   var CALORIE_RING_CIRCUMFERENCE = 2 * Math.PI * CALORIE_RING_R;
 
   function calorieRingHtml(value, goal){
     var percent = pct(value, goal);
     var offset = CALORIE_RING_CIRCUMFERENCE * (1 - percent / 100);
-    return '<div class="today-hero">' +
+    return '<div class="calorie-ring-row"><div class="calorie-ring-item">' +
       '<div class="calorie-ring-wrap">' +
-        '<svg class="calorie-ring-svg" viewBox="0 0 136 136">' +
-          '<defs><linearGradient id="calRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">' +
-            '<stop offset="0%" stop-color="#f2b134"></stop>' +
-            '<stop offset="100%" stop-color="#ffdd8a"></stop>' +
-          '</linearGradient></defs>' +
-          '<circle class="calorie-ring-track" cx="68" cy="68" r="' + CALORIE_RING_R + '"></circle>' +
-          '<circle class="calorie-ring-fill" cx="68" cy="68" r="' + CALORIE_RING_R + '" ' +
+        '<svg class="calorie-ring-svg" viewBox="0 0 116 116">' +
+          '<circle class="calorie-ring-track" cx="58" cy="58" r="' + CALORIE_RING_R + '"></circle>' +
+          '<circle class="calorie-ring-fill" cx="58" cy="58" r="' + CALORIE_RING_R + '" ' +
             'style="stroke-dasharray:' + CALORIE_RING_CIRCUMFERENCE.toFixed(2) + ';stroke-dashoffset:' + offset.toFixed(2) + ';"></circle>' +
         '</svg>' +
-        '<div class="calorie-ring-pct">' + percent + '<span>%</span></div>' +
+        '<div class="calorie-ring-pct">' + percent + '%</div>' +
       '</div>' +
-      '<div class="today-hero-kcal">' + Math.round(value) + ' <span>/ ' + goal + ' kcal</span></div>' +
-    '</div>';
+      '<div class="calorie-ring-label">Calories</div>' +
+      '<div class="calorie-ring-sub">' + Math.round(value) + ' / ' + goal + ' kcal</div>' +
+    '</div></div>';
   }
 
   // Budget framing to sit alongside the percentage rings above — how
@@ -1977,8 +1968,8 @@
     var todayTotals = totalsFor(todayMeals);
     var g = STORE.goals;
 
-    var html = calorieRingHtml(todayTotals.calories, g.calories);
-    html += '<div class="card">';
+    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Today</h3>';
+    html += calorieRingHtml(todayTotals.calories, g.calories);
     html += '<div class="macro-ring-row">' +
       macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
       macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
