@@ -103,7 +103,15 @@
     flex:1;
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
-    padding:16px 16px calc(90px + var(--safe-bottom));
+    padding:0 16px calc(90px + var(--safe-bottom));
+  }
+
+  /* Every tab except Log needs the top inset #view no longer provides
+     itself (removed so the Log tab's sticky header can sit flush at
+     the very top with no margin math). Excludes the sticky wrapper,
+     which should stay flush. */
+  #view > *:first-child:not(.macro-summary-wrap){
+    margin-top:16px;
   }
 
   /* Fade+shift tab transition — same treatment as SaviorFit Logger's
@@ -195,7 +203,7 @@
 
   /* ---------- Macro summary + bars ---------- */
   .macro-summary-wrap{
-    margin:-16px -16px 20px;
+    margin:0 -16px 20px;
     position:relative;
     z-index:5;
   }
