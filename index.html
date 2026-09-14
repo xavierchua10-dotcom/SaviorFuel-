@@ -238,6 +238,15 @@
   }
   .macro-collapse-toggle svg{width:16px;height:16px;transition:transform 0.2s ease;}
   .macro-collapse-toggle:active{background:var(--panel-2);}
+  .macro-cal-row-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .reset-log-btn{
+    background:none; border:1px solid var(--accent-2-dim); color:var(--accent-2);
+    font-size:15px; line-height:1; padding:0;
+    width:28px; height:28px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; flex-shrink:0;
+  }
+  .reset-log-btn:active{background:var(--accent-2-dim);}
   .macro-cal-row .num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
   .macro-cal-row .num span{font-size:14px;font-weight:500;color:var(--text-faint);}
   .macro-bar-row{margin-bottom:7px;}
@@ -859,12 +868,15 @@
     var g = STORE.goals;
 
     var collapsed = ui.macroCardCollapsed;
+    var resetBtn = todayMeals.length > 0
+      ? '<button class="reset-log-btn" data-action="reset-today-log" aria-label="Reset today\u2019s log">&#8635;</button>'
+      : '';
     var chevron = '<button class="macro-collapse-toggle" data-action="toggle-macro-card" aria-label="' + (collapsed ? 'Expand' : 'Collapse') + '">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(' + (collapsed ? '180deg' : '0deg') + ')"><polyline points="18 15 12 9 6 15"></polyline></svg>' +
     '</button>';
 
     var html = '<div class="card macro-summary-card">' +
-      '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div>' + chevron + '</div>' +
+      '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div><div class="macro-cal-row-actions">' + resetBtn + chevron + '</div></div>' +
       (collapsed ? '' :
         macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
         macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
@@ -1383,6 +1395,17 @@
     renderApp();
   }
 
+  // Clears only today's logged meals — a genuine blank slate for the
+  // day, same idea as SaviorFit Logger's reset-log. History and every
+  // other day's data stay untouched.
+  function resetTodayLog(){
+    if (!window.confirm('Reset today\u2019s log? This clears every meal logged today \u2014 History and other days aren\u2019t touched.')) return;
+    var today = todayKey();
+    STORE.meals = STORE.meals.filter(function(m){ return dateKey(m.loggedAt) !== today; });
+    saveStore();
+    renderApp();
+  }
+
   /* =========================================================
      RENDER — HISTORY TAB
      ========================================================= */
@@ -1800,6 +1823,8 @@
     } else if (action === 'toggle-macro-card'){
       ui.macroCardCollapsed = !ui.macroCardCollapsed;
       renderApp();
+    } else if (action === 'reset-today-log'){
+      resetTodayLog();
     } else if (action === 'calculate-plan'){
       calculatePlanFromForm();
     } else if (action === 'open-scanner'){
