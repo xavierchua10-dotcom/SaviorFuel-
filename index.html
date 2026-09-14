@@ -156,11 +156,11 @@
     padding:0 16px calc(90px + var(--safe-bottom));
   }
 
-  /* Every tab except Log needs the top inset #view no longer provides
-     itself (removed so the Log tab's sticky header can sit flush at
-     the very top with no margin math). Excludes the sticky card,
-     which should stay flush. */
-  #view > *:first-child:not(.macro-summary-card){
+  /* Every tab needs the top inset #view no longer provides itself
+     (removed so the sticky header can still sit flush at the very
+     top of the scroll container when stuck, independent of this
+     margin — see .macro-summary-card). */
+  #view > *:first-child{
     margin-top:16px;
   }
 
@@ -289,16 +289,14 @@
   }
 
   /* ---------- Macro summary + bars ---------- */
+  /* Used to be a full-bleed flat bar (negative margins, no radius,
+     no side borders) so it read as part of the header rather than a
+     card. Now just a normal .card that happens to stick to the top
+     while scrolling — same rounded corners/border/shadow as every
+     other card in the app. */
   .macro-summary-card{
-    margin:0 -16px 20px;
-    padding:10px 16px 8px;
-    border-radius:0;
-    border-left:none;
-    border-right:none;
-    border-top:none;
     position:sticky;
     top:0;
-    background:var(--bg);
     z-index:5;
   }
   .macro-cal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
