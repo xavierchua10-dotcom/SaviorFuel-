@@ -478,7 +478,7 @@
     display:flex;align-items:center;gap:10px;
     width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
     border-radius:var(--radius-lg);color:var(--text-dim);font-size:14px;
-    padding:14px;cursor:pointer;margin-bottom:14px;
+    padding:12px 14px;cursor:pointer;margin:10px 0 0;
   }
   .food-search-trigger svg{width:18px;height:18px;flex-shrink:0;color:var(--text-faint);}
 
@@ -687,12 +687,11 @@
       macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
       macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
       macroBarHtml('Fat', totals.fat, g.fat, 'fat') +
+      '<button class="food-search-trigger" data-action="open-food-search-overlay">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
+        'Search or scan a food...' +
+      '</button>' +
     '</div></div>';
-
-    html += '<button class="card food-search-trigger" data-action="open-food-search-overlay">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
-      'Search or scan a food...' +
-    '</button>';
 
     html += '<div class="card add-meal-card">' +
       (ui.selectedFood ? selectedFoodBannerHtml() : '') +
