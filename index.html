@@ -948,7 +948,7 @@
   function mealRowHtml(m){
     return '<div class="meal-row">' +
       '<div class="meal-row-name">' + esc(m.name) +
-        '<div class="meal-row-macros"><span class="mp">Protein ' + (m.protein||0) + 'g</span> · <span class="mc">Carbs ' + (m.carbs||0) + 'g</span> · <span class="mf">Fat ' + (m.fat||0) + 'g</span></div>' +
+        '<div class="meal-row-macros"><span class="mp">P' + (m.protein||0) + '</span> · <span class="mc">C' + (m.carbs||0) + '</span> · <span class="mf">F' + (m.fat||0) + '</span></div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
       '<button class="meal-row-del" data-action="delete-meal" data-id="' + m.id + '" aria-label="Delete">' +
