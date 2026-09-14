@@ -242,16 +242,17 @@
   /* ---------- Quick-add meal form ---------- */
   .add-meal-card .field-row{display:flex;gap:8px;margin-bottom:8px;}
 
-  /* Brief glow on the add-meal card right after a food gets picked
-     from search/scan — confirms the fill worked without needing a
-     toast or alert. Class is only present for the one render right
-     after picking (see ui.justFilledFood), so it plays once. */
+  /* Brief glow on a meal row right after it's logged via the food
+     confirm panel (search/scan pick -> confirm -> Add to Log) —
+     confirms it actually landed in the list. See ui.justAddedMealId
+     in mealRowHtml(), one-shot per add. */
   @keyframes addMealGlow{
     0%{ box-shadow:0 0 0 2px rgba(var(--accent-rgb),0.55), 0 0 18px 2px rgba(var(--accent-rgb),0.35); border-color:var(--accent); }
     100%{ box-shadow:0 0 0 0 rgba(var(--accent-rgb),0); border-color:var(--line); }
   }
-  .add-meal-card.glow-once{
+  .meal-row.glow-once{
     animation:addMealGlow 900ms ease-out;
+    border-radius:var(--radius-sm);
   }
   .add-meal-card input{
     flex:1;
@@ -330,20 +331,6 @@
     color:var(--accent-2);border-radius:var(--radius-xl);font-family:'Oswald',sans-serif;
     font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;
     padding:12px;cursor:pointer;
-  }
-
-  /* ---------- Selected-food banner (shown in the add-meal card
-     once a search/scan result has been picked) ---------- */
-  .selected-food-banner{
-    display:flex;justify-content:space-between;align-items:center;
-    background:var(--panel-3);border-radius:var(--radius-sm);
-    padding:8px 10px;margin-bottom:8px;font-size:12px;color:var(--text-dim);
-  }
-  .selected-food-banner b{color:var(--text);}
-  .selected-food-banner .grams-input{
-    width:60px;background:var(--panel-2);border:1px solid var(--line);
-    border-radius:var(--radius-xs);color:var(--text);font-family:'JetBrains Mono',monospace;
-    font-size:12px;padding:5px 6px;text-align:center;
   }
 
   /* ---------- Barcode scanner overlay ---------- */
@@ -501,6 +488,37 @@
   }
   .food-suggest-status{font-size:12px;color:var(--text-faint);padding:8px 4px;}
 
+  /* ---------- Food confirm view (shown inside the search overlay
+     after tapping a result, before it's actually logged) ---------- */
+  .food-confirm-back{
+    display:flex;align-items:center;gap:6px;
+    background:none;border:none;color:var(--text-dim);font-size:13px;
+    padding:4px 4px 16px;cursor:pointer;
+  }
+  .food-confirm-back svg{width:16px;height:16px;}
+  .food-confirm-back:active{color:var(--text);}
+  .food-confirm-card{
+    background:var(--panel-3);border:1px solid var(--line);border-radius:var(--radius-lg);
+    padding:20px 18px;text-align:center;
+  }
+  .food-confirm-name{font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px;}
+  .food-confirm-name .brand{display:block;font-size:12px;font-weight:400;color:var(--text-faint);margin-top:2px;}
+  .food-confirm-serving{font-size:13px;color:var(--text-dim);margin-bottom:14px;}
+  .food-confirm-grams-row{margin-bottom:14px;}
+  .food-confirm-grams-row input{
+    width:80px;text-align:center;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:var(--radius-sm);color:var(--text);font-family:'JetBrains Mono',monospace;
+    font-size:15px;padding:8px;
+  }
+  .food-confirm-grams-row input:focus{outline:none;border-color:var(--accent);}
+  .food-confirm-cal{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:var(--accent);margin-bottom:10px;}
+  .food-confirm-cal span{font-size:14px;font-weight:500;color:var(--text-faint);}
+  .food-confirm-macros{
+    display:flex;justify-content:center;gap:22px;
+    font-size:12px;color:var(--text-dim);margin-bottom:18px;
+  }
+  .food-confirm-macros b{display:block;color:var(--text);font-size:15px;font-family:'JetBrains Mono',monospace;margin-top:2px;}
+
   /* Trigger button that opens the overlay, replacing the old inline box */
   .food-search-trigger{
     display:flex;align-items:center;gap:10px;
@@ -634,8 +652,9 @@
     prefillName: null, prefillCal: null, prefillProtein: null, prefillCarbs: null, prefillFat: null,
     searchDebounce: null,
     dangerZoneOpen: false,
-    justFilledFood: false,
-    macroCardCollapsed: false
+    justAddedMealId: null,
+    macroCardCollapsed: false,
+    showFoodConfirm: false
   };
 
   function loadStore(){
@@ -730,11 +749,7 @@
       '</button>' +
     '</div>';
 
-    var glowClass = ui.justFilledFood ? ' glow-once' : '';
-    ui.justFilledFood = false; // one-shot: only the render right after a pick gets the animation
-
-    html += '<div class="card add-meal-card' + glowClass + '">' +
-      (ui.selectedFood ? selectedFoodBannerHtml() : '') +
+    html += '<div class="card add-meal-card">' +
       '<div class="field-row"><input type="text" id="mealName" placeholder="Meal name" value="' + esc(ui.prefillName || '') + '"></div>' +
       '<div class="field-row">' +
         '<input type="number" inputmode="numeric" id="mealCal" placeholder="kcal" value="' + (ui.prefillCal != null ? ui.prefillCal : '') + '">' +
@@ -754,6 +769,7 @@
         '</svg></div><p>Nothing logged yet today.<br>Add your first meal above.</p></div>';
     } else {
       html += '<div class="card">' + todayMeals.map(mealRowHtml).join('') + '</div>';
+      ui.justAddedMealId = null; // one-shot: only the render right after adding gets the glow
     }
 
     document.getElementById('view').innerHTML = html;
@@ -767,27 +783,13 @@
   }
 
   function mealRowHtml(m){
-    return '<div class="meal-row">' +
+    var glowClass = (m.id === ui.justAddedMealId) ? ' glow-once' : '';
+    return '<div class="meal-row' + glowClass + '">' +
       '<div class="meal-row-name">' + esc(m.name) +
         '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
       '<button class="meal-row-del" data-action="delete-meal" data-id="' + m.id + '" aria-label="Delete">&times;</button>' +
-    '</div>';
-  }
-
-  function selectedFoodBannerHtml(){
-    var f = ui.selectedFood;
-    if (f.wholeServing){
-      return '<div class="selected-food-banner">' +
-        '<span>From Kalori: <b>' + esc(f.name) + '</b> — ' + esc(f.servingLabel || '1 serving') + '</span>' +
-      '</div>';
-    }
-    return '<div class="selected-food-banner">' +
-      '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span>' +
-      '<span>' +
-        '<input type="number" class="grams-input" id="foodGrams" value="' + ui.grams + '" data-action-change="rescale-food"> g' +
-      '</span>' +
     '</div>';
   }
 
@@ -798,6 +800,7 @@
   function openFoodSearchOverlay(){
     var overlay = document.getElementById('foodSearchOverlay');
     var input = document.getElementById('foodSearchInput');
+    ui.showFoodConfirm = false;
     document.getElementById('foodSearchResults').innerHTML = '';
     input.value = '';
     overlay.classList.remove('hidden');
@@ -805,6 +808,7 @@
   }
 
   function closeFoodSearchOverlay(){
+    ui.showFoodConfirm = false;
     document.getElementById('foodSearchOverlay').classList.add('hidden');
   }
 
@@ -865,7 +869,7 @@
 
   // Normalizes a USDA FoodData Central food into the same shape as an
   // Open Food Facts product, so the rest of the search/pick pipeline
-  // (pickFoodResult, applySelectedFoodToForm) doesn't need to know or
+  // (pickFoodResult, renderFoodConfirmView) doesn't need to know or
   // care which source a result came from.
   function usdaToProductShape(food){
     var n = {};
@@ -913,6 +917,27 @@
       });
   }
 
+  // Renders the results list into #foodSearchResults from an already-
+  // fetched products array — used both after a fresh search and when
+  // backing out of the confirm view (no re-fetch needed, same data).
+  function renderFoodResultsList(products){
+    var resultsEl = document.getElementById('foodSearchResults');
+    if (!resultsEl) return;
+    resultsEl.innerHTML = products.map(function(p, i){
+      var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
+      var tag = (p._source === 'techapi')
+        ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
+        : cal + ' kcal/100g';
+      return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
+        '<div class="food-suggest-name">' + esc(p.product_name) +
+          (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
+        '</div>' +
+        '<div class="food-suggest-tag">' + tag + '</div>' +
+      '</div>';
+    }).join('');
+    ui.lastSearchProducts = products; // stashed so pick-food can look up by index without re-fetching
+  }
+
   function runFoodSearch(query){
     var resultsEl = document.getElementById('foodSearchResults');
     if (!resultsEl) return;
@@ -940,19 +965,7 @@
           resultsEl.innerHTML = '<div class="food-suggest-status">No results — try a different search, or just type it in manually below.</div>';
           return;
         }
-        resultsEl.innerHTML = products.map(function(p, i){
-          var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
-          var tag = (p._source === 'techapi')
-            ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
-            : cal + ' kcal/100g';
-          return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
-            '<div class="food-suggest-name">' + esc(p.product_name) +
-              (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
-            '</div>' +
-            '<div class="food-suggest-tag">' + tag + '</div>' +
-          '</div>';
-        }).join('');
-        ui.lastSearchProducts = products; // stashed so pick-food can look up by index without re-fetching
+        renderFoodResultsList(products);
       })
       .catch(function(err){
         if (thisRequest !== searchRequestId) return;
@@ -993,30 +1006,85 @@
       };
     }
     ui.grams = 100;
-    applySelectedFoodToForm();
-    ui.justFilledFood = true;
-    closeFoodSearchOverlay();
-    renderApp();
+    ui.showFoodConfirm = true;
+    renderFoodConfirmView();
   }
 
-  // Recomputes the prefill macro values from the selected food.
-  // Per-100g sources (OFF/USDA) scale by the current gram amount;
-  // whole-serving sources (Kalori) use the given numbers directly.
-  function applySelectedFoodToForm(){
+  // Computes the current cal/protein/carbs/fat for whatever's selected
+  // right now — whole-serving sources (Kalori) use their fixed values,
+  // per-100g sources (OFF/USDA) scale by ui.grams. Shared by the confirm
+  // view's live preview and the final "Add to Log" commit, so they can
+  // never disagree with each other.
+  function computeSelectedFoodMacros(){
     var f = ui.selectedFood;
-    ui.prefillName = f.name;
+    if (!f) return { cal: 0, protein: 0, carbs: 0, fat: 0 };
     if (f.wholeServing){
-      ui.prefillCal = Math.round(f.whole.cal);
-      ui.prefillProtein = Math.round(f.whole.protein);
-      ui.prefillCarbs = Math.round(f.whole.carbs);
-      ui.prefillFat = Math.round(f.whole.fat);
-      return;
+      return {
+        cal: Math.round(f.whole.cal),
+        protein: Math.round(f.whole.protein),
+        carbs: Math.round(f.whole.carbs),
+        fat: Math.round(f.whole.fat)
+      };
     }
     var factor = (ui.grams || 0) / 100;
-    ui.prefillCal = Math.round(f.per100g.cal * factor);
-    ui.prefillProtein = Math.round(f.per100g.protein * factor);
-    ui.prefillCarbs = Math.round(f.per100g.carbs * factor);
-    ui.prefillFat = Math.round(f.per100g.fat * factor);
+    return {
+      cal: Math.round(f.per100g.cal * factor),
+      protein: Math.round(f.per100g.protein * factor),
+      carbs: Math.round(f.per100g.carbs * factor),
+      fat: Math.round(f.per100g.fat * factor)
+    };
+  }
+
+  function renderFoodConfirmView(){
+    var resultsEl = document.getElementById('foodSearchResults');
+    if (!resultsEl || !ui.selectedFood) return;
+    var f = ui.selectedFood;
+    var m = computeSelectedFoodMacros();
+
+    var servingRow = f.wholeServing
+      ? '<div class="food-confirm-serving">' + esc(f.servingLabel || '1 serving') + '</div>'
+      : '<div class="food-confirm-grams-row">' +
+          '<input type="number" inputmode="numeric" id="confirmGrams" value="' + ui.grams + '"> g' +
+        '</div>';
+
+    resultsEl.innerHTML =
+      '<button class="food-confirm-back" data-action="back-to-food-results">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>' +
+        ' Back to results' +
+      '</button>' +
+      '<div class="food-confirm-card">' +
+        '<div class="food-confirm-name">' + esc(f.name) + (f.brand ? '<span class="brand">' + esc(f.brand) + '</span>' : '') + '</div>' +
+        servingRow +
+        '<div class="food-confirm-cal">' + m.cal + ' <span>kcal</span></div>' +
+        '<div class="food-confirm-macros">' +
+          '<div>P<b>' + m.protein + 'g</b></div>' +
+          '<div>C<b>' + m.carbs + 'g</b></div>' +
+          '<div>F<b>' + m.fat + 'g</b></div>' +
+        '</div>' +
+        '<button class="btn-primary" data-action="confirm-add-food">+ Add to Log</button>' +
+      '</div>';
+  }
+
+  function confirmAddFood(){
+    if (!ui.selectedFood) return;
+    var m = computeSelectedFoodMacros();
+    var newMeal = {
+      id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      name: ui.selectedFood.name,
+      calories: m.cal,
+      protein: m.protein,
+      carbs: m.carbs,
+      fat: m.fat,
+      loggedAt: Date.now()
+    };
+    STORE.meals.push(newMeal);
+    saveStore();
+    maybeVibrate();
+    ui.selectedFood = null;
+    ui.showFoodConfirm = false;
+    ui.justAddedMealId = newMeal.id;
+    closeFoodSearchOverlay();
+    renderApp();
   }
 
   function clearFoodSelection(){
@@ -1096,7 +1164,6 @@
       .then(function(res){ return res.json(); })
       .then(function(data){
         closeScanner();
-        closeFoodSearchOverlay();
         if (data.status !== 1 || !data.product || !data.product.nutriments){
           alert('That barcode isn\'t in the food database. Try searching by name instead.');
           return;
@@ -1114,9 +1181,8 @@
           }
         };
         ui.grams = 100;
-        applySelectedFoodToForm();
-        ui.justFilledFood = true;
-        renderApp();
+        ui.showFoodConfirm = true;
+        renderFoodConfirmView();
       })
       .catch(function(err){
         console.error('SaviorFuel: barcode lookup failed —', err);
@@ -1526,6 +1592,12 @@
       }
     } else if (action === 'pick-food'){
       pickFoodResult(parseInt(el.dataset.index, 10));
+    } else if (action === 'confirm-add-food'){
+      confirmAddFood();
+    } else if (action === 'back-to-food-results'){
+      ui.selectedFood = null;
+      ui.showFoodConfirm = false;
+      renderFoodResultsList(ui.lastSearchProducts || []);
     } else if (action === 'open-food-search-overlay'){
       openFoodSearchOverlay();
     } else if (action === 'close-food-search-overlay'){
@@ -1568,30 +1640,44 @@
   });
 
   // Live food search as you type (debounced inside searchFoodDebounced).
+  // The confirm view's grams field updates the calorie/macro numbers
+  // directly (not a full re-render) so the input never loses focus
+  // mid-keystroke.
   document.addEventListener('input', function(e){
     if (e.target.id === 'foodSearchInput'){
       searchFoodDebounced(e.target.value);
+    } else if (e.target.id === 'confirmGrams'){
+      ui.grams = parseInt(e.target.value, 10) || 0;
+      var m = computeSelectedFoodMacros();
+      var card = document.querySelector('.food-confirm-card');
+      if (card){
+        card.querySelector('.food-confirm-cal').innerHTML = m.cal + ' <span>kcal</span>';
+        var macroEls = card.querySelectorAll('.food-confirm-macros b');
+        macroEls[0].textContent = m.protein + 'g';
+        macroEls[1].textContent = m.carbs + 'g';
+        macroEls[2].textContent = m.fat + 'g';
+      }
     }
   });
 
   document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && e.target.id === 'foodSearchInput'){
+    if (e.key !== 'Escape') return;
+    if (e.target.id === 'confirmGrams'){
+      e.preventDefault();
+      ui.selectedFood = null;
+      ui.showFoodConfirm = false;
+      renderFoodResultsList(ui.lastSearchProducts || []);
+    } else if (e.target.id === 'foodSearchInput'){
       e.preventDefault();
       closeFoodSearchOverlay();
     }
   });
 
   // Goal inputs save on change (blur/enter), not on every keystroke —
-  // avoids writing to localStorage on every digit typed. Same event
-  // also handles the "grams" field on a selected search result, which
-  // just recomputes the prefill macros rather than saving anything.
+  // avoids writing to localStorage on every digit typed.
   document.addEventListener('change', function(e){
     if (e.target.dataset && e.target.dataset.actionChange === 'save-goal'){
       saveGoalsFromInputs();
-    } else if (e.target.id === 'foodGrams'){
-      ui.grams = parseInt(e.target.value, 10) || 0;
-      applySelectedFoodToForm();
-      renderApp();
     }
   });
 
