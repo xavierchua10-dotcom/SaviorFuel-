@@ -355,6 +355,20 @@
   .insight-bar-fill{height:100%;background:var(--accent);border-radius:var(--radius-xs);}
   .insight-bar-val{width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0;}
 
+  /* ---------- Insights "Today" table ---------- */
+  .today-macro-table{width:100%;border-collapse:collapse;}
+  .today-macro-table th{
+    text-align:right; font-size:10.5px; font-weight:600; letter-spacing:0.03em;
+    text-transform:uppercase; color:var(--text-faint); padding:0 0 8px;
+  }
+  .today-macro-table th:first-child, .today-macro-table td:first-child{text-align:left;}
+  .today-macro-table td{
+    text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px;
+    color:var(--text); padding:8px 0; border-top:1px solid var(--line);
+  }
+  .today-macro-table td:first-child{font-family:'Inter',sans-serif;font-size:14px;color:var(--text-dim);}
+  .today-macro-table tr:first-child td{border-top:none;}
+
   /* ---------- Settings ---------- */
   .settings-group{margin-bottom:18px;}
   .settings-group h3{
@@ -942,6 +956,13 @@
     '</div>';
   }
 
+  // One row of the Insights "Today" table — plain consumed/goal/%
+  // numbers, no bar, since this panel is meant to read as a quick
+  // reference table rather than a repeat of the Log tab's bars.
+  function todayMacroRowHtml(label, value, goal){
+    return '<tr><td>' + label + '</td><td>' + Math.round(value) + 'g</td><td>' + goal + 'g</td><td>' + pct(value, goal) + '%</td></tr>';
+  }
+
   function mealRowHtml(m){
     return '<div class="meal-row">' +
       '<div class="meal-row-name">' + esc(m.name) +
@@ -1474,15 +1495,6 @@
      RENDER — INSIGHTS TAB
      ========================================================= */
   function renderInsights(){
-    var days = [];
-    for (var i = 6; i >= 0; i--){
-      days.push(dateKey(Date.now() - i * 86400000));
-    }
-    var dayTotals = days.map(function(key){
-      return { key: key, total: totalsFor(mealsForDay(key)).calories };
-    });
-    var maxVal = Math.max(STORE.goals.calories, Math.max.apply(null, dayTotals.map(function(d){ return d.total; })), 1);
-
     if (STORE.meals.length === 0){
       document.getElementById('view').innerHTML =
         '<div class="empty tab-empty-state"><div class="glyph">' +
@@ -1492,15 +1504,16 @@
       return;
     }
 
-    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Last 7 days — calories</h3>';
-    html += dayTotals.map(function(d){
-      var label = new Date(d.key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' });
-      return '<div class="insight-bar-row">' +
-        '<div class="insight-bar-day">' + label + '</div>' +
-        '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct(d.total, maxVal) + '%"></div></div>' +
-        '<div class="insight-bar-val">' + d.total + '</div>' +
-      '</div>';
-    }).join('');
+    var todayMeals = mealsForDay(todayKey());
+    var todayTotals = totalsFor(todayMeals);
+    var g = STORE.goals;
+
+    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Today</h3>';
+    html += '<table class="today-macro-table"><thead><tr><th></th><th>Consumed</th><th>Goal</th><th>%</th></tr></thead><tbody>' +
+      todayMacroRowHtml('Protein', todayTotals.protein, g.protein) +
+      todayMacroRowHtml('Carbs', todayTotals.carbs, g.carbs) +
+      todayMacroRowHtml('Fat', todayTotals.fat, g.fat) +
+    '</tbody></table>';
     html += '</div>';
 
     // Weekly panel — rolling 7-day blocks (not calendar weeks), each
