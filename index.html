@@ -958,7 +958,7 @@
   function loadStore(){
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS) };
+      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [] };
       var parsed = JSON.parse(raw);
       // Merge (not replace) so existing saved goals keep whatever the
       // person already customized, while newly-added goal fields
@@ -970,10 +970,14 @@
       // Same merge reasoning as goals above — existing density/corners/
       // unit choices are kept, newly-added settings (theme) backfill.
       parsed.appSettings = Object.assign({}, DEFAULT_APP_SETTINGS, parsed.appSettings || {});
+      // Foods picked from a live search/scan, cached locally so the
+      // same food can be found and re-logged without network next
+      // time (see saveFoodToCache / searchSavedFoods).
+      if (!parsed.savedFoods) parsed.savedFoods = [];
       return parsed;
     } catch (e){
       console.error('SaviorFuel: failed to load local store, starting fresh —', e);
-      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS) };
+      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [] };
     }
   }
 
@@ -1446,14 +1450,14 @@
       resultsEl.insertAdjacentHTML('afterbegin', '<div class="food-suggest-status">Updating...</div>');
     }
 
-    // Kalori (Malaysian dishes) listed first since it's the most locally
-    // relevant, then USDA (generic foods), then Open Food Facts
-    // (branded/packaged) — each source can fail independently without
-    // taking the others down with it.
-    Promise.all([fetchKalori(query), fetchUSDA(query), fetchOpenFoodFacts(query)])
+    // Saved (your own cache, works offline) listed first, then Kalori
+    // (Malaysian dishes, most locally relevant), then USDA (generic
+    // foods), then Open Food Facts (branded/packaged) — each source
+    // can fail independently without taking the others down with it.
+    Promise.all([Promise.resolve(searchSavedFoods(query)), fetchKalori(query), fetchUSDA(query), fetchOpenFoodFacts(query)])
       .then(function(results){
         if (thisRequest !== searchRequestId) return; // a newer search has since superseded this one
-        var products = results[0].concat(results[1]).concat(results[2]);
+        var products = results[0].concat(results[1]).concat(results[2]).concat(results[3]);
         var trimmed = query.trim();
         var exactMatch = products.some(function(p){ return p.product_name.toLowerCase() === trimmed.toLowerCase(); });
         // Pinned above the list whenever what's typed isn't already an
@@ -1470,9 +1474,11 @@
         }
         resultsEl.innerHTML = customBtn + products.map(function(p, i){
           var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
-          var tag = (p._source === 'techapi')
-            ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
-            : cal + ' kcal/100g';
+          var tag = (p._source === 'saved')
+            ? cal + ' kcal · Saved'
+            : (p._source === 'techapi')
+              ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
+              : cal + ' kcal/100g';
           return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
             '<div class="food-suggest-name">' + esc(p.product_name) +
               (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
@@ -1489,27 +1495,74 @@
       });
   }
 
+  // ---- Offline food cache: every food actually picked from a live
+  // search/scan gets saved here (name + macros, not the logged
+  // instance), so searching that same food again — even fully
+  // offline — finds it instantly instead of needing network. Merged
+  // into runFoodSearch() as a 4th source alongside Kalori/USDA/OFF.
+  function saveFoodToCache(food){
+    var key = (food.name || '').trim().toLowerCase();
+    if (!key) return;
+    var src = food.wholeServing ? food.whole : food.per100g;
+    var entry = {
+      product_name: food.name,
+      brands: food.brand || '',
+      _source: 'saved',
+      _servingLabel: food.wholeServing ? (food.servingLabel || '1 serving') : '100g',
+      nutriments: {
+        'energy-kcal_100g': src.cal || 0,
+        'proteins_100g': src.protein || 0,
+        'carbohydrates_100g': src.carbs || 0,
+        'fat_100g': src.fat || 0,
+        'fiber_100g': src.fiber || 0,
+        'sugars_100g': src.sugar || 0,
+        'sodium_100g_mg': src.sodium || 0 // already normalized to mg by this point regardless of original source
+      }
+    };
+    // De-dupe by name so re-picking the same food refreshes its
+    // numbers and bumps it back to most-recently-used, rather than
+    // piling up duplicate entries.
+    STORE.savedFoods = (STORE.savedFoods || []).filter(function(f){
+      return f.product_name.trim().toLowerCase() !== key;
+    });
+    STORE.savedFoods.unshift(entry);
+    if (STORE.savedFoods.length > 200) STORE.savedFoods.length = 200; // cap so it doesn't grow forever
+    saveStore();
+  }
+
+  function searchSavedFoods(query){
+    var q = query.trim().toLowerCase();
+    if (!q) return [];
+    return (STORE.savedFoods || [])
+      .filter(function(f){ return f.product_name.toLowerCase().indexOf(q) !== -1; })
+      .slice(0, 8);
+  }
+
   function pickFoodResult(index){
     var p = ui.lastSearchProducts && ui.lastSearchProducts[index];
     if (!p) return;
 
-    if (p._source === 'techapi'){
+    if (p._source === 'techapi' || p._source === 'saved'){
       // Kalori's numbers are per-serving already (see the 'serving'
       // field), not per-100g like OFF/USDA — log as-is, no scaling.
+      // Cached ("saved") entries are stored the same way regardless
+      // of their original source — see saveFoodToCache().
       ui.selectedFood = {
         name: p.product_name,
         wholeServing: true,
-        servingLabel: p._serving || '1 serving',
+        servingLabel: p._serving || p._servingLabel || '1 serving',
         whole: {
           cal: p.nutriments['energy-kcal_100g'] || 0,
           protein: p.nutriments['proteins_100g'] || 0,
           carbs: p.nutriments['carbohydrates_100g'] || 0,
           fat: p.nutriments['fat_100g'] || 0,
           // Kalori (techapi.my) doesn't report these yet — fine to
-          // default to 0, the form fields just come up blank.
+          // default to 0, the form fields just come up blank. Saved
+          // entries always carry real numbers here since they came
+          // from a completed pick earlier.
           fiber: p.nutriments['fiber_100g'] || 0,
           sugar: p.nutriments['sugars_100g'] || 0,
-          sodium: 0
+          sodium: p.nutriments['sodium_100g_mg'] || 0
         }
       };
     } else {
@@ -1530,6 +1583,10 @@
         }
       };
     }
+    // Remember this food locally (name + macros) so searching for it
+    // again works even offline — skip re-caching an item that was
+    // itself picked from the cache, nothing new to learn from that.
+    if (p._source !== 'saved') saveFoodToCache(ui.selectedFood);
     ui.grams = 100;
     applySelectedFoodToForm();
     ui.justFilledFood = true;
@@ -1662,6 +1719,7 @@
             sodium: (n['sodium_100g'] || 0) * 1000 // OFF reports sodium in g like everything else
           }
         };
+        saveFoodToCache(ui.selectedFood); // works offline next time, even for a barcode
         ui.grams = 100;
         applySelectedFoodToForm();
         ui.justFilledFood = true;
@@ -2125,6 +2183,8 @@
     html += '<div class="settings-group">';
     html += '<div class="settings-row"><div><div class="sr-label">' + STORE.meals.length + ' meal' + (STORE.meals.length === 1 ? '' : 's') + ' logged</div>' +
               '<div class="sr-sub">Stored only on this device — no account or sync yet</div></div></div>';
+    html += '<div class="settings-row"><div><div class="sr-label">' + (STORE.savedFoods || []).length + ' food' + ((STORE.savedFoods || []).length === 1 ? '' : 's') + ' saved for offline search</div>' +
+              '<div class="sr-sub">Foods you\'ve picked before — found instantly, even with no connection</div></div></div>';
     html += '<div class="settings-row"><div><div class="sr-label">Export backup</div><div class="sr-sub">Download a JSON file of your log</div></div>' +
               '<button class="sr-action" data-action="export-data">Export</button></div>';
     html += '<div class="settings-row"><div><div class="sr-label">Import backup</div><div class="sr-sub">Restore from a JSON file</div></div>' +
@@ -2201,7 +2261,8 @@
           meals: parsed.meals,
           goals: Object.assign({}, DEFAULT_GOALS, parsed.goals || {}),
           profile: parsed.profile || Object.assign({}, DEFAULT_PROFILE),
-          appSettings: Object.assign({}, DEFAULT_APP_SETTINGS, parsed.appSettings || {})
+          appSettings: Object.assign({}, DEFAULT_APP_SETTINGS, parsed.appSettings || {}),
+          savedFoods: Array.isArray(parsed.savedFoods) ? parsed.savedFoods : []
         };
         saveStore();
         applyAppearanceSettings();
@@ -2316,7 +2377,7 @@
       renderApp();
     } else if (action === 'clear-data'){
       if (window.confirm('Erase all logged meals and reset goals? This can\'t be undone.')){
-        STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS) };
+        STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [] };
         saveStore();
         applyAppearanceSettings();
         renderApp();
@@ -2412,6 +2473,18 @@
   document.getElementById('bootLoading').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   renderApp();
+
+  // Registered after boot so it never delays first paint — this is
+  // what lets the app open at all with no connection, and caches
+  // static assets (fonts, background image, the food-photo model
+  // once used) opportunistically. Deliberately doesn't cache USDA/
+  // OFF/Kalori search calls — see sw.js.
+  if ('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js')
+        .catch(function(err){ console.error('SaviorFuel: service worker registration failed —', err); });
+    });
+  }
 </script>
 
 </body>
