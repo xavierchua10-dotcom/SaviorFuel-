@@ -47,10 +47,16 @@
     --radius-xl:20px;
     --radius-pill:999px;
     --safe-bottom:env(safe-area-inset-bottom, 0px);
-    /* Subtle depth for cards — one soft, low-opacity shadow, not a
-       dramatic drop shadow. Same value in both themes; a plain dark
-       shadow reads fine against a light card too. */
-    --card-shadow:0 1px 2px rgba(0,0,0,0.14), 0 4px 10px rgba(0,0,0,0.10);
+    /* Subtle depth for cards — soft ambient shadow (unchanged from
+       before) plus a thin inset highlight along the top edge, same
+       trick as the beatbox app's panels: a hairline of white just
+       inside the border suggests a light source above, without an
+       actual glow/blur effect anywhere. */
+    --card-shadow:0 1px 0 0 rgba(255,255,255,0.05) inset, 0 1px 2px rgba(0,0,0,0.14), 0 4px 10px rgba(0,0,0,0.10);
+    /* Gradient fill instead of a flat color — top stop one step up
+       the surface scale (--panel-2), base stop --panel itself, so
+       cards read as gently lit rather than a solid block of color. */
+    --card-gradient:linear-gradient(180deg, var(--panel-2), var(--panel));
     /* Fixed, theme-independent — the header stays exactly as it was
        in both themes, per request, so it does not reference any of
        the swappable tokens above. */
@@ -82,6 +88,13 @@
     --accent-2-dim:#f6dcda;
     --success:#3f8f4f;
     --success-dim:#e2f2e4;
+    /* --panel-2 is darker than --panel here (it's a step down the
+       surface scale, not up, since white is already the lightest
+       surface) — the dark-theme gradient/inset-highlight direction
+       would look inverted if reused as-is, so both are redefined
+       for light mode specifically rather than shared. */
+    --card-shadow:0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.06);
+    --card-gradient:linear-gradient(180deg, #ffffff, #faf8f3);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -261,7 +274,7 @@
 
   /* ---------- Cards (same pattern as SaviorFit Logger) ---------- */
   .card{
-    background:var(--panel);
+    background:var(--card-gradient);
     border:1px solid var(--line);
     border-radius:var(--radius-lg);
     padding:14px 14px 12px;
@@ -576,7 +589,7 @@
   }
   .section-label:first-child{margin-top:0;}
   .settings-group{
-    background:var(--panel);
+    background:var(--card-gradient);
     border:1px solid var(--line);
     border-radius:var(--radius);
     padding:6px 14px;
