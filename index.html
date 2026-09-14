@@ -1387,14 +1387,13 @@
       var meals = byDay[key].sort(function(a,b){ return b.loggedAt - a.loggedAt; });
       var totals = totalsFor(meals);
       var isOpen = ui.historyOpenDay === key;
-      var inner = isOpen ? meals.map(mealRowHtml).join('') : '';
       return '<div class="card history-day-card">' +
         '<div class="history-day-head" data-action="toggle-history-day" data-day="' + key + '" style="cursor:pointer;">' +
           '<span class="date">' + formatDateLabel(key) + '</span>' +
           '<span class="total">' + totals.calories + ' kcal</span>' +
         '</div>' +
-        inner +
-      '</div>';
+      '</div>' +
+      (isOpen ? groupedMealsHtml(meals) : '');
     }).join('');
 
     document.getElementById('view').innerHTML = html;
