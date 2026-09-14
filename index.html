@@ -438,7 +438,7 @@
 
   .insight-caption{
     font-family:'Inter',sans-serif; font-size:12.5px; line-height:1.4;
-    color:var(--text-dim); margin:0 0 16px; padding:10px 12px;
+    color:var(--text-dim); margin:16px 0 0; padding:10px 12px;
     background:var(--panel-3); border-radius:var(--radius-sm);
   }
   .insight-caption.balanced{color:var(--success);background:var(--success-dim);}
@@ -1685,8 +1685,6 @@
     var g = STORE.goals;
 
     var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Today</h3>';
-    var caption = macroBalanceCaption(todayMeals, todayTotals, g);
-    html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
     html += calorieRingHtml(todayTotals.calories, g.calories);
     html += '<div class="macro-ring-row">' +
       macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
@@ -1699,6 +1697,8 @@
       remainingStatHtml('Carbs', todayTotals.carbs, g.carbs, 'g') +
       remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
     '</div>';
+    var caption = macroBalanceCaption(todayMeals, todayTotals, g);
+    html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
     html += '</div>';
 
     document.getElementById('view').innerHTML = html;
