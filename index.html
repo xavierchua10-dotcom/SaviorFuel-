@@ -143,12 +143,48 @@
     transition:opacity 160ms ease, transform 160ms ease;
   }
 
-  /* ---------- Bottom tab bar (same classes as SaviorFit Logger) ---------- */
-  .tabbar{
+  /* Extra bottom room on Insights so the last row/card isn't hidden
+     behind the sticky Today / Trends bar (mirrors SaviorFit Logger's
+     body.has-progress-subtab rule). */
+  body.has-insights-subtab main#view{
+    padding-bottom:calc(136px + var(--safe-bottom));
+  }
+
+  /* ---------- Bottom nav stack (tab bar + optional Insights sub-tab bar) ---------- */
+  .bottom-nav{
     position:fixed;
     left:0; right:0; bottom:0;
     max-width:480px;
     margin:0 auto;
+    z-index:20;
+  }
+
+  /* ---------- Insights sub-tab bar (Today / Trends) — same pattern as
+     SaviorFit Logger's Volume overview / Exercise progression bar ---------- */
+  .insights-subtabbar{
+    display:flex;
+    background:var(--panel-2);
+    border-top:1px solid var(--line);
+  }
+  .insights-subtabbar button{
+    flex:1;
+    background:none;
+    border:none;
+    color:var(--text-faint);
+    font-family:'Oswald',sans-serif;
+    font-size:12px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    font-weight:700;
+    padding:12px 6px;
+    cursor:pointer;
+  }
+  .insights-subtabbar button + button{border-left:1px solid var(--line);}
+  .insights-subtabbar button.active{color:var(--accent);background:var(--panel-3);}
+  .insights-subtabbar button:active{opacity:0.85;}
+
+  /* ---------- Bottom tab bar (same classes as SaviorFit Logger) ---------- */
+  .tabbar{
     display:flex;
     background:var(--panel-2);
     border-top:1px solid var(--line);
@@ -665,6 +701,11 @@
 
   <main id="view"></main>
 
+  <div class="bottom-nav" id="bottomNav">
+  <nav class="insights-subtabbar hidden" id="insightsSubtabbar">
+    <button data-action="set-insights-view" data-view="today">Today</button>
+    <button data-action="set-insights-view" data-view="trends">Trends</button>
+  </nav>
   <nav class="tabbar" id="tabbar">
     <button data-action="set-tab" data-tab="log" class="active">
       <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="4" width="4" height="16" rx="1.3"/><rect x="19" y="4" width="4" height="16" rx="1.3"/><rect x="5" y="10.4" width="14" height="3.2" rx="1"/></svg></span>
@@ -683,6 +724,7 @@
       Settings
     </button>
   </nav>
+  </div>
 </div>
 
 <div class="food-search-overlay hidden" id="foodSearchOverlay">
@@ -804,7 +846,8 @@
     dangerZoneOpen: false,
     justFilledFood: false,
     macroCardCollapsed: false,
-    selectedCategory: 'breakfast' // set properly each time the Add Meal overlay opens
+    selectedCategory: 'breakfast', // set properly each time the Add Meal overlay opens
+    insightsView: 'today' // 'today' | 'trends' — which Insights sub-tab panel is showing
   };
 
   function loadStore(){
@@ -1494,6 +1537,11 @@
   /* =========================================================
      RENDER — INSIGHTS TAB
      ========================================================= */
+  // Dispatches to whichever Insights sub-tab panel is active — same
+  // pattern as SaviorFit Logger's renderProgress() dispatching between
+  // its Volume overview / Exercise progression views. The empty state
+  // is shared: with nothing logged yet, neither panel has anything
+  // meaningful to show.
   function renderInsights(){
     if (STORE.meals.length === 0){
       document.getElementById('view').innerHTML =
@@ -1504,6 +1552,11 @@
       return;
     }
 
+    if (ui.insightsView === 'trends') renderInsightsTrends();
+    else renderInsightsToday();
+  }
+
+  function renderInsightsToday(){
     var todayMeals = mealsForDay(todayKey());
     var todayTotals = totalsFor(todayMeals);
     var g = STORE.goals;
@@ -1516,6 +1569,10 @@
     '</tbody></table>';
     html += '</div>';
 
+    document.getElementById('view').innerHTML = html;
+  }
+
+  function renderInsightsTrends(){
     // Weekly panel — rolling 7-day blocks (not calendar weeks), each
     // showing that week's average daily calories, so it's on the same
     // scale as the daily chart above and comparable to the goal line.
@@ -1534,7 +1591,7 @@
     }
     var weekMax = Math.max(STORE.goals.calories, Math.max.apply(null, weekBuckets.map(function(w){ return w.avg; })), 1);
 
-    html += '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Last 6 weeks — avg daily calories</h3>';
+    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Last 6 weeks — avg daily calories</h3>';
     html += weekBuckets.map(function(w){
       return '<div class="insight-bar-row">' +
         '<div class="insight-bar-day">' + w.label + '</div>' +
@@ -1791,6 +1848,46 @@
     else if (state.tab === 'history') renderHistory();
     else if (state.tab === 'insights') renderInsights();
     else if (state.tab === 'settings') renderSettings();
+
+    // Sticky Today / Trends switch — only exists on the Insights tab
+    // once there's something to show, same pattern as SaviorFit
+    // Logger's Volume overview / Exercise progression bar.
+    var showInsightsSubtabbar = state.tab === 'insights' && STORE.meals.length > 0;
+    document.body.classList.toggle('has-insights-subtab', showInsightsSubtabbar);
+    var insightsSubtabbarEl = document.getElementById('insightsSubtabbar');
+    insightsSubtabbarEl.classList.toggle('hidden', !showInsightsSubtabbar);
+    if (showInsightsSubtabbar){
+      insightsSubtabbarEl.querySelectorAll('button').forEach(function(btn){
+        btn.classList.toggle('active', btn.dataset.view === ui.insightsView);
+      });
+    }
+  }
+
+  // Fades the current Insights sub-tab panel out, swaps to the new
+  // one, then fades it in — same treatment as SaviorFit Logger's
+  // switchProgressViewWithFade() for its Volume overview / Exercise
+  // progression switch.
+  function switchInsightsViewWithFade(newView){
+    if (newView === ui.insightsView) return;
+    var viewEl = document.getElementById('view');
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion){
+      ui.insightsView = newView;
+      renderApp();
+      return;
+    }
+    viewEl.classList.remove('subtab-fade-in');
+    viewEl.classList.add('subtab-fade-out');
+    setTimeout(function(){
+      ui.insightsView = newView;
+      renderApp();
+      var v = document.getElementById('view');
+      v.classList.remove('subtab-fade-out');
+      v.classList.add('subtab-fade-in');
+      setTimeout(function(){
+        v.classList.remove('subtab-fade-in');
+      }, 170);
+    }, 140);
   }
 
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
@@ -1828,6 +1925,8 @@
     var action = el.dataset.action;
     if (action === 'set-tab'){
       switchTab(el.dataset.tab);
+    } else if (action === 'set-insights-view'){
+      switchInsightsViewWithFade(el.dataset.view);
     } else if (action === 'add-meal'){
       addMealFromForm();
     } else if (action === 'close-add-meal-overlay'){
