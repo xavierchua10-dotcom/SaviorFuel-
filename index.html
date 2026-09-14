@@ -1598,30 +1598,26 @@
   }
 
   function renderInsightsTrends(){
-    // Weekly panel — rolling 7-day blocks (not calendar weeks), each
-    // showing that week's average daily calories, so it's on the same
-    // scale as the daily chart above and comparable to the goal line.
-    var WEEKS_TO_SHOW = 6;
-    var weekBuckets = [];
-    for (var w = WEEKS_TO_SHOW - 1; w >= 0; w--){
-      var weekKeys = [];
-      for (var d2 = 6; d2 >= 0; d2--){
-        weekKeys.push(dateKey(Date.now() - (w * 7 + d2) * 86400000));
-      }
-      var weekTotal = weekKeys.reduce(function(sum, key){ return sum + totalsFor(mealsForDay(key)).calories; }, 0);
-      weekBuckets.push({
-        label: w === 0 ? 'This wk' : new Date(weekKeys[0] + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
-        avg: Math.round(weekTotal / 7)
+    // Daily panel — the last 7 calendar days (today plus the 6 before
+    // it), each bar showing that day's total calories, so day-to-day
+    // swings are visible rather than smoothed into a weekly average.
+    var DAYS_TO_SHOW = 7;
+    var dayBuckets = [];
+    for (var d = DAYS_TO_SHOW - 1; d >= 0; d--){
+      var key = dateKey(Date.now() - d * 86400000);
+      dayBuckets.push({
+        label: d === 0 ? 'Today' : new Date(key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }),
+        total: Math.round(totalsFor(mealsForDay(key)).calories)
       });
     }
-    var weekMax = Math.max(STORE.goals.calories, Math.max.apply(null, weekBuckets.map(function(w){ return w.avg; })), 1);
+    var dayMax = Math.max(STORE.goals.calories, Math.max.apply(null, dayBuckets.map(function(d2){ return d2.total; })), 1);
 
-    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Last 6 weeks — avg daily calories</h3>';
-    html += weekBuckets.map(function(w){
+    var html = '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Last 7 days — daily calories</h3>';
+    html += dayBuckets.map(function(d3){
       return '<div class="insight-bar-row">' +
-        '<div class="insight-bar-day">' + w.label + '</div>' +
-        '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct(w.avg, weekMax) + '%"></div></div>' +
-        '<div class="insight-bar-val">' + w.avg + '</div>' +
+        '<div class="insight-bar-day">' + d3.label + '</div>' +
+        '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct(d3.total, dayMax) + '%"></div></div>' +
+        '<div class="insight-bar-val">' + d3.total + '</div>' +
       '</div>';
     }).join('');
     html += '</div>';
