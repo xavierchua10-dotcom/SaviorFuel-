@@ -281,8 +281,11 @@
   .meal-row-cal{font-family:'Oswald',sans-serif;font-weight:700;color:var(--accent);white-space:nowrap;}
   .meal-row-del{
     background:none;border:none;color:var(--text-faint);
-    font-size:18px;line-height:1;padding:4px 6px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    padding:6px;cursor:pointer;flex-shrink:0;
   }
+  .meal-row-del svg{width:16px;height:16px;display:block;}
+  .meal-row-del:active{color:var(--accent-2);}
 
   /* ---------- History day groups ---------- */
   .history-day-card .history-day-head{
@@ -788,7 +791,9 @@
         '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
-      '<button class="meal-row-del" data-action="delete-meal" data-id="' + m.id + '" aria-label="Delete">&times;</button>' +
+      '<button class="meal-row-del" data-action="delete-meal" data-id="' + m.id + '" aria-label="Delete">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>' +
+      '</button>' +
     '</div>';
   }
 
