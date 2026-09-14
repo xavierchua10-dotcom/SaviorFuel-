@@ -229,6 +229,18 @@
 
   /* ---------- Quick-add meal form ---------- */
   .add-meal-card .field-row{display:flex;gap:8px;margin-bottom:8px;}
+
+  /* Brief glow on the add-meal card right after a food gets picked
+     from search/scan — confirms the fill worked without needing a
+     toast or alert. Class is only present for the one render right
+     after picking (see ui.justFilledFood), so it plays once. */
+  @keyframes addMealGlow{
+    0%{ box-shadow:0 0 0 2px rgba(var(--accent-rgb),0.55), 0 0 18px 2px rgba(var(--accent-rgb),0.35); border-color:var(--accent); }
+    100%{ box-shadow:0 0 0 0 rgba(var(--accent-rgb),0); border-color:var(--line); }
+  }
+  .add-meal-card.glow-once{
+    animation:addMealGlow 900ms ease-out;
+  }
   .add-meal-card input{
     flex:1;
     min-width:0;
@@ -609,7 +621,8 @@
     grams: 100,            // serving size in grams, scales the selected food's macros
     prefillName: null, prefillCal: null, prefillProtein: null, prefillCarbs: null, prefillFat: null,
     searchDebounce: null,
-    dangerZoneOpen: false
+    dangerZoneOpen: false,
+    justFilledFood: false
   };
 
   function loadStore(){
@@ -697,7 +710,10 @@
       '</button>' +
     '</div>';
 
-    html += '<div class="card add-meal-card">' +
+    var glowClass = ui.justFilledFood ? ' glow-once' : '';
+    ui.justFilledFood = false; // one-shot: only the render right after a pick gets the animation
+
+    html += '<div class="card add-meal-card' + glowClass + '">' +
       (ui.selectedFood ? selectedFoodBannerHtml() : '') +
       '<div class="field-row"><input type="text" id="mealName" placeholder="Meal name" value="' + esc(ui.prefillName || '') + '"></div>' +
       '<div class="field-row">' +
@@ -958,6 +974,7 @@
     }
     ui.grams = 100;
     applySelectedFoodToForm();
+    ui.justFilledFood = true;
     closeFoodSearchOverlay();
     renderApp();
   }
@@ -1078,6 +1095,7 @@
         };
         ui.grams = 100;
         applySelectedFoodToForm();
+        ui.justFilledFood = true;
         renderApp();
       })
       .catch(function(err){
