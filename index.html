@@ -1398,16 +1398,34 @@
       var meals = byDay[key].sort(function(a,b){ return b.loggedAt - a.loggedAt; });
       var totals = totalsFor(meals);
       var isOpen = ui.historyOpenDay === key;
+      var inner = isOpen ? sortMealsByCategory(meals).map(mealRowHtml).join('') : '';
       return '<div class="card history-day-card">' +
         '<div class="history-day-head" data-action="toggle-history-day" data-day="' + key + '" style="cursor:pointer;">' +
           '<span class="date">' + formatDateLabel(key) + '</span>' +
           '<span class="total">' + totals.calories + ' kcal</span>' +
         '</div>' +
-      '</div>' +
-      (isOpen ? groupedMealsHtml(meals) : '');
+        inner +
+      '</div>';
     }).join('');
 
     document.getElementById('view').innerHTML = html;
+  }
+
+  // Orders meals by category (Breakfast -> ... -> Dinner -> Other) —
+  // used for History's single-list day view, which shows meal timing
+  // through ordering alone rather than groupedMealsHtml()'s separate
+  // card-per-category treatment (too visually busy for a day that's
+  // just being glanced back at, versus the Log tab where it's the
+  // main working view).
+  function sortMealsByCategory(meals){
+    var order = MEAL_CATEGORIES.map(function(c){ return c.id; });
+    return meals.slice().sort(function(a, b){
+      var ai = a.category ? order.indexOf(a.category) : order.length;
+      var bi = b.category ? order.indexOf(b.category) : order.length;
+      if (ai === -1) ai = order.length;
+      if (bi === -1) bi = order.length;
+      return ai - bi;
+    });
   }
 
   /* =========================================================
