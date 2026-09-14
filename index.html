@@ -276,6 +276,16 @@
   .category-section-label:first-child{margin-top:0;}
   .category-section-total{float:right; color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-weight:400; letter-spacing:0;}
 
+  /* Subtler in-card category label for History's single-list view —
+     just a small text row between groups of meal rows, no card/border
+     of its own, unlike Log's standalone .category-section-label. */
+  .inline-category-label{
+    font-family:'Oswald',sans-serif; font-size:10.5px; font-weight:700;
+    letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);
+    padding:10px 0 4px;
+  }
+  .inline-category-label:first-child{padding-top:0;}
+
   /* Brief glow on the sheet right after a food gets picked from
      search/scan — confirms the fill worked without needing a toast
      or alert. Class is added once by openAddMealOverlay() and
@@ -1398,7 +1408,7 @@
       var meals = byDay[key].sort(function(a,b){ return b.loggedAt - a.loggedAt; });
       var totals = totalsFor(meals);
       var isOpen = ui.historyOpenDay === key;
-      var inner = isOpen ? sortMealsByCategory(meals).map(mealRowHtml).join('') : '';
+      var inner = isOpen ? categorizedMealRowsHtml(meals) : '';
       return '<div class="card history-day-card">' +
         '<div class="history-day-head" data-action="toggle-history-day" data-day="' + key + '" style="cursor:pointer;">' +
           '<span class="date">' + formatDateLabel(key) + '</span>' +
@@ -1411,21 +1421,30 @@
     document.getElementById('view').innerHTML = html;
   }
 
-  // Orders meals by category (Breakfast -> ... -> Dinner -> Other) —
-  // used for History's single-list day view, which shows meal timing
-  // through ordering alone rather than groupedMealsHtml()'s separate
-  // card-per-category treatment (too visually busy for a day that's
-  // just being glanced back at, versus the Log tab where it's the
-  // main working view).
-  function sortMealsByCategory(meals){
-    var order = MEAL_CATEGORIES.map(function(c){ return c.id; });
-    return meals.slice().sort(function(a, b){
-      var ai = a.category ? order.indexOf(a.category) : order.length;
-      var bi = b.category ? order.indexOf(b.category) : order.length;
-      if (ai === -1) ai = order.length;
-      if (bi === -1) bi = order.length;
-      return ai - bi;
+  // Groups meals by category (Breakfast -> ... -> Dinner -> Other) and
+  // returns rows with a small inline label before each group — all as
+  // one continuous string meant to sit inside a single .card, unlike
+  // groupedMealsHtml()'s separate card-per-category treatment (that
+  // looked too broken-up for History specifically, per feedback).
+  function categorizedMealRowsHtml(meals){
+    var buckets = {};
+    MEAL_CATEGORIES.forEach(function(c){ buckets[c.id] = []; });
+    var other = [];
+    meals.forEach(function(m){
+      if (m.category && buckets[m.category]) buckets[m.category].push(m);
+      else other.push(m);
     });
+
+    var html = '';
+    MEAL_CATEGORIES.forEach(function(c){
+      var group = buckets[c.id];
+      if (group.length === 0) return;
+      html += '<div class="inline-category-label">' + c.label + '</div>' + group.map(mealRowHtml).join('');
+    });
+    if (other.length > 0){
+      html += '<div class="inline-category-label">Other</div>' + other.map(mealRowHtml).join('');
+    }
+    return html;
   }
 
   /* =========================================================
