@@ -350,7 +350,7 @@
 
   /* ---------- Insights bars ---------- */
   .insight-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-  .insight-bar-day{width:34px;font-size:11px;color:var(--text-faint);flex-shrink:0;}
+  .insight-bar-day{width:52px;font-size:11px;color:var(--text-faint);flex-shrink:0;}
   .insight-bar-track{flex:1;height:16px;background:var(--panel-3);border-radius:var(--radius-xs);overflow:hidden;}
   .insight-bar-fill{height:100%;background:var(--accent);border-radius:var(--radius-xs);}
   .insight-bar-val{width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0;}
@@ -1499,6 +1499,34 @@
         '<div class="insight-bar-day">' + label + '</div>' +
         '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct(d.total, maxVal) + '%"></div></div>' +
         '<div class="insight-bar-val">' + d.total + '</div>' +
+      '</div>';
+    }).join('');
+    html += '</div>';
+
+    // Weekly panel — rolling 7-day blocks (not calendar weeks), each
+    // showing that week's average daily calories, so it's on the same
+    // scale as the daily chart above and comparable to the goal line.
+    var WEEKS_TO_SHOW = 6;
+    var weekBuckets = [];
+    for (var w = WEEKS_TO_SHOW - 1; w >= 0; w--){
+      var weekKeys = [];
+      for (var d2 = 6; d2 >= 0; d2--){
+        weekKeys.push(dateKey(Date.now() - (w * 7 + d2) * 86400000));
+      }
+      var weekTotal = weekKeys.reduce(function(sum, key){ return sum + totalsFor(mealsForDay(key)).calories; }, 0);
+      weekBuckets.push({
+        label: w === 0 ? 'This wk' : new Date(weekKeys[0] + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+        avg: Math.round(weekTotal / 7)
+      });
+    }
+    var weekMax = Math.max(STORE.goals.calories, Math.max.apply(null, weekBuckets.map(function(w){ return w.avg; })), 1);
+
+    html += '<div class="card"><h3 class="section-label" style="margin:0 0 14px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Last 6 weeks — avg daily calories</h3>';
+    html += weekBuckets.map(function(w){
+      return '<div class="insight-bar-row">' +
+        '<div class="insight-bar-day">' + w.label + '</div>' +
+        '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct(w.avg, weekMax) + '%"></div></div>' +
+        '<div class="insight-bar-val">' + w.avg + '</div>' +
       '</div>';
     }).join('');
     html += '</div>';
