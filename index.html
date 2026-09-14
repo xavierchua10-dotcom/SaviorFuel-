@@ -427,6 +427,15 @@
   }
   .macro-ring-sub{margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-faint);}
 
+  .remaining-row{display:flex;justify-content:space-between;gap:6px;padding-top:14px;margin-top:14px;border-top:1px solid var(--line);}
+  .remaining-item{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;}
+  .remaining-item .num{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--text);white-space:nowrap;}
+  .remaining-item .num.over{color:var(--accent-2);}
+  .remaining-item .lbl{
+    margin-top:3px; font-family:'Oswald',sans-serif; font-size:10px; font-weight:700;
+    letter-spacing:0.03em; text-transform:uppercase; color:var(--text-faint); text-align:center;
+  }
+
   /* ---------- Settings ---------- */
   .settings-group{margin-bottom:18px;}
   .settings-group h3{
@@ -1070,6 +1079,19 @@
     '</div></div>';
   }
 
+  // Budget framing to sit alongside the percentage rings above — how
+  // much of each goal is left to hit (or how far over), rather than
+  // how much has been consumed so far.
+  function remainingStatHtml(label, consumed, goal, unit){
+    var diff = goal - consumed;
+    var over = diff < 0;
+    var amount = Math.round(Math.abs(diff));
+    return '<div class="remaining-item">' +
+      '<div class="num' + (over ? ' over' : '') + '">' + amount + unit + '</div>' +
+      '<div class="lbl">' + label + (over ? ' over' : ' left') + '</div>' +
+    '</div>';
+  }
+
   function mealRowHtml(m){
     return '<div class="meal-row">' +
       '<div class="meal-row-name">' + esc(m.name) +
@@ -1631,6 +1653,12 @@
       macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
       macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
       macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
+    '</div>';
+    html += '<div class="remaining-row">' +
+      remainingStatHtml('Calories', todayTotals.calories, g.calories, ' kcal') +
+      remainingStatHtml('Protein', todayTotals.protein, g.protein, 'g') +
+      remainingStatHtml('Carbs', todayTotals.carbs, g.carbs, 'g') +
+      remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
     '</div>';
     html += '</div>';
 
