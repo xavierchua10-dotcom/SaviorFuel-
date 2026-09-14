@@ -526,11 +526,13 @@
   @keyframes foodSearchBackdropIn{ 0%{opacity:0;} 100%{opacity:1;} }
   @keyframes foodSearchPanelIn{ 0%{opacity:0;transform:translateY(28px);} 100%{opacity:1;transform:translateY(0);} }
 
-  /* ---------- Add Meal overlay — bottom sheet, distinct from the
+  /* ---------- Add Meal overlay — centered modal, distinct from the
      full-screen search overlay so the two don't feel like the same
      pattern stacked twice ---------- */
   .add-meal-overlay{
     position:absolute; inset:0; z-index:95;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px 20px;
   }
   .add-meal-overlay.hidden{display:none;}
   .add-meal-backdrop{
@@ -540,16 +542,16 @@
     animation:foodSearchBackdropIn 0.2s ease;
   }
   .add-meal-sheet{
-    position:absolute; left:0; right:0; bottom:0;
-    max-height:88vh;
+    position:relative;
+    width:100%; max-width:380px; max-height:82vh;
     background:var(--panel);
-    border:1px solid var(--line); border-bottom:none;
-    border-radius:var(--radius-xl) var(--radius-xl) 0 0;
-    padding:16px 16px calc(20px + var(--safe-bottom));
+    border:1px solid var(--line);
+    border-radius:var(--radius-xl);
+    padding:18px 18px 20px;
     display:flex; flex-direction:column;
-    animation:addMealSheetIn 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+    animation:addMealSheetIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  @keyframes addMealSheetIn{ 0%{transform:translateY(100%);} 100%{transform:translateY(0);} }
+  @keyframes addMealSheetIn{ 0%{opacity:0;transform:scale(0.94);} 100%{opacity:1;transform:scale(1);} }
   .add-meal-head{
     display:flex; align-items:center; justify-content:space-between;
     margin-bottom:14px;
