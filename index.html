@@ -294,6 +294,9 @@
   .macro-bar-fill.protein{background:var(--success);}
   .macro-bar-fill.carbs{background:#5fa8d6;}
   .macro-bar-fill.fat{background:var(--accent-2);}
+  .macro-bar-fill.fiber{background:#a97c50;}
+  .macro-bar-fill.sugar{background:#d67ab1;}
+  .macro-bar-fill.sodium{background:#4fc3c9;}
 
   /* ---------- Quick-add meal form (inside the Add Meal sheet) ---------- */
   #addMealBody .field-row{display:flex;gap:8px;margin-bottom:8px;}
@@ -810,6 +813,13 @@
         <input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g">
         <input type="number" inputmode="numeric" id="mealFat" placeholder="fat g">
       </div>
+      <div class="field-row">
+        <input type="number" inputmode="numeric" id="mealFiber" placeholder="fiber g">
+        <input type="number" inputmode="numeric" id="mealSugar" placeholder="sugar g">
+      </div>
+      <div class="field-row">
+        <input type="number" inputmode="numeric" id="mealSodium" placeholder="sodium mg">
+      </div>
       <button class="btn-primary" data-action="add-meal">+ Add Meal</button>
     </div>
   </div>
@@ -833,7 +843,11 @@
 
   var STORAGE_KEY = 'saviorfuel_local_v1';
 
-  var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65 };
+  // Fiber/sugar/sodium defaults follow the FDA's general Daily
+  // Values (28g, 50g added sugar, 2300mg) — same starting-point
+  // convention as the Mifflin-St Jeor calculator below: a sensible
+  // default, always overridable in Settings.
+  var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65, fiber: 28, sugar: 50, sodium: 2300 };
 
   var MEAL_CATEGORIES = [
     { id: 'breakfast', label: 'Breakfast' },
@@ -883,6 +897,7 @@
     selectedFood: null,   // { name, brand, per100g: {cal,protein,carbs,fat} } once a search result is tapped
     grams: 100,            // serving size in grams, scales the selected food's macros
     prefillName: null, prefillCal: null, prefillProtein: null, prefillCarbs: null, prefillFat: null,
+    prefillFiber: null, prefillSugar: null, prefillSodium: null,
     searchDebounce: null,
     dangerZoneOpen: false,
     justFilledFood: false,
@@ -896,7 +911,11 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS) };
       var parsed = JSON.parse(raw);
-      if (!parsed.goals) parsed.goals = Object.assign({}, DEFAULT_GOALS);
+      // Merge (not replace) so existing saved goals keep whatever the
+      // person already customized, while newly-added goal fields
+      // (e.g. fiber/sugar/sodium) backfill from defaults instead of
+      // coming back undefined.
+      parsed.goals = Object.assign({}, DEFAULT_GOALS, parsed.goals || {});
       if (!parsed.meals) parsed.meals = [];
       if (!parsed.profile) parsed.profile = Object.assign({}, DEFAULT_PROFILE);
       if (!parsed.appSettings) parsed.appSettings = Object.assign({}, DEFAULT_APP_SETTINGS);
@@ -942,12 +961,15 @@
   }
 
   function totalsFor(meals){
-    var t = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+    var t = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, sugar: 0, sodium: 0 };
     meals.forEach(function(m){
       t.calories += m.calories || 0;
       t.protein += m.protein || 0;
       t.carbs += m.carbs || 0;
       t.fat += m.fat || 0;
+      t.fiber += m.fiber || 0;
+      t.sugar += m.sugar || 0;
+      t.sodium += m.sodium || 0;
     });
     return t;
   }
@@ -1033,9 +1055,10 @@
     return html;
   }
 
-  function macroBarHtml(label, value, goal, cls){
+  function macroBarHtml(label, value, goal, cls, unit){
+    unit = unit || 'g';
     return '<div class="macro-bar-row">' +
-      '<div class="macro-bar-label"><span>' + label + '</span><b>' + Math.round(value) + 'g / ' + goal + 'g</b></div>' +
+      '<div class="macro-bar-label"><span>' + label + '</span><b>' + Math.round(value) + unit + ' / ' + goal + unit + '</b></div>' +
       '<div class="macro-bar-track"><div class="macro-bar-fill ' + cls + '" style="width:' + pct(value, goal) + '%"></div></div>' +
     '</div>';
   }
@@ -1213,6 +1236,9 @@
     document.getElementById('mealProtein').value = ui.prefillProtein != null ? ui.prefillProtein : '';
     document.getElementById('mealCarbs').value = ui.prefillCarbs != null ? ui.prefillCarbs : '';
     document.getElementById('mealFat').value = ui.prefillFat != null ? ui.prefillFat : '';
+    document.getElementById('mealFiber').value = ui.prefillFiber != null ? ui.prefillFiber : '';
+    document.getElementById('mealSugar').value = ui.prefillSugar != null ? ui.prefillSugar : '';
+    document.getElementById('mealSodium').value = ui.prefillSodium != null ? ui.prefillSodium : '';
 
     var overlay = document.getElementById('addMealOverlay');
     var sheet = document.getElementById('addMealSheet');
@@ -1302,6 +1328,13 @@
       else if (fn.nutrientName === 'Protein') n['proteins_100g'] = fn.value;
       else if (fn.nutrientName === 'Carbohydrate, by difference') n['carbohydrates_100g'] = fn.value;
       else if (fn.nutrientName === 'Total lipid (fat)') n['fat_100g'] = fn.value;
+      else if (fn.nutrientName === 'Fiber, total dietary') n['fiber_100g'] = fn.value;
+      else if (fn.nutrientName === 'Sugars, total including NLEA' || fn.nutrientName === 'Total Sugars') n['sugars_100g'] = fn.value;
+      // USDA reports sodium in mg (unitName 'MG') already, unlike OFF
+      // which reports it in g like the other nutrients — kept under
+      // its own key so the mg-vs-g unit mismatch can't get mixed up
+      // downstream (see pickFoodResult / onBarcodeDetected).
+      else if (fn.nutrientName === 'Sodium, Na') n['sodium_100g_mg'] = fn.value;
     });
     return { product_name: food.description, brands: food.brandOwner || '', nutriments: n, _source: 'usda' };
   }
@@ -1414,7 +1447,12 @@
           cal: p.nutriments['energy-kcal_100g'] || 0,
           protein: p.nutriments['proteins_100g'] || 0,
           carbs: p.nutriments['carbohydrates_100g'] || 0,
-          fat: p.nutriments['fat_100g'] || 0
+          fat: p.nutriments['fat_100g'] || 0,
+          // Kalori (techapi.my) doesn't report these yet — fine to
+          // default to 0, the form fields just come up blank.
+          fiber: p.nutriments['fiber_100g'] || 0,
+          sugar: p.nutriments['sugars_100g'] || 0,
+          sodium: 0
         }
       };
     } else {
@@ -1426,7 +1464,12 @@
           cal: n['energy-kcal_100g'] || 0,
           protein: n['proteins_100g'] || 0,
           carbs: n['carbohydrates_100g'] || 0,
-          fat: n['fat_100g'] || 0
+          fat: n['fat_100g'] || 0,
+          fiber: n['fiber_100g'] || 0,
+          sugar: n['sugars_100g'] || 0,
+          // USDA already gives mg (sodium_100g_mg); OFF gives g like
+          // its other per-100g fields, so it needs the *1000 here.
+          sodium: p._source === 'usda' ? (n['sodium_100g_mg'] || 0) : (n['sodium_100g'] || 0) * 1000
         }
       };
     }
@@ -1448,6 +1491,9 @@
       ui.prefillProtein = Math.round(f.whole.protein);
       ui.prefillCarbs = Math.round(f.whole.carbs);
       ui.prefillFat = Math.round(f.whole.fat);
+      ui.prefillFiber = Math.round(f.whole.fiber || 0);
+      ui.prefillSugar = Math.round(f.whole.sugar || 0);
+      ui.prefillSodium = Math.round(f.whole.sodium || 0);
       return;
     }
     var factor = (ui.grams || 0) / 100;
@@ -1455,11 +1501,15 @@
     ui.prefillProtein = Math.round(f.per100g.protein * factor);
     ui.prefillCarbs = Math.round(f.per100g.carbs * factor);
     ui.prefillFat = Math.round(f.per100g.fat * factor);
+    ui.prefillFiber = Math.round((f.per100g.fiber || 0) * factor);
+    ui.prefillSugar = Math.round((f.per100g.sugar || 0) * factor);
+    ui.prefillSodium = Math.round((f.per100g.sodium || 0) * factor);
   }
 
   function clearFoodSelection(){
     ui.selectedFood = null;
-    ui.prefillName = ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat = null;
+    ui.prefillName = ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat =
+      ui.prefillFiber = ui.prefillSugar = ui.prefillSodium = null;
   }
 
   /* =========================================================
@@ -1548,7 +1598,10 @@
             cal: n['energy-kcal_100g'] || 0,
             protein: n['proteins_100g'] || 0,
             carbs: n['carbohydrates_100g'] || 0,
-            fat: n['fat_100g'] || 0
+            fat: n['fat_100g'] || 0,
+            fiber: n['fiber_100g'] || 0,
+            sugar: n['sugars_100g'] || 0,
+            sodium: (n['sodium_100g'] || 0) * 1000 // OFF reports sodium in g like everything else
           }
         };
         ui.grams = 100;
@@ -1569,6 +1622,9 @@
     var protein = parseInt(document.getElementById('mealProtein').value, 10) || 0;
     var carbs = parseInt(document.getElementById('mealCarbs').value, 10) || 0;
     var fat = parseInt(document.getElementById('mealFat').value, 10) || 0;
+    var fiber = parseInt(document.getElementById('mealFiber').value, 10) || 0;
+    var sugar = parseInt(document.getElementById('mealSugar').value, 10) || 0;
+    var sodium = parseInt(document.getElementById('mealSodium').value, 10) || 0;
 
     if (!name || cal <= 0) return; // require at least a name + calories
 
@@ -1579,6 +1635,9 @@
       protein: protein,
       carbs: carbs,
       fat: fat,
+      fiber: fiber,
+      sugar: sugar,
+      sodium: sodium,
       category: ui.selectedCategory,
       loggedAt: Date.now()
     });
@@ -1709,6 +1768,10 @@
       remainingStatHtml('Carbs', todayTotals.carbs, g.carbs, 'g') +
       remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
     '</div>';
+    html += '<h3 class="section-label" style="margin:16px 0 10px;color:var(--text-faint);font-family:Oswald,sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">Other nutrients</h3>';
+    html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
+      macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
+      macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg');
     var caption = macroBalanceCaption(todayMeals, todayTotals, g);
     html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
     html += '</div>';
@@ -1759,7 +1822,10 @@
       calories: parseInt(document.getElementById('goalCalories').value, 10) || DEFAULT_GOALS.calories,
       protein: parseInt(document.getElementById('goalProtein').value, 10) || DEFAULT_GOALS.protein,
       carbs: parseInt(document.getElementById('goalCarbs').value, 10) || DEFAULT_GOALS.carbs,
-      fat: parseInt(document.getElementById('goalFat').value, 10) || DEFAULT_GOALS.fat
+      fat: parseInt(document.getElementById('goalFat').value, 10) || DEFAULT_GOALS.fat,
+      fiber: parseInt(document.getElementById('goalFiber').value, 10) || DEFAULT_GOALS.fiber,
+      sugar: parseInt(document.getElementById('goalSugar').value, 10) || DEFAULT_GOALS.sugar,
+      sodium: parseInt(document.getElementById('goalSodium').value, 10) || DEFAULT_GOALS.sodium
     };
     saveStore();
   }
@@ -1838,7 +1904,11 @@
     var carbCal = Math.max(0, targetCalories - proteinCal - fatCal);
     var carbG = Math.round(carbCal / 4);
 
-    STORE.goals = { calories: targetCalories, protein: proteinG, carbs: carbG, fat: fatG };
+    // Merge rather than replace — the calculator only derives
+    // calories/protein/carbs/fat, so fiber/sugar/sodium goals
+    // (whatever the person set, or the defaults) carry over instead
+    // of getting wiped to undefined.
+    STORE.goals = Object.assign({}, STORE.goals, { calories: targetCalories, protein: proteinG, carbs: carbG, fat: fatG });
     STORE.lastPlanTdee = Math.round(tdee);
     saveStore();
     renderApp();
@@ -1858,6 +1928,9 @@
       settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
       settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
       settingsGoalRow('Fat (g)', 'goalFat', g.fat) +
+      settingsGoalRow('Fiber (g)', 'goalFiber', g.fiber) +
+      settingsGoalRow('Sugar (g)', 'goalSugar', g.sugar) +
+      settingsGoalRow('Sodium (mg)', 'goalSodium', g.sodium) +
     '</div></div>';
 
     html += '<div class="section-label">Preferences</div>';
@@ -1965,7 +2038,7 @@
         if (!window.confirm('Replace everything currently on this device with this backup?')) return;
         STORE = {
           meals: parsed.meals,
-          goals: parsed.goals || Object.assign({}, DEFAULT_GOALS),
+          goals: Object.assign({}, DEFAULT_GOALS, parsed.goals || {}),
           profile: parsed.profile || Object.assign({}, DEFAULT_PROFILE),
           appSettings: parsed.appSettings || Object.assign({}, DEFAULT_APP_SETTINGS)
         };
