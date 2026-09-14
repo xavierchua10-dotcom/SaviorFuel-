@@ -194,7 +194,18 @@
   }
 
   /* ---------- Macro summary + bars ---------- */
-  .macro-summary-card{margin-bottom:16px;}
+  .macro-summary-card{
+    margin:-16px -16px 16px;
+    padding:14px 16px 12px;
+    border-radius:0;
+    border-left:none;
+    border-right:none;
+    border-top:none;
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:var(--bg);
+  }
   .macro-cal-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
   .macro-cal-row .num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
   .macro-cal-row .num span{font-size:14px;font-weight:500;color:var(--text-faint);}
