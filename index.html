@@ -330,7 +330,7 @@
   }
   .meal-row:last-child{border-bottom:none;}
   .meal-row-name{font-size:14px;color:var(--text);flex:1;min-width:0;}
-  .meal-row-macros{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);white-space:nowrap;}
+  .meal-row-macros{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);}
   .meal-row-cal{font-family:'Oswald',sans-serif;font-weight:700;color:var(--accent);white-space:nowrap;}
   .meal-row-del{
     background:none;border:none;color:var(--text-faint);
@@ -945,7 +945,7 @@
   function mealRowHtml(m){
     return '<div class="meal-row">' +
       '<div class="meal-row-name">' + esc(m.name) +
-        '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
+        '<div class="meal-row-macros">Protein ' + (m.protein||0) + 'g · Carbs ' + (m.carbs||0) + 'g · Fat ' + (m.fat||0) + 'g</div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
       '<button class="meal-row-del" data-action="delete-meal" data-id="' + m.id + '" aria-label="Delete">' +
