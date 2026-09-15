@@ -835,32 +835,19 @@
   }
   .nutrient-info-head button svg{width:14px;height:14px;}
   .nutrient-info-head button:active{background:var(--panel-2);}
-  .nutrient-info-card p{margin:0;font-size:14px;line-height:1.5;color:var(--text-dim);}
-  .nutrient-info-foundin{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);}
-  .nutrient-info-foundin span{
-    display:block;margin-bottom:4px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;
-    letter-spacing:0.05em;text-transform:uppercase;color:var(--text-faint);
-  }
-  .nutrient-info-foundin p{color:var(--text);}
-  /* "All 4" view shows the reference image instead of text now —
-     see showNutrientInfo(). */
   .nutrient-info-image{display:block;width:100%;height:auto;border-radius:var(--radius-md);}
 
-  /* Small inline "i" button next to a nutrient label — opens the
-     popover above. Sits right in the label text via inline-flex so
-     it doesn't disturb the row's existing layout. */
+  /* Info button on the Today card header, opens the macros/fiber
+     guide image. */
   .nutrient-info-btn{
     display:inline-flex; align-items:center; justify-content:center;
-    width:14px; height:14px; margin-left:5px; vertical-align:-2px;
+    width:22px; height:22px;
     background:none; border:none; color:var(--text-faint); cursor:pointer; padding:0;
   }
   .nutrient-info-btn svg{width:100%;height:100%;}
   .nutrient-info-btn:active{color:var(--text-dim);}
-  /* Bigger standalone variant — the "about all 4" button at the top
-     of the Today card, not inline within a label's text. */
   .today-card-head{display:flex;align-items:center;justify-content:space-between;}
   .today-card-head .section-label{margin:0;}
-  .nutrient-info-btn-lg{width:22px;height:22px;margin-left:0;}
 
   .hidden{display:none !important;}
 
@@ -1160,49 +1147,14 @@
     return Math.max(0, Math.round((value / goal) * 100));
   }
 
-  // Plain-language reference for the 4 nutrients people actually ask
-  // "what does this do" about — written from scratch, not copied from
-  // any source. Sugar/sodium/calories don't get an entry since there's
-  // no equivalent "why does this matter" framing that isn't just
-  // restating the number itself.
-  var NUTRIENT_INFO = {
-    protein: { label: 'Protein', role: 'Builds and repairs muscle, tissue, hair, and skin.', foundIn: 'Meat, fish, eggs, dairy, beans, lentils' },
-    carbs: { label: 'Carbs', role: 'Your body and brain\u2019s main energy source.', foundIn: 'Bread, rice, pasta, fruit, vegetables' },
-    fat: { label: 'Fat', role: 'Stores energy, protects organs, helps absorb nutrients, supports brain function.', foundIn: 'Oils, nuts, seeds, salmon, cheese' },
-    fiber: { label: 'Fiber', role: 'Aids digestion, keeps you full longer, and helps regulate blood sugar.', foundIn: 'Whole grains, fruit, vegetables, beans, oats' }
-  };
-
-  function infoBtnHtml(key){
-    return '<button type="button" class="nutrient-info-btn" data-action="show-nutrient-info" data-nutrient="' + key + '" aria-label="About ' + NUTRIENT_INFO[key].label + '">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
-    '</button>';
-  }
-
-  // Shared body markup for one nutrient's role + "found in" line —
-  // used both for a single-nutrient popover and, with a heading in
-  // front of each, inside the combined "all 4" view.
-  function nutrientBodyHtml(key){
-    var info = NUTRIENT_INFO[key];
-    return '<p>' + info.role + '</p>' +
-      '<div class="nutrient-info-foundin"><span>Found in</span><p>' + info.foundIn + '</p></div>';
-  }
-
-  function showNutrientInfo(key){
-    var titleEl = document.getElementById('nutrientInfoTitle');
-    var bodyEl = document.getElementById('nutrientInfoBody');
-    if (key === 'all'){
-      titleEl.textContent = 'Macros & Fiber';
-      // Reference image instead of the text summary below — same
-      // info, laid out as a guide. Kept as its own file
-      // (images/macros-fiber-guide.webp) rather than inlined, same
-      // as the background art, so it's cacheable and doesn't bloat
-      // the HTML.
-      bodyEl.innerHTML = '<img class="nutrient-info-image" src="images/macros-fiber-guide.webp" alt="Guide to protein, carbs, fats, and fiber — what each does and where to find it">';
-    } else {
-      if (!NUTRIENT_INFO[key]) return;
-      titleEl.textContent = NUTRIENT_INFO[key].label;
-      bodyEl.innerHTML = nutrientBodyHtml(key);
-    }
+  function showNutrientInfo(){
+    document.getElementById('nutrientInfoTitle').textContent = 'Macros & Fiber';
+    // Reference image rather than generated text — kept as its own
+    // file (images/macros-fiber-guide.webp) rather than inlined,
+    // same as the background art, so it's cacheable and doesn't
+    // bloat the HTML.
+    document.getElementById('nutrientInfoBody').innerHTML =
+      '<img class="nutrient-info-image" src="images/macros-fiber-guide.webp" alt="Guide to protein, carbs, fats, and fiber — what each does and where to find it">';
     document.getElementById('nutrientInfoOverlay').classList.remove('hidden');
   }
 
@@ -1286,11 +1238,11 @@
     return html;
   }
 
-  function macroBarHtml(label, value, goal, cls, unit, infoKey){
+  function macroBarHtml(label, value, goal, cls, unit){
     unit = unit || 'g';
     var over = goal > 0 && value > goal;
     return '<div class="macro-bar-row">' +
-      '<div class="macro-bar-label"><span>' + label + (infoKey ? infoBtnHtml(infoKey) : '') + '</span><b>' + Math.round(value) + unit + ' / ' + goal + unit + '</b></div>' +
+      '<div class="macro-bar-label"><span>' + label + '</span><b>' + Math.round(value) + unit + ' / ' + goal + unit + '</b></div>' +
       '<div class="macro-bar-track"><div class="macro-bar-fill ' + cls + (over ? ' over' : '') + '" style="width:' + pct(value, goal) + '%"></div></div>' +
     '</div>';
   }
@@ -1308,7 +1260,7 @@
   var MACRO_RING_R = 32;
   var MACRO_RING_CIRCUMFERENCE = 2 * Math.PI * MACRO_RING_R;
 
-  function macroRingHtml(label, value, goal, colorClass, infoKey){
+  function macroRingHtml(label, value, goal, colorClass){
     var percent = pctUncapped(value, goal);
     var over = percent > 100;
     var offset = MACRO_RING_CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100);
@@ -1321,7 +1273,7 @@
         '</svg>' +
         '<div class="macro-ring-pct' + (over ? ' over' : '') + '">' + percent + '%</div>' +
       '</div>' +
-      '<div class="macro-ring-label">' + label + (infoKey ? infoBtnHtml(infoKey) : '') + '</div>' +
+      '<div class="macro-ring-label">' + label + '</div>' +
       '<div class="macro-ring-sub">' + Math.round(value) + ' / ' + goal + 'g</div>' +
     '</div>';
   }
@@ -2189,15 +2141,15 @@
     var g = STORE.goals;
 
     var html = '<div class="card"><div class="today-card-head"><h3 class="section-label">Today</h3>' +
-      '<button type="button" class="nutrient-info-btn nutrient-info-btn-lg" data-action="show-nutrient-info" data-nutrient="all" aria-label="About macros and fiber">' +
+      '<button type="button" class="nutrient-info-btn" data-action="show-nutrient-info" aria-label="About macros and fiber">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
       '</button>' +
     '</div>';
     html += calorieRingHtml(todayTotals.calories, g.calories);
     html += '<div class="macro-ring-row">' +
-      macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein', 'protein') +
-      macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs', 'carbs') +
-      macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat', 'fat') +
+      macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
+      macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
+      macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
     '</div>';
     html += '<div class="remaining-row">' +
       remainingStatHtml('Calories', todayTotals.calories, g.calories, ' kcal') +
@@ -2206,7 +2158,7 @@
       remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
     '</div>';
     html += '<h3 class="section-label">Other nutrients</h3>';
-    html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber', 'g', 'fiber') +
+    html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
       macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
       macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg');
     var caption = macroBalanceCaption(todayMeals, todayTotals, g);
@@ -2591,7 +2543,7 @@
     } else if (action === 'close-add-meal-overlay'){
       closeAddMealOverlay();
     } else if (action === 'show-nutrient-info'){
-      showNutrientInfo(el.dataset.nutrient);
+      showNutrientInfo();
     } else if (action === 'close-nutrient-info'){
       closeNutrientInfo();
     } else if (action === 'select-meal-category'){
