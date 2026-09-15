@@ -842,14 +842,9 @@
     letter-spacing:0.05em;text-transform:uppercase;color:var(--text-faint);
   }
   .nutrient-info-foundin p{color:var(--text);}
-  /* Groups one nutrient's role+found-in inside the combined "all 4"
-     view — each gets its own small heading, divided from the next. */
-  .nutrient-info-section{padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);}
-  .nutrient-info-section:last-child{padding-bottom:0;margin-bottom:0;border-bottom:none;}
-  .nutrient-info-section h4{
-    margin:0 0 4px; font-family:'Oswald',sans-serif; font-size:13px; font-weight:700;
-    letter-spacing:0.03em; text-transform:uppercase; color:var(--text);
-  }
+  /* "All 4" view shows the reference image instead of text now —
+     see showNutrientInfo(). */
+  .nutrient-info-image{display:block;width:100%;height:auto;border-radius:var(--radius-md);}
 
   /* Small inline "i" button next to a nutrient label — opens the
      popover above. Sits right in the label text via inline-flex so
@@ -1197,9 +1192,12 @@
     var bodyEl = document.getElementById('nutrientInfoBody');
     if (key === 'all'){
       titleEl.textContent = 'Macros & Fiber';
-      bodyEl.innerHTML = ['protein', 'carbs', 'fat', 'fiber'].map(function(k){
-        return '<div class="nutrient-info-section"><h4>' + NUTRIENT_INFO[k].label + '</h4>' + nutrientBodyHtml(k) + '</div>';
-      }).join('');
+      // Reference image instead of the text summary below — same
+      // info, laid out as a guide. Kept as its own file
+      // (images/macros-fiber-guide.webp) rather than inlined, same
+      // as the background art, so it's cacheable and doesn't bloat
+      // the HTML.
+      bodyEl.innerHTML = '<img class="nutrient-info-image" src="images/macros-fiber-guide.webp" alt="Guide to protein, carbs, fats, and fiber — what each does and where to find it">';
     } else {
       if (!NUTRIENT_INFO[key]) return;
       titleEl.textContent = NUTRIENT_INFO[key].label;
