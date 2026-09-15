@@ -128,6 +128,9 @@
     background-repeat:no-repeat;
     overflow:hidden;
   }
+  /* Toggled off via Settings > Appearance — plain background color
+     only, no illustration. */
+  body[data-bg-art="off"] #app{background-image:none;}
 
   /* ---------- Topbar (same structure/classes as SaviorFit Logger) ---------- */
   .topbar{
@@ -1020,7 +1023,7 @@
     return 'dinner';
   }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
-  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark' };
+  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true };
   var APP_VERSION = '0.1.0';
 
   function cmToIn(cm){ return cm / 2.54; }
@@ -2343,6 +2346,11 @@
                 '<button data-action="set-theme" data-theme="dark" class="' + (s.theme !== 'light' ? 'active' : '') + '">Dark</button>' +
                 '<button data-action="set-theme" data-theme="light" class="' + (s.theme === 'light' ? 'active' : '') + '">Light</button>' +
               '</div></div>';
+    html += '<div class="settings-row"><div><div class="sr-label">Background image</div><div class="sr-sub">The food illustration behind everything</div></div>' +
+              '<div class="seg">' +
+                '<button data-action="set-bg-art" data-val="on" class="' + (s.bgArt !== false ? 'active' : '') + '">On</button>' +
+                '<button data-action="set-bg-art" data-val="off" class="' + (s.bgArt === false ? 'active' : '') + '">Off</button>' +
+              '</div></div>';
     html += '<div class="settings-row"><div><div class="sr-label">Density</div><div class="sr-sub">Fit more on screen in Log &amp; History</div></div>' +
               '<div class="seg">' +
                 '<button data-action="set-density" data-density="comfortable" class="' + (s.density === 'comfortable' ? 'active' : '') + '">Comfortable</button>' +
@@ -2405,6 +2413,7 @@
     document.body.dataset.density = STORE.appSettings.density || 'comfortable';
     document.body.dataset.corners = STORE.appSettings.corners || 'rounded';
     document.body.dataset.theme = STORE.appSettings.theme || 'dark';
+    document.body.dataset.bgArt = STORE.appSettings.bgArt === false ? 'off' : 'on';
   }
 
   function maybeVibrate(){
@@ -2611,6 +2620,11 @@
       renderApp();
     } else if (action === 'set-theme'){
       STORE.appSettings.theme = el.dataset.theme;
+      saveStore();
+      applyAppearanceSettings();
+      renderApp();
+    } else if (action === 'set-bg-art'){
+      STORE.appSettings.bgArt = (el.dataset.val === 'on');
       saveStore();
       applyAppearanceSettings();
       renderApp();
