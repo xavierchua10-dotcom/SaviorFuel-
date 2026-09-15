@@ -87,12 +87,14 @@
      text-faint/accent/success above are the minimum darkening each
      needed to clear 4.5:1 against every background they're actually
      used on (cards, the tab bar, caption backgrounds). Accent going
-     darker breaks .category-pill.active's fixed dark (#1c1500) text
-     on an accent-colored background (was already borderline in the
-     old lighter accent, definitively fails now) — dark-mode's much
-     brighter accent still works fine with dark text, so this is
-     light-theme-only rather than changing the shared rule. */
+     darker breaks fixed dark (#1c1500) text sitting on an accent-
+     colored background (.category-pill.active, .unit-toggle button
+     .active) — was already borderline in the old lighter accent,
+     definitively fails now. Dark-mode's much brighter accent still
+     works fine with dark text, so these are light-theme-only
+     overrides rather than changing the shared rules.  */
   body[data-theme="light"] .category-pill.active{color:#fff;}
+  body[data-theme="light"] .unit-toggle button.active{color:#fff;}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
@@ -535,16 +537,25 @@
   /* ---------- Selected-food banner (shown in the add-meal card
      once a search/scan result has been picked) ---------- */
   .selected-food-banner{
-    display:flex;justify-content:space-between;align-items:center;
     background:var(--panel-3);border-radius:var(--radius-sm);
     padding:8px 10px;margin-bottom:8px;font-size:12px;color:var(--text-dim);
   }
+  .selected-food-banner-row{display:flex;justify-content:space-between;align-items:center;}
   .selected-food-banner b{color:var(--text);}
   .selected-food-banner .grams-input{
     width:60px;background:var(--panel-2);border:1px solid var(--line);
     border-radius:var(--radius-xs);color:var(--text);font-family:'JetBrains Mono',monospace;
     font-size:12px;padding:5px 6px;text-align:center;
   }
+  /* Only shown when the picked food has a known serving size (OFF
+     products with contributor-entered serving data) — grams-only
+     otherwise, since guessing a serving size would just be wrong. */
+  .unit-toggle{display:flex;gap:2px;background:var(--panel-2);border-radius:var(--radius-sm);padding:3px;margin-top:8px;}
+  .unit-toggle button{
+    flex:1;background:none;border:none;color:var(--text-faint);
+    padding:6px 8px;border-radius:var(--radius-xs);font-size:11px;font-weight:600;cursor:pointer;
+  }
+  .unit-toggle button.active{background:var(--accent);color:#1c1500;}
 
   /* ---------- Barcode scanner overlay ---------- */
   .scan-overlay{
@@ -970,7 +981,8 @@
     justFilledFood: false,
     macroCardCollapsed: false,
     selectedCategory: 'breakfast', // set properly each time the Add Meal overlay opens
-    insightsView: 'today' // 'today' | 'trends' — which Insights sub-tab panel is showing
+    insightsView: 'today', // 'today' | 'trends' — which Insights sub-tab panel is showing
+    unitMode: 'grams' // 'grams' | 'servings' — only meaningful when the picked food has a known serving size (see selectedFood.servingGrams)
   };
 
   function loadStore(){
@@ -1257,11 +1269,21 @@
         '<span>From Kalori: <b>' + esc(f.name) + '</b> — ' + esc(f.servingLabel || '1 serving') + '</span>' +
       '</div>';
     }
+    var showServingToggle = f.servingGrams && f.servingGrams > 0;
+    var inputHtml = (ui.unitMode === 'servings' && showServingToggle)
+      ? '<input type="number" class="grams-input" id="foodGrams" step="0.5" value="' + (Math.round((ui.grams / f.servingGrams) * 100) / 100) + '" data-action-change="rescale-food"> serving' + (ui.grams === f.servingGrams ? '' : 's')
+      : '<input type="number" class="grams-input" id="foodGrams" value="' + ui.grams + '" data-action-change="rescale-food"> g';
     return '<div class="selected-food-banner">' +
-      '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span>' +
-      '<span>' +
-        '<input type="number" class="grams-input" id="foodGrams" value="' + ui.grams + '" data-action-change="rescale-food"> g' +
-      '</span>' +
+      '<div class="selected-food-banner-row">' +
+        '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span>' +
+        '<span>' + inputHtml + '</span>' +
+      '</div>' +
+      (showServingToggle ?
+        '<div class="unit-toggle">' +
+          '<button type="button" data-action="set-unit-mode" data-mode="grams" class="' + (ui.unitMode !== 'servings' ? 'active' : '') + '">Grams</button>' +
+          '<button type="button" data-action="set-unit-mode" data-mode="servings" class="' + (ui.unitMode === 'servings' ? 'active' : '') + '">Serving' + (f.servingSizeText ? ' (' + esc(f.servingSizeText) + ')' : '') + '</button>' +
+        '</div>'
+        : '') +
     '</div>';
   }
 
@@ -1296,11 +1318,18 @@
     }).join('');
   }
 
-  function openAddMealOverlay(){
+  // Just the banner portion — used on its own by the unit-mode toggle
+  // so switching grams/servings doesn't also re-run openAddMealOverlay()'s
+  // category auto-suggestion (which would discard a category the person
+  // already picked manually).
+  function refreshSelectedFoodBanner(){
     var bodyEl = document.getElementById('addMealBody');
-    var bannerHtml = ui.selectedFood ? selectedFoodBannerHtml() : '';
     bodyEl.querySelectorAll('.selected-food-banner').forEach(function(el){ el.remove(); });
-    if (bannerHtml) bodyEl.insertAdjacentHTML('afterbegin', bannerHtml);
+    if (ui.selectedFood) bodyEl.insertAdjacentHTML('afterbegin', selectedFoodBannerHtml());
+  }
+
+  function openAddMealOverlay(){
+    refreshSelectedFoodBanner();
 
     ui.selectedCategory = suggestCategoryForNow();
     renderCategoryPicker();
@@ -1588,6 +1617,12 @@
       ui.selectedFood = {
         name: p.product_name,
         brand: p.brands ? p.brands.split(',')[0] : '',
+        // Only OFF products reliably carry this (contributor-entered,
+        // e.g. "38 g" / "1 slice (38g)") — USDA's raw-ingredient
+        // entries don't really have a "serving" concept the same way,
+        // and Kalori/saved items are handled in the branch above.
+        servingGrams: (p._source === 'off' && p.serving_quantity > 0) ? p.serving_quantity : null,
+        servingSizeText: (p._source === 'off' && p.serving_size) ? p.serving_size : null,
         per100g: {
           cal: n['energy-kcal_100g'] || 0,
           protein: n['proteins_100g'] || 0,
@@ -1606,6 +1641,7 @@
     // itself picked from the cache, nothing new to learn from that.
     if (p._source !== 'saved') saveFoodToCache(ui.selectedFood);
     ui.grams = 100;
+    ui.unitMode = 'grams'; // reset — a previous pick's servings mode shouldn't carry over to a food that may not have serving data
     applySelectedFoodToForm();
     ui.justFilledFood = true;
     closeFoodSearchOverlay();
@@ -1727,6 +1763,8 @@
         ui.selectedFood = {
           name: p.product_name || 'Scanned item',
           brand: p.brands ? p.brands.split(',')[0] : '',
+          servingGrams: (p.serving_quantity > 0) ? p.serving_quantity : null,
+          servingSizeText: p.serving_size || null,
           per100g: {
             cal: n['energy-kcal_100g'] || 0,
             protein: n['proteins_100g'] || 0,
@@ -1739,6 +1777,7 @@
         };
         saveFoodToCache(ui.selectedFood); // works offline next time, even for a barcode
         ui.grams = 100;
+        ui.unitMode = 'grams';
         applySelectedFoodToForm();
         ui.justFilledFood = true;
         openAddMealOverlay();
@@ -2424,6 +2463,9 @@
       openScanner();
     } else if (action === 'capture-food-photo'){
       captureFoodPhoto();
+    } else if (action === 'set-unit-mode'){
+      ui.unitMode = el.dataset.mode;
+      refreshSelectedFoodBanner();
     } else if (action === 'close-scanner'){
       closeScanner();
     } else if (action === 'set-unit'){
@@ -2481,7 +2523,16 @@
     if (e.target.dataset && e.target.dataset.actionChange === 'save-goal'){
       saveGoalsFromInputs();
     } else if (e.target.id === 'foodGrams'){
-      ui.grams = parseInt(e.target.value, 10) || 0;
+      var raw = parseFloat(e.target.value) || 0;
+      // In servings mode the field holds a serving count (can be
+      // fractional, e.g. 0.5), converted to the actual gram amount —
+      // ui.grams stays the single source of truth either way, same
+      // as applySelectedFoodToForm() already expects.
+      if (ui.unitMode === 'servings' && ui.selectedFood && ui.selectedFood.servingGrams){
+        ui.grams = Math.round(raw * ui.selectedFood.servingGrams);
+      } else {
+        ui.grams = Math.round(raw);
+      }
       applySelectedFoodToForm();
       renderApp();
     }
