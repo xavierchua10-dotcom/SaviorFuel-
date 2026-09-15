@@ -336,6 +336,7 @@
   .macro-bar-fill.fiber{background:#a97c50;}
   .macro-bar-fill.sugar{background:#d67ab1;}
   .macro-bar-fill.sodium{background:#4fc3c9;}
+  .macro-bar-fill.over{background:var(--accent-2);}
 
   /* ---------- Quick-add meal form (inside the Add Meal sheet) ---------- */
   #addMealBody .field-row{display:flex;gap:8px;margin-bottom:8px;}
@@ -453,10 +454,12 @@
   .calorie-ring-svg{width:116px;height:116px;transform:rotate(-90deg);}
   .calorie-ring-track{fill:none;stroke:var(--panel-3);stroke-width:10;}
   .calorie-ring-fill{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 500ms ease;}
+  .calorie-ring-fill.over{stroke:var(--accent-2);}
   .calorie-ring-pct{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     font-family:'Oswald',sans-serif; font-size:22px; font-weight:700; color:var(--text);
   }
+  .calorie-ring-pct.over{color:var(--accent-2);}
   .calorie-ring-label{
     margin-top:10px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
     letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim);
@@ -472,10 +475,12 @@
   .macro-ring-fill.protein{stroke:var(--success);}
   .macro-ring-fill.carbs{stroke:#5fa8d6;}
   .macro-ring-fill.fat{stroke:var(--accent-2);}
+  .macro-ring-fill.over{stroke:var(--accent-2);}
   .macro-ring-pct{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     font-family:'Oswald',sans-serif; font-size:15px; font-weight:700; color:var(--text);
   }
+  .macro-ring-pct.over{color:var(--accent-2);}
   .macro-ring-label{
     margin-top:9px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
     letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim);
@@ -1070,6 +1075,16 @@
     return Math.max(0, Math.min(100, Math.round((value / goal) * 100)));
   }
 
+  // Same as pct() but never caps the upper end — for anywhere the
+  // actual number is shown (ring center text, etc.), so 250g against
+  // a 100g goal reads as "250%", not a misleading capped "100%".
+  // Fill widths/ring offsets still need pct() (capped) since they're
+  // physically bounded by the container — this one's for display only.
+  function pctUncapped(value, goal){
+    if (!goal) return 0;
+    return Math.max(0, Math.round((value / goal) * 100));
+  }
+
   /* =========================================================
      RENDER — LOG TAB
      ========================================================= */
@@ -1148,9 +1163,10 @@
 
   function macroBarHtml(label, value, goal, cls, unit){
     unit = unit || 'g';
+    var over = goal > 0 && value > goal;
     return '<div class="macro-bar-row">' +
       '<div class="macro-bar-label"><span>' + label + '</span><b>' + Math.round(value) + unit + ' / ' + goal + unit + '</b></div>' +
-      '<div class="macro-bar-track"><div class="macro-bar-fill ' + cls + '" style="width:' + pct(value, goal) + '%"></div></div>' +
+      '<div class="macro-bar-track"><div class="macro-bar-fill ' + cls + (over ? ' over' : '') + '" style="width:' + pct(value, goal) + '%"></div></div>' +
     '</div>';
   }
 
@@ -1158,22 +1174,27 @@
   // numbers, no bar, since this panel is meant to read as a quick
   // reference table rather than a repeat of the Log tab's bars.
   // Ring circumference is fixed (r=32), so the stroke-dasharray is
-  // constant and only stroke-dashoffset moves to reveal the arc —
-  // same capped 0-100% used everywhere else via pct().
+  // constant and only stroke-dashoffset moves to reveal the arc.
+  // Fill offset stays capped at 100% (a ring can't physically show
+  // more than a full circle), but the center text uses the real,
+  // uncapped percentage — and switches to the "over" red once past
+  // 100% — so exceeding a goal never just looks identical to hitting
+  // it exactly.
   var MACRO_RING_R = 32;
   var MACRO_RING_CIRCUMFERENCE = 2 * Math.PI * MACRO_RING_R;
 
   function macroRingHtml(label, value, goal, colorClass){
-    var percent = pct(value, goal);
-    var offset = MACRO_RING_CIRCUMFERENCE * (1 - percent / 100);
+    var percent = pctUncapped(value, goal);
+    var over = percent > 100;
+    var offset = MACRO_RING_CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100);
     return '<div class="macro-ring-item">' +
       '<div class="macro-ring-wrap">' +
         '<svg class="macro-ring-svg" viewBox="0 0 76 76">' +
           '<circle class="macro-ring-track" cx="38" cy="38" r="' + MACRO_RING_R + '"></circle>' +
-          '<circle class="macro-ring-fill ' + colorClass + '" cx="38" cy="38" r="' + MACRO_RING_R + '" ' +
+          '<circle class="macro-ring-fill ' + colorClass + (over ? ' over' : '') + '" cx="38" cy="38" r="' + MACRO_RING_R + '" ' +
             'style="stroke-dasharray:' + MACRO_RING_CIRCUMFERENCE.toFixed(2) + ';stroke-dashoffset:' + offset.toFixed(2) + ';"></circle>' +
         '</svg>' +
-        '<div class="macro-ring-pct">' + percent + '%</div>' +
+        '<div class="macro-ring-pct' + (over ? ' over' : '') + '">' + percent + '%</div>' +
       '</div>' +
       '<div class="macro-ring-label">' + label + '</div>' +
       '<div class="macro-ring-sub">' + Math.round(value) + ' / ' + goal + 'g</div>' +
@@ -1187,16 +1208,17 @@
   var CALORIE_RING_CIRCUMFERENCE = 2 * Math.PI * CALORIE_RING_R;
 
   function calorieRingHtml(value, goal){
-    var percent = pct(value, goal);
-    var offset = CALORIE_RING_CIRCUMFERENCE * (1 - percent / 100);
+    var percent = pctUncapped(value, goal);
+    var over = percent > 100;
+    var offset = CALORIE_RING_CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100);
     return '<div class="calorie-ring-row"><div class="calorie-ring-item">' +
       '<div class="calorie-ring-wrap">' +
         '<svg class="calorie-ring-svg" viewBox="0 0 116 116">' +
           '<circle class="calorie-ring-track" cx="58" cy="58" r="' + CALORIE_RING_R + '"></circle>' +
-          '<circle class="calorie-ring-fill" cx="58" cy="58" r="' + CALORIE_RING_R + '" ' +
+          '<circle class="calorie-ring-fill' + (over ? ' over' : '') + '" cx="58" cy="58" r="' + CALORIE_RING_R + '" ' +
             'style="stroke-dasharray:' + CALORIE_RING_CIRCUMFERENCE.toFixed(2) + ';stroke-dashoffset:' + offset.toFixed(2) + ';"></circle>' +
         '</svg>' +
-        '<div class="calorie-ring-pct">' + percent + '%</div>' +
+        '<div class="calorie-ring-pct' + (over ? ' over' : '') + '">' + percent + '%</div>' +
       '</div>' +
       '<div class="calorie-ring-label">Calories</div>' +
       '<div class="calorie-ring-sub">' + Math.round(value) + ' / ' + goal + ' kcal</div>' +
