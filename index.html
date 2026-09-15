@@ -1253,7 +1253,7 @@
     return '<div class="meal-row">' +
       '<div class="meal-row-name">' +
         '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(m.name) + '</div>' +
-        '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
+        '<div class="meal-row-macros">Protein ' + (m.protein||0) + 'g · Carbs ' + (m.carbs||0) + 'g · Fat ' + (m.fat||0) + 'g</div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
       '<button class="meal-row-del" data-action="delete-meal" data-id="' + m.id + '" aria-label="Delete">' +
