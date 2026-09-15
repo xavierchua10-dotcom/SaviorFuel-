@@ -800,6 +800,59 @@
   .add-meal-close:active{background:var(--panel-2);}
   .add-meal-body{overflow-y:auto;}
 
+  /* ---------- Nutrient info popover — same overlay pattern as Add
+     Meal, just a smaller fixed-content card instead of a form. ---------- */
+  .nutrient-info-overlay{
+    position:absolute; inset:0; z-index:96;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px 20px;
+  }
+  .nutrient-info-overlay.hidden{display:none;}
+  .nutrient-info-backdrop{
+    position:absolute; inset:0;
+    background:rgba(10,11,13,0.62);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  }
+  .nutrient-info-card{
+    position:relative;
+    width:100%; max-width:340px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-xl);
+    box-shadow:var(--card-shadow);
+    padding:18px 18px 20px;
+  }
+  .nutrient-info-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .nutrient-info-head h3{
+    margin:0; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;
+    letter-spacing:0.04em; text-transform:uppercase; color:var(--text);
+  }
+  .nutrient-info-head button{
+    width:28px;height:28px;flex-shrink:0;border-radius:50%;
+    background:var(--panel-3);border:none;color:var(--text-dim);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+  }
+  .nutrient-info-head button svg{width:14px;height:14px;}
+  .nutrient-info-head button:active{background:var(--panel-2);}
+  .nutrient-info-card p{margin:0;font-size:14px;line-height:1.5;color:var(--text-dim);}
+  .nutrient-info-foundin{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);}
+  .nutrient-info-foundin span{
+    display:block;margin-bottom:4px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;
+    letter-spacing:0.05em;text-transform:uppercase;color:var(--text-faint);
+  }
+  .nutrient-info-foundin p{color:var(--text);}
+
+  /* Small inline "i" button next to a nutrient label — opens the
+     popover above. Sits right in the label text via inline-flex so
+     it doesn't disturb the row's existing layout. */
+  .nutrient-info-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:14px; height:14px; margin-left:5px; vertical-align:-2px;
+    background:none; border:none; color:var(--text-faint); cursor:pointer; padding:0;
+  }
+  .nutrient-info-btn svg{width:100%;height:100%;}
+  .nutrient-info-btn:active{color:var(--text-dim);}
+
   .hidden{display:none !important;}
 
   .boot-loading{
@@ -910,6 +963,23 @@
         <div class="field-labeled"><label>Sodium (mg)</label><input type="number" inputmode="numeric" id="mealSodium" placeholder="0"></div>
       </div>
       <button class="btn-primary" data-action="add-meal">+ Add Meal</button>
+    </div>
+  </div>
+</div>
+
+<div class="nutrient-info-overlay hidden" id="nutrientInfoOverlay">
+  <div class="nutrient-info-backdrop" data-action="close-nutrient-info"></div>
+  <div class="nutrient-info-card">
+    <div class="nutrient-info-head">
+      <h3 id="nutrientInfoTitle"></h3>
+      <button data-action="close-nutrient-info" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <p id="nutrientInfoRole"></p>
+    <div class="nutrient-info-foundin">
+      <span>Found in</span>
+      <p id="nutrientInfoFoundIn"></p>
     </div>
   </div>
 </div>
@@ -1085,6 +1155,37 @@
     return Math.max(0, Math.round((value / goal) * 100));
   }
 
+  // Plain-language reference for the 4 nutrients people actually ask
+  // "what does this do" about — written from scratch, not copied from
+  // any source. Sugar/sodium/calories don't get an entry since there's
+  // no equivalent "why does this matter" framing that isn't just
+  // restating the number itself.
+  var NUTRIENT_INFO = {
+    protein: { label: 'Protein', role: 'Builds and repairs muscle, tissue, hair, and skin.', foundIn: 'Meat, fish, eggs, dairy, beans, lentils' },
+    carbs: { label: 'Carbs', role: 'Your body and brain\u2019s main energy source.', foundIn: 'Bread, rice, pasta, fruit, vegetables' },
+    fat: { label: 'Fat', role: 'Stores energy, protects organs, helps absorb nutrients, supports brain function.', foundIn: 'Oils, nuts, seeds, salmon, cheese' },
+    fiber: { label: 'Fiber', role: 'Aids digestion, keeps you full longer, and helps regulate blood sugar.', foundIn: 'Whole grains, fruit, vegetables, beans, oats' }
+  };
+
+  function infoBtnHtml(key){
+    return '<button type="button" class="nutrient-info-btn" data-action="show-nutrient-info" data-nutrient="' + key + '" aria-label="About ' + NUTRIENT_INFO[key].label + '">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
+    '</button>';
+  }
+
+  function showNutrientInfo(key){
+    var info = NUTRIENT_INFO[key];
+    if (!info) return;
+    document.getElementById('nutrientInfoTitle').textContent = info.label;
+    document.getElementById('nutrientInfoRole').textContent = info.role;
+    document.getElementById('nutrientInfoFoundIn').textContent = info.foundIn;
+    document.getElementById('nutrientInfoOverlay').classList.remove('hidden');
+  }
+
+  function closeNutrientInfo(){
+    document.getElementById('nutrientInfoOverlay').classList.add('hidden');
+  }
+
   /* =========================================================
      RENDER — LOG TAB
      ========================================================= */
@@ -1161,11 +1262,11 @@
     return html;
   }
 
-  function macroBarHtml(label, value, goal, cls, unit){
+  function macroBarHtml(label, value, goal, cls, unit, infoKey){
     unit = unit || 'g';
     var over = goal > 0 && value > goal;
     return '<div class="macro-bar-row">' +
-      '<div class="macro-bar-label"><span>' + label + '</span><b>' + Math.round(value) + unit + ' / ' + goal + unit + '</b></div>' +
+      '<div class="macro-bar-label"><span>' + label + (infoKey ? infoBtnHtml(infoKey) : '') + '</span><b>' + Math.round(value) + unit + ' / ' + goal + unit + '</b></div>' +
       '<div class="macro-bar-track"><div class="macro-bar-fill ' + cls + (over ? ' over' : '') + '" style="width:' + pct(value, goal) + '%"></div></div>' +
     '</div>';
   }
@@ -1183,7 +1284,7 @@
   var MACRO_RING_R = 32;
   var MACRO_RING_CIRCUMFERENCE = 2 * Math.PI * MACRO_RING_R;
 
-  function macroRingHtml(label, value, goal, colorClass){
+  function macroRingHtml(label, value, goal, colorClass, infoKey){
     var percent = pctUncapped(value, goal);
     var over = percent > 100;
     var offset = MACRO_RING_CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100);
@@ -1196,7 +1297,7 @@
         '</svg>' +
         '<div class="macro-ring-pct' + (over ? ' over' : '') + '">' + percent + '%</div>' +
       '</div>' +
-      '<div class="macro-ring-label">' + label + '</div>' +
+      '<div class="macro-ring-label">' + label + (infoKey ? infoBtnHtml(infoKey) : '') + '</div>' +
       '<div class="macro-ring-sub">' + Math.round(value) + ' / ' + goal + 'g</div>' +
     '</div>';
   }
@@ -2066,9 +2167,9 @@
     var html = '<div class="card"><h3 class="section-label">Today</h3>';
     html += calorieRingHtml(todayTotals.calories, g.calories);
     html += '<div class="macro-ring-row">' +
-      macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
-      macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
-      macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
+      macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein', 'protein') +
+      macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs', 'carbs') +
+      macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat', 'fat') +
     '</div>';
     html += '<div class="remaining-row">' +
       remainingStatHtml('Calories', todayTotals.calories, g.calories, ' kcal') +
@@ -2077,7 +2178,7 @@
       remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
     '</div>';
     html += '<h3 class="section-label">Other nutrients</h3>';
-    html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
+    html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber', 'g', 'fiber') +
       macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
       macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg');
     var caption = macroBalanceCaption(todayMeals, todayTotals, g);
@@ -2461,6 +2562,10 @@
       addMealFromForm();
     } else if (action === 'close-add-meal-overlay'){
       closeAddMealOverlay();
+    } else if (action === 'show-nutrient-info'){
+      showNutrientInfo(el.dataset.nutrient);
+    } else if (action === 'close-nutrient-info'){
+      closeNutrientInfo();
     } else if (action === 'select-meal-category'){
       ui.selectedCategory = el.dataset.category;
       renderCategoryPicker();
