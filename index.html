@@ -74,15 +74,25 @@
     --line:#ddd9cf;
     --text:#22201c;
     --text-dim:#6b6860;
-    --text-faint:#8a8578;
-    --accent:#a86c00;
+    --text-faint:#706c61;
+    --accent:#966000;
     --accent-dim:#f0dfb8;
-    --accent-rgb:168,108,0;
+    --accent-rgb:150,96,0;
     --accent-2:#a5372f;
     --accent-2-dim:#f6dcda;
-    --success:#3f8f4f;
+    --success:#31703e;
     --success-dim:#e2f2e4;
   }
+  /* Verified against actual WCAG contrast math, not eyeballed —
+     text-faint/accent/success above are the minimum darkening each
+     needed to clear 4.5:1 against every background they're actually
+     used on (cards, the tab bar, caption backgrounds). Accent going
+     darker breaks .category-pill.active's fixed dark (#1c1500) text
+     on an accent-colored background (was already borderline in the
+     old lighter accent, definitively fails now) — dark-mode's much
+     brighter accent still works fine with dark text, so this is
+     light-theme-only rather than changing the shared rule. */
+  body[data-theme="light"] .category-pill.active{color:#fff;}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
