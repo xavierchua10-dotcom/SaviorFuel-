@@ -816,6 +816,7 @@
   .nutrient-info-card{
     position:relative;
     width:100%; max-width:340px;
+    max-height:80vh; overflow-y:auto;
     background:var(--panel);
     border:1px solid var(--line);
     border-radius:var(--radius-xl);
@@ -841,6 +842,14 @@
     letter-spacing:0.05em;text-transform:uppercase;color:var(--text-faint);
   }
   .nutrient-info-foundin p{color:var(--text);}
+  /* Groups one nutrient's role+found-in inside the combined "all 4"
+     view — each gets its own small heading, divided from the next. */
+  .nutrient-info-section{padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);}
+  .nutrient-info-section:last-child{padding-bottom:0;margin-bottom:0;border-bottom:none;}
+  .nutrient-info-section h4{
+    margin:0 0 4px; font-family:'Oswald',sans-serif; font-size:13px; font-weight:700;
+    letter-spacing:0.03em; text-transform:uppercase; color:var(--text);
+  }
 
   /* Small inline "i" button next to a nutrient label — opens the
      popover above. Sits right in the label text via inline-flex so
@@ -852,6 +861,11 @@
   }
   .nutrient-info-btn svg{width:100%;height:100%;}
   .nutrient-info-btn:active{color:var(--text-dim);}
+  /* Bigger standalone variant — the "about all 4" button at the top
+     of the Today card, not inline within a label's text. */
+  .today-card-head{display:flex;align-items:center;justify-content:space-between;}
+  .today-card-head .section-label{margin:0;}
+  .nutrient-info-btn-lg{width:22px;height:22px;margin-left:0;}
 
   .hidden{display:none !important;}
 
@@ -976,11 +990,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
-    <p id="nutrientInfoRole"></p>
-    <div class="nutrient-info-foundin">
-      <span>Found in</span>
-      <p id="nutrientInfoFoundIn"></p>
-    </div>
+    <div id="nutrientInfoBody"></div>
   </div>
 </div>
 
@@ -1173,12 +1183,28 @@
     '</button>';
   }
 
-  function showNutrientInfo(key){
+  // Shared body markup for one nutrient's role + "found in" line —
+  // used both for a single-nutrient popover and, with a heading in
+  // front of each, inside the combined "all 4" view.
+  function nutrientBodyHtml(key){
     var info = NUTRIENT_INFO[key];
-    if (!info) return;
-    document.getElementById('nutrientInfoTitle').textContent = info.label;
-    document.getElementById('nutrientInfoRole').textContent = info.role;
-    document.getElementById('nutrientInfoFoundIn').textContent = info.foundIn;
+    return '<p>' + info.role + '</p>' +
+      '<div class="nutrient-info-foundin"><span>Found in</span><p>' + info.foundIn + '</p></div>';
+  }
+
+  function showNutrientInfo(key){
+    var titleEl = document.getElementById('nutrientInfoTitle');
+    var bodyEl = document.getElementById('nutrientInfoBody');
+    if (key === 'all'){
+      titleEl.textContent = 'Macros & Fiber';
+      bodyEl.innerHTML = ['protein', 'carbs', 'fat', 'fiber'].map(function(k){
+        return '<div class="nutrient-info-section"><h4>' + NUTRIENT_INFO[k].label + '</h4>' + nutrientBodyHtml(k) + '</div>';
+      }).join('');
+    } else {
+      if (!NUTRIENT_INFO[key]) return;
+      titleEl.textContent = NUTRIENT_INFO[key].label;
+      bodyEl.innerHTML = nutrientBodyHtml(key);
+    }
     document.getElementById('nutrientInfoOverlay').classList.remove('hidden');
   }
 
@@ -2164,7 +2190,11 @@
     var todayTotals = totalsFor(todayMeals);
     var g = STORE.goals;
 
-    var html = '<div class="card"><h3 class="section-label">Today</h3>';
+    var html = '<div class="card"><div class="today-card-head"><h3 class="section-label">Today</h3>' +
+      '<button type="button" class="nutrient-info-btn nutrient-info-btn-lg" data-action="show-nutrient-info" data-nutrient="all" aria-label="About macros and fiber">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
+      '</button>' +
+    '</div>';
     html += calorieRingHtml(todayTotals.calories, g.calories);
     html += '<div class="macro-ring-row">' +
       macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein', 'protein') +
