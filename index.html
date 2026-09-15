@@ -337,6 +337,12 @@
 
   /* ---------- Quick-add meal form (inside the Add Meal sheet) ---------- */
   #addMealBody .field-row{display:flex;gap:8px;margin-bottom:8px;}
+  /* Persistent label above each numeric field — the old placeholder
+     text ("kcal", "protein g") explained what a field was only while
+     it was empty; once a value got typed or prefilled from a search
+     pick, it vanished, leaving bare unlabeled numbers. */
+  .field-labeled{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+  .field-labeled label{font-size:11px;font-weight:600;color:var(--text-faint);padding:0 2px;}
 
   /* ---------- Meal category picker (inside Add Meal overlay) ---------- */
   .category-picker{
@@ -867,19 +873,19 @@
       <div class="category-picker" id="categoryPicker"></div>
       <div class="field-row"><input type="text" id="mealName" placeholder="Meal name"></div>
       <div class="field-row">
-        <input type="number" inputmode="numeric" id="mealCal" placeholder="kcal">
-        <input type="number" inputmode="numeric" id="mealProtein" placeholder="protein g">
+        <div class="field-labeled"><label>Calories</label><input type="number" inputmode="numeric" id="mealCal" placeholder="0"></div>
+        <div class="field-labeled"><label>Protein (g)</label><input type="number" inputmode="numeric" id="mealProtein" placeholder="0"></div>
       </div>
       <div class="field-row">
-        <input type="number" inputmode="numeric" id="mealCarbs" placeholder="carbs g">
-        <input type="number" inputmode="numeric" id="mealFat" placeholder="fat g">
+        <div class="field-labeled"><label>Carbs (g)</label><input type="number" inputmode="numeric" id="mealCarbs" placeholder="0"></div>
+        <div class="field-labeled"><label>Fat (g)</label><input type="number" inputmode="numeric" id="mealFat" placeholder="0"></div>
       </div>
       <div class="field-row">
-        <input type="number" inputmode="numeric" id="mealFiber" placeholder="fiber g">
-        <input type="number" inputmode="numeric" id="mealSugar" placeholder="sugar g">
+        <div class="field-labeled"><label>Fiber (g)</label><input type="number" inputmode="numeric" id="mealFiber" placeholder="0"></div>
+        <div class="field-labeled"><label>Sugar (g)</label><input type="number" inputmode="numeric" id="mealSugar" placeholder="0"></div>
       </div>
       <div class="field-row">
-        <input type="number" inputmode="numeric" id="mealSodium" placeholder="sodium mg">
+        <div class="field-labeled"><label>Sodium (mg)</label><input type="number" inputmode="numeric" id="mealSodium" placeholder="0"></div>
       </div>
       <button class="btn-primary" data-action="add-meal">+ Add Meal</button>
     </div>
