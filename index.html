@@ -390,6 +390,12 @@
   .add-meal-sheet.glow-once{
     animation:addMealSheetIn 0.22s cubic-bezier(0.16, 1, 0.3, 1), addMealGlow 900ms ease-out;
   }
+  /* Same glow, no sheet slide-in — for the meal row itself once it
+     lands in the Log list, confirming it was actually added. */
+  .meal-row.glow-once{
+    animation:addMealGlow 900ms ease-out;
+    border-radius:var(--radius-sm);
+  }
   #addMealBody input{
     flex:1;
     min-width:0;
@@ -1250,7 +1256,7 @@
   }
 
   function mealRowHtml(m){
-    return '<div class="meal-row">' +
+    return '<div class="meal-row" data-id="' + m.id + '">' +
       '<div class="meal-row-name">' +
         '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(m.name) + '</div>' +
         '<div class="meal-row-macros">Protein ' + (m.protein||0) + 'g · Carbs ' + (m.carbs||0) + 'g · Fat ' + (m.fat||0) + 'g</div>' +
@@ -1898,8 +1904,9 @@
 
     if (!name || cal <= 0) return; // require at least a name + calories
 
+    var newId = 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
     STORE.meals.push({
-      id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      id: newId,
       name: name,
       calories: cal,
       protein: protein,
@@ -1915,6 +1922,15 @@
     maybeVibrate();
     closeAddMealOverlay(); // also clears the food selection state
     renderApp();
+
+    // Same glow treatment as the Add Meal sheet gets when a food is
+    // auto-filled — reused here to confirm the meal actually landed
+    // in the list, once the row exists in the DOM post-render.
+    var newRow = document.querySelector('.meal-row[data-id="' + newId + '"]');
+    if (newRow){
+      newRow.classList.add('glow-once');
+      setTimeout(function(){ newRow.classList.remove('glow-once'); }, 900);
+    }
   }
 
   function deleteMeal(id){
