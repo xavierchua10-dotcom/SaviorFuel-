@@ -259,29 +259,29 @@
   .tab-glyph svg{width:22px;height:22px;}
 
   /* ---------- Scan tab ---------- */
-  .scan-page{
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; gap:14px; min-height:62vh; padding:0 24px;
-  }
-  .scan-page-btn{
-    width:128px; height:128px; border-radius:50%;
-    background:var(--panel); border:2px solid var(--accent); color:var(--accent);
-    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
-    box-shadow:0 0 0 8px rgba(var(--accent-rgb),0.10);
-    transition:transform 120ms ease;
-  }
-  .scan-page-btn:active{transform:scale(0.95);}
-  .scan-page-btn svg{width:56px; height:56px;}
+  .scan-page{display:flex; flex-direction:column; gap:12px; padding-top:6px;}
   .scan-page-title{
-    margin:8px 0 0; font-family:'Oswald',sans-serif; font-size:20px; font-weight:700;
+    margin:0; font-family:'Oswald',sans-serif; font-size:20px; font-weight:700;
     letter-spacing:0.05em; text-transform:uppercase; color:var(--text);
   }
-  .scan-page-sub{margin:0; max-width:280px; font-size:14px; line-height:1.5; color:var(--text-dim);}
-  .scan-page-alt{
-    margin-top:6px; background:none; border:1px solid var(--line); border-radius:var(--radius-pill);
-    color:var(--text-dim); font-size:13px; font-weight:600; padding:10px 18px; cursor:pointer;
+  .scan-page-sub{margin:-6px 0 4px; font-size:14px; line-height:1.5; color:var(--text-dim);}
+  .scan-option{
+    display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-lg);
+    box-shadow:var(--card-shadow); color:var(--text); padding:14px; cursor:pointer;
   }
-  .scan-page-alt:active{background:var(--panel-2);}
+  .scan-option:active{background:var(--panel-2);}
+  .scan-option[disabled]{opacity:0.5; cursor:default;}
+  .scan-option-icon{
+    width:46px; height:46px; flex-shrink:0; border-radius:var(--radius-md);
+    background:var(--panel-3); color:var(--accent);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .scan-option-icon svg{width:24px; height:24px;}
+  .scan-option-text{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+  .scan-option-title{font-family:'Oswald',sans-serif; font-size:15px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase;}
+  .scan-option-sub{font-size:12px; line-height:1.4; color:var(--text-faint);}
+  .scan-option-chevron{width:16px; height:16px; flex-shrink:0; color:var(--text-faint);}
 
   /* ---------- Empty state (same pattern as SaviorFit Logger) ---------- */
   .empty.tab-empty-state{
@@ -2296,10 +2296,18 @@
      ========================================================= */
   var scanState = { stream: null, loopId: null, detector: null };
 
-  function openScanner(){
-    if (typeof BarcodeDetector === 'undefined'){
-      alert('Barcode scanning isn\'t supported in this browser. Try the installed app, or search by name instead.');
-      return;
+  // mode: 'barcode' (watch for a barcode only), 'photo' (just the shutter
+  // button — works even in browsers with no barcode reader), or nothing =
+  // both at once (the scan button in food search).
+  function openScanner(mode){
+    mode = mode || 'both';
+    var canBarcode = typeof BarcodeDetector !== 'undefined';
+    if (!canBarcode){
+      if (mode === 'barcode'){
+        alert('Barcode scanning isn\'t supported in this browser. Try the installed app, or search by name instead.');
+        return;
+      }
+      mode = 'photo'; // no barcode reader here, but the photo button still works
     }
     var overlay = document.getElementById('scanOverlay');
     var video = document.getElementById('scanVideo');
@@ -2310,11 +2318,14 @@
         scanState.stream = stream;
         video.srcObject = stream;
         overlay.classList.remove('hidden');
-        scanState.detector = new BarcodeDetector({
+        document.getElementById('scanCaptureBtn').classList.toggle('hidden', mode === 'barcode');
+        scanState.detector = (mode === 'photo') ? null : new BarcodeDetector({
           formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128']
         });
-        statusEl.textContent = 'Point at a barcode, or snap a photo of the food';
-        scanLoop();
+        statusEl.textContent = mode === 'photo' ? 'Frame your food, then tap the camera button'
+          : mode === 'barcode' ? 'Point the camera at a barcode'
+          : 'Point at a barcode, or snap a photo of the food';
+        if (scanState.detector) scanLoop();
       })
       .catch(function(err){
         console.error('SaviorFuel: camera access failed —', err);
@@ -2324,7 +2335,7 @@
 
   function scanLoop(){
     var video = document.getElementById('scanVideo');
-    if (!scanState.stream) return; // scanner was closed mid-loop
+    if (!scanState.stream || !scanState.detector) return; // scanner closed mid-loop, or photo-only mode
     scanState.detector.detect(video)
       .then(function(codes){
         if (codes.length > 0){
@@ -3560,22 +3571,35 @@
     reader.readAsText(file);
   }
 
-  // Scan tab: a big scan button that opens the camera (barcode, or snap
-  // a photo of the food). The camera also opens by itself when you tap
-  // the tab (see switchTab); this page is what's underneath it, so it
-  // is what you land on if you cancel.
+  // Scan tab: a small panel asking how you want to add the food. The
+  // camera only opens after you pick one of the camera options — tapping
+  // the tab itself never turns the camera on. Cancelling the camera
+  // brings you back here.
   function renderScan(){
-    var canScan = typeof BarcodeDetector !== 'undefined';
+    var canBarcode = typeof BarcodeDetector !== 'undefined';
+    var svgOpen = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+    var icons = {
+      barcode: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h6v2.4H5.4V9H3z"/><path d="M15 3h6v6h-2.4V5.4H15z"/><path d="M3 15h2.4v3.6H9V21H3z"/><path d="M18.6 15H21v6h-6v-2.4h3.6z"/><rect x="6.5" y="11" width="11" height="2" rx="1"/></svg>',
+      camera: svgOpen + '<path d="M4 8V6a2 2 0 0 1 2-2h1l1.5-2h7L17 4h1a2 2 0 0 1 2 2v2"></path><path d="M2 8h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"></path><circle cx="12" cy="14" r="4"></circle></svg>',
+      search: svgOpen + '<circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>'
+    };
+    var chevron = '<svg class="scan-option-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+    function option(action, mode, icon, title, sub, disabled){
+      return '<button type="button" class="scan-option" data-action="' + action + '"' + (mode ? ' data-mode="' + mode + '"' : '') + (disabled ? ' disabled' : '') + '>' +
+        '<span class="scan-option-icon">' + icon + '</span>' +
+        '<span class="scan-option-text"><span class="scan-option-title">' + title + '</span><span class="scan-option-sub">' + sub + '</span></span>' +
+        chevron +
+      '</button>';
+    }
     document.getElementById('view').innerHTML =
       '<div class="scan-page">' +
-        '<button class="scan-page-btn" data-action="open-scanner" aria-label="Open the camera scanner">' +
-          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h6v2.4H5.4V9H3z"/><path d="M15 3h6v6h-2.4V5.4H15z"/><path d="M3 15h2.4v3.6H9V21H3z"/><path d="M18.6 15H21v6h-6v-2.4h3.6z"/><rect x="6.5" y="11" width="11" height="2" rx="1"/></svg>' +
-        '</button>' +
         '<h2 class="scan-page-title">Scan a food</h2>' +
-        '<p class="scan-page-sub">' + (canScan
-          ? 'Point your camera at a barcode, or snap a photo of your meal.'
-          : 'Barcode scanning isn\'t supported in this browser. Try the installed app, or search by name instead.') + '</p>' +
-        '<button class="scan-page-alt" data-action="open-food-search-overlay">Search by name instead</button>' +
+        '<p class="scan-page-sub">Choose how you want to add it.</p>' +
+        option('open-scanner', 'barcode', icons.barcode, 'Scan a barcode',
+          canBarcode ? 'Point the camera at the barcode on the packaging' : 'Not supported in this browser', !canBarcode) +
+        option('open-scanner', 'photo', icons.camera, 'Snap a photo',
+          aiScanEnabled() ? 'Take a photo of your meal — AI estimates what\'s on the plate' : 'Take a photo of your meal to get a starting guess') +
+        option('open-food-search-overlay', '', icons.search, 'Search by name', 'Type the food instead') +
       '</div>';
   }
 
@@ -3659,13 +3683,6 @@
     }, 140);
   }
 
-  // Tapping the Scan tab goes straight to the camera. Skipped when the
-  // browser can't scan (the page underneath explains that), so nobody
-  // gets an error popup just for opening the tab.
-  function openScannerForScanTab(tab){
-    if (tab === 'scan' && typeof BarcodeDetector !== 'undefined') openScanner();
-  }
-
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
   function switchTab(newTab){
     if (newTab === state.tab) return;
@@ -3678,7 +3695,6 @@
     if (reduceMotion){
       state.tab = newTab;
       renderApp();
-      openScannerForScanTab(newTab);
       return;
     }
 
@@ -3688,7 +3704,6 @@
     setTimeout(function(){
       state.tab = newTab;
       renderApp();
-      openScannerForScanTab(newTab);
       viewEl.classList.remove('subtab-fade-out');
       viewEl.classList.add('subtab-fade-in');
       setTimeout(function(){
@@ -3766,7 +3781,7 @@
     } else if (action === 'calculate-plan'){
       calculatePlanFromForm();
     } else if (action === 'open-scanner'){
-      openScanner();
+      openScanner(el.dataset.mode);
     } else if (action === 'capture-food-photo'){
       captureFoodPhoto();
     } else if (action === 'set-unit-mode'){
