@@ -284,6 +284,14 @@
     box-shadow:var(--card-shadow);
   }
 
+  /* Flat (panel-less) card: no box, border, shadow or background — the
+     content just sits on the app background. Used on the Log tab. The
+     #view prefix beats the compact-density card padding rule. */
+  #view .card.flat{
+    background:none; border:none; border-radius:0; box-shadow:none;
+    padding:0 2px;
+  }
+
   /* ---------- Buttons (same pattern as SaviorFit Logger) ---------- */
   .btn-primary{
     display:block;
@@ -1278,7 +1286,7 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(' + (collapsed ? '180deg' : '0deg') + ')"><polyline points="18 15 12 9 6 15"></polyline></svg>' +
     '</button>';
 
-    var html = '<div class="card macro-summary-card">' +
+    var html = '<div class="card flat macro-summary-card">' +
       '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div><div class="macro-cal-row-actions">' + resetBtn + chevron + '</div></div>' +
       (collapsed ? '' :
         macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
@@ -1328,12 +1336,12 @@
       var subtotal = totalsFor(group).calories;
       html += '<div class="category-section-label">' + c.label +
         '<span class="category-section-total">' + subtotal + ' kcal</span></div>' +
-        '<div class="card">' + group.map(mealRowHtml).join('') + '</div>';
+        '<div class="card flat">' + group.map(mealRowHtml).join('') + '</div>';
     });
     if (other.length > 0){
       html += '<div class="category-section-label">Other' +
         '<span class="category-section-total">' + totalsFor(other).calories + ' kcal</span></div>' +
-        '<div class="card">' + other.map(mealRowHtml).join('') + '</div>';
+        '<div class="card flat">' + other.map(mealRowHtml).join('') + '</div>';
     }
     return html;
   }
