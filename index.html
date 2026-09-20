@@ -632,13 +632,11 @@
     margin:22px 0 8px;
   }
   .section-label:first-child{margin-top:0;}
+  /* Flat (no box): the rows sit straight on the app background and
+     keep their thin divider lines. */
   .settings-group{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:6px 14px;
+    padding:0 2px;
     margin-bottom:16px;
-    box-shadow:var(--card-shadow);
   }
   .settings-row{
     display:flex;
@@ -2726,7 +2724,7 @@
     var imperial = STORE.appSettings.unit === 'imperial';
     var heightVal = imperial ? Math.round(cmToIn(p.heightCm)) : p.heightCm;
     var weightVal = imperial ? Math.round(kgToLb(p.weightKg)) : p.weightKg;
-    return '<div class="settings-section"><h3>Your profile</h3><div class="card">' +
+    return '<div class="settings-section"><h3>Your profile</h3><div class="card flat">' +
       '<div class="settings-goal-row"><label>Sex</label>' +
         '<select id="profSex">' +
           '<option value="male"' + (p.sex === 'male' ? ' selected' : '') + '>Male</option>' +
@@ -2802,7 +2800,7 @@
       html += '<div class="plan-result-banner">Estimated maintenance (TDEE): <b>' + STORE.lastPlanTdee + ' kcal/day</b> — your goals below were calculated from this.</div>';
     }
 
-    html += '<div class="settings-section"><h3>Daily goals</h3><div class="card">' +
+    html += '<div class="settings-section"><h3>Daily goals</h3><div class="card flat">' +
       settingsGoalRow('Calories', 'goalCalories', g.calories) +
       settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
       settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
