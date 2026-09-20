@@ -779,8 +779,18 @@
   }
   .food-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .food-suggest-item:active{background:var(--panel);border-color:var(--accent-dim);}
-  .food-suggest-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .food-suggest-name .brand{display:block;font-size:11px;color:var(--text-faint);}
+  /* The name wraps onto up to two lines (instead of being chopped with
+     "..."), with the small grey line under it carrying the category /
+     serving / "Saved" details that used to crowd the right-hand tag. */
+  .food-suggest-name{flex:1;min-width:0;}
+  .food-suggest-title{
+    display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2;
+    overflow:hidden; line-height:1.3; overflow-wrap:anywhere;
+  }
+  .food-suggest-name .brand{
+    display:block; margin-top:2px; font-size:11px; color:var(--text-faint);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
   .food-suggest-tag{
     flex-shrink:0;background:var(--panel);color:var(--text-faint);
     font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;
@@ -1982,17 +1992,21 @@
 
     var rows = products.map(function(p, i){
       var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
-      var tag = (p._source === 'saved')
-        ? cal + ' kcal · Saved'
-        : (p._source === 'techapi')
-          ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
-          : cal + ' kcal/100g';
+      // Right-hand tag is just the calories; the serving basis goes in
+      // the small line under the name so the name gets the room.
+      var meta = [];
+      var brand = p.brands ? p.brands.split(',')[0].trim() : '';
+      if (brand) meta.push(esc(brand));
+      if (p._source === 'saved') meta.push(esc(p._servingLabel || '100g'), 'Saved');
+      else if (p._source === 'techapi'){ if (p._serving) meta.push(esc(p._serving)); }
+      else meta.push('per 100 g');
       return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
         foodThumbHtml(p) +
-        '<div class="food-suggest-name">' + esc(p.product_name) +
-          (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
+        '<div class="food-suggest-name">' +
+          '<div class="food-suggest-title">' + esc(p.product_name) + '</div>' +
+          (meta.length ? '<div class="brand">' + meta.join(' \u00b7 ') + '</div>' : '') +
         '</div>' +
-        '<div class="food-suggest-tag">' + tag + '</div>' +
+        '<div class="food-suggest-tag">' + cal + ' kcal</div>' +
       '</div>';
     }).join('');
 
