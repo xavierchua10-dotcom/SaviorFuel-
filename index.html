@@ -1670,10 +1670,21 @@
       if (resultsEl) resultsEl.innerHTML = '';
       return;
     }
+    // Foods you've saved before are local, so if nothing's on screen yet
+    // show those on the very first keystroke rather than waiting out the
+    // debounce; the online sources follow (see runFoodSearch).
+    var resultsNow = document.getElementById('foodSearchResults');
+    if (resultsNow && !resultsNow.querySelector('.food-suggest-item')){
+      var savedNow = searchSavedFoods(query);
+      if (savedNow.length > 0){
+        foodSearch = { id: searchRequestId, query: query.trim(), products: savedNow, pending: 1, stale: false };
+        renderFoodSearchResults();
+      }
+    }
     // Shorter debounce than you might expect for a network call — paired
     // with not blanking the list below, this is the closest a remote
     // search can feel to SaviorFit Logger's instant local exercise search.
-    ui.searchDebounce = setTimeout(function(){ runFoodSearch(query.trim()); }, 250);
+    ui.searchDebounce = setTimeout(function(){ runFoodSearch(query.trim()); }, 180);
   }
 
   var searchRequestId = 0; // guards against a slow older request overwriting a newer one's results
@@ -1686,10 +1697,10 @@
   // `data` wasn't confirmed from docs, so this checks a few reasonable
   // shapes defensively rather than assuming one and silently returning
   // nothing if it's wrong.
-  function fetchKalori(query){
+  function fetchKalori(query, signal){
     var url = 'https://api.techapi.my/api/v2/kalori/foods/search?q=' + encodeURIComponent(query);
-    return fetch(url, { headers: { 'X-API-Key': TECHAPI_KEY } })
-      .then(function(res){ return res.json(); })
+    return fetch(url, { headers: { 'X-API-Key': TECHAPI_KEY }, signal: signal })
+      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
       .then(function(json){
         if (!json || json.success === false) return [];
         var d = json.data;
@@ -1711,10 +1722,6 @@
               _serving: f.serving || null
             };
           });
-      })
-      .catch(function(err){
-        console.error('SaviorFuel: Kalori (techapi.my) search failed —', err);
-        return [];
       });
   }
 
@@ -1748,96 +1755,155 @@
   // Foundation + SR Legacy are USDA's generic/whole-food datasets —
   // exactly the "plain chicken breast," "egg" category Open Food Facts
   // is weakest at, since OFF mostly covers branded/packaged items.
-  function fetchUSDA(query){
+  function fetchUSDA(query, signal){
     var url = 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + USDA_API_KEY +
       '&query=' + encodeURIComponent(query) + '&pageSize=10&dataType=Foundation,SR%20Legacy';
-    return fetch(url)
-      .then(function(res){ return res.json(); })
+    return fetch(url, { signal: signal })
+      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
       .then(function(data){
         return (data.foods || [])
           .map(usdaToProductShape)
           .filter(function(p){ return p.product_name && p.nutriments['energy-kcal_100g'] != null; });
-      })
-      .catch(function(err){
-        console.error('SaviorFuel: USDA search failed —', err);
-        return [];
       });
   }
 
-  function fetchOpenFoodFacts(query){
+  // `fields` trims the response to what the app actually uses — Open Food
+  // Facts products are huge (ingredients, images, dozens of tags), and
+  // that payload is a big part of why this source is the slow one.
+  function fetchOpenFoodFacts(query, signal){
     var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' +
-      encodeURIComponent(query) + '&search_simple=1&action=process&json=1&page_size=15';
-    return fetch(url)
-      .then(function(res){ return res.json(); })
+      encodeURIComponent(query) + '&search_simple=1&action=process&json=1&page_size=10' +
+      '&fields=product_name,brands,nutriments,serving_quantity,serving_size';
+    return fetch(url, { signal: signal })
+      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
       .then(function(data){
         return (data.products || [])
           .map(function(p){ p._source = 'off'; return p; })
           .filter(function(p){ return p.product_name && p.nutriments && p.nutriments['energy-kcal_100g'] != null; });
-      })
-      .catch(function(err){
-        console.error('SaviorFuel: Open Food Facts search failed —', err);
+      });
+  }
+
+  /* ---- Food search: fast and progressive ----
+     Kalori, USDA and Open Food Facts are asked in parallel and their
+     results appear as each one answers, instead of waiting for the
+     slowest (Open Food Facts can take many seconds). Saved foods show
+     instantly; an old search is cancelled as soon as you keep typing;
+     each source gets a timeout; and a repeated query is answered from
+     a short-lived memory cache. Results already on screen never move —
+     later sources only add to the bottom — so a tap always lands on
+     the row you aimed at. */
+  var FOOD_SOURCE_TIMEOUT_MS = 7000;
+  var FOOD_CACHE_TTL_MS = 10 * 60 * 1000;
+  var foodSearchCache = {};   // 'source|query' -> { t, list }
+  var searchAbort = null;
+  var foodSearch = { id: 0, query: '', products: [], pending: 0, stale: false };
+
+  function pruneFoodCache(){
+    var keys = Object.keys(foodSearchCache);
+    if (keys.length <= 80) return;
+    keys.sort(function(a, b){ return foodSearchCache[a].t - foodSearchCache[b].t; });
+    keys.slice(0, keys.length - 80).forEach(function(k){ delete foodSearchCache[k]; });
+  }
+
+  // One source, with cache + timeout + cancel. Never rejects: a source
+  // that fails just contributes nothing (and isn't cached, so it gets
+  // another chance next time).
+  function searchFoodSource(name, query, fetcher, signal){
+    var key = name + '|' + query.toLowerCase();
+    var hit = foodSearchCache[key];
+    if (hit && Date.now() - hit.t < FOOD_CACHE_TTL_MS) return Promise.resolve(hit.list);
+    var ctrl = new AbortController();
+    var onAbort = function(){ ctrl.abort(); };
+    signal.addEventListener('abort', onAbort);
+    var timer = setTimeout(function(){ ctrl.abort(); }, FOOD_SOURCE_TIMEOUT_MS);
+    var done = function(){ clearTimeout(timer); signal.removeEventListener('abort', onAbort); };
+    return fetcher(query, ctrl.signal)
+      .then(function(list){
+        done();
+        foodSearchCache[key] = { t: Date.now(), list: list };
+        pruneFoodCache();
+        return list;
+      }, function(err){
+        done();
+        if (!(err && err.name === 'AbortError')) console.error('SaviorFuel: ' + name + ' search failed —', err);
         return [];
       });
+  }
+
+  function renderFoodSearchResults(){
+    var resultsEl = document.getElementById('foodSearchResults');
+    if (!resultsEl) return;
+
+    // Nothing fresh yet and the previous query's list is still up:
+    // leave it alone (no flash-to-empty) and just say we're updating.
+    if (foodSearch.stale){
+      if (!resultsEl.querySelector('.food-suggest-status')){
+        resultsEl.insertAdjacentHTML('beforeend', '<div class="food-suggest-status">Updating...</div>');
+      }
+      return;
+    }
+
+    var products = foodSearch.products;
+    var trimmed = foodSearch.query;
+    var exactMatch = products.some(function(p){ return p.product_name.toLowerCase() === trimmed.toLowerCase(); });
+    // Pinned above the list whenever what's typed isn't already an
+    // exact match below — same "use what I typed" pattern as
+    // SaviorFit Logger's custom-exercise option — so a genuinely
+    // uncommon or local dish can still be added in one tap even
+    // when none of the sources have it.
+    var customBtn = exactMatch ? '' :
+      '<button type="button" class="food-suggest-custom" data-action="use-custom-food-name" data-name="' + esc(trimmed) + '">Use \u201c' + esc(trimmed) + '\u201d</button>';
+
+    var rows = products.map(function(p, i){
+      var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
+      var tag = (p._source === 'saved')
+        ? cal + ' kcal · Saved'
+        : (p._source === 'techapi')
+          ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
+          : cal + ' kcal/100g';
+      return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
+        '<div class="food-suggest-name">' + esc(p.product_name) +
+          (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
+        '</div>' +
+        '<div class="food-suggest-tag">' + tag + '</div>' +
+      '</div>';
+    }).join('');
+
+    var status = '';
+    if (foodSearch.pending > 0) status = '<div class="food-suggest-status">' + (products.length ? 'Searching more...' : 'Searching...') + '</div>';
+    else if (products.length === 0) status = '<div class="food-suggest-status">No matches — add it as a custom food above, or type it in manually.</div>';
+
+    resultsEl.innerHTML = customBtn + rows + status;
+    ui.lastSearchProducts = products; // stashed so pick-food can look up by index without re-fetching
   }
 
   function runFoodSearch(query){
     var resultsEl = document.getElementById('foodSearchResults');
     if (!resultsEl) return;
+    if (searchAbort) searchAbort.abort(); // drop the previous query's requests
+    searchAbort = new AbortController();
+    var signal = searchAbort.signal;
     var thisRequest = ++searchRequestId;
+    var trimmed = query.trim();
 
-    // Don't blank existing results while the new query is in flight —
-    // keep whatever's already showing and just add a small "updating"
-    // line above it, so typing doesn't cause a flash-to-empty each
-    // keystroke the way replacing the whole list would.
-    if (!resultsEl.querySelector('.food-suggest-item')){
-      resultsEl.innerHTML = '<div class="food-suggest-status">Searching...</div>';
-    } else if (!resultsEl.querySelector('.food-suggest-status')){
-      resultsEl.insertAdjacentHTML('afterbegin', '<div class="food-suggest-status">Updating...</div>');
-    }
+    // Saved foods (your own cache, works offline) are local, so they
+    // show immediately, listed first.
+    var saved = searchSavedFoods(trimmed);
+    var hadResults = !!resultsEl.querySelector('.food-suggest-item');
+    foodSearch = { id: thisRequest, query: trimmed, products: saved, pending: 3, stale: hadResults && saved.length === 0 };
+    renderFoodSearchResults();
 
-    // Saved (your own cache, works offline) listed first, then Kalori
-    // (Malaysian dishes, most locally relevant), then USDA (generic
-    // foods), then Open Food Facts (branded/packaged) — each source
-    // can fail independently without taking the others down with it.
-    Promise.all([Promise.resolve(searchSavedFoods(query)), fetchKalori(query), fetchUSDA(query), fetchOpenFoodFacts(query)])
-      .then(function(results){
+    // Then the three online sources, each landing as soon as it answers.
+    // Each can fail independently without taking the others down.
+    [['Kalori', fetchKalori], ['USDA', fetchUSDA], ['Open Food Facts', fetchOpenFoodFacts]].forEach(function(src){
+      searchFoodSource(src[0], trimmed, src[1], signal).then(function(list){
         if (thisRequest !== searchRequestId) return; // a newer search has since superseded this one
-        var products = results[0].concat(results[1]).concat(results[2]).concat(results[3]);
-        var trimmed = query.trim();
-        var exactMatch = products.some(function(p){ return p.product_name.toLowerCase() === trimmed.toLowerCase(); });
-        // Pinned above the list whenever what's typed isn't already an
-        // exact match below — same "use what I typed" pattern as
-        // SaviorFit Logger's custom-exercise option — so a genuinely
-        // uncommon or local dish can still be added in one tap even
-        // when none of the three sources have it.
-        var customBtn = exactMatch ? '' :
-          '<button type="button" class="food-suggest-custom" data-action="use-custom-food-name" data-name="' + esc(trimmed) + '">Use \u201c' + esc(trimmed) + '\u201d</button>';
-
-        if (products.length === 0){
-          resultsEl.innerHTML = customBtn + '<div class="food-suggest-status">No matches — add it as a custom food above, or type it in manually.</div>';
-          return;
-        }
-        resultsEl.innerHTML = customBtn + products.map(function(p, i){
-          var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
-          var tag = (p._source === 'saved')
-            ? cal + ' kcal · Saved'
-            : (p._source === 'techapi')
-              ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
-              : cal + ' kcal/100g';
-          return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
-            '<div class="food-suggest-name">' + esc(p.product_name) +
-              (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
-            '</div>' +
-            '<div class="food-suggest-tag">' + tag + '</div>' +
-          '</div>';
-        }).join('');
-        ui.lastSearchProducts = products; // stashed so pick-food can look up by index without re-fetching
-      })
-      .catch(function(err){
-        if (thisRequest !== searchRequestId) return;
-        console.error('SaviorFuel food search failed —', err);
-        resultsEl.innerHTML = '<div class="food-suggest-status">Search failed — check your connection, or type the meal in manually below.</div>';
+        foodSearch.pending--;
+        foodSearch.products = foodSearch.products.concat(list);
+        if (list.length > 0 || foodSearch.pending === 0) foodSearch.stale = false;
+        renderFoodSearchResults();
       });
+    });
   }
 
   // ---- Offline food cache: every food actually picked from a live
