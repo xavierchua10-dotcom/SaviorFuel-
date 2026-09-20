@@ -2176,7 +2176,7 @@
     var readyPromise = null;  // libs + scene + model; cleared on failure so reopening the tab retries
     var stage = null;         // container currently on screen, null when the panel isn't showing
     var scene, camera, renderer, controls, model = null;
-    var fit = { center: null, hy: 0.4, rxz: 0.56, az: 0.32, el: 0.34 };
+    var fit = { center: null, hx: 0.5, hy: 0.4, hz: 0.47, rxz: 0.69, az: 0.32, el: 0.2, lift: -0.04 };
     var placed = false, userMoved = false, dirty = true;
     var rafId = 0, resumeTimer = 0, resizeObserver = null;
 
@@ -2249,8 +2249,9 @@
       controls.enableDamping = true;
       controls.dampingFactor = 0.08;
       controls.rotateSpeed = 0.8;
-      controls.minPolarAngle = 0.15;
-      controls.maxPolarAngle = Math.PI * 0.52; // never dips far below the ground plane
+      // Horizontal spin only: min = max pins the camera at one
+      // elevation, so vertical drags do nothing.
+      controls.minPolarAngle = controls.maxPolarAngle = Math.PI / 2 - fit.el;
       controls.autoRotateSpeed = 1.2;
       controls.addEventListener('start', function(){
         userMoved = true;
@@ -2286,7 +2287,9 @@
           var box = new THREE.Box3().setFromObject(model);
           var size = box.getSize(new THREE.Vector3());
           fit.center = box.getCenter(new THREE.Vector3());
+          fit.hx = size.x / 2;
           fit.hy = size.y / 2;
+          fit.hz = size.z / 2;
           fit.rxz = Math.sqrt(size.x * size.x + size.z * size.z) / 2; // spins around Y, so use the footprint's radius
           resolve();
         }, function(evt){
@@ -2298,12 +2301,17 @@
       });
     }
 
-    // Camera distance that keeps the whole model in frame at the
-    // current aspect ratio (narrow phone = width-limited).
+    // Default camera distance: big and close — the pyramid is about
+    // 60% of the panel's height and its base runs past the screen
+    // edges (matches the size picked from a screenshot; pinch to zoom
+    // out for the whole thing). On a very wide/short screen the
+    // height limit wins so it never overflows top/bottom.
     function fitDistance(){
       var tanV = Math.tan(camera.fov * Math.PI / 360);
       var tanH = tanV * camera.aspect;
-      return Math.max(fit.rxz / tanH, fit.hy / tanV) + fit.rxz * 0.8;
+      var byWidth = fit.hx / (1.40 * tanH) + fit.hz;
+      var byHeight = fit.hy / (0.92 * tanV) + fit.hz * 0.6;
+      return Math.max(byWidth, byHeight);
     }
 
     // Stretch the card down to the top of the bottom nav (whose height
@@ -2323,20 +2331,21 @@
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       var d = fitDistance();
-      controls.target.copy(fit.center);
+      controls.target.set(fit.center.x, fit.center.y + fit.lift, fit.center.z);
       if (!placed){
+        var t = controls.target;
         camera.position.set(
-          fit.center.x + d * Math.sin(fit.az) * Math.cos(fit.el),
-          fit.center.y + d * Math.sin(fit.el),
-          fit.center.z + d * Math.cos(fit.az) * Math.cos(fit.el)
+          t.x + d * Math.sin(fit.az) * Math.cos(fit.el),
+          t.y + d * Math.sin(fit.el),
+          t.z + d * Math.cos(fit.az) * Math.cos(fit.el)
         );
         placed = true;
       } else if (!userMoved){
         var dir = camera.position.clone().sub(controls.target).normalize();
         camera.position.copy(controls.target).addScaledVector(dir, d);
       }
-      controls.minDistance = d * 0.5;
-      controls.maxDistance = d * 1.5;
+      controls.minDistance = d * 0.6;
+      controls.maxDistance = d * 1.6;
       controls.update();
       dirty = true;
     }
