@@ -869,6 +869,14 @@
     height:clamp(320px, calc(100vh - 240px - var(--safe-bottom)), 640px);
     height:clamp(320px, calc(100dvh - 240px - var(--safe-bottom)), 640px);
   }
+  /* Full-screen mode: while the 3D panel is showing, #view drops its
+     padding/scroll and the card stretches edge to edge between the
+     top bar and the bottom nav (JS sets card bottom = nav height). */
+  body.has-insights-subtab main#view.model-fullscreen{padding:0; overflow:hidden; position:relative;}
+  #view.model-fullscreen > .card.model-card{
+    position:absolute; top:0; left:0; right:0; bottom:0;
+    height:auto; margin:0;
+  }
   .model-stage{position:absolute; inset:0;}
   .model-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab; outline:none;}
   .model-status{
@@ -2167,7 +2175,7 @@
 
     var readyPromise = null;  // libs + scene + model; cleared on failure so reopening the tab retries
     var stage = null;         // container currently on screen, null when the panel isn't showing
-    var scene, camera, renderer, controls, model = null, blob = null;
+    var scene, camera, renderer, controls, model = null;
     var fit = { center: null, hy: 0.4, rxz: 0.56, az: 0.32, el: 0.34 };
     var placed = false, userMoved = false, dirty = true;
     var rafId = 0, resumeTimer = 0, resizeObserver = null;
@@ -2236,23 +2244,6 @@
       rim.position.set(0, 2, -3);
       scene.add(key, fill, rim);
 
-      // Soft blob under the model so it reads as sitting on something
-      // (a radial-gradient texture — no real shadow-map cost).
-      var blobCanvas = document.createElement('canvas');
-      blobCanvas.width = blobCanvas.height = 128;
-      var bctx = blobCanvas.getContext('2d');
-      var grad = bctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-      grad.addColorStop(0, 'rgba(0,0,0,0.45)');
-      grad.addColorStop(1, 'rgba(0,0,0,0)');
-      bctx.fillStyle = grad;
-      bctx.fillRect(0, 0, 128, 128);
-      blob = new THREE.Mesh(
-        new THREE.PlaneGeometry(1, 1), // scaled to the model's footprint once it's loaded
-        new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(blobCanvas), transparent: true, depthWrite: false })
-      );
-      blob.rotation.x = -Math.PI / 2;
-      scene.add(blob);
-
       controls = new THREE.OrbitControls(camera, renderer.domElement);
       controls.enablePan = false;
       controls.enableDamping = true;
@@ -2297,8 +2288,6 @@
           fit.center = box.getCenter(new THREE.Vector3());
           fit.hy = size.y / 2;
           fit.rxz = Math.sqrt(size.x * size.x + size.z * size.z) / 2; // spins around Y, so use the footprint's radius
-          blob.scale.set(size.x * 2.3, size.z * 2.3, 1);
-          blob.position.set(fit.center.x, box.min.y + 0.002, fit.center.z);
           resolve();
         }, function(evt){
           var total = (evt.lengthComputable && evt.total) ? evt.total : MODEL_BYTES_ESTIMATE;
@@ -2314,7 +2303,16 @@
     function fitDistance(){
       var tanV = Math.tan(camera.fov * Math.PI / 360);
       var tanH = tanV * camera.aspect;
-      return Math.max(fit.rxz / tanH, fit.hy / tanV) + fit.rxz * 0.6;
+      return Math.max(fit.rxz / tanH, fit.hy / tanV) + fit.rxz * 0.8;
+    }
+
+    // Stretch the card down to the top of the bottom nav (whose height
+    // varies with the device's safe area).
+    function layout(){
+      if (!stage) return;
+      var card = stage.parentNode;
+      var nav = document.querySelector('.bottom-nav');
+      if (card && nav) card.style.bottom = nav.offsetHeight + 'px';
     }
 
     function resize(){
@@ -2358,6 +2356,7 @@
 
     function mount(container){
       stage = container;
+      layout();
       if (!readyPromise){
         readyPromise = ensureLibs()
           .then(function(){ buildScene(); return loadModel(); })
@@ -2367,6 +2366,7 @@
         if (stage !== container) return; // panel was closed or re-rendered while loading
         container.appendChild(renderer.domElement);
         controls.autoRotate = !reduceMotion();
+        layout();
         resize();
         hideStatus();
         if (resizeObserver) resizeObserver.disconnect();
@@ -2391,6 +2391,8 @@
       clearTimeout(resumeTimer);
       if (resizeObserver){ resizeObserver.disconnect(); resizeObserver = null; }
     }
+
+    window.addEventListener('resize', function(){ layout(); });
 
     return { mount: mount, unmount: unmount };
   })();
@@ -2729,7 +2731,9 @@
   function renderApp(){
     // The 3D panel only exists on Insights > Daily Overview; stop its
     // render loop everywhere else so it isn't drawing off-screen.
-    if (!(state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends')) Model3D.unmount();
+    var showModel = state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends';
+    if (!showModel) Model3D.unmount();
+    document.getElementById('view').classList.toggle('model-fullscreen', showModel);
     document.querySelectorAll('.tabbar button').forEach(function(btn){
       btn.classList.toggle('active', btn.dataset.tab === state.tab);
     });
