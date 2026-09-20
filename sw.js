@@ -33,7 +33,12 @@ var SHELL_FILES = [
 var NEVER_CACHE_HOSTS = [
   'api.nal.usda.gov',
   'world.openfoodfacts.org',
-  'api.techapi.my'
+  'api.techapi.my',
+  // Product thumbnails shown in food search. Left to the browser's own
+  // HTTP cache instead of this file's cache-first store, which would
+  // otherwise keep every thumbnail ever searched, forever.
+  'images.openfoodfacts.org',
+  'static.openfoodfacts.org'
 ];
 
 self.addEventListener('install', function(event){

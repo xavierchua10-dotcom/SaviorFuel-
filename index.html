@@ -767,8 +767,17 @@
     width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;
     text-align:left;background:var(--panel-3);border:1px solid var(--line);color:var(--text);
     font-size:13.5px;font-family:'Inter',sans-serif;font-weight:500;
-    padding:13px 14px;border-radius:var(--radius);cursor:pointer;
+    padding:9px 12px;border-radius:var(--radius);cursor:pointer;
   }
+  /* Picture tile at the left of each search result: the product photo
+     when there is one, otherwise an emoji picked from the food's name. */
+  .food-thumb{
+    width:38px;height:38px;flex-shrink:0;border-radius:var(--radius-sm);
+    background:var(--panel);overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    font-size:21px;line-height:1;
+  }
+  .food-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .food-suggest-item:active{background:var(--panel);border-color:var(--accent-dim);}
   .food-suggest-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .food-suggest-name .brand{display:block;font-size:11px;color:var(--text-faint);}
@@ -1719,6 +1728,8 @@
                 'fat_100g': f.fat || 0
               },
               _source: 'techapi',
+              // Not confirmed that Kalori returns pictures; take one if it does.
+              _image: f.image_url || f.image || f.photo || f.thumbnail || '',
               _serving: f.serving || null
             };
           });
@@ -1773,12 +1784,16 @@
   function fetchOpenFoodFacts(query, signal){
     var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' +
       encodeURIComponent(query) + '&search_simple=1&action=process&json=1&page_size=10' +
-      '&fields=product_name,brands,nutriments,serving_quantity,serving_size';
+      '&fields=product_name,brands,nutriments,serving_quantity,serving_size,image_front_thumb_url,image_thumb_url,image_small_url';
     return fetch(url, { signal: signal })
       .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
       .then(function(data){
         return (data.products || [])
-          .map(function(p){ p._source = 'off'; return p; })
+          .map(function(p){
+            p._source = 'off';
+            p._image = p.image_front_thumb_url || p.image_thumb_url || p.image_small_url || '';
+            return p;
+          })
           .filter(function(p){ return p.product_name && p.nutriments && p.nutriments['energy-kcal_100g'] != null; });
       });
   }
@@ -1830,6 +1845,117 @@
       });
   }
 
+  /* ---- Pictures in search results ----
+     Packaged products from Open Food Facts (and anything you saved from
+     one, or a Kalori entry that includes one) show their photo. Nothing
+     else has a photo source — USDA has none, and generic/local dishes
+     like "chicken breast" or "nasi lemak" aren't packaged products — so
+     every other row gets an emoji picked from the food's name (English
+     and Malay words). If a photo fails to load (offline, dead link) the
+     tile falls back to the emoji too. Emoji are limited to older, widely
+     supported ones so they render on older phones. */
+  var FOOD_EMOJI_RULES = [
+    [/\b(pizza)\b/i, '\uD83C\uDF55'],
+    [/\b(burger|hamburger|cheeseburger)\b/i, '\uD83C\uDF54'],
+    [/\b(french fries|fries)\b/i, '\uD83C\uDF5F'],
+    [/\b(hot ?dog|sausages?|sosej)\b/i, '\uD83C\uDF2D'],
+    [/\b(sushi|sashimi)\b/i, '\uD83C\uDF63'],
+    [/\b(satay|sate|kebab)\b/i, '\uD83C\uDF62'],
+    [/\b(dumplings?|dim sum|gyoza|siomay)\b/i, '\uD83E\uDD5F'],
+    [/\b(tacos?|burrito)\b/i, '\uD83C\uDF2E'],
+    [/\b(pasta|spaghetti|macaroni|lasagn?a)\b/i, '\uD83C\uDF5D'],
+    [/\b(noodles?|mee|mi|mie|mihun|bihun|kuey teow|kway teow|laksa|ramen|udon|pho|vermicelli|maggi)\b/i, '\uD83C\uDF5C'],
+    [/\b(curry|kari|rendang|gulai)\b/i, '\uD83C\uDF5B'],
+    [/\b(soups?|sup|soto|stew|broth|bak kut teh)\b/i, '\uD83C\uDF72'],
+    [/\b(nasi|rice|bubur|porridge|congee|biryani|briyani|risotto)\b/i, '\uD83C\uDF5A'],
+    [/\b(chicken|ayam|poultry|drumsticks?|wings?|nuggets?)\b/i, '\uD83C\uDF57'],
+    [/\b(eggs?|telur|omelette|omelet)\b/i, '\uD83E\uDD5A'],
+    [/\b(prawns?|shrimps?|udang)\b/i, '\uD83E\uDD90'],
+    [/\b(squid|sotong|cuttlefish|octopus)\b/i, '\uD83E\uDD91'],
+    [/\b(crabs?|ketam)\b/i, '\uD83E\uDD80'],
+    [/\b(fish|ikan|salmon|tuna|sardines?|mackerel|tilapia|cod|anchov\w*|seafood)\b/i, '\uD83D\uDC1F'],
+    [/\b(beef|daging|steak|lamb|mutton|kambing|pork|bacon|ham|ribs?|meatballs?|veal|liver)\b/i, '\uD83E\uDD69'],
+    [/\b(pancakes?|waffles?|crepes?|apam)\b/i, '\uD83E\uDD5E'],
+    [/\b(bread|roti|toast|buns?|loaf|bagel|croissant|baguette|pau)\b/i, '\uD83C\uDF5E'],
+    [/\b(ice cream|aiskrim|gelato)\b/i, '\uD83C\uDF68'],
+    [/\b(cake|kek|cupcakes?|muffins?|brownie)\b/i, '\uD83C\uDF70'],
+    [/\b(chocolate|coklat|cocoa)\b/i, '\uD83C\uDF6B'],
+    [/\b(cookies?|biscuits?|crackers?|wafers?)\b/i, '\uD83C\uDF6A'],
+    [/\b(donuts?|doughnuts?)\b/i, '\uD83C\uDF69'],
+    [/\b(candy|candies|sweets|gummy|lollipop)\b/i, '\uD83C\uDF6C'],
+    [/\b(cendol|ais kacang|shaved ice)\b/i, '\uD83C\uDF67'],
+    [/\b(kuih|kueh|pudding)\b/i, '\uD83C\uDF61'],
+    [/\b(cheese|keju)\b/i, '\uD83E\uDDC0'],
+    [/\b(milk|susu|yogh?urt|dairy|cream|creamer)\b/i, '\uD83E\uDD5B'],
+    [/\b(coffee|kopi|latte|cappuccino|espresso|tea|teh)\b/i, '\u2615'],
+    [/\b(juice|jus|smoothie|soda|cola|coke|pepsi|sprite|fanta|soft drink|energy drink|isotonic|100 ?plus|milo)\b/i, '\uD83E\uDD64'],
+    [/\b(water|mineral)\b/i, '\uD83D\uDCA7'],
+    [/\b(apples?|epal)\b/i, '\uD83C\uDF4E'],
+    [/\b(bananas?|pisang)\b/i, '\uD83C\uDF4C'],
+    [/\b(oranges?|oren|mandarin|limau)\b/i, '\uD83C\uDF4A'],
+    [/\b(lemons?)\b/i, '\uD83C\uDF4B'],
+    [/\b(mango|mangoes|mangga)\b/i, '\uD83E\uDD6D'],
+    [/\b(grapes?|anggur)\b/i, '\uD83C\uDF47'],
+    [/\b(watermelon|tembikai)\b/i, '\uD83C\uDF49'],
+    [/\b(pineapple|nanas)\b/i, '\uD83C\uDF4D'],
+    [/\b(strawberr(?:y|ies))\b/i, '\uD83C\uDF53'],
+    [/\b(coconut|kelapa)\b/i, '\uD83E\uDD65'],
+    [/\b(avocados?|alpukat)\b/i, '\uD83E\uDD51'],
+    [/\b(fruits?|buah|papaya|durian|rambutan|guava|jambu|berr(?:y|ies)|peach|pears?|cherr(?:y|ies)|kiwi|melon)\b/i, '\uD83C\uDF4E'],
+    [/\b(carrots?|lobak)\b/i, '\uD83E\uDD55'],
+    [/\b(broccoli)\b/i, '\uD83E\uDD66'],
+    [/\b(tomato(?:es)?)\b/i, '\uD83C\uDF45'],
+    [/\b(potato(?:es)?|kentang)\b/i, '\uD83E\uDD54'],
+    [/\b(corn|jagung)\b/i, '\uD83C\uDF3D'],
+    [/\b(cucumbers?|timun)\b/i, '\uD83E\uDD52'],
+    [/\b(mushrooms?|cendawan)\b/i, '\uD83C\uDF44'],
+    [/\b(eggplants?|aubergine|terung)\b/i, '\uD83C\uDF46'],
+    [/\b(chill?i(?:es)?|cili)\b/i, '\uD83C\uDF36\uFE0F'],
+    [/\b(salad|lettuce|spinach|bayam|kangkung|sayur|vegetables?|cabbage|kubis|sawi|kale|greens)\b/i, '\uD83E\uDD57'],
+    [/\b(nuts?|peanuts?|kacang|almonds?|cashews?|walnuts?)\b/i, '\uD83E\uDD5C'],
+    [/\b(tofu|tauhu|tempeh|tempe|beans?|lentils?|dal|soy|soya)\b/i, '\uD83C\uDF31'],
+    [/\b(cereal|oats?|oatmeal|granola|muesli|nestum)\b/i, '\uD83E\uDD63'],
+    [/\b(popcorn|crisps|keropok|snacks?)\b/i, '\uD83C\uDF7F'],
+    [/\b(honey|madu)\b/i, '\uD83C\uDF6F'],
+    [/\b(sauce|sos|ketchup|sambal|kicap|mayonnaise|dressing|paste|jam)\b/i, '\uD83E\uDD6B']
+  ];
+  var FOOD_EMOJI_DEFAULT = '\uD83C\uDF7D\uFE0F'; // plate with cutlery
+
+  function foodEmoji(name){
+    var n = String(name || '');
+    for (var i = 0; i < FOOD_EMOJI_RULES.length; i++){
+      if (FOOD_EMOJI_RULES[i][0].test(n)) return FOOD_EMOJI_RULES[i][1];
+    }
+    return FOOD_EMOJI_DEFAULT;
+  }
+
+  // Only ever put a plain https address in an <img src>; anything else
+  // (javascript:, data:, odd characters) is ignored and the emoji shows.
+  function safeImageUrl(u){
+    if (typeof u !== 'string') return '';
+    u = u.trim();
+    if (/^http:\/\//i.test(u)) u = 'https://' + u.slice(7);
+    return /^https:\/\/[^\s"'<>]+$/i.test(u) ? u : '';
+  }
+
+  function foodThumbHtml(p){
+    var emoji = foodEmoji(p.product_name);
+    var img = safeImageUrl(p._image);
+    if (img){
+      return '<span class="food-thumb" data-emoji="' + emoji + '"><img src="' + esc(img) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span>';
+    }
+    return '<span class="food-thumb">' + emoji + '</span>';
+  }
+
+  // <img> load errors don't bubble, so listen in the capture phase once
+  // on the results list and swap a broken photo for its emoji.
+  document.getElementById('foodSearchResults').addEventListener('error', function(e){
+    var img = e.target;
+    if (!img || img.tagName !== 'IMG') return;
+    var box = img.parentNode;
+    if (box && box.classList && box.classList.contains('food-thumb')) box.textContent = box.getAttribute('data-emoji') || FOOD_EMOJI_DEFAULT;
+  }, true);
+
   function renderFoodSearchResults(){
     var resultsEl = document.getElementById('foodSearchResults');
     if (!resultsEl) return;
@@ -1862,6 +1988,7 @@
           ? cal + ' kcal' + (p._serving ? ' / ' + esc(p._serving) : '')
           : cal + ' kcal/100g';
       return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
+        foodThumbHtml(p) +
         '<div class="food-suggest-name">' + esc(p.product_name) +
           (p.brands ? '<span class="brand">' + esc(p.brands.split(',')[0]) + '</span>' : '') +
         '</div>' +
@@ -1918,6 +2045,7 @@
     var entry = {
       product_name: food.name,
       brands: food.brand || '',
+      _image: food.image || '',
       _source: 'saved',
       _servingLabel: food.wholeServing ? (food.servingLabel || '1 serving') : '100g',
       nutriments: {
@@ -1960,6 +2088,7 @@
       // of their original source — see saveFoodToCache().
       ui.selectedFood = {
         name: p.product_name,
+        image: p._image || '',
         wholeServing: true,
         servingLabel: p._serving || p._servingLabel || '1 serving',
         whole: {
@@ -1980,6 +2109,7 @@
       var n = p.nutriments;
       ui.selectedFood = {
         name: p.product_name,
+        image: p._image || '',
         brand: p.brands ? p.brands.split(',')[0] : '',
         // Only OFF products reliably carry this (contributor-entered,
         // e.g. "38 g" / "1 slice (38g)") — USDA's raw-ingredient
@@ -2126,6 +2256,7 @@
         var n = p.nutriments;
         ui.selectedFood = {
           name: p.product_name || 'Scanned item',
+          image: p.image_front_thumb_url || p.image_thumb_url || p.image_small_url || '',
           brand: p.brands ? p.brands.split(',')[0] : '',
           servingGrams: (p.serving_quantity > 0) ? p.serving_quantity : null,
           servingSizeText: p.serving_size || null,
@@ -3223,6 +3354,8 @@
               '<div class="sr-sub">Stored only on this device — no account or sync yet</div></div></div>';
     html += '<div class="settings-row"><div><div class="sr-label">' + (STORE.savedFoods || []).length + ' food' + ((STORE.savedFoods || []).length === 1 ? '' : 's') + ' saved for offline search</div>' +
               '<div class="sr-sub">Foods you\'ve picked before — found instantly, even with no connection</div></div></div>';
+    html += '<div class="settings-row"><div><div class="sr-label">Food data sources</div>' +
+              '<div class="sr-sub">Kalori (Malaysian foods) · USDA FoodData Central · Open Food Facts. Product photos come from Open Food Facts contributors (CC BY-SA).</div></div></div>';
     html += '<div class="settings-row"><div><div class="sr-label">Export backup</div><div class="sr-sub">Download a JSON file of your log</div></div>' +
               '<button class="sr-action" data-action="export-data">Export</button></div>';
     html += '<div class="settings-row"><div><div class="sr-label">Import backup</div><div class="sr-sub">Restore from a JSON file</div></div>' +
