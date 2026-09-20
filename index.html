@@ -855,19 +855,21 @@
   /* ---------- Insights "Daily Overview" — 3D model panel ----------
      The card is sized to fill the space between the top bar and the
      bottom nav so the page itself doesn't scroll while you drag the
-     model around. The canvas is transparent, so the card's own
-     (theme-aware) background shows through behind the model. */
+     model around. The card has no border/background of its own and
+     the canvas is transparent, so the model sits directly on the
+     app background with no box around it. */
   #view .card.model-card{
     position:relative;
     padding:0;
     overflow:hidden;
+    background:none;
+    border:none;
+    border-radius:0;
+    box-shadow:none;
     height:clamp(320px, calc(100vh - 240px - var(--safe-bottom)), 640px);
     height:clamp(320px, calc(100dvh - 240px - var(--safe-bottom)), 640px);
   }
-  .model-stage{
-    position:absolute; inset:0;
-    background:radial-gradient(ellipse at 50% 62%, rgba(var(--accent-rgb),0.12), transparent 68%);
-  }
+  .model-stage{position:absolute; inset:0;}
   .model-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab; outline:none;}
   .model-status{
     position:absolute; inset:0; z-index:1;
@@ -2151,22 +2153,22 @@
      panel's DOM is rebuilt on every render, so mount() just moves
      the existing canvas into the fresh container, and unmount()
      stops the render loop whenever the panel isn't on screen.
-     models/food-pyramid.glb is a decimated copy of the source
-     model (~60k triangles, 2048px colour map) so it loads in
+     models/food-pyramid-v2.glb is a decimated copy of the source
+     model (~58k triangles, 2048px colour map) so it loads in
      seconds on a phone; the service worker caches it after the
      first load.
      ========================================================= */
   var Model3D = (function(){
-    var MODEL_URL = 'models/food-pyramid.glb';
-    var MODEL_BYTES_ESTIMATE = 3234448; // for the progress bar when the server sends no length
+    var MODEL_URL = 'models/food-pyramid-v2.glb';
+    var MODEL_BYTES_ESTIMATE = 2748140; // for the progress bar when the server sends no length
     var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
     var GLTF_LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
     var ORBIT_CONTROLS_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
 
     var readyPromise = null;  // libs + scene + model; cleared on failure so reopening the tab retries
     var stage = null;         // container currently on screen, null when the panel isn't showing
-    var scene, camera, renderer, controls, model = null;
-    var fit = { center: null, hy: 0.4, rxz: 0.56, az: 0.32, el: 0.24 };
+    var scene, camera, renderer, controls, model = null, blob = null;
+    var fit = { center: null, hy: 0.4, rxz: 0.56, az: 0.32, el: 0.34 };
     var placed = false, userMoved = false, dirty = true;
     var rafId = 0, resumeTimer = 0, resizeObserver = null;
 
@@ -2244,12 +2246,11 @@
       grad.addColorStop(1, 'rgba(0,0,0,0)');
       bctx.fillStyle = grad;
       bctx.fillRect(0, 0, 128, 128);
-      var blob = new THREE.Mesh(
-        new THREE.PlaneGeometry(2.1, 1.3),
+      blob = new THREE.Mesh(
+        new THREE.PlaneGeometry(1, 1), // scaled to the model's footprint once it's loaded
         new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(blobCanvas), transparent: true, depthWrite: false })
       );
       blob.rotation.x = -Math.PI / 2;
-      blob.position.y = 0.002;
       scene.add(blob);
 
       controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -2296,6 +2297,8 @@
           fit.center = box.getCenter(new THREE.Vector3());
           fit.hy = size.y / 2;
           fit.rxz = Math.sqrt(size.x * size.x + size.z * size.z) / 2; // spins around Y, so use the footprint's radius
+          blob.scale.set(size.x * 2.3, size.z * 2.3, 1);
+          blob.position.set(fit.center.x, box.min.y + 0.002, fit.center.z);
           resolve();
         }, function(evt){
           var total = (evt.lengthComputable && evt.total) ? evt.total : MODEL_BYTES_ESTIMATE;
