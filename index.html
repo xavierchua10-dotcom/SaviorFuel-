@@ -781,6 +781,40 @@
     font-size:21px;line-height:1;
   }
   .food-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  /* The Add Meal banner's thumbnail is tappable (opens the big photo). */
+  .food-thumb-btn{border:none;padding:0;cursor:pointer;}
+  .food-thumb-btn:active{filter:brightness(1.15);}
+
+  /* Big photo viewer — opened from the Add Meal banner thumbnail. */
+  .photo-overlay{
+    position:absolute; inset:0; z-index:98;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px 20px;
+  }
+  .photo-overlay.hidden{display:none;}
+  .photo-overlay-backdrop{
+    position:absolute; inset:0;
+    background:rgba(8,9,11,0.82);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  }
+  .photo-overlay-card{
+    position:relative; width:100%; max-width:380px;
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:var(--radius-xl); box-shadow:var(--card-shadow);
+    padding:12px 12px 14px;
+  }
+  .photo-overlay-close{position:absolute; top:-12px; right:-6px; z-index:1; box-shadow:var(--card-shadow);}
+  .photo-overlay-frame{
+    background:var(--panel-2); border-radius:var(--radius-lg); overflow:hidden;
+    display:flex; align-items:center; justify-content:center; min-height:160px;
+  }
+  .photo-overlay-frame img{display:block; width:100%; max-height:62vh; object-fit:contain;}
+  .photo-overlay-name{
+    margin-top:12px; padding:0 4px; text-align:center;
+    font-family:'Oswald',sans-serif; font-size:15px; font-weight:700;
+    letter-spacing:0.03em; color:var(--text); overflow-wrap:anywhere;
+  }
+  .photo-overlay-credit{margin-top:4px; text-align:center; font-size:10.5px; color:var(--text-faint);}
   .food-suggest-item:active{background:var(--panel);border-color:var(--accent-dim);}
   /* The name wraps onto up to two lines (instead of being chopped with
      "..."), with the small grey line under it carrying the category /
@@ -1175,6 +1209,18 @@
       <div class="ai-scan-total" id="aiScanTotal"></div>
       <button class="btn-primary" data-action="ai-scan-log">+ Log meal</button>
     </div>
+  </div>
+</div>
+
+<div class="photo-overlay hidden" id="photoOverlay" role="dialog" aria-modal="true" aria-label="Food photo">
+  <div class="photo-overlay-backdrop" data-action="close-food-photo"></div>
+  <div class="photo-overlay-card">
+    <button class="add-meal-close photo-overlay-close" data-action="close-food-photo" aria-label="Close photo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <div class="photo-overlay-frame"><img id="photoOverlayImg" alt="" referrerpolicy="no-referrer"></div>
+    <div class="photo-overlay-name" id="photoOverlayName"></div>
+    <div class="photo-overlay-credit" id="photoOverlayCredit">Photo: Open Food Facts contributors · CC BY-SA</div>
   </div>
 </div>
 
@@ -1585,7 +1631,7 @@
   function selectedFoodBannerHtml(){
     var f = ui.selectedFood;
     if (f.wholeServing){
-      return '<div class="selected-food-banner"><div class="banner-food">' + foodThumbHtml({ product_name: f.name, _image: f.image }) +
+      return '<div class="selected-food-banner"><div class="banner-food">' + foodThumbHtml({ product_name: f.name, _image: f.image }, true) +
         '<span>From Kalori: <b>' + esc(f.name) + '</b> — ' + esc(f.servingLabel || '1 serving') + '</span>' +
       '</div></div>';
     }
@@ -1595,7 +1641,7 @@
       : '<input type="number" class="grams-input" id="foodGrams" value="' + ui.grams + '" data-action-change="rescale-food"> g';
     return '<div class="selected-food-banner">' +
       '<div class="selected-food-banner-row">' +
-        '<span class="banner-food">' + foodThumbHtml({ product_name: f.name, _image: f.image }) +
+        '<span class="banner-food">' + foodThumbHtml({ product_name: f.name, _image: f.image }, true) +
           '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span></span>' +
         '<span>' + inputHtml + '</span>' +
       '</div>' +
@@ -1952,9 +1998,13 @@
     return /^https:\/\/[^\s"'<>]+$/i.test(u) ? u : '';
   }
 
-  function foodThumbHtml(p){
+  function foodThumbHtml(p, tappable){
     var emoji = foodEmoji(p.product_name);
     var img = safeImageUrl(p._image);
+    if (img && tappable){
+      // Photo tile that opens the big viewer (see openFoodPhoto)
+      return '<button type="button" class="food-thumb food-thumb-btn" data-action="open-food-photo" data-emoji="' + emoji + '" aria-label="View photo of ' + esc(p.product_name) + '"><img src="' + esc(img) + '" alt="" decoding="async" referrerpolicy="no-referrer"></button>';
+    }
     if (img){
       return '<span class="food-thumb" data-emoji="' + emoji + '"><img src="' + esc(img) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span>';
     }
@@ -1963,11 +2013,54 @@
 
   // <img> load errors don't bubble, so listen in the capture phase once
   // on the results list and swap a broken photo for its emoji.
+  // Big photo viewer. Open Food Facts stores each picture at several sizes
+  // (…100.jpg, …200.jpg, …400.jpg, full), so the 100/200px thumbnail's
+  // address is turned into the 400px one for the viewer; if that size
+  // isn't there, the thumbnail itself is shown instead.
+  function openFoodPhoto(){
+    var f = ui.selectedFood;
+    var thumb = f ? safeImageUrl(f.image) : '';
+    if (!thumb) return;
+    var big = thumb.replace(/\.(100|200)\.(jpe?g|png|webp)(\?.*)?$/i, '.400.$2$3');
+    var img = document.getElementById('photoOverlayImg');
+    img.setAttribute('data-thumb', thumb);
+    img.removeAttribute('data-tried-thumb');
+    img.alt = f.name || 'Food photo';
+    img.src = big;
+    document.getElementById('photoOverlayName').textContent = f.name + (f.brand ? ' \u00b7 ' + f.brand : '');
+    document.getElementById('photoOverlay').classList.remove('hidden');
+  }
+
+  function closeFoodPhoto(){
+    document.getElementById('photoOverlay').classList.add('hidden');
+    document.getElementById('photoOverlayImg').removeAttribute('src'); // stop any download in progress
+  }
+
+  document.getElementById('photoOverlayImg').addEventListener('error', function(e){
+    var img = e.target;
+    if (!img.getAttribute('src')) return; // we just cleared it on close
+    var thumb = img.getAttribute('data-thumb');
+    if (thumb && !img.getAttribute('data-tried-thumb') && img.getAttribute('src') !== thumb){
+      img.setAttribute('data-tried-thumb', '1');
+      img.src = thumb; // the larger size isn't available — show the small one
+    } else {
+      document.getElementById('photoOverlayName').textContent = 'Couldn\u2019t load this photo.';
+    }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !document.getElementById('photoOverlay').classList.contains('hidden')) closeFoodPhoto();
+  });
+
   function foodThumbErrorHandler(e){
     var img = e.target;
     if (!img || img.tagName !== 'IMG') return;
     var box = img.parentNode;
-    if (box && box.classList && box.classList.contains('food-thumb')) box.textContent = box.getAttribute('data-emoji') || FOOD_EMOJI_DEFAULT;
+    if (box && box.classList && box.classList.contains('food-thumb')){
+      box.textContent = box.getAttribute('data-emoji') || FOOD_EMOJI_DEFAULT;
+      box.removeAttribute('data-action'); // nothing to open any more
+      box.classList.remove('food-thumb-btn');
+    }
   }
   document.getElementById('foodSearchResults').addEventListener('error', foodThumbErrorHandler, true);
   document.getElementById('addMealBody').addEventListener('error', foodThumbErrorHandler, true);
@@ -3625,6 +3718,10 @@
     } else if (action === 'select-meal-category'){
       ui.selectedCategory = el.dataset.category;
       renderCategoryPicker();
+    } else if (action === 'open-food-photo'){
+      openFoodPhoto();
+    } else if (action === 'close-food-photo'){
+      closeFoodPhoto();
     } else if (action === 'close-ai-scan'){
       closeAiScanSheet();
     } else if (action === 'ai-select-category'){
