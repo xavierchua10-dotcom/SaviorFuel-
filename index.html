@@ -851,25 +851,34 @@
   .nutrient-info-btn:active{color:var(--text-dim);}
   .today-card-head{display:flex;align-items:center;justify-content:space-between;}
   .today-card-head .section-label{margin:0;}
-  .today-card-head .head-actions{display:flex; align-items:center; gap:12px;}
 
   /* 3D / Plain switch for Daily Overview — two icons, the active one
-     highlighted. Floats over the 3D view in the top-right corner, and
-     sits next to the (i) button in the plain view's card header. */
+     highlighted, stuck flush into the top-right corner of the panel
+     (no gap): it only keeps its left and bottom borders, the panel's
+     own edge is the other two. */
   .mode-toggle{
     display:inline-flex; overflow:hidden;
-    background:var(--panel-2); border:1px solid var(--line);
-    border-radius:var(--radius-pill);
+    background:var(--panel-2);
+    border:1px solid var(--line); border-top:none; border-right:none;
+    border-radius:0 0 0 var(--radius-md);
   }
   .mode-toggle button{
     display:flex; align-items:center; justify-content:center;
-    width:38px; height:32px; padding:0;
+    width:40px; height:34px; padding:0;
     background:none; border:none; color:var(--text-faint); cursor:pointer;
   }
   .mode-toggle button + button{border-left:1px solid var(--line);}
   .mode-toggle button.active{color:var(--accent); background:var(--panel-3);}
   .mode-toggle svg{width:18px; height:18px;}
-  .mode-toggle.floating{position:absolute; top:12px; right:12px; z-index:2;}
+  /* Plain view: the header row cancels the card's padding on the top
+     and right so the switch touches the corner, and matches the card's
+     rounded corner. */
+  .today-card-head{margin:-14px -14px 0 0;}
+  body[data-density="compact"] .today-card-head{margin:-10px -10px 0 0;}
+  .today-card-head .section-label{margin:0;}
+  .today-card-head .mode-toggle{border-top-right-radius:calc(var(--radius-lg) - 1px);}
+  /* 3D view: pinned to the top-right corner of the full-bleed panel. */
+  .mode-toggle.floating{position:absolute; top:0; right:0; z-index:2; border-top-right-radius:0;}
 
   /* ---------- Insights "Daily Overview" — 3D model panel ----------
      The card is sized to fill the space between the top bar and the
@@ -2496,12 +2505,7 @@
     var g = STORE.goals;
 
     var html = '<div class="card"><div class="today-card-head"><h3 class="section-label">Today</h3>' +
-      '<div class="head-actions">' +
-        overviewModeToggleHtml('') +
-        '<button type="button" class="nutrient-info-btn" data-action="show-nutrient-info" aria-label="About macros and fiber">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
-        '</button>' +
-      '</div>' +
+      overviewModeToggleHtml('') +
     '</div>';
     html += calorieRingHtml(todayTotals.calories, g.calories);
     html += '<div class="macro-ring-row">' +
