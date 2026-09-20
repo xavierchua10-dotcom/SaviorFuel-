@@ -595,7 +595,10 @@
     background:var(--panel-3);border-radius:var(--radius-sm);
     padding:8px 10px;margin-bottom:8px;font-size:12px;color:var(--text-dim);
   }
-  .selected-food-banner-row{display:flex;justify-content:space-between;align-items:center;}
+  .selected-food-banner-row{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  /* Small picture of the food you picked (same photo/emoji as in the search). */
+  .selected-food-banner .food-thumb{width:32px;height:32px;font-size:18px;border-radius:var(--radius-xs);}
+  .banner-food{display:flex;align-items:center;gap:10px;min-width:0;}
   .selected-food-banner b{color:var(--text);}
   .selected-food-banner .grams-input{
     width:60px;background:var(--panel-2);border:1px solid var(--line);
@@ -1582,9 +1585,9 @@
   function selectedFoodBannerHtml(){
     var f = ui.selectedFood;
     if (f.wholeServing){
-      return '<div class="selected-food-banner">' +
+      return '<div class="selected-food-banner"><div class="banner-food">' + foodThumbHtml({ product_name: f.name, _image: f.image }) +
         '<span>From Kalori: <b>' + esc(f.name) + '</b> — ' + esc(f.servingLabel || '1 serving') + '</span>' +
-      '</div>';
+      '</div></div>';
     }
     var showServingToggle = f.servingGrams && f.servingGrams > 0;
     var inputHtml = (ui.unitMode === 'servings' && showServingToggle)
@@ -1592,7 +1595,8 @@
       : '<input type="number" class="grams-input" id="foodGrams" value="' + ui.grams + '" data-action-change="rescale-food"> g';
     return '<div class="selected-food-banner">' +
       '<div class="selected-food-banner-row">' +
-        '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span>' +
+        '<span class="banner-food">' + foodThumbHtml({ product_name: f.name, _image: f.image }) +
+          '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span></span>' +
         '<span>' + inputHtml + '</span>' +
       '</div>' +
       (showServingToggle ?
@@ -1959,12 +1963,14 @@
 
   // <img> load errors don't bubble, so listen in the capture phase once
   // on the results list and swap a broken photo for its emoji.
-  document.getElementById('foodSearchResults').addEventListener('error', function(e){
+  function foodThumbErrorHandler(e){
     var img = e.target;
     if (!img || img.tagName !== 'IMG') return;
     var box = img.parentNode;
     if (box && box.classList && box.classList.contains('food-thumb')) box.textContent = box.getAttribute('data-emoji') || FOOD_EMOJI_DEFAULT;
-  }, true);
+  }
+  document.getElementById('foodSearchResults').addEventListener('error', foodThumbErrorHandler, true);
+  document.getElementById('addMealBody').addEventListener('error', foodThumbErrorHandler, true);
 
   function renderFoodSearchResults(){
     var resultsEl = document.getElementById('foodSearchResults');
