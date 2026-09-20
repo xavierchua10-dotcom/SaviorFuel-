@@ -851,6 +851,25 @@
   .nutrient-info-btn:active{color:var(--text-dim);}
   .today-card-head{display:flex;align-items:center;justify-content:space-between;}
   .today-card-head .section-label{margin:0;}
+  .today-card-head .head-actions{display:flex; align-items:center; gap:12px;}
+
+  /* 3D / Plain switch for Daily Overview — two icons, the active one
+     highlighted. Floats over the 3D view in the top-right corner, and
+     sits next to the (i) button in the plain view's card header. */
+  .mode-toggle{
+    display:inline-flex; overflow:hidden;
+    background:var(--panel-2); border:1px solid var(--line);
+    border-radius:var(--radius-pill);
+  }
+  .mode-toggle button{
+    display:flex; align-items:center; justify-content:center;
+    width:38px; height:32px; padding:0;
+    background:none; border:none; color:var(--text-faint); cursor:pointer;
+  }
+  .mode-toggle button + button{border-left:1px solid var(--line);}
+  .mode-toggle button.active{color:var(--accent); background:var(--panel-3);}
+  .mode-toggle svg{width:18px; height:18px;}
+  .mode-toggle.floating{position:absolute; top:12px; right:12px; z-index:2;}
 
   /* ---------- Insights "Daily Overview" — 3D model panel ----------
      The card is sized to fill the space between the top bar and the
@@ -1059,7 +1078,7 @@
     return 'dinner';
   }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
-  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true };
+  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d' };
   var APP_VERSION = '0.1.0';
 
   function cmToIn(cm){ return cm / 2.54; }
@@ -2428,11 +2447,33 @@
     else renderInsightsToday();
   }
 
-  // Daily Overview: the panel is now just the 3D model. (The rings,
-  // remaining-macro row, other-nutrient bars and balance caption that
-  // used to live here were removed on purpose — their helper
-  // functions above are still in the file if any of it comes back.)
+  // ---- Daily Overview has two modes, switched by the icon pair in its
+  // corner: '3d' (the full-bleed food pyramid) and 'plain' (the
+  // original rings / remaining macros / nutrient bars). The choice is
+  // saved in appSettings so it sticks between visits.
+  function overviewMode(){
+    return STORE.appSettings.overviewMode === 'plain' ? 'plain' : '3d';
+  }
+
+  function overviewModeToggleHtml(extraClass){
+    var mode = overviewMode();
+    var svgAttrs = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+    return '<div class="mode-toggle' + (extraClass ? ' ' + extraClass : '') + '" role="group" aria-label="Overview style">' +
+      '<button type="button" data-action="set-overview-mode" data-mode="3d" aria-label="3D view" aria-pressed="' + (mode === '3d') + '" class="' + (mode === '3d' ? 'active' : '') + '">' +
+        '<svg ' + svgAttrs + '><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' +
+      '</button>' +
+      '<button type="button" data-action="set-overview-mode" data-mode="plain" aria-label="Plain view (rings and numbers)" aria-pressed="' + (mode === 'plain') + '" class="' + (mode === 'plain' ? 'active' : '') + '">' +
+        '<svg ' + svgAttrs + '><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>' +
+      '</button>' +
+    '</div>';
+  }
+
   function renderInsightsToday(){
+    if (overviewMode() === 'plain') renderInsightsPlain();
+    else renderInsights3D();
+  }
+
+  function renderInsights3D(){
     document.getElementById('view').innerHTML =
       '<div class="card model-card">' +
         '<div class="model-stage" id="modelStage"></div>' +
@@ -2440,12 +2481,49 @@
           '<span id="modelStatusText">Loading 3D model…</span>' +
           '<div class="model-bar" id="modelBarWrap"><i id="modelBar"></i></div>' +
         '</div>' +
+        overviewModeToggleHtml('floating') +
       '</div>';
     try {
       Model3D.mount(document.getElementById('modelStage'));
     } catch (err){
       console.error('SaviorFuel: 3D panel failed to start —', err);
     }
+  }
+
+  function renderInsightsPlain(){
+    var todayMeals = mealsForDay(todayKey());
+    var todayTotals = totalsFor(todayMeals);
+    var g = STORE.goals;
+
+    var html = '<div class="card"><div class="today-card-head"><h3 class="section-label">Today</h3>' +
+      '<div class="head-actions">' +
+        overviewModeToggleHtml('') +
+        '<button type="button" class="nutrient-info-btn" data-action="show-nutrient-info" aria-label="About macros and fiber">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+    html += calorieRingHtml(todayTotals.calories, g.calories);
+    html += '<div class="macro-ring-row">' +
+      macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
+      macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
+      macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
+    '</div>';
+    html += '<div class="remaining-row">' +
+      remainingStatHtml('Calories', todayTotals.calories, g.calories, ' kcal') +
+      remainingStatHtml('Protein', todayTotals.protein, g.protein, 'g') +
+      remainingStatHtml('Carbs', todayTotals.carbs, g.carbs, 'g') +
+      remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
+    '</div>';
+    html += '<h3 class="section-label">Other nutrients</h3>';
+    html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
+      macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
+      macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg');
+    var caption = macroBalanceCaption(todayMeals, todayTotals, g);
+    html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
+    html += '</div>';
+
+    document.getElementById('view').innerHTML = html;
   }
 
   function renderInsightsTrends(){
@@ -2740,7 +2818,7 @@
   function renderApp(){
     // The 3D panel only exists on Insights > Daily Overview; stop its
     // render loop everywhere else so it isn't drawing off-screen.
-    var showModel = state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends';
+    var showModel = state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends' && overviewMode() === '3d';
     if (!showModel) Model3D.unmount();
     document.getElementById('view').classList.toggle('model-fullscreen', showModel);
     document.querySelectorAll('.tabbar button').forEach(function(btn){
@@ -2792,6 +2870,28 @@
     }, 140);
   }
 
+  // 3D <-> Plain switch on Daily Overview, same fade as the sub-tabs.
+  function switchOverviewModeWithFade(newMode){
+    if (newMode === overviewMode()) return;
+    function apply(){
+      STORE.appSettings.overviewMode = newMode;
+      saveStore();
+      renderApp();
+    }
+    var viewEl = document.getElementById('view');
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion){ apply(); return; }
+    viewEl.classList.remove('subtab-fade-in');
+    viewEl.classList.add('subtab-fade-out');
+    setTimeout(function(){
+      apply();
+      var v = document.getElementById('view');
+      v.classList.remove('subtab-fade-out');
+      v.classList.add('subtab-fade-in');
+      setTimeout(function(){ v.classList.remove('subtab-fade-in'); }, 170);
+    }, 140);
+  }
+
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
   function switchTab(newTab){
     if (newTab === state.tab) return;
@@ -2829,6 +2929,8 @@
       switchTab(el.dataset.tab);
     } else if (action === 'set-insights-view'){
       switchInsightsViewWithFade(el.dataset.view);
+    } else if (action === 'set-overview-mode'){
+      switchOverviewModeWithFade(el.dataset.mode);
     } else if (action === 'add-meal'){
       addMealFromForm();
     } else if (action === 'close-add-meal-overlay'){
