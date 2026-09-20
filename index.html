@@ -870,13 +870,15 @@
   .mode-toggle button + button{border-left:1px solid var(--line);}
   .mode-toggle button.active{color:var(--accent); background:var(--panel-3);}
   .mode-toggle svg{width:18px; height:18px;}
-  /* Plain view: the header row cancels the card's padding on the top
-     and right so the switch touches the corner, and matches the card's
-     rounded corner. */
-  .today-card-head{margin:-14px -14px 0 0;}
-  body[data-density="compact"] .today-card-head{margin:-10px -10px 0 0;}
-  .today-card-head .section-label{margin:0;}
-  .today-card-head .mode-toggle{border-top-right-radius:calc(var(--radius-lg) - 1px);}
+  /* Plain view, full screen: no card box around it — the rings and
+     bars run edge to edge on the app background (#view drops its side
+     padding while this is showing), and the switch is pinned flush to
+     the top-right corner of the screen, like in the 3D view. */
+  body.has-insights-subtab main#view.plain-fullscreen{padding-left:0; padding-right:0;}
+  #view > .overview-plain:first-child{position:relative; margin-top:0; padding:0 20px;}
+  body[data-density="compact"] #view > .overview-plain:first-child{padding:0 14px;}
+  .overview-plain .today-card-head{min-height:34px; margin-bottom:8px;}
+  .overview-plain .mode-toggle{position:absolute; top:0; right:0; border-top-right-radius:0;}
   /* 3D view: pinned to the top-right corner of the full-bleed panel. */
   .mode-toggle.floating{position:absolute; top:0; right:0; z-index:2; border-top-right-radius:0;}
 
@@ -2614,7 +2616,7 @@
     var todayTotals = totalsFor(todayMeals);
     var g = STORE.goals;
 
-    var html = '<div class="card"><div class="today-card-head"><h3 class="section-label">Today</h3>' +
+    var html = '<div class="overview-plain"><div class="today-card-head"><h3 class="section-label">Today</h3>' +
       overviewModeToggleHtml('') +
     '</div>';
     html += calorieRingHtml(todayTotals.calories, g.calories);
@@ -2935,6 +2937,8 @@
     var showModel = state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends' && overviewMode() === '3d';
     if (!showModel) Model3D.unmount();
     document.getElementById('view').classList.toggle('model-fullscreen', showModel);
+    document.getElementById('view').classList.toggle('plain-fullscreen',
+      state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends' && overviewMode() === 'plain');
     document.querySelectorAll('.tabbar button').forEach(function(btn){
       btn.classList.toggle('active', btn.dataset.tab === state.tab);
     });
