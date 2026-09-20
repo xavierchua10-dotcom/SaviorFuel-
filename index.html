@@ -819,6 +819,35 @@
   .add-meal-close:active{background:var(--panel-2);}
   .add-meal-body{overflow-y:auto;}
 
+  /* AI food scan result sheet (rows of name + grams, live macros) */
+  .ai-scan-note{font-size:12px; line-height:1.45; color:var(--text-faint); margin-bottom:12px;}
+  .ai-item{padding:10px 0; border-top:1px solid var(--line);}
+  .ai-item:first-child{border-top:none; padding-top:0;}
+  .ai-item-top{display:flex; align-items:center; gap:8px;}
+  .ai-item-name, .ai-item-grams{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:var(--radius-sm);
+    color:var(--text); font-size:14px; padding:8px 10px;
+  }
+  .ai-item-name{flex:1; min-width:0;}
+  .ai-item-name:focus, .ai-item-grams:focus{outline:none; border-color:var(--accent);}
+  .ai-item-del{
+    width:28px; height:28px; flex-shrink:0; border-radius:50%; padding:0;
+    background:var(--panel-3); border:none; color:var(--text-dim); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1;
+  }
+  .ai-item-del:active{background:var(--panel-2); color:var(--accent-2);}
+  .ai-item-bottom{display:flex; align-items:center; gap:6px; margin-top:8px;}
+  .ai-item-grams{width:76px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px;}
+  .ai-item-unit{font-size:12px; color:var(--text-faint);}
+  .ai-item-macros{margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-align:right;}
+  .ai-scan-total{
+    display:flex; justify-content:space-between; gap:10px; align-items:baseline;
+    padding:12px 0 14px; border-top:1px solid var(--line);
+    font-family:'Oswald',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.04em;
+    text-transform:uppercase; color:var(--text);
+  }
+  .ai-scan-total span:last-child{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:400; letter-spacing:0; text-transform:none; color:var(--accent);}
+
   /* ---------- Nutrient info popover — same overlay pattern as Add
      Meal, just a smaller fixed-content card instead of a form. ---------- */
   .nutrient-info-overlay{
@@ -1079,6 +1108,25 @@
   </div>
 </div>
 
+<div class="add-meal-overlay hidden" id="aiScanOverlay">
+  <div class="add-meal-backdrop" data-action="close-ai-scan"></div>
+  <div class="add-meal-sheet">
+    <div class="add-meal-head">
+      <h2>Scanned meal</h2>
+      <button class="add-meal-close" data-action="close-ai-scan" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="add-meal-body">
+      <div class="ai-scan-note" id="aiScanNote"></div>
+      <div class="category-picker" id="aiCategoryPicker"></div>
+      <div id="aiScanItems"></div>
+      <div class="ai-scan-total" id="aiScanTotal"></div>
+      <button class="btn-primary" data-action="ai-scan-log">+ Log meal</button>
+    </div>
+  </div>
+</div>
+
 <div class="nutrient-info-overlay hidden" id="nutrientInfoOverlay">
   <div class="nutrient-info-backdrop" data-action="close-nutrient-info"></div>
   <div class="nutrient-info-card">
@@ -1136,7 +1184,7 @@
     return 'dinner';
   }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
-  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d' };
+  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d', aiScanConsent: false };
   var APP_VERSION = '0.1.0';
 
   function cmToIn(cm){ return cm / 2.54; }
@@ -2076,16 +2124,40 @@
     if (scanState.loopId) cancelAnimationFrame(scanState.loopId);
     scanState.loopId = null;
     captureBtn.classList.add('loading');
-    statusEl.textContent = 'Loading food recognition...';
 
     var canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0);
 
+    // AI scan (Gemini via the proxy) when it's set up and we're online;
+    // otherwise — or if it fails — the basic on-device guess below.
+    if (aiScanEnabled()){
+      statusEl.textContent = 'Analysing your meal...';
+      runAiScan(canvas).catch(function(err){
+        if (err && err.declined){ classifyFoodPhotoLegacy(canvas); return; }
+        console.error('SaviorFuel: AI food scan failed —', err);
+        if (err && err.status === 429){
+          // Out of scans for today: say so, and stay on the camera so
+          // barcode scanning still works.
+          statusEl.textContent = err.userMessage || 'Scan limit reached for today.';
+          captureBtn.classList.remove('loading');
+          if (scanState.stream) scanLoop();
+          return;
+        }
+        statusEl.textContent = 'AI scan unavailable — trying basic recognition...';
+        classifyFoodPhotoLegacy(canvas);
+      });
+      return;
+    }
+    classifyFoodPhotoLegacy(canvas);
+  }
+
+  function classifyFoodPhotoLegacy(canvas){
+    document.getElementById('scanStatus').textContent = 'Loading food recognition...';
     loadFoodClassifier()
       .then(function(model){
-        statusEl.textContent = 'Identifying...';
+        document.getElementById('scanStatus').textContent = 'Identifying...';
         return model.classify(canvas);
       })
       .then(function(predictions){
@@ -2105,6 +2177,204 @@
         alert('Couldn\'t load food recognition — check your connection, or search by name instead.');
       });
   }
+
+  /* =========================================================
+     AI FOOD SCAN — snap a photo, an AI (Google Gemini, reached
+     through the small proxy in /ai-proxy) lists what's on the plate
+     with estimated grams and nutrition, and you confirm/edit it
+     before anything is logged. The API key is NOT in this file —
+     the proxy holds it, applies daily limits, and only accepts
+     requests from this app's own site. Leave AI_SCAN_URL empty and
+     the camera button just uses the basic on-device guess above.
+     ========================================================= */
+  var AI_SCAN_URL = ''; // e.g. 'https://your-site.netlify.app/api/scan-food' (see ai-proxy/README.md)
+  var aiScan = { items: [], category: 'lunch' };
+
+  function aiScanEnabled(){
+    return !!AI_SCAN_URL && navigator.onLine !== false;
+  }
+
+  function aiNum(v){
+    var n = Number(v);
+    return (isFinite(n) && n > 0) ? n : 0;
+  }
+
+  // Photo -> ~1024px JPEG base64: keeps detail for recognition while
+  // staying a few hundred KB, so it's quick on mobile data.
+  function aiPhotoToBase64(canvas){
+    var max = 1024;
+    var scale = Math.min(1, max / Math.max(canvas.width, canvas.height));
+    var out = document.createElement('canvas');
+    out.width = Math.max(1, Math.round(canvas.width * scale));
+    out.height = Math.max(1, Math.round(canvas.height * scale));
+    out.getContext('2d').drawImage(canvas, 0, 0, out.width, out.height);
+    return out.toDataURL('image/jpeg', 0.8).split(',')[1];
+  }
+
+  function runAiScan(canvas){
+    if (!STORE.appSettings.aiScanConsent){
+      var ok = window.confirm('AI food scan sends this photo to a server and on to Google\'s Gemini AI to estimate what\'s in it. SaviorFuel doesn\'t keep the photo. Continue?');
+      if (!ok) return Promise.reject({ declined: true });
+      STORE.appSettings.aiScanConsent = true;
+      saveStore();
+    }
+
+    var ctrl = new AbortController();
+    var timer = setTimeout(function(){ ctrl.abort(); }, 25000);
+    return fetch(AI_SCAN_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: aiPhotoToBase64(canvas), mime: 'image/jpeg' }),
+      signal: ctrl.signal
+    })
+      .then(function(res){
+        return res.json().catch(function(){ return {}; }).then(function(data){
+          if (!res.ok){
+            var e = new Error(data.error || ('Scan failed (' + res.status + ')'));
+            e.status = res.status;
+            e.userMessage = data.error;
+            throw e;
+          }
+          return data;
+        });
+      })
+      .then(function(data){
+        clearTimeout(timer);
+        if (!scanState.stream) return; // they hit Cancel while we were waiting
+        var items = Array.isArray(data.items) ? data.items : [];
+        if (items.length === 0){
+          document.getElementById('scanStatus').textContent = 'Couldn\'t spot any food — get closer, add light, and try again.';
+          document.getElementById('scanCaptureBtn').classList.remove('loading');
+          scanLoop(); // back to watching for barcodes
+          return;
+        }
+        closeScanner();
+        closeFoodSearchOverlay();
+        openAiScanSheet(data);
+      })
+      .catch(function(err){
+        clearTimeout(timer);
+        throw err;
+      });
+  }
+
+  function aiItemMacros(it){
+    var f = it.base.grams > 0 ? it.grams / it.base.grams : 0;
+    return {
+      calories: it.base.calories * f, protein: it.base.protein * f, carbs: it.base.carbs * f,
+      fat: it.base.fat * f, fiber: it.base.fiber * f, sugar: it.base.sugar * f, sodium: it.base.sodium * f
+    };
+  }
+
+  function aiMacroLine(m){
+    return Math.round(m.calories) + ' kcal · P' + Math.round(m.protein) + ' · C' + Math.round(m.carbs) + ' · F' + Math.round(m.fat);
+  }
+
+  function renderAiCategoryPicker(){
+    document.getElementById('aiCategoryPicker').innerHTML = MEAL_CATEGORIES.map(function(c){
+      return '<button type="button" class="category-pill' + (c.id === aiScan.category ? ' active' : '') + '" data-action="ai-select-category" data-category="' + c.id + '">' + c.label + '</button>';
+    }).join('');
+  }
+
+  function renderAiScanTotal(){
+    var t = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+    aiScan.items.forEach(function(it){
+      var m = aiItemMacros(it);
+      t.calories += m.calories; t.protein += m.protein; t.carbs += m.carbs; t.fat += m.fat;
+    });
+    document.getElementById('aiScanTotal').innerHTML = '<span>Total</span><span>' + aiMacroLine(t) + '</span>';
+  }
+
+  function renderAiScanItems(){
+    document.getElementById('aiScanItems').innerHTML = aiScan.items.map(function(it, i){
+      return '<div class="ai-item">' +
+        '<div class="ai-item-top">' +
+          '<input type="text" class="ai-item-name" data-ai-field="name" data-i="' + i + '" value="' + esc(it.name) + '" maxlength="60" aria-label="Food name">' +
+          '<button type="button" class="ai-item-del" data-action="ai-remove-item" data-i="' + i + '" aria-label="Remove ' + esc(it.name) + '">&times;</button>' +
+        '</div>' +
+        '<div class="ai-item-bottom">' +
+          '<input type="number" inputmode="decimal" class="ai-item-grams" data-ai-field="grams" data-i="' + i + '" value="' + it.grams + '" min="0" max="3000" aria-label="Grams">' +
+          '<span class="ai-item-unit">g</span>' +
+          '<span class="ai-item-macros" id="aiMacros' + i + '">' + aiMacroLine(aiItemMacros(it)) + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    renderAiScanTotal();
+  }
+
+  function openAiScanSheet(data){
+    aiScan.items = data.items.map(function(it){
+      var g = Math.max(1, aiNum(it.grams) || 100);
+      return {
+        name: String(it.name || 'Food').slice(0, 60),
+        grams: Math.round(g),
+        base: {
+          grams: g, calories: aiNum(it.calories), protein: aiNum(it.protein_g), carbs: aiNum(it.carbs_g),
+          fat: aiNum(it.fat_g), fiber: aiNum(it.fiber_g), sugar: aiNum(it.sugar_g), sodium: aiNum(it.sodium_mg)
+        }
+      };
+    });
+    aiScan.category = suggestCategoryForNow();
+    document.getElementById('aiScanNote').textContent =
+      (data.note ? data.note + ' ' : '') + 'These are estimates from a photo — check the names and portions before logging.';
+    renderAiCategoryPicker();
+    renderAiScanItems();
+    document.getElementById('aiScanOverlay').classList.remove('hidden');
+  }
+
+  function closeAiScanSheet(){
+    document.getElementById('aiScanOverlay').classList.add('hidden');
+    aiScan.items = [];
+  }
+
+  function logAiScan(){
+    var now = Date.now();
+    var logged = 0;
+    aiScan.items.forEach(function(it, i){
+      var name = it.name.trim();
+      var m = aiItemMacros(it);
+      if (!name || it.grams <= 0 || m.calories <= 0) return; // skip blanks / zeroed-out rows
+      STORE.meals.push({
+        id: 'm_' + now + '_' + i + '_' + Math.random().toString(36).slice(2, 6),
+        name: name,
+        calories: Math.round(m.calories),
+        protein: Math.round(m.protein),
+        carbs: Math.round(m.carbs),
+        fat: Math.round(m.fat),
+        fiber: Math.round(m.fiber),
+        sugar: Math.round(m.sugar),
+        sodium: Math.round(m.sodium),
+        category: aiScan.category,
+        loggedAt: now
+      });
+      logged++;
+    });
+    if (logged === 0) return;
+    saveStore();
+    maybeVibrate();
+    closeAiScanSheet();
+    renderApp();
+  }
+
+  // Editing a name or grams updates that row's numbers and the total in
+  // place (no re-render, so the keyboard and cursor stay put).
+  document.addEventListener('input', function(e){
+    var t = e.target;
+    if (!t || !t.getAttribute) return;
+    var field = t.getAttribute('data-ai-field');
+    if (!field) return;
+    var i = parseInt(t.getAttribute('data-i'), 10);
+    var it = aiScan.items[i];
+    if (!it) return;
+    if (field === 'name'){
+      it.name = t.value;
+    } else if (field === 'grams'){
+      it.grams = Math.min(3000, Math.max(0, parseFloat(t.value) || 0));
+      var line = document.getElementById('aiMacros' + i);
+      if (line) line.textContent = aiMacroLine(aiItemMacros(it));
+      renderAiScanTotal();
+    }
+  });
 
 
   function addMealFromForm(){
@@ -3076,6 +3346,16 @@
     } else if (action === 'select-meal-category'){
       ui.selectedCategory = el.dataset.category;
       renderCategoryPicker();
+    } else if (action === 'close-ai-scan'){
+      closeAiScanSheet();
+    } else if (action === 'ai-select-category'){
+      aiScan.category = el.dataset.category;
+      renderAiCategoryPicker();
+    } else if (action === 'ai-remove-item'){
+      aiScan.items.splice(parseInt(el.dataset.i, 10), 1);
+      if (aiScan.items.length === 0) closeAiScanSheet(); else renderAiScanItems();
+    } else if (action === 'ai-scan-log'){
+      logAiScan();
     } else if (action === 'delete-meal'){
       deleteMeal(el.dataset.id);
     } else if (action === 'toggle-history-day'){

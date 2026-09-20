@@ -1,0 +1,4 @@
+# Deploy this folder as its own Netlify site (Base directory: ai-proxy).
+[build]
+  publish = "public"
+  functions = "netlify/functions"
