@@ -906,6 +906,42 @@
     height:auto; margin:0;
   }
   .model-stage{position:absolute; inset:0;}
+
+  /* Small ring + amounts for whichever side of the pyramid is
+     turned toward you (protein / carbs / fibre / fat). Sits in the
+     free space above the pyramid, top-left; taps and drags pass
+     straight through it to the model. */
+  .face-panel{
+    position:absolute; top:12px; left:12px; z-index:2; pointer-events:none;
+    display:flex; align-items:center; gap:11px;
+    padding:8px 16px 8px 8px;
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:var(--radius-lg); box-shadow:var(--card-shadow);
+    opacity:0; transform:translateY(-4px);
+    transition:opacity 160ms ease, transform 160ms ease;
+  }
+  .face-panel.show{opacity:1; transform:translateY(0);}
+  .face-ring{position:relative; width:46px; height:46px; flex:none;}
+  .face-ring svg{width:46px; height:46px; transform:rotate(-90deg);}
+  .face-ring-track{fill:none; stroke:var(--panel-3); stroke-width:5;}
+  .face-ring-fill{fill:none; stroke-width:5; stroke-linecap:round; transition:stroke-dashoffset 600ms ease;}
+  .face-ring-fill.protein{stroke:var(--success);}
+  .face-ring-fill.carbs{stroke:#5fa8d6;}
+  .face-ring-fill.fat{stroke:var(--accent-2);}
+  .face-ring-fill.fiber{stroke:#a97c50;}
+  .face-ring-fill.over{stroke:var(--accent-2);}
+  .face-ring-pct{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald',sans-serif; font-size:12.5px; font-weight:700; color:var(--text);
+  }
+  .face-ring-pct.over{color:var(--accent-2);}
+  .face-name{font-family:'Oswald',sans-serif; font-size:14px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--text);}
+  .face-amount{margin-top:1px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-dim);}
+  .face-left{margin-top:1px; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--text-faint);}
+  .face-left.over{color:var(--accent-2);}
+  @media (prefers-reduced-motion: reduce){
+    .face-panel, .face-ring-fill{transition:none;}
+  }
   .model-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab; outline:none;}
   .model-status{
     position:absolute; inset:0; z-index:1;
@@ -2207,6 +2243,7 @@
     var fit = { center: null, hx: 0.5, hy: 0.4, hz: 0.47, rxz: 0.69, az: 0.32, el: 0.2, lift: -0.04 };
     var placed = false, userMoved = false, dirty = true;
     var rafId = 0, resumeTimer = 0, resizeObserver = null;
+    var faceCb = null, lastFace = -1; // which of the 4 sides faces the camera (0-3), reported to faceCb
 
     function reduceMotion(){
       return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -2378,9 +2415,25 @@
       dirty = true;
     }
 
+    // The pyramid has four sides; side k faces the camera when the
+    // orbit azimuth is about k * 90 degrees (0 = +z side, 1 = +x,
+    // 2 = -z, 3 = -x). Switching needs an extra ~8 degrees past the
+    // 45-degree midpoint so it doesn't flicker on the corners.
+    function trackFace(){
+      var quarter = Math.PI / 2;
+      var az = controls.getAzimuthalAngle();
+      if (lastFace !== -1){
+        var d = az - lastFace * quarter;
+        if (Math.abs(Math.atan2(Math.sin(d), Math.cos(d))) <= quarter / 2 + 0.14) return;
+      }
+      lastFace = ((Math.round(az / quarter) % 4) + 4) % 4;
+      faceCb(lastFace);
+    }
+
     function tick(){
       rafId = requestAnimationFrame(tick);
       var moved = controls.update();
+      if (faceCb) trackFace();
       if (moved || dirty || controls.autoRotate){
         renderer.render(scene, camera);
         dirty = false;
@@ -2391,8 +2444,10 @@
       if (rafId){ cancelAnimationFrame(rafId); rafId = 0; }
     }
 
-    function mount(container){
+    function mount(container, onFace){
       stage = container;
+      faceCb = onFace || null;
+      lastFace = -1;
       layout();
       if (!readyPromise){
         readyPromise = ensureLibs()
@@ -2424,6 +2479,7 @@
     function unmount(){
       if (!stage) return;
       stage = null;
+      faceCb = null;
       stopLoop();
       clearTimeout(resumeTimer);
       if (resizeObserver){ resizeObserver.disconnect(); resizeObserver = null; }
@@ -2482,10 +2538,72 @@
     else renderInsights3D();
   }
 
+  // Each side of the 3D pyramid stands for one nutrient; turn the
+  // pyramid and a small ring shows how much of it you've had today.
+  // Order = the side facing the camera at 0 / 90 / 180 / 270 degrees
+  // (the four faces of models/food-pyramid-v2.glb).
+  var PYRAMID_FACES = [
+    { key: 'protein', label: 'Protein' },
+    { key: 'carbs',   label: 'Carbs' },
+    { key: 'fiber',   label: 'Fibre' },
+    { key: 'fat',     label: 'Fat' }
+  ];
+  var FACE_RING_R = 19;
+  var FACE_RING_C = 2 * Math.PI * FACE_RING_R;
+  var facePanelTimer = 0;
+
+  function facePanelInnerHtml(faceIndex, totals, goals){
+    var f = PYRAMID_FACES[faceIndex];
+    var value = totals[f.key] || 0;
+    var goal = goals[f.key] || 0;
+    var percent = pctUncapped(value, goal);
+    var over = percent > 100;
+    var offset = FACE_RING_C * (1 - Math.min(percent, 100) / 100);
+    var left = Math.round(Math.abs(goal - value));
+    return '<div class="face-ring">' +
+        '<svg viewBox="0 0 46 46">' +
+          '<circle class="face-ring-track" cx="23" cy="23" r="' + FACE_RING_R + '"></circle>' +
+          // starts empty and is filled a frame later so the ring animates in
+          '<circle class="face-ring-fill ' + f.key + (over ? ' over' : '') + '" cx="23" cy="23" r="' + FACE_RING_R + '" ' +
+            'style="stroke-dasharray:' + FACE_RING_C.toFixed(2) + ';stroke-dashoffset:' + FACE_RING_C.toFixed(2) + ';" data-offset="' + offset.toFixed(2) + '"></circle>' +
+        '</svg>' +
+        '<div class="face-ring-pct' + (over ? ' over' : '') + '">' + percent + '%</div>' +
+      '</div>' +
+      '<div>' +
+        '<div class="face-name">' + f.label + '</div>' +
+        '<div class="face-amount">' + Math.round(value) + ' / ' + goal + 'g</div>' +
+        '<div class="face-left' + (over ? ' over' : '') + '">' + left + 'g ' + (over ? 'over' : 'left') + '</div>' +
+      '</div>';
+  }
+
+  // Fades the panel out, swaps in the new side's numbers, fades back in.
+  function showFacePanel(faceIndex, totals, goals, instant){
+    clearTimeout(facePanelTimer);
+    var panel = document.getElementById('facePanel');
+    if (!panel) return;
+    panel.classList.remove('show');
+    facePanelTimer = setTimeout(function(){
+      var p = document.getElementById('facePanel');
+      if (!p) return;
+      p.innerHTML = facePanelInnerHtml(faceIndex, totals, goals);
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          var fill = p.querySelector('.face-ring-fill');
+          if (fill) fill.style.strokeDashoffset = fill.getAttribute('data-offset');
+          p.classList.add('show');
+        });
+      });
+    }, instant ? 0 : 150);
+  }
+
   function renderInsights3D(){
+    var totals = totalsFor(mealsForDay(todayKey()));
+    var goals = STORE.goals;
+    var firstFace = true;
     document.getElementById('view').innerHTML =
       '<div class="card model-card">' +
         '<div class="model-stage" id="modelStage"></div>' +
+        '<div class="face-panel" id="facePanel"></div>' +
         '<div class="model-status" id="modelStatus">' +
           '<span id="modelStatusText">Loading 3D model…</span>' +
           '<div class="model-bar" id="modelBarWrap"><i id="modelBar"></i></div>' +
@@ -2493,7 +2611,10 @@
         overviewModeToggleHtml('floating') +
       '</div>';
     try {
-      Model3D.mount(document.getElementById('modelStage'));
+      Model3D.mount(document.getElementById('modelStage'), function(faceIndex){
+        showFacePanel(faceIndex, totals, goals, firstFace);
+        firstFace = false;
+      });
     } catch (err){
       console.error('SaviorFuel: 3D panel failed to start —', err);
     }
