@@ -258,6 +258,31 @@
   .tabbar button.active{color:var(--accent);}
   .tab-glyph svg{width:22px;height:22px;}
 
+  /* ---------- Scan tab ---------- */
+  .scan-page{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; gap:14px; min-height:62vh; padding:0 24px;
+  }
+  .scan-page-btn{
+    width:128px; height:128px; border-radius:50%;
+    background:var(--panel); border:2px solid var(--accent); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+    box-shadow:0 0 0 8px rgba(var(--accent-rgb),0.10);
+    transition:transform 120ms ease;
+  }
+  .scan-page-btn:active{transform:scale(0.95);}
+  .scan-page-btn svg{width:56px; height:56px;}
+  .scan-page-title{
+    margin:8px 0 0; font-family:'Oswald',sans-serif; font-size:20px; font-weight:700;
+    letter-spacing:0.05em; text-transform:uppercase; color:var(--text);
+  }
+  .scan-page-sub{margin:0; max-width:280px; font-size:14px; line-height:1.5; color:var(--text-dim);}
+  .scan-page-alt{
+    margin-top:6px; background:none; border:1px solid var(--line); border-radius:var(--radius-pill);
+    color:var(--text-dim); font-size:13px; font-weight:600; padding:10px 18px; cursor:pointer;
+  }
+  .scan-page-alt:active{background:var(--panel-2);}
+
   /* ---------- Empty state (same pattern as SaviorFit Logger) ---------- */
   .empty.tab-empty-state{
     display:flex;
@@ -1036,6 +1061,10 @@
     <button data-action="set-tab" data-tab="history">
       <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="5" width="18" height="3" rx="1"/><rect x="3" y="10.5" width="18" height="3" rx="1"/><rect x="3" y="16" width="12" height="3" rx="1"/></svg></span>
       History
+    </button>
+    <button data-action="set-tab" data-tab="scan">
+      <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h6v2.4H5.4V9H3z"/><path d="M15 3h6v6h-2.4V5.4H15z"/><path d="M3 15h2.4v3.6H9V21H3z"/><path d="M18.6 15H21v6h-6v-2.4h3.6z"/><rect x="6.5" y="11" width="11" height="2" rx="1"/></svg></span>
+      Scan
     </button>
     <button data-action="set-tab" data-tab="insights">
       <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="14" width="4" height="7" rx="1"/><rect x="10" y="9" width="4" height="12" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>
@@ -2353,6 +2382,7 @@
     saveStore();
     maybeVibrate();
     closeAiScanSheet();
+    if (state.tab === 'scan') state.tab = 'log';
     renderApp();
   }
 
@@ -2406,6 +2436,7 @@
     saveStore();
     maybeVibrate();
     closeAddMealOverlay(); // also clears the food selection state
+    if (state.tab === 'scan') state.tab = 'log'; // came from the Scan tab — show where the meal landed
     renderApp();
 
     // Same glow treatment as the Add Meal sheet gets when a food is
@@ -3217,6 +3248,25 @@
     reader.readAsText(file);
   }
 
+  // Scan tab: a big scan button that opens the camera (barcode, or snap
+  // a photo of the food). The camera also opens by itself when you tap
+  // the tab (see switchTab); this page is what's underneath it, so it
+  // is what you land on if you cancel.
+  function renderScan(){
+    var canScan = typeof BarcodeDetector !== 'undefined';
+    document.getElementById('view').innerHTML =
+      '<div class="scan-page">' +
+        '<button class="scan-page-btn" data-action="open-scanner" aria-label="Open the camera scanner">' +
+          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h6v2.4H5.4V9H3z"/><path d="M15 3h6v6h-2.4V5.4H15z"/><path d="M3 15h2.4v3.6H9V21H3z"/><path d="M18.6 15H21v6h-6v-2.4h3.6z"/><rect x="6.5" y="11" width="11" height="2" rx="1"/></svg>' +
+        '</button>' +
+        '<h2 class="scan-page-title">Scan a food</h2>' +
+        '<p class="scan-page-sub">' + (canScan
+          ? 'Point your camera at a barcode, or snap a photo of your meal.'
+          : 'Barcode scanning isn\'t supported in this browser. Try the installed app, or search by name instead.') + '</p>' +
+        '<button class="scan-page-alt" data-action="open-food-search-overlay">Search by name instead</button>' +
+      '</div>';
+  }
+
   function renderApp(){
     // The 3D panel only exists on Insights > Daily Overview; stop its
     // render loop everywhere else so it isn't drawing off-screen.
@@ -3230,6 +3280,7 @@
     });
     if (state.tab === 'log') renderLog();
     else if (state.tab === 'history') renderHistory();
+    else if (state.tab === 'scan') renderScan();
     else if (state.tab === 'insights') renderInsights();
     else if (state.tab === 'settings') renderSettings();
 
@@ -3296,6 +3347,13 @@
     }, 140);
   }
 
+  // Tapping the Scan tab goes straight to the camera. Skipped when the
+  // browser can't scan (the page underneath explains that), so nobody
+  // gets an error popup just for opening the tab.
+  function openScannerForScanTab(tab){
+    if (tab === 'scan' && typeof BarcodeDetector !== 'undefined') openScanner();
+  }
+
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
   function switchTab(newTab){
     if (newTab === state.tab) return;
@@ -3308,6 +3366,7 @@
     if (reduceMotion){
       state.tab = newTab;
       renderApp();
+      openScannerForScanTab(newTab);
       return;
     }
 
@@ -3317,6 +3376,7 @@
     setTimeout(function(){
       state.tab = newTab;
       renderApp();
+      openScannerForScanTab(newTab);
       viewEl.classList.remove('subtab-fade-out');
       viewEl.classList.add('subtab-fade-in');
       setTimeout(function(){
