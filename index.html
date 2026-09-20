@@ -292,6 +292,14 @@
     padding:0 2px;
   }
 
+  /* History: without the box, each day is separated from the next by a
+     thin line under it (none under the last one). */
+  #view .card.flat.history-day-card{
+    padding:0 2px 10px; margin-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  #view .card.flat.history-day-card:last-child{border-bottom:none;}
+
   /* ---------- Buttons (same pattern as SaviorFit Logger) ---------- */
   .btn-primary{
     display:block;
@@ -2183,7 +2191,7 @@
       var totals = totalsFor(meals);
       var isOpen = ui.historyOpenDay === key;
       var inner = isOpen ? categorizedMealRowsHtml(meals) : '';
-      return '<div class="card history-day-card">' +
+      return '<div class="card flat history-day-card">' +
         '<div class="history-day-head" data-action="toggle-history-day" data-day="' + key + '" style="cursor:pointer;">' +
           '<span class="date">' + formatDateLabel(key) + '</span>' +
           '<span class="total">' + totals.calories + ' kcal</span>' +
