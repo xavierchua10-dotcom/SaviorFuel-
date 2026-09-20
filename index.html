@@ -852,6 +852,32 @@
   .today-card-head{display:flex;align-items:center;justify-content:space-between;}
   .today-card-head .section-label{margin:0;}
 
+  /* ---------- Insights "Daily Overview" — 3D model panel ----------
+     The card is sized to fill the space between the top bar and the
+     bottom nav so the page itself doesn't scroll while you drag the
+     model around. The canvas is transparent, so the card's own
+     (theme-aware) background shows through behind the model. */
+  #view .card.model-card{
+    position:relative;
+    padding:0;
+    overflow:hidden;
+    height:clamp(320px, calc(100vh - 240px - var(--safe-bottom)), 640px);
+    height:clamp(320px, calc(100dvh - 240px - var(--safe-bottom)), 640px);
+  }
+  .model-stage{
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at 50% 62%, rgba(var(--accent-rgb),0.12), transparent 68%);
+  }
+  .model-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab; outline:none;}
+  .model-status{
+    position:absolute; inset:0; z-index:1;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    padding:24px; text-align:center; font-size:13px; line-height:1.5;
+    color:var(--text-faint); pointer-events:none;
+  }
+  .model-bar{width:160px; height:3px; border-radius:2px; background:var(--line); overflow:hidden;}
+  .model-bar i{display:block; height:100%; width:0; background:var(--accent); transition:width 150ms ease;}
+
   .hidden{display:none !important;}
 
   .boot-loading{
@@ -2117,6 +2143,256 @@
   }
 
   /* =========================================================
+     3D MODEL — Insights > Daily Overview panel
+     Three.js (r128, same build as the Demo3d viewer) is loaded from
+     CDN the first time the panel is actually opened — same lazy
+     pattern as the food-photo model — so it costs nothing on app
+     start. One renderer/scene lives for the whole session: the
+     panel's DOM is rebuilt on every render, so mount() just moves
+     the existing canvas into the fresh container, and unmount()
+     stops the render loop whenever the panel isn't on screen.
+     models/food-pyramid.glb is a decimated copy of the source
+     model (~60k triangles, 2048px colour map) so it loads in
+     seconds on a phone; the service worker caches it after the
+     first load.
+     ========================================================= */
+  var Model3D = (function(){
+    var MODEL_URL = 'models/food-pyramid.glb';
+    var MODEL_BYTES_ESTIMATE = 3234448; // for the progress bar when the server sends no length
+    var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    var GLTF_LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
+    var ORBIT_CONTROLS_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+
+    var readyPromise = null;  // libs + scene + model; cleared on failure so reopening the tab retries
+    var stage = null;         // container currently on screen, null when the panel isn't showing
+    var scene, camera, renderer, controls, model = null;
+    var fit = { center: null, hy: 0.4, rxz: 0.56, az: 0.32, el: 0.24 };
+    var placed = false, userMoved = false, dirty = true;
+    var rafId = 0, resumeTimer = 0, resizeObserver = null;
+
+    function reduceMotion(){
+      return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+
+    function setStatus(text, progress){
+      var box = document.getElementById('modelStatus');
+      if (!box) return;
+      box.classList.remove('hidden');
+      var label = document.getElementById('modelStatusText');
+      if (label) label.textContent = text;
+      var barWrap = document.getElementById('modelBarWrap');
+      if (barWrap) barWrap.classList.toggle('hidden', progress === null);
+      var bar = document.getElementById('modelBar');
+      if (bar && progress !== null) bar.style.width = Math.round(progress * 100) + '%';
+    }
+    function hideStatus(){
+      var box = document.getElementById('modelStatus');
+      if (box) box.classList.add('hidden');
+    }
+
+    function ensureLibs(){
+      return Promise.resolve()
+        .then(function(){ if (typeof THREE === 'undefined') return loadScriptOnce(THREE_URL); })
+        .then(function(){
+          var jobs = [];
+          if (!THREE.GLTFLoader) jobs.push(loadScriptOnce(GLTF_LOADER_URL));
+          if (!THREE.OrbitControls) jobs.push(loadScriptOnce(ORBIT_CONTROLS_URL));
+          return Promise.all(jobs);
+        });
+    }
+
+    function buildScene(){
+      if (renderer) return;
+      try {
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      } catch (e){
+        renderer = null;
+        e.noWebGL = true; // lets mount() show a "device can't do 3D" message instead of "check your connection"
+        throw e;
+      }
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); // 3x+ phones: lots of overdraw, little visible gain
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.setClearColor(0x000000, 0);
+      renderer.domElement.setAttribute('role', 'img');
+      renderer.domElement.setAttribute('aria-label', 'Interactive 3D food pyramid. Drag to rotate, pinch to zoom.');
+      // Phones drop the GL context when the browser is backgrounded;
+      // three.js rebuilds its state on restore, we just need to redraw.
+      renderer.domElement.addEventListener('webglcontextlost', function(e){ e.preventDefault(); });
+      renderer.domElement.addEventListener('webglcontextrestored', function(){ dirty = true; });
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(36, 1, 0.05, 50);
+
+      // Lighting: no environment map here, so a hemisphere fill plus
+      // key / fill / warm rim lights (the rim uses the app's accent).
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x3a3f4a, 0.95));
+      var key = new THREE.DirectionalLight(0xffffff, 1.1);
+      key.position.set(2, 3, 2.5);
+      var fill = new THREE.DirectionalLight(0xbfd0ff, 0.4);
+      fill.position.set(-3, 1.5, 1);
+      var rim = new THREE.DirectionalLight(0xf2b134, 0.4);
+      rim.position.set(0, 2, -3);
+      scene.add(key, fill, rim);
+
+      // Soft blob under the model so it reads as sitting on something
+      // (a radial-gradient texture — no real shadow-map cost).
+      var blobCanvas = document.createElement('canvas');
+      blobCanvas.width = blobCanvas.height = 128;
+      var bctx = blobCanvas.getContext('2d');
+      var grad = bctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grad.addColorStop(0, 'rgba(0,0,0,0.45)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      bctx.fillStyle = grad;
+      bctx.fillRect(0, 0, 128, 128);
+      var blob = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.1, 1.3),
+        new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(blobCanvas), transparent: true, depthWrite: false })
+      );
+      blob.rotation.x = -Math.PI / 2;
+      blob.position.y = 0.002;
+      scene.add(blob);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enablePan = false;
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.rotateSpeed = 0.8;
+      controls.minPolarAngle = 0.15;
+      controls.maxPolarAngle = Math.PI * 0.52; // never dips far below the ground plane
+      controls.autoRotateSpeed = 1.2;
+      controls.addEventListener('start', function(){
+        userMoved = true;
+        controls.autoRotate = false;
+        clearTimeout(resumeTimer);
+      });
+      controls.addEventListener('end', function(){
+        if (reduceMotion()) return;
+        resumeTimer = setTimeout(function(){ controls.autoRotate = true; }, 3500);
+      });
+      controls.addEventListener('change', function(){ dirty = true; });
+    }
+
+    function loadModel(){
+      if (model) return Promise.resolve();
+      return new Promise(function(resolve, reject){
+        new THREE.GLTFLoader().load(MODEL_URL, function(gltf){
+          model = gltf.scene;
+          var maxAniso = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
+          model.traverse(function(node){
+            if (!node.isMesh) return;
+            (Array.isArray(node.material) ? node.material : [node.material]).forEach(function(m){
+              // Nothing on a food pyramid is really metal, and with no
+              // environment map any metalness would render near-black —
+              // so ignore the metal channel and keep the roughness one.
+              m.metalness = 0;
+              m.metalnessMap = null;
+              if (m.map) m.map.anisotropy = maxAniso;
+              m.needsUpdate = true;
+            });
+          });
+          scene.add(model);
+          var box = new THREE.Box3().setFromObject(model);
+          var size = box.getSize(new THREE.Vector3());
+          fit.center = box.getCenter(new THREE.Vector3());
+          fit.hy = size.y / 2;
+          fit.rxz = Math.sqrt(size.x * size.x + size.z * size.z) / 2; // spins around Y, so use the footprint's radius
+          resolve();
+        }, function(evt){
+          var total = (evt.lengthComputable && evt.total) ? evt.total : MODEL_BYTES_ESTIMATE;
+          setStatus('Loading 3D model…', Math.min(evt.loaded / total, 0.95));
+        }, function(err){
+          reject(err || new Error('Could not load ' + MODEL_URL));
+        });
+      });
+    }
+
+    // Camera distance that keeps the whole model in frame at the
+    // current aspect ratio (narrow phone = width-limited).
+    function fitDistance(){
+      var tanV = Math.tan(camera.fov * Math.PI / 360);
+      var tanH = tanV * camera.aspect;
+      return Math.max(fit.rxz / tanH, fit.hy / tanV) + fit.rxz * 0.6;
+    }
+
+    function resize(){
+      if (!stage || !renderer || !fit.center) return;
+      var w = stage.clientWidth, h = stage.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false); // CSS sizes the canvas (100% x 100%)
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      var d = fitDistance();
+      controls.target.copy(fit.center);
+      if (!placed){
+        camera.position.set(
+          fit.center.x + d * Math.sin(fit.az) * Math.cos(fit.el),
+          fit.center.y + d * Math.sin(fit.el),
+          fit.center.z + d * Math.cos(fit.az) * Math.cos(fit.el)
+        );
+        placed = true;
+      } else if (!userMoved){
+        var dir = camera.position.clone().sub(controls.target).normalize();
+        camera.position.copy(controls.target).addScaledVector(dir, d);
+      }
+      controls.minDistance = d * 0.5;
+      controls.maxDistance = d * 1.5;
+      controls.update();
+      dirty = true;
+    }
+
+    function tick(){
+      rafId = requestAnimationFrame(tick);
+      var moved = controls.update();
+      if (moved || dirty || controls.autoRotate){
+        renderer.render(scene, camera);
+        dirty = false;
+      }
+    }
+    function startLoop(){ if (!rafId) rafId = requestAnimationFrame(tick); }
+    function stopLoop(){
+      if (rafId){ cancelAnimationFrame(rafId); rafId = 0; }
+    }
+
+    function mount(container){
+      stage = container;
+      if (!readyPromise){
+        readyPromise = ensureLibs()
+          .then(function(){ buildScene(); return loadModel(); })
+          .catch(function(err){ readyPromise = null; throw err; });
+      }
+      readyPromise.then(function(){
+        if (stage !== container) return; // panel was closed or re-rendered while loading
+        container.appendChild(renderer.domElement);
+        controls.autoRotate = !reduceMotion();
+        resize();
+        hideStatus();
+        if (resizeObserver) resizeObserver.disconnect();
+        if (typeof ResizeObserver !== 'undefined'){
+          resizeObserver = new ResizeObserver(resize);
+          resizeObserver.observe(container);
+        }
+        startLoop();
+      }, function(err){
+        console.error('SaviorFuel: 3D model failed —', err);
+        if (stage !== container) return;
+        setStatus(err && err.noWebGL
+          ? 'This device or browser can\'t show the 3D view.'
+          : 'Couldn\'t load the 3D model. Check your connection, then reopen this tab.', null);
+      });
+    }
+
+    function unmount(){
+      if (!stage) return;
+      stage = null;
+      stopLoop();
+      clearTimeout(resumeTimer);
+      if (resizeObserver){ resizeObserver.disconnect(); resizeObserver = null; }
+    }
+
+    return { mount: mount, unmount: unmount };
+  })();
+
+  /* =========================================================
      RENDER — INSIGHTS TAB
      ========================================================= */
   // Dispatches to whichever Insights sub-tab panel is active — same
@@ -2138,37 +2414,24 @@
     else renderInsightsToday();
   }
 
+  // Daily Overview: the panel is now just the 3D model. (The rings,
+  // remaining-macro row, other-nutrient bars and balance caption that
+  // used to live here were removed on purpose — their helper
+  // functions above are still in the file if any of it comes back.)
   function renderInsightsToday(){
-    var todayMeals = mealsForDay(todayKey());
-    var todayTotals = totalsFor(todayMeals);
-    var g = STORE.goals;
-
-    var html = '<div class="card"><div class="today-card-head"><h3 class="section-label">Today</h3>' +
-      '<button type="button" class="nutrient-info-btn" data-action="show-nutrient-info" aria-label="About macros and fiber">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
-      '</button>' +
-    '</div>';
-    html += calorieRingHtml(todayTotals.calories, g.calories);
-    html += '<div class="macro-ring-row">' +
-      macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
-      macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
-      macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
-    '</div>';
-    html += '<div class="remaining-row">' +
-      remainingStatHtml('Calories', todayTotals.calories, g.calories, ' kcal') +
-      remainingStatHtml('Protein', todayTotals.protein, g.protein, 'g') +
-      remainingStatHtml('Carbs', todayTotals.carbs, g.carbs, 'g') +
-      remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
-    '</div>';
-    html += '<h3 class="section-label">Other nutrients</h3>';
-    html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
-      macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
-      macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg');
-    var caption = macroBalanceCaption(todayMeals, todayTotals, g);
-    html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
-    html += '</div>';
-
-    document.getElementById('view').innerHTML = html;
+    document.getElementById('view').innerHTML =
+      '<div class="card model-card">' +
+        '<div class="model-stage" id="modelStage"></div>' +
+        '<div class="model-status" id="modelStatus">' +
+          '<span id="modelStatusText">Loading 3D model…</span>' +
+          '<div class="model-bar" id="modelBarWrap"><i id="modelBar"></i></div>' +
+        '</div>' +
+      '</div>';
+    try {
+      Model3D.mount(document.getElementById('modelStage'));
+    } catch (err){
+      console.error('SaviorFuel: 3D panel failed to start —', err);
+    }
   }
 
   function renderInsightsTrends(){
@@ -2461,6 +2724,9 @@
   }
 
   function renderApp(){
+    // The 3D panel only exists on Insights > Daily Overview; stop its
+    // render loop everywhere else so it isn't drawing off-screen.
+    if (!(state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends')) Model3D.unmount();
     document.querySelectorAll('.tabbar button').forEach(function(btn){
       btn.classList.toggle('active', btn.dataset.tab === state.tab);
     });
