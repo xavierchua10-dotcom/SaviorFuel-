@@ -292,10 +292,12 @@
   .tab-glyph{display:inline-block; transition:transform 120ms ease;}
   .tabbar button:active .tab-glyph{transform:scale(0.86);}
 
-  /* Sliding highlight: one pill sits behind the active tab and glides to
-     the tapped one (the bar's --i = index of the active tab, --n = how
-     many tabs). Tabs are equal width, so the slider is 1/n wide and
-     moves by whole multiples of its own width. The buttons sit above it. */
+  /* Sliding indicator (as in SaviorFit Logger): a thin gold line on the
+     top edge of the bar sits over the active tab and glides to the
+     tapped one (the bar's --i = index of the active tab, --n = how many
+     tabs). Tabs are equal width, so the slider is 1/n wide and moves by
+     whole multiples of its own width. The Daily / Weekly bar uses a
+     sliding fill behind its active label instead. */
   .tabbar, .insights-subtabbar{position:relative; isolation:isolate; --i:0;}
   .tabbar{--n:5;}
   .insights-subtabbar{--n:2;}
@@ -305,8 +307,8 @@
     transform:translateX(calc(var(--i) * 100%));
     transition:transform 360ms cubic-bezier(0.32,0.72,0,1);
   }
-  .tab-slider{top:6px; bottom:calc(6px + var(--safe-bottom)); padding:0 7px; box-sizing:border-box;}
-  .tab-slider::before{content:''; display:block; height:100%; border-radius:14px; background:rgba(var(--accent-rgb),0.16);}
+  .tab-slider{top:-1px; bottom:auto; height:3px; padding:0 4px; box-sizing:border-box;}   /* covers the bar's 1px top border */
+  .tab-slider::before{content:''; display:block; height:100%; border-radius:3px; background:var(--accent);}
   .subtab-slider{background:var(--panel-3);}
   .no-slide .tab-slider, .no-slide .subtab-slider{transition:none;}
   @media (prefers-reduced-motion: reduce){ .tab-slider, .subtab-slider, .tab-glyph{transition:none;} }
