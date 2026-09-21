@@ -487,9 +487,34 @@
   /* ---------- Insights bars ---------- */
   .insight-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
   .insight-bar-day{width:52px;font-size:11px;color:var(--text-faint);flex-shrink:0;}
-  .insight-bar-track{flex:1;height:16px;background:var(--panel-3);border-radius:var(--radius-xs);overflow:hidden;}
+  .insight-bar-track{flex:1;height:16px;background:var(--panel-3);border-radius:var(--radius-xs);overflow:hidden;position:relative;}
   .insight-bar-fill{height:100%;background:var(--accent);border-radius:var(--radius-xs);}
+  .insight-bar-fill.over{background:var(--accent-2);}
+  /* dashed line across the bars at your calorie goal */
+  .insight-goal-mark{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed rgba(255,255,255,0.55);}
   .insight-bar-val{width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0;}
+
+  /* Weekly Overview extras (inside the same card, below the bars) */
+  .week-legend-note{display:flex;align-items:center;gap:8px;margin:-2px 0 0 62px;font-size:11px;color:var(--text-faint);}
+  .week-legend-note i{display:inline-block;width:0;height:12px;border-left:2px dashed rgba(255,255,255,0.55);}
+  .week-divider{height:1px;background:var(--line);margin:18px 0 16px;}
+  .week-divider + .section-label{margin-top:0;}
+  .week-stats{display:flex;justify-content:space-between;gap:8px;}
+  .week-stat{flex:1;text-align:center;}
+  .week-stat b{display:block;font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;line-height:1.1;color:var(--text);}
+  .week-stat span{display:block;margin-top:3px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);}
+  .week-note{margin-top:12px;text-align:center;font-size:11px;color:var(--text-faint);}
+  .split-bar{display:flex;gap:2px;height:16px;border-radius:var(--radius-xs);overflow:hidden;background:var(--panel-3);}
+  .split-bar i{display:block;height:100%;}
+  .split-bar .p{background:var(--success);}
+  .split-bar .c{background:#5fa8d6;}
+  .split-bar .f{background:var(--accent-2);}
+  .split-legend{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:12px;color:var(--text-dim);}
+  .split-legend b{color:var(--text);}
+  .split-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;}
+  .split-legend .p{background:var(--success);}
+  .split-legend .c{background:#5fa8d6;}
+  .split-legend .f{background:var(--accent-2);}
 
   /* ---------- Insights "Today" macro rings ---------- */
   .calorie-ring-row{display:flex;justify-content:center;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);}
@@ -3281,28 +3306,91 @@
   }
 
   function renderInsightsTrends(){
-    // Daily panel — the last 7 calendar days (today plus the 6 before
-    // it), each bar showing that day's total calories, so day-to-day
-    // swings are visible rather than smoothed into a weekly average.
+    // Last 7 calendar days (today plus the 6 before it), each bar showing
+    // that day's total calories so day-to-day swings stay visible, then
+    // a few week-level numbers worked out from the same meals: averages
+    // (over the days you actually logged), how the week's calories split
+    // between protein/carbs/fat, and how many days landed near the goal.
     var DAYS_TO_SHOW = 7;
-    var dayBuckets = [];
+    var g = STORE.goals;
+    var days = [];
     for (var d = DAYS_TO_SHOW - 1; d >= 0; d--){
       var key = dateKey(Date.now() - d * 86400000);
-      dayBuckets.push({
+      var dayMeals = mealsForDay(key);
+      var t = totalsFor(dayMeals);
+      days.push({
         label: d === 0 ? 'Today' : new Date(key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }),
-        total: Math.round(totalsFor(mealsForDay(key)).calories)
+        logged: dayMeals.length > 0,
+        total: Math.round(t.calories),
+        t: t
       });
     }
-    var dayMax = Math.max(STORE.goals.calories, Math.max.apply(null, dayBuckets.map(function(d2){ return d2.total; })), 1);
+    var dayMax = Math.max(g.calories, Math.max.apply(null, days.map(function(x){ return x.total; })), 1);
+    var goalPos = pct(g.calories, dayMax); // where the goal line sits along each bar
 
     var html = '<div class="card"><h3 class="section-label">Last 7 days — daily calories</h3>';
-    html += dayBuckets.map(function(d3){
+    html += days.map(function(x){
       return '<div class="insight-bar-row">' +
-        '<div class="insight-bar-day">' + d3.label + '</div>' +
-        '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct(d3.total, dayMax) + '%"></div></div>' +
-        '<div class="insight-bar-val">' + d3.total + '</div>' +
+        '<div class="insight-bar-day">' + x.label + '</div>' +
+        '<div class="insight-bar-track">' +
+          '<div class="insight-bar-fill' + (g.calories > 0 && x.total > g.calories ? ' over' : '') + '" style="width:' + pct(x.total, dayMax) + '%"></div>' +
+          (g.calories > 0 ? '<i class="insight-goal-mark" style="left:' + goalPos + '%"></i>' : '') +
+        '</div>' +
+        '<div class="insight-bar-val">' + x.total + '</div>' +
       '</div>';
     }).join('');
+    if (g.calories > 0) html += '<div class="week-legend-note"><i></i>Goal ' + g.calories + ' kcal</div>';
+
+    var loggedDays = days.filter(function(x){ return x.logged; });
+    if (loggedDays.length === 0){
+      html += '<div class="insight-caption">Log a meal to see your weekly averages and macro split.</div></div>';
+      document.getElementById('view').innerHTML = html;
+      return;
+    }
+
+    var sum = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
+    loggedDays.forEach(function(x){
+      Object.keys(sum).forEach(function(k){ sum[k] += x.t[k] || 0; });
+    });
+    var avg = function(k){ return sum[k] / loggedDays.length; };
+    var highest = Math.max.apply(null, loggedDays.map(function(x){ return x.total; }));
+
+    // ---- headline numbers
+    html += '<div class="week-divider"></div><div class="week-stats">' +
+      '<div class="week-stat"><b>' + Math.round(avg('calories')) + '</b><span>Avg kcal / day</span></div>' +
+      '<div class="week-stat"><b>' + loggedDays.length + '/' + DAYS_TO_SHOW + '</b><span>Days logged</span></div>' +
+      '<div class="week-stat"><b>' + highest + '</b><span>Highest day</span></div>' +
+    '</div><div class="week-note">Averages count only the days you logged.</div>';
+
+    // ---- average macros against goals
+    html += '<div class="week-divider"></div><h3 class="section-label">Daily average vs goal</h3>' +
+      macroBarHtml('Protein', avg('protein'), g.protein, 'protein') +
+      macroBarHtml('Carbs', avg('carbs'), g.carbs, 'carbs') +
+      macroBarHtml('Fat', avg('fat'), g.fat, 'fat') +
+      macroBarHtml('Fiber', avg('fiber'), g.fiber, 'fiber');
+
+    // ---- where the week's calories came from (4 kcal/g protein & carbs, 9 kcal/g fat)
+    var pKcal = sum.protein * 4, cKcal = sum.carbs * 4, fKcal = sum.fat * 9;
+    var macroKcal = pKcal + cKcal + fKcal;
+    if (macroKcal > 0){
+      var pP = Math.round(pKcal / macroKcal * 100);
+      var pC = Math.round(cKcal / macroKcal * 100);
+      var pF = Math.max(0, 100 - pP - pC); // so the three always add to 100
+      html += '<div class="week-divider"></div><h3 class="section-label">Where your calories come from</h3>' +
+        '<div class="split-bar"><i class="p" style="width:' + pP + '%"></i><i class="c" style="width:' + pC + '%"></i><i class="f" style="width:' + pF + '%"></i></div>' +
+        '<div class="split-legend">' +
+          '<span><i class="p"></i>Protein <b>' + pP + '%</b></span>' +
+          '<span><i class="c"></i>Carbs <b>' + pC + '%</b></span>' +
+          '<span><i class="f"></i>Fat <b>' + pF + '%</b></span>' +
+        '</div>';
+    }
+
+    // ---- consistency: days close to the calorie goal (85%–110%)
+    if (g.calories > 0){
+      var onTarget = loggedDays.filter(function(x){ return x.total >= 0.85 * g.calories && x.total <= 1.10 * g.calories; }).length;
+      html += '<div class="insight-caption' + (onTarget * 2 >= loggedDays.length ? ' balanced' : '') + '">' +
+        'Close to your calorie goal (85–110%) on <b>' + onTarget + ' of ' + loggedDays.length + '</b> logged day' + (loggedDays.length === 1 ? '' : 's') + '.</div>';
+    }
     html += '</div>';
 
     document.getElementById('view').innerHTML = html;
