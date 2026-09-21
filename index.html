@@ -658,6 +658,35 @@
   .selected-food-banner .food-thumb{width:32px;height:32px;font-size:18px;border-radius:var(--radius-xs);}
   .banner-food{display:flex;align-items:center;gap:10px;min-width:0;}
   .selected-food-banner b{color:var(--text);}
+  /* Serving picker: unit chips (scroll sideways) + amount stepper */
+  .serving-label{
+    font-family:'Oswald',sans-serif; font-size:10.5px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--text-faint); margin:10px 0 5px;
+  }
+  .serving-chips{
+    display:flex; gap:6px; overflow-x:auto; padding-bottom:2px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .serving-chips::-webkit-scrollbar{display:none;}
+  .serving-chip{
+    flex-shrink:0; white-space:nowrap; cursor:pointer;
+    background:var(--panel-2); border:1px solid var(--line); color:var(--text-dim);
+    border-radius:var(--radius-pill); padding:7px 13px; font-size:12px; font-weight:600;
+  }
+  .serving-chip.active{background:var(--accent); border-color:var(--accent); color:#1c1500;}
+  body[data-theme="light"] .serving-chip.active{color:#fff;}
+  .serving-qty{display:flex; align-items:center; gap:8px; margin-top:10px;}
+  .serving-qty .serving-label{margin:0; flex:0 0 auto;}
+  .qty-btn{
+    width:34px; height:34px; flex-shrink:0; border-radius:50%; padding:0; cursor:pointer;
+    background:var(--panel-2); border:1px solid var(--line); color:var(--text);
+    font-size:19px; line-height:1; display:flex; align-items:center; justify-content:center;
+  }
+  #addMealBody .serving-qty input{
+    flex:0 0 74px; width:74px; text-align:center;
+    font-family:'JetBrains Mono',monospace; font-size:15px; padding:7px 6px;
+  }
+  .serving-eq{margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-faint); white-space:nowrap;}
   .selected-food-banner .grams-input{
     width:60px;background:var(--panel-2);border:1px solid var(--line);
     border-radius:var(--radius-xs);color:var(--text);font-family:'JetBrains Mono',monospace;
@@ -1513,7 +1542,7 @@
     macroCardCollapsed: false,
     selectedCategory: 'breakfast', // set properly each time the Add Meal overlay opens
     insightsView: 'today', // 'today' | 'trends' — which Insights sub-tab panel is showing
-    unitMode: 'grams' // 'grams' | 'servings' — only meaningful when the picked food has a known serving size (see selectedFood.servingGrams)
+    serving: null // { unitId, qty } — how the picked food is being measured (see the serving picker)
   };
 
   function loadStore(){
@@ -1825,29 +1854,97 @@
     '</div>';
   }
 
+  /* ---- Serving picker ----
+     Every picked food gets a choice of how to measure it: its own
+     serving (when the data has one — Kalori's "1 plate (550g)", Open
+     Food Facts' serving size), household measures where USDA gives them
+     ("cup, chopped"), and always plain grams and ounces. You pick the
+     unit and how many; the calories/macros below rescale. Switching
+     units keeps the amount the same (1 serving of 380 g becomes 380 g,
+     then 13.4 oz). A per-serving food with no known weight (some Kalori
+     items) can only be measured in multiples of its serving. */
+  var OZ_GRAMS = 28.3495;
+
+  // "1 plate (550g)" / "(38 g)" / "250 g" -> grams, or null
+  function parseServingGrams(text){
+    var m = /\(\s*(\d+(?:\.\d+)?)\s*g(?:ram|rams|m)?\b/i.exec(text || '') ||
+            /^\s*(\d+(?:\.\d+)?)\s*g(?:ram|rams|m)?\s*$/i.exec(text || '');
+    return m ? parseFloat(m[1]) : null;
+  }
+
+  function servingUnitsFor(f){
+    var units = [];
+    var label = f.servingLabel || f.servingSizeText || '';
+    if (f.servingGrams > 0){
+      units.push({ id: 'serving', label: 'Serving' + (label ? ' · ' + label : ''), grams: f.servingGrams, step: 0.5, defaultQty: 1 });
+    } else if (f.whole){
+      units.push({ id: 'serving', label: 'Serving' + (label ? ' · ' + label : ''), grams: null, step: 0.5, defaultQty: 1 });
+    }
+    (f.measures || []).slice(0, 4).forEach(function(m, i){
+      units.push({ id: 'm' + i, label: m.label + ' · ' + Math.round(m.grams) + ' g', grams: m.grams, step: 0.5, defaultQty: 1 });
+    });
+    if (f.per100g){
+      units.push({ id: 'g', label: 'g', grams: 1, step: 10, defaultQty: 100 });
+      units.push({ id: 'oz', label: 'oz', grams: OZ_GRAMS, step: 0.5, defaultQty: 1 });
+    }
+    return units;
+  }
+
+  function currentServingUnit(){
+    var f = ui.selectedFood;
+    if (!f) return null;
+    var units = servingUnitsFor(f);
+    for (var i = 0; i < units.length; i++) if (units[i].id === (ui.serving && ui.serving.unitId)) return units[i];
+    return units[0];
+  }
+
+  // Start on the food's own serving if it has one, otherwise 100 g.
+  function initServing(){
+    var units = servingUnitsFor(ui.selectedFood);
+    var u = units[0];
+    if (u.id !== 'serving'){
+      for (var i = 0; i < units.length; i++) if (units[i].id === 'g') u = units[i];
+    }
+    ui.serving = { unitId: u.id, qty: u.defaultQty };
+  }
+
+  function roundQty(n, unit){
+    return unit && unit.id === 'g' ? Math.round(n) : Math.round(n * 100) / 100;
+  }
+
+  function servingEqText(){
+    var u = currentServingUnit();
+    if (!u || u.grams == null) return '';
+    var grams = (ui.serving.qty || 0) * u.grams;
+    if (u.id === 'g') return '= ' + (Math.round(grams / OZ_GRAMS * 10) / 10) + ' oz';
+    return '= ' + (Math.round(grams * 10) / 10) + ' g';
+  }
+
   function selectedFoodBannerHtml(){
     var f = ui.selectedFood;
-    if (f.wholeServing){
-      return '<div class="selected-food-banner"><div class="banner-food">' + foodThumbHtml({ product_name: f.name, _image: f.image }, true) +
-        '<span>From Kalori: <b>' + esc(f.name) + '</b> — ' + esc(f.servingLabel || '1 serving') + '</span>' +
-      '</div></div>';
-    }
-    var showServingToggle = f.servingGrams && f.servingGrams > 0;
-    var inputHtml = (ui.unitMode === 'servings' && showServingToggle)
-      ? '<input type="number" class="grams-input" id="foodGrams" step="0.5" value="' + (Math.round((ui.grams / f.servingGrams) * 100) / 100) + '" data-action-change="rescale-food"> serving' + (ui.grams === f.servingGrams ? '' : 's')
-      : '<input type="number" class="grams-input" id="foodGrams" value="' + ui.grams + '" data-action-change="rescale-food"> g';
+    var units = servingUnitsFor(f);
+    var cur = currentServingUnit();
+    var from = f.from === 'Kalori' ? 'From Kalori' : (f.from === 'saved' ? 'From your saved foods' : 'From search');
+    var chips = units.length > 1
+      ? '<div class="serving-label">Serving size</div><div class="serving-chips" role="group" aria-label="Serving size">' +
+          units.map(function(u){
+            return '<button type="button" class="serving-chip' + (u.id === cur.id ? ' active' : '') + '" data-action="set-serving-unit" data-unit="' + u.id + '">' + esc(u.label) + '</button>';
+          }).join('') +
+        '</div>'
+      : '';
     return '<div class="selected-food-banner">' +
       '<div class="selected-food-banner-row">' +
         '<span class="banner-food">' + foodThumbHtml({ product_name: f.name, _image: f.image }, true) +
-          '<span>From search: <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span></span>' +
-        '<span>' + inputHtml + '</span>' +
+          '<span>' + from + ': <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span></span>' +
       '</div>' +
-      (showServingToggle ?
-        '<div class="unit-toggle">' +
-          '<button type="button" data-action="set-unit-mode" data-mode="grams" class="' + (ui.unitMode !== 'servings' ? 'active' : '') + '">Grams</button>' +
-          '<button type="button" data-action="set-unit-mode" data-mode="servings" class="' + (ui.unitMode === 'servings' ? 'active' : '') + '">Serving' + (f.servingSizeText ? ' (' + esc(f.servingSizeText) + ')' : '') + '</button>' +
-        '</div>'
-        : '') +
+      chips +
+      '<div class="serving-qty">' +
+        '<span class="serving-label">Amount</span>' +
+        '<button type="button" class="qty-btn" data-action="qty-step" data-dir="-1" aria-label="Less">&minus;</button>' +
+        '<input type="number" id="servingQty" inputmode="decimal" step="any" min="0" value="' + roundQty(ui.serving.qty, cur) + '" aria-label="Amount">' +
+        '<button type="button" class="qty-btn" data-action="qty-step" data-dir="1" aria-label="More">+</button>' +
+        '<span class="serving-eq" id="servingEq">' + servingEqText() + '</span>' +
+      '</div>' +
     '</div>';
   }
 
@@ -1888,8 +1985,14 @@
   // already picked manually).
   function refreshSelectedFoodBanner(){
     var bodyEl = document.getElementById('addMealBody');
+    var oldChips = bodyEl.querySelector('.serving-chips');
+    var scrolled = oldChips ? oldChips.scrollLeft : 0;
     bodyEl.querySelectorAll('.selected-food-banner').forEach(function(el){ el.remove(); });
-    if (ui.selectedFood) bodyEl.insertAdjacentHTML('afterbegin', selectedFoodBannerHtml());
+    if (ui.selectedFood){
+      bodyEl.insertAdjacentHTML('afterbegin', selectedFoodBannerHtml());
+      var newChips = bodyEl.querySelector('.serving-chips');
+      if (newChips) newChips.scrollLeft = scrolled; // don't jump the row back to the start when a chip is tapped
+    }
   }
 
   /* ---- bottom-sheet helpers, shared by Add Meal and the Scanned-meal sheet ---- */
@@ -2082,7 +2185,18 @@
     // meaningless noise for a personal food log, so strip any
     // parenthetical that mentions USDA rather than log it verbatim.
     var name = (food.description || '').replace(/\s*\([^)]*USDA[^)]*\)/gi, '').trim();
-    return { product_name: name, brands: food.brandOwner || '', nutriments: n, _source: 'usda' };
+    // Household measures ("1 cup, chopped" = 160 g) when USDA includes
+    // them, so the serving picker can offer cups etc. (not confirmed for
+    // every item — foods without them just get grams / ounces).
+    var measures = [];
+    (food.foodMeasures || []).forEach(function(m){
+      var g = Number(m.gramWeight);
+      var text = String(m.disseminationText || '').replace(/\s+/g, ' ').trim();
+      if (!(g > 0) || !text || /quantity not specified/i.test(text)) return;
+      var label = text.replace(/^1\s+/, ''); // "1 cup" -> "cup" (the amount field supplies the number)
+      if (!measures.some(function(x){ return x.label === label; })) measures.push({ label: label, grams: g });
+    });
+    return { product_name: name, brands: food.brandOwner || '', nutriments: n, _source: 'usda', _measures: measures.slice(0, 4) };
   }
 
   // Foundation + SR Legacy are USDA's generic/whole-food datasets —
@@ -2416,13 +2530,13 @@
   function saveFoodToCache(food){
     var key = (food.name || '').trim().toLowerCase();
     if (!key) return;
-    var src = food.wholeServing ? food.whole : food.per100g;
+    var src = food.whole || food.per100g; // per-serving foods are saved on their own per-serving basis
     var entry = {
       product_name: food.name,
       brands: food.brand || '',
       _image: food.image || '',
       _source: 'saved',
-      _servingLabel: food.wholeServing ? (food.servingLabel || '1 serving') : '100g',
+      _servingLabel: food.whole ? (food.servingLabel || '1 serving') : '100g',
       nutriments: {
         'energy-kcal_100g': src.cal || 0,
         'proteins_100g': src.protein || 0,
@@ -2433,6 +2547,11 @@
         'sodium_100g_mg': src.sodium || 0 // already normalized to mg by this point regardless of original source
       }
     };
+    if (!food.whole){ // per-100 g foods keep their serving / household measures, so the picker offers them next time too
+      entry._servingGrams = food.servingGrams || null;
+      entry._servingSizeText = food.servingSizeText || null;
+      entry._measures = food.measures || [];
+    }
     // De-dupe by name so re-picking the same food refreshes its
     // numbers and bumps it back to most-recently-used, rather than
     // piling up duplicate entries.
@@ -2455,43 +2574,60 @@
   function pickFoodResult(index){
     var p = ui.lastSearchProducts && ui.lastSearchProducts[index];
     if (!p) return;
+    var nut = p.nutriments || {};
 
     if (p._source === 'techapi' || p._source === 'saved'){
-      // Kalori's numbers are per-serving already (see the 'serving'
-      // field), not per-100g like OFF/USDA — log as-is, no scaling.
-      // Cached ("saved") entries are stored the same way regardless
-      // of their original source — see saveFoodToCache().
-      ui.selectedFood = {
-        name: p.product_name,
-        image: p._image || '',
-        wholeServing: true,
-        servingLabel: p._serving || p._servingLabel || '1 serving',
-        whole: {
-          cal: p.nutriments['energy-kcal_100g'] || 0,
-          protein: p.nutriments['proteins_100g'] || 0,
-          carbs: p.nutriments['carbohydrates_100g'] || 0,
-          fat: p.nutriments['fat_100g'] || 0,
-          // Kalori (techapi.my) doesn't report these yet — fine to
-          // default to 0, the form fields just come up blank. Saved
-          // entries always carry real numbers here since they came
-          // from a completed pick earlier.
-          fiber: p.nutriments['fiber_100g'] || 0,
-          sugar: p.nutriments['sugars_100g'] || 0,
-          sodium: p.nutriments['sodium_100g_mg'] || 0
-        }
+      // Kalori's numbers are per SERVING (see its 'serving' field), and
+      // saved entries keep whatever basis they were saved with — either
+      // per serving too, or per 100 g (label '100g').
+      var basis = {
+        cal: nut['energy-kcal_100g'] || 0,
+        protein: nut['proteins_100g'] || 0,
+        carbs: nut['carbohydrates_100g'] || 0,
+        fat: nut['fat_100g'] || 0,
+        // Kalori (techapi.my) doesn't report these yet — fine to
+        // default to 0. Saved entries always carry real numbers here.
+        fiber: nut['fiber_100g'] || 0,
+        sugar: nut['sugars_100g'] || 0,
+        sodium: nut['sodium_100g_mg'] || 0
       };
+      var label = p._serving || p._servingLabel || '1 serving';
+      var from = p._source === 'techapi' ? 'Kalori' : 'saved';
+      if (p._source === 'saved' && /^\s*100\s*g\s*$/i.test(p._servingLabel || '')){
+        // saved per-100 g food: comes back with its serving / measures
+        ui.selectedFood = {
+          name: p.product_name, image: p._image || '', brand: p.brands ? p.brands.split(',')[0] : '', from: from,
+          servingGrams: p._servingGrams || null, servingSizeText: p._servingSizeText || null,
+          measures: p._measures || [], per100g: basis
+        };
+      } else {
+        var sg = parseServingGrams(label);
+        ui.selectedFood = {
+          name: p.product_name, image: p._image || '', from: from,
+          whole: basis, servingLabel: label, servingGrams: sg, measures: []
+        };
+        // A serving with a known weight can also be measured in g / oz
+        if (sg){
+          var k = 100 / sg;
+          ui.selectedFood.per100g = {
+            cal: basis.cal * k, protein: basis.protein * k, carbs: basis.carbs * k, fat: basis.fat * k,
+            fiber: basis.fiber * k, sugar: basis.sugar * k, sodium: basis.sodium * k
+          };
+        }
+      }
     } else {
-      var n = p.nutriments;
+      var n = nut;
       ui.selectedFood = {
         name: p.product_name,
         image: p._image || '',
         brand: p.brands ? p.brands.split(',')[0] : '',
-        // Only OFF products reliably carry this (contributor-entered,
-        // e.g. "38 g" / "1 slice (38g)") — USDA's raw-ingredient
-        // entries don't really have a "serving" concept the same way,
-        // and Kalori/saved items are handled in the branch above.
+        from: 'search',
+        // Only OFF products reliably carry a serving size (contributor-
+        // entered, e.g. "38 g" / "1 slice (38g)"); USDA's generic foods
+        // bring household measures instead (see usdaToProductShape).
         servingGrams: (p._source === 'off' && p.serving_quantity > 0) ? p.serving_quantity : null,
         servingSizeText: (p._source === 'off' && p.serving_size) ? p.serving_size : null,
+        measures: p._measures || [],
         per100g: {
           cal: n['energy-kcal_100g'] || 0,
           protein: n['proteins_100g'] || 0,
@@ -2509,42 +2645,74 @@
     // again works even offline — skip re-caching an item that was
     // itself picked from the cache, nothing new to learn from that.
     if (p._source !== 'saved') saveFoodToCache(ui.selectedFood);
-    ui.grams = 100;
-    ui.unitMode = 'grams'; // reset — a previous pick's servings mode shouldn't carry over to a food that may not have serving data
+    initServing();
     applySelectedFoodToForm();
     ui.justFilledFood = true;
     closeFoodSearchOverlay();
     openAddMealOverlay();
   }
 
-  // Recomputes the prefill macro values from the selected food.
-  // Per-100g sources (OFF/USDA) scale by the current gram amount;
-  // whole-serving sources (Kalori) use the given numbers directly.
+  // Recomputes the prefill macro values from the selected food and
+  // the chosen serving (unit x amount): per-100 g foods scale by the
+  // weight, a per-serving food with no known weight by the count.
   function applySelectedFoodToForm(){
     var f = ui.selectedFood;
+    var u = currentServingUnit();
+    var q = (ui.serving && ui.serving.qty) || 0;
     ui.prefillName = f.name;
-    if (f.wholeServing){
-      ui.prefillCal = Math.round(f.whole.cal);
-      ui.prefillProtein = Math.round(f.whole.protein);
-      ui.prefillCarbs = Math.round(f.whole.carbs);
-      ui.prefillFat = Math.round(f.whole.fat);
-      ui.prefillFiber = Math.round(f.whole.fiber || 0);
-      ui.prefillSugar = Math.round(f.whole.sugar || 0);
-      ui.prefillSodium = Math.round(f.whole.sodium || 0);
-      return;
-    }
-    var factor = (ui.grams || 0) / 100;
-    ui.prefillCal = Math.round(f.per100g.cal * factor);
-    ui.prefillProtein = Math.round(f.per100g.protein * factor);
-    ui.prefillCarbs = Math.round(f.per100g.carbs * factor);
-    ui.prefillFat = Math.round(f.per100g.fat * factor);
-    ui.prefillFiber = Math.round((f.per100g.fiber || 0) * factor);
-    ui.prefillSugar = Math.round((f.per100g.sugar || 0) * factor);
-    ui.prefillSodium = Math.round((f.per100g.sodium || 0) * factor);
+    var src, factor;
+    if (u.grams == null){ src = f.whole; factor = q; }
+    else { src = f.per100g; factor = q * u.grams / 100; }
+    ui.prefillCal = Math.round(src.cal * factor);
+    ui.prefillProtein = Math.round(src.protein * factor);
+    ui.prefillCarbs = Math.round(src.carbs * factor);
+    ui.prefillFat = Math.round(src.fat * factor);
+    ui.prefillFiber = Math.round((src.fiber || 0) * factor);
+    ui.prefillSugar = Math.round((src.sugar || 0) * factor);
+    ui.prefillSodium = Math.round((src.sodium || 0) * factor);
+  }
+
+  // Writes the computed prefill numbers into the visible Add Meal fields
+  // (openAddMealOverlay does this once on open; this is for when the
+  // serving unit or amount changes while the sheet is up).
+  function syncMealFieldsFromPrefill(){
+    var map = { mealCal: 'prefillCal', mealProtein: 'prefillProtein', mealCarbs: 'prefillCarbs', mealFat: 'prefillFat',
+                mealFiber: 'prefillFiber', mealSugar: 'prefillSugar', mealSodium: 'prefillSodium' };
+    Object.keys(map).forEach(function(id){
+      var v = ui[map[id]];
+      document.getElementById(id).value = v != null ? v : '';
+    });
+  }
+
+  function setServingQty(qty){
+    ui.serving.qty = Math.max(0, qty);
+    applySelectedFoodToForm();
+    syncMealFieldsFromPrefill();
+    var eq = document.getElementById('servingEq');
+    if (eq) eq.textContent = servingEqText();
+  }
+
+  function setServingUnit(unitId){
+    var f = ui.selectedFood;
+    if (!f) return;
+    var old = currentServingUnit();
+    var next = servingUnitsFor(f).filter(function(u){ return u.id === unitId; })[0];
+    if (!next || next.id === old.id) return;
+    // keep the same amount of food: 1 serving (380 g) -> 380 g -> 13.4 oz.
+    // The exact value is kept (only the number shown is rounded), so
+    // switching units never nudges the calories by a rounding error.
+    var qty = (old.grams != null && next.grams != null)
+      ? (ui.serving.qty || 0) * old.grams / next.grams
+      : next.defaultQty;
+    ui.serving = { unitId: next.id, qty: qty };
+    applySelectedFoodToForm();
+    syncMealFieldsFromPrefill();
+    refreshSelectedFoodBanner();
   }
 
   function clearFoodSelection(){
     ui.selectedFood = null;
+    ui.serving = null;
     ui.prefillName = ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat =
       ui.prefillFiber = ui.prefillSugar = ui.prefillSodium = null;
   }
@@ -2644,8 +2812,10 @@
           name: p.product_name || 'Scanned item',
           image: p.image_front_thumb_url || p.image_thumb_url || p.image_small_url || '',
           brand: p.brands ? p.brands.split(',')[0] : '',
+          from: 'search',
           servingGrams: (p.serving_quantity > 0) ? p.serving_quantity : null,
           servingSizeText: p.serving_size || null,
+          measures: [],
           per100g: {
             cal: n['energy-kcal_100g'] || 0,
             protein: n['proteins_100g'] || 0,
@@ -2657,8 +2827,7 @@
           }
         };
         saveFoodToCache(ui.selectedFood); // works offline next time, even for a barcode
-        ui.grams = 100;
-        ui.unitMode = 'grams';
+        initServing();
         applySelectedFoodToForm();
         ui.justFilledFood = true;
         openAddMealOverlay();
@@ -4480,9 +4649,16 @@
       openScanner(el.dataset.mode);
     } else if (action === 'capture-food-photo'){
       captureFoodPhoto();
-    } else if (action === 'set-unit-mode'){
-      ui.unitMode = el.dataset.mode;
-      refreshSelectedFoodBanner();
+    } else if (action === 'set-serving-unit'){
+      setServingUnit(el.dataset.unit);
+    } else if (action === 'qty-step'){
+      var stepUnit = currentServingUnit();
+      if (stepUnit){
+        var nextQty = roundQty((ui.serving.qty || 0) + parseInt(el.dataset.dir, 10) * stepUnit.step, stepUnit);
+        setServingQty(nextQty);
+        var qtyInput = document.getElementById('servingQty');
+        if (qtyInput) qtyInput.value = roundQty(ui.serving.qty, stepUnit);
+      }
     } else if (action === 'close-scanner'){
       closeScanner();
     } else if (action === 'set-unit'){
@@ -4544,19 +4720,13 @@
   document.addEventListener('change', function(e){
     if (e.target.dataset && e.target.dataset.actionChange === 'save-goal'){
       saveGoalsFromInputs();
-    } else if (e.target.id === 'foodGrams'){
-      var raw = parseFloat(e.target.value) || 0;
-      // In servings mode the field holds a serving count (can be
-      // fractional, e.g. 0.5), converted to the actual gram amount —
-      // ui.grams stays the single source of truth either way, same
-      // as applySelectedFoodToForm() already expects.
-      if (ui.unitMode === 'servings' && ui.selectedFood && ui.selectedFood.servingGrams){
-        ui.grams = Math.round(raw * ui.selectedFood.servingGrams);
-      } else {
-        ui.grams = Math.round(raw);
-      }
-      applySelectedFoodToForm();
-      renderApp();
+    }
+  });
+
+  // Typing in the amount box updates the macros live.
+  document.addEventListener('input', function(e){
+    if (e.target && e.target.id === 'servingQty' && ui.selectedFood){
+      setServingQty(parseFloat(e.target.value) || 0);
     }
   });
 
