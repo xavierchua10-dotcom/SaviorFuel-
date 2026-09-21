@@ -1,3 +1,4 @@
+// SaviorFuel AI proxy — Copyright (c) 2026 Xavier Chua (Savior). All rights reserved. See the LICENSE file in the repo root.
 // AI food scan — the logic behind the proxy, kept free of any Netlify
 // specifics so it can be tested locally (see scan-core.test.mjs).
 //

@@ -1,3 +1,5 @@
+// SaviorFuel AI proxy — Copyright (c) 2026 Xavier Chua (Savior). All rights reserved.
+
 // lib/scan-core.mjs
 var DEFAULT_ORIGINS = ["https://xavierchua10-dotcom.github.io"];
 var DEFAULT_MODEL = "gemini-2.5-flash-lite";

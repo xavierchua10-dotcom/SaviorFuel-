@@ -5,12 +5,14 @@
   "description": "Tiny proxy that keeps the Gemini API key off the public app: photo in, estimated foods out.",
   "scripts": {
     "test": "node scan-core.test.mjs && node cloudflare/worker.test.mjs",
-    "build:worker": "esbuild cloudflare/worker.src.mjs --bundle --format=esm --outfile=cloudflare/worker.js"
+    "build:worker": "esbuild cloudflare/worker.src.mjs --bundle --format=esm --banner:js=\"// SaviorFuel AI proxy — Copyright (c) 2026 Xavier Chua (Savior). All rights reserved.\" --outfile=cloudflare/worker.js"
   },
   "dependencies": {
     "@netlify/blobs": "^11.1.0"
   },
   "devDependencies": {
     "esbuild": "^0.25.0"
-  }
+  },
+  "license": "UNLICENSED",
+  "author": "Xavier Chua (Savior)"
 }

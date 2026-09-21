@@ -1,0 +1,53 @@
+SaviorFuel — Proprietary License (source-available, all rights reserved)
+
+Copyright (c) 2026 Xavier Chua (Savior). All rights reserved.
+
+In this license, "SaviorFuel" means the source code, design, text, icons,
+branding and other original material in this repository (including the app,
+its service worker, and the ai-proxy folder), and the app as published on its
+website. "The Owner" means Xavier Chua (Savior).
+
+1. OWNERSHIP
+   SaviorFuel is the copyrighted work of the Owner. No rights are granted to
+   you except those expressly stated in this license.
+
+2. WHAT YOU MAY DO
+   a) Use the published app in your web browser for your own personal use.
+   b) Read the source code in this repository and, as GitHub's Terms of
+      Service allow for public repositories, fork it on GitHub in order to
+      read it. A fork gives you no right to run, deploy, modify or share the
+      code beyond that.
+
+3. WHAT YOU MAY NOT DO without the Owner's prior written permission
+   - copy, reproduce or reuse any part of the code, design, text, icons or
+     other original material in another project or product;
+   - modify, translate, adapt or create derivative works of SaviorFuel;
+   - host, deploy, publish, sell, rent, sublicense or distribute SaviorFuel or
+     any copy or part of it, whether free or paid, and whether under this name
+     or another;
+   - remove or alter this license or any copyright notice;
+   - use the code, design or the names "SaviorFuel" or "Savior" to build,
+     promote or imitate a competing or similar app;
+   - use the code or content to train or fine-tune machine-learning models;
+   - bypass, probe or abuse any usage limit or access control of the AI scan
+     service, or use that service from anything other than the official app.
+
+4. THIRD-PARTY MATERIAL
+   SaviorFuel relies on third-party libraries, fonts, data and assets (for
+   example Three.js, TensorFlow.js, Open Food Facts, USDA FoodData Central and
+   Kalori). They remain under their own licenses and terms. This license does
+   not change those terms and does not claim ownership of that material.
+
+5. NO WARRANTY
+   SaviorFuel is provided "AS IS", without warranty of any kind, express or
+   implied. To the fullest extent permitted by law, the Owner is not liable for
+   any claim or damages arising from its use. Nutrition figures, including any
+   AI-generated estimates, are approximations and are not medical advice.
+
+6. TERMINATION
+   Any use that breaks this license ends your rights under it immediately.
+
+7. PERMISSION REQUESTS
+   To ask for permission to use SaviorFuel in any way not listed above, contact
+   the Owner through the GitHub profile that owns this repository
+   (https://github.com/xavierchua10-dotcom).

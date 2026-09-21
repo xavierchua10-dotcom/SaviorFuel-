@@ -1,3 +1,4 @@
+// SaviorFuel — Copyright (c) 2026 Xavier Chua (Savior). All rights reserved. See LICENSE.
 // SaviorFuel service worker
 //
 // Job: make the app itself open offline, and cache static assets

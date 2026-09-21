@@ -1,3 +1,4 @@
+// SaviorFuel AI proxy — Copyright (c) 2026 Xavier Chua (Savior). All rights reserved. See the LICENSE file in the repo root.
 import { getStore } from '@netlify/blobs';
 import { handleScan } from '../../lib/scan-core.mjs';
 

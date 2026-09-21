@@ -1,3 +1,4 @@
+// SaviorFuel AI proxy — Copyright (c) 2026 Xavier Chua (Savior). All rights reserved. See the LICENSE file in the repo root.
 // Cloudflare Workers version of the AI scan proxy. Same logic as the Netlify
 // version (lib/scan-core.mjs) — only the wiring differs: the person's address
 // comes from Cloudflare's header, and the daily counters live in a Workers KV
