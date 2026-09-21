@@ -4153,6 +4153,26 @@
     }).join(' ');
   }
 
+  // Open / close the pyramid's "Meals today" drawer. It also closes by
+  // itself when you tap anywhere outside it (which includes touching the
+  // pyramid to spin it — that starts with a touch on the canvas) or press
+  // Escape, so it never lingers over the model.
+  function setMealDrawer(open){
+    var drawer = document.getElementById('mealDrawer');
+    if (!drawer) return;
+    drawer.classList.toggle('open', open);
+    var handleBtn = drawer.querySelector('.meal-drawer-handle');
+    handleBtn.setAttribute('aria-expanded', String(open));
+    handleBtn.setAttribute('aria-label', open ? 'Hide today\'s meals' : 'Show today\'s meals');
+  }
+  document.addEventListener('pointerdown', function(e){
+    var drawer = document.getElementById('mealDrawer');
+    if (drawer && drawer.classList.contains('open') && !drawer.contains(e.target)) setMealDrawer(false);
+  }, true); // capture phase, so it still fires when something on the page stops the event
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') setMealDrawer(false);
+  });
+
   // Contents of the pyramid's slide-out "Meals today" drawer: one block per
   // meal time (name + kcal, a thin share bar, and its protein / carbs /
   // fat / fibre), then the day's totals.
@@ -4845,15 +4865,11 @@
       switchOverviewModeWithFade(el.dataset.mode);
     } else if (action === 'set-weekly-mode'){
       switchWeeklyModeWithFlip(el.dataset.mode);
-    } else if (action === 'toggle-meal-drawer' || action === 'close-meal-drawer'){
-      var drawer = document.getElementById('mealDrawer');
-      if (drawer){
-        var open = action === 'toggle-meal-drawer' ? !drawer.classList.contains('open') : false;
-        drawer.classList.toggle('open', open);
-        var handleBtn = drawer.querySelector('.meal-drawer-handle');
-        handleBtn.setAttribute('aria-expanded', String(open));
-        handleBtn.setAttribute('aria-label', open ? 'Hide today\'s meals' : 'Show today\'s meals');
-      }
+    } else if (action === 'toggle-meal-drawer'){
+      var mealDrawerEl = document.getElementById('mealDrawer');
+      if (mealDrawerEl) setMealDrawer(!mealDrawerEl.classList.contains('open'));
+    } else if (action === 'close-meal-drawer'){
+      setMealDrawer(false);
     } else if (action === 'close-day-card'){
       WeekWheel3D.ctx.selected = null;
       var dayCardEl = document.getElementById('dayCard');
