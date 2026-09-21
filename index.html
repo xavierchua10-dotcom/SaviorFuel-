@@ -466,7 +466,7 @@
     100%{ box-shadow:0 0 0 0 rgba(var(--accent-rgb),0); border-color:var(--line); }
   }
   .add-meal-sheet.glow-once{
-    animation:addMealSheetIn 0.22s cubic-bezier(0.16, 1, 0.3, 1), addMealGlow 900ms ease-out;
+    animation:addMealGlow 900ms ease-out;
   }
   /* Same glow, no sheet slide-in — for the meal row itself once it
      lands in the Log list, confirming it was actually added. */
@@ -978,29 +978,48 @@
   /* ---------- Add Meal overlay — centered modal, distinct from the
      full-screen search overlay so the two don't feel like the same
      pattern stacked twice ---------- */
+  /* Add Meal and the AI "Scanned meal" sheet are bottom sheets: the dim
+     backdrop fades in and the sheet rides up from the bottom edge (same
+     feel as the delete confirmation). JS adds .open a frame after
+     un-hiding so the slide can play, and waits for the slide-down before
+     hiding again. --kb / --vvh are set from the visual viewport while
+     the on-screen keyboard is up, so the sheet sits above the keyboard. */
   .add-meal-overlay{
     position:absolute; inset:0; z-index:95;
-    display:flex; align-items:center; justify-content:center;
-    padding:24px 20px;
+    display:flex; align-items:flex-end; justify-content:center;
+    padding-bottom:var(--kb, 0px);
+    overflow:hidden;                 /* the closed sheet sits below the screen — don't let it add scroll room */
+    overscroll-behavior:contain;
   }
   .add-meal-overlay.hidden{display:none;}
   .add-meal-backdrop{
     position:absolute; inset:0;
-    background:rgba(10,11,13,0.62);
-    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
-    animation:foodSearchBackdropIn 0.2s ease;
+    background:rgba(8,9,11,0.58);
+    opacity:0; transition:opacity 260ms ease;
   }
+  .add-meal-backdrop:active{filter:none;}
+  .add-meal-overlay.open .add-meal-backdrop{opacity:1;}
   .add-meal-sheet{
     position:relative;
-    width:100%; max-width:380px; max-height:82vh;
+    width:100%; max-width:480px;
+    max-height:88vh; max-height:min(88dvh, calc(var(--vvh, 100dvh) - 12px));
     background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:var(--radius-xl);
-    padding:18px 18px 20px;
+    border:1px solid var(--line); border-bottom:none;
+    border-radius:var(--radius-xl) var(--radius-xl) 0 0;
+    box-shadow:0 -12px 40px rgba(0,0,0,0.45);
+    padding:4px 18px calc(20px + var(--safe-bottom));
     display:flex; flex-direction:column;
-    animation:addMealSheetIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    transform:translate3d(0,100%,0);
+    transition:transform 360ms cubic-bezier(0.32,0.72,0,1);
+    will-change:transform;
   }
-  @keyframes addMealSheetIn{ 0%{opacity:0;transform:scale(0.94);} 100%{opacity:1;transform:scale(1);} }
+  .add-meal-overlay.open .add-meal-sheet{transform:translate3d(0,0,0);}
+  .add-meal-sheet.dragging{transition:none;}
+  .sheet-grab{height:26px; flex-shrink:0; display:flex; align-items:center; justify-content:center; touch-action:none; cursor:grab;}
+  .sheet-grab i{display:block; width:40px; height:4px; border-radius:2px; background:var(--text-faint); opacity:0.5;}
+  @media (prefers-reduced-motion: reduce){
+    .add-meal-sheet, .add-meal-backdrop{transition:none;}
+  }
   .add-meal-head{
     display:flex; align-items:center; justify-content:space-between;
     margin-bottom:14px;
@@ -1321,6 +1340,7 @@
 <div class="add-meal-overlay hidden" id="addMealOverlay">
   <div class="add-meal-backdrop" data-action="close-add-meal-overlay"></div>
   <div class="add-meal-sheet" id="addMealSheet">
+    <div class="sheet-grab" id="addMealGrab" aria-hidden="true"><i></i></div>
     <div class="add-meal-head">
       <h2>Add Meal</h2>
       <button class="add-meal-close" data-action="close-add-meal-overlay" aria-label="Close">
@@ -1353,6 +1373,7 @@
 <div class="add-meal-overlay hidden" id="aiScanOverlay">
   <div class="add-meal-backdrop" data-action="close-ai-scan"></div>
   <div class="add-meal-sheet">
+    <div class="sheet-grab" id="aiScanGrab" aria-hidden="true"><i></i></div>
     <div class="add-meal-head">
       <h2>Scanned meal</h2>
       <button class="add-meal-close" data-action="close-ai-scan" aria-label="Close">
@@ -1871,6 +1892,67 @@
     if (ui.selectedFood) bodyEl.insertAdjacentHTML('afterbegin', selectedFoodBannerHtml());
   }
 
+  /* ---- bottom-sheet helpers, shared by Add Meal and the Scanned-meal sheet ---- */
+  function showSheetOverlay(overlay){
+    clearTimeout(overlay._closeTimer);
+    var sheet = overlay.querySelector('.add-meal-sheet');
+    sheet.style.transform = '';
+    sheet.classList.remove('dragging');
+    overlay.classList.remove('hidden');
+    void overlay.offsetHeight;        // paint the closed position first, so it animates up
+    overlay.classList.add('open');
+  }
+
+  function hideSheetOverlay(overlay){
+    if (overlay.classList.contains('hidden')) return;
+    overlay.classList.remove('open');
+    var sheet = overlay.querySelector('.add-meal-sheet');
+    sheet.classList.remove('dragging');
+    sheet.style.transform = '';       // hand control back to the CSS slide-down
+    overlay._closeTimer = setTimeout(function(){ overlay.classList.add('hidden'); }, prefersReducedMotion() ? 0 : 380);
+  }
+
+  // drag the little handle at the top of a sheet down to dismiss it
+  function attachSheetDrag(grab, closeFn){
+    var sheet = grab.parentNode;
+    var startY = null;
+    grab.addEventListener('pointerdown', function(e){
+      startY = e.clientY;
+      sheet.classList.add('dragging');
+      if (grab.setPointerCapture){ try { grab.setPointerCapture(e.pointerId); } catch (err){} }
+    });
+    grab.addEventListener('pointermove', function(e){
+      if (startY === null) return;
+      sheet.style.transform = 'translateY(' + Math.max(0, e.clientY - startY) + 'px)';
+    });
+    function endDrag(e){
+      if (startY === null) return;
+      var dy = Math.max(0, e.clientY - startY);
+      startY = null;
+      sheet.classList.remove('dragging');
+      if (dy > 90) closeFn(); else sheet.style.transform = '';
+    }
+    grab.addEventListener('pointerup', endDrag);
+    grab.addEventListener('pointercancel', endDrag);
+  }
+
+  // While the on-screen keyboard is up, tell the CSS how much of the
+  // screen it covers (--kb) and how much is left (--vvh), so a sheet
+  // with fields in it lifts above the keyboard instead of hiding behind it.
+  if (window.visualViewport){
+    (function(){
+      var vv = window.visualViewport;
+      function update(){
+        var kb = Math.round(window.innerHeight - vv.height - vv.offsetTop);
+        var root = document.documentElement.style;
+        if (kb > 80){ root.setProperty('--kb', kb + 'px'); root.setProperty('--vvh', Math.round(vv.height) + 'px'); }
+        else { root.removeProperty('--kb'); root.removeProperty('--vvh'); }
+      }
+      vv.addEventListener('resize', update);
+      vv.addEventListener('scroll', update);
+    })();
+  }
+
   function openAddMealOverlay(){
     refreshSelectedFoodBanner();
 
@@ -1888,7 +1970,7 @@
 
     var overlay = document.getElementById('addMealOverlay');
     var sheet = document.getElementById('addMealSheet');
-    overlay.classList.remove('hidden');
+    showSheetOverlay(overlay);
     if (ui.justFilledFood){
       sheet.classList.add('glow-once');
       setTimeout(function(){ sheet.classList.remove('glow-once'); }, 900);
@@ -1898,13 +1980,17 @@
     // Autofocus the name field only when it's empty (a fresh custom
     // entry) — a prefilled pick from search doesn't need the keyboard
     // popping up immediately.
+    // Focus waits for the slide to finish (the keyboard opening at the
+    // same moment made the sheet stutter) and never scrolls the page.
     if (!ui.prefillName){
-      document.getElementById('mealName').focus();
+      setTimeout(function(){
+        if (overlay.classList.contains('open')) document.getElementById('mealName').focus({ preventScroll: true });
+      }, prefersReducedMotion() ? 0 : 380);
     }
   }
 
   function closeAddMealOverlay(){
-    document.getElementById('addMealOverlay').classList.add('hidden');
+    hideSheetOverlay(document.getElementById('addMealOverlay'));
     clearFoodSelection();
   }
 
@@ -2845,13 +2931,16 @@
       (data.note ? data.note + ' ' : '') + 'These are estimates from a photo — check the names and portions before logging.';
     renderAiCategoryPicker();
     renderAiScanItems();
-    document.getElementById('aiScanOverlay').classList.remove('hidden');
+    showSheetOverlay(document.getElementById('aiScanOverlay'));
   }
 
   function closeAiScanSheet(){
-    document.getElementById('aiScanOverlay').classList.add('hidden');
+    hideSheetOverlay(document.getElementById('aiScanOverlay'));
     aiScan.items = [];
   }
+
+  attachSheetDrag(document.getElementById('addMealGrab'), closeAddMealOverlay);
+  attachSheetDrag(document.getElementById('aiScanGrab'), closeAiScanSheet);
 
   function logAiScan(){
     var now = Date.now();
