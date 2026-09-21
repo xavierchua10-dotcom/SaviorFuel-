@@ -545,6 +545,15 @@
   .insight-bar-val{width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0;}
 
   /* Weekly Overview extras (inside the same card, below the bars) */
+  /* Calories by meal time: label, bar (share of the total), number + % */
+  .meal-split-row{display:flex; align-items:center; gap:10px; margin-bottom:9px;}
+  .meal-split-label{width:106px; flex-shrink:0; font-size:13px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .meal-split-track{flex:1; min-width:0; height:14px; background:var(--panel-3); border-radius:var(--radius-xs); overflow:hidden;}
+  .meal-split-fill{height:100%; background:var(--accent); border-radius:var(--radius-xs);}
+  .meal-split-val{width:74px; flex-shrink:0; text-align:right; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text);}
+  .meal-split-val span{margin-left:6px; color:var(--text-faint);}
+  .day-card-meals{margin-top:7px; padding-top:7px; border-top:1px solid var(--line); font-size:11.5px; line-height:1.5; color:var(--text-faint);}
+  .day-card-meals b{color:var(--text);}
   .week-legend-note{display:flex;align-items:center;gap:8px;margin:-2px 0 0 62px;font-size:11px;color:var(--text-faint);}
   .week-legend-note i{display:inline-block;width:0;height:12px;border-left:2px dashed rgba(255,255,255,0.55);}
   .week-divider{height:1px;background:var(--line);margin:18px 0 16px;}
@@ -4046,6 +4055,37 @@
     }
   }
 
+  // Calories per meal time (Breakfast, Lunch ...) for a list of meals, in
+  // the fixed meal order; meals with no category (logged before meal
+  // times existed) fall into "Other". Only meal times that have
+  // something logged are returned.
+  function mealBreakdown(meals){
+    var rows = MEAL_CATEGORIES.map(function(c){ return { id: c.id, label: c.label, kcal: 0, count: 0 }; });
+    var other = { id: 'other', label: 'Other', kcal: 0, count: 0 };
+    meals.forEach(function(m){
+      var row = rows.filter(function(r){ return r.id === m.category; })[0] || other;
+      row.kcal += m.calories || 0;
+      row.count += 1;
+    });
+    if (other.count > 0) rows.push(other);
+    return rows.filter(function(r){ return r.count > 0; }).map(function(r){
+      return { id: r.id, label: r.label, kcal: Math.round(r.kcal), count: r.count };
+    });
+  }
+
+  // One row per meal time: label, a bar sized by its share of the total,
+  // and the number (divided by `perDay` for a weekly average) with its %.
+  function mealSplitHtml(rows, total, perDay){
+    return rows.map(function(r){
+      var share = total > 0 ? Math.round(r.kcal / total * 100) : 0;
+      return '<div class="meal-split-row">' +
+        '<div class="meal-split-label">' + esc(r.label) + '</div>' +
+        '<div class="meal-split-track"><div class="meal-split-fill" style="width:' + Math.max(share, 2) + '%"></div></div>' +
+        '<div class="meal-split-val">' + Math.round(r.kcal / (perDay || 1)) + '<span>' + share + '%</span></div>' +
+      '</div>';
+    }).join('');
+  }
+
   function renderInsightsPlain(){
     var todayMeals = mealsForDay(todayKey());
     var todayTotals = totalsFor(todayMeals);
@@ -4070,6 +4110,11 @@
     html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
       macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
       macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg');
+    // how today's calories split across breakfast / lunch / dinner ...
+    var todayByMeal = mealBreakdown(todayMeals);
+    if (todayByMeal.length > 0){
+      html += '<h3 class="section-label">Today by meal</h3>' + mealSplitHtml(todayByMeal, todayTotals.calories, 1);
+    }
     var caption = macroBalanceCaption(todayMeals, todayTotals, g);
     html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
     html += '</div>';
@@ -4083,16 +4128,19 @@
   function weekData(){
     var g = STORE.goals;
     var days = [];
+    var weekMeals = [];
     for (var d = 6; d >= 0; d--){
       var key = dateKey(Date.now() - d * 86400000);
       var dayMeals = mealsForDay(key);
       var t = totalsFor(dayMeals);
+      weekMeals = weekMeals.concat(dayMeals);
       days.push({
         label: d === 0 ? 'Today' : new Date(key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }),
         isToday: d === 0,
         logged: dayMeals.length > 0,
         total: Math.round(t.calories),
-        t: t
+        t: t,
+        byMeal: mealBreakdown(dayMeals)
       });
     }
     var loggedDays = days.filter(function(x){ return x.logged; });
@@ -4102,6 +4150,7 @@
     });
     return {
       days: days, goal: g.calories, goals: g, loggedDays: loggedDays, sum: sum,
+      byMeal: mealBreakdown(weekMeals),
       avg: function(k){ return loggedDays.length ? sum[k] / loggedDays.length : 0; },
       highest: loggedDays.length ? Math.max.apply(null, loggedDays.map(function(x){ return x.total; })) : 0
     };
@@ -4133,7 +4182,8 @@
         '<span class="p">Protein <b>' + Math.round(d.t.protein) + 'g</b></span>' +
         '<span class="c">Carbs <b>' + Math.round(d.t.carbs) + 'g</b></span>' +
         '<span class="f">Fat <b>' + Math.round(d.t.fat) + 'g</b></span>' +
-      '</div>';
+      '</div>' +
+      '<div class="day-card-meals">' + d.byMeal.map(function(r){ return esc(r.label) + ' <b>' + r.kcal + '</b>'; }).join(' · ') + '</div>';
   }
 
   function renderTrends3D(){
@@ -4238,6 +4288,16 @@
           '<span><i class="c"></i>Carbs <b>' + pC + '%</b></span>' +
           '<span><i class="f"></i>Fat <b>' + pF + '%</b></span>' +
         '</div>';
+    }
+
+    // ---- calories by meal time (average per logged day)
+    var weekByMeal = wd.byMeal;
+    if (weekByMeal.length > 0){
+      var weekKcal = weekByMeal.reduce(function(acc, r){ return acc + r.kcal; }, 0);
+      var biggest = weekByMeal.slice().sort(function(a, b){ return b.kcal - a.kcal; })[0];
+      html += '<div class="week-divider"></div><h3 class="section-label">Calories by meal</h3>' +
+        mealSplitHtml(weekByMeal, weekKcal, loggedDays.length) +
+        '<div class="week-note">Average per logged day · biggest share: <b>' + esc(biggest.label) + '</b> (' + (weekKcal > 0 ? Math.round(biggest.kcal / weekKcal * 100) : 0) + '%)</div>';
     }
 
     // ---- consistency: days close to the calorie goal (85%–110%)
