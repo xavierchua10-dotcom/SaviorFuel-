@@ -762,6 +762,12 @@
     flex:0 0 74px; width:74px; text-align:center;
     font-family:'JetBrains Mono',monospace; font-size:15px; padding:7px 6px;
   }
+  .food-note{
+    margin-top:8px; padding:8px 10px; border-radius:var(--radius-sm);
+    background:rgba(242,177,52,0.10); color:#e2b04a; font-size:11.5px; line-height:1.45;
+  }
+  .row-warn{color:#e2b04a;}
+  .data-note{margin:8px 0 2px; font-size:11.5px; line-height:1.45; color:var(--text-faint);}
   .serving-eq{margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-faint); white-space:nowrap;}
   .selected-food-banner .grams-input{
     width:60px;background:var(--panel-2);border:1px solid var(--line);
@@ -1723,7 +1729,7 @@
       // (e.g. fiber/sugar/sodium) backfill from defaults instead of
       // coming back undefined.
       parsed.goals = Object.assign({}, DEFAULT_GOALS, parsed.goals || {});
-      if (!parsed.meals) parsed.meals = [];
+      parsed.meals = Array.isArray(parsed.meals) ? parsed.meals.map(sanitizeMeal).filter(Boolean) : [];
       if (!parsed.profile) parsed.profile = Object.assign({}, DEFAULT_PROFILE);
       // Same merge reasoning as goals above — existing density/corners/
       // unit choices are kept, newly-added settings (theme) backfill.
@@ -1739,12 +1745,47 @@
     }
   }
 
+  // If the browser refuses the write (storage full, private mode, blocked)
+  // the meal only exists in memory and vanishes on reload — so say so once,
+  // instead of failing silently.
+  var saveFailureShown = false;
   function saveStore(){
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(STORE));
+      saveFailureShown = false;
     } catch (e){
       console.error('SaviorFuel: failed to save local store —', e);
+      if (!saveFailureShown){
+        saveFailureShown = true;
+        alert('SaviorFuel couldn\u2019t save to this device (storage may be full or blocked by the browser), so what you just logged may be lost when you close the app. Export a backup from Settings, and free up some space or leave private browsing.');
+      }
     }
+  }
+
+  // Ask the browser not to evict our saved data when it's short of space
+  // (best effort — the browser decides).
+  if (navigator.storage && navigator.storage.persist){
+    try { navigator.storage.persist(); } catch (e){}
+  }
+
+  // Coerces one logged meal to safe types: numbers are numbers (a string
+  // "100" would make totals concatenate text), never negative, and an
+  // entry without a usable timestamp is dropped. Used for stored data and
+  // for imported backups.
+  function sanitizeMeal(m){
+    if (!m || typeof m !== 'object') return null;
+    var t = Number(m.loggedAt);
+    if (!isFinite(t) || t <= 0) return null;
+    var n = function(v){ v = Number(v); return (isFinite(v) && v > 0) ? v : 0; };
+    var clean = {
+      id: String(m.id || ('m_' + t + '_' + Math.random().toString(36).slice(2, 7))),
+      name: String(m.name == null ? 'Food' : m.name).slice(0, 120),
+      calories: n(m.calories), protein: n(m.protein), carbs: n(m.carbs), fat: n(m.fat),
+      fiber: n(m.fiber), sugar: n(m.sugar), sodium: n(m.sodium),
+      loggedAt: t
+    };
+    if (typeof m.category === 'string') clean.category = m.category;
+    return clean;
   }
 
   function esc(str){
@@ -1760,9 +1801,20 @@
 
   function todayKey(){ return dateKey(Date.now()); }
 
+  // Date key for N calendar days ago. Counted by calendar (via the noon
+  // of today), NOT by subtracting N x 24 hours — on the day clocks go
+  // forward (a 23-hour day) that subtraction lands a day too early and
+  // "yesterday" / the weekly chart skip or repeat a date.
+  function dateKeyDaysAgo(n){
+    var d = new Date();
+    d.setHours(12, 0, 0, 0);
+    d.setDate(d.getDate() - n);
+    return dateKey(d.getTime());
+  }
+
   function formatDateLabel(key){
     var today = todayKey();
-    var yesterday = dateKey(Date.now() - 86400000);
+    var yesterday = dateKeyDaysAgo(1);
     if (key === today) return 'Today';
     if (key === yesterday) return 'Yesterday';
     var d = new Date(key + 'T00:00:00');
@@ -2052,6 +2104,26 @@
      items) can only be measured in multiples of its serving. */
   var OZ_GRAMS = 28.3495;
 
+  // Sanity-check a food's numbers before it is logged. Food databases
+  // (Open Food Facts especially) have gaps and typos: a missing protein /
+  // carbs / fat field counts as 0, which quietly understates your totals,
+  // and calories that don't roughly match the macros (4/4/9 kcal per gram)
+  // usually mean a mistyped label. Returns a short warning, or ''.
+  function foodDataNote(nut){
+    if (!nut) return '';
+    var missing = [];
+    if (nut['proteins_100g'] == null) missing.push('protein');
+    if (nut['carbohydrates_100g'] == null) missing.push('carbs');
+    if (nut['fat_100g'] == null) missing.push('fat');
+    if (missing.length) return 'This food has no ' + missing.join(' / ') + ' data, so it counts as 0 — your totals may come out low.';
+    var kcal = nut['energy-kcal_100g'] || 0;
+    var fromMacros = 4 * nut['proteins_100g'] + 4 * nut['carbohydrates_100g'] + 9 * nut['fat_100g'];
+    if (kcal >= 60 && fromMacros > 0 && Math.abs(kcal - fromMacros) / kcal > 0.35){
+      return 'Its calories (' + Math.round(kcal) + ') and macros (about ' + Math.round(fromMacros) + ' kcal worth) don\u2019t agree — worth checking the label.';
+    }
+    return '';
+  }
+
   // "1 plate (550g)" / "(38 g)" / "250 g" -> grams, or null
   function parseServingGrams(text){
     var m = /\(\s*(\d+(?:\.\d+)?)\s*g(?:ram|rams|m)?\b/i.exec(text || '') ||
@@ -2125,6 +2197,7 @@
           '<span>' + from + ': <b>' + esc(f.name) + '</b>' + (f.brand ? ' (' + esc(f.brand) + ')' : '') + '</span></span>' +
       '</div>' +
       chips +
+      (f.dataNote ? '<div class="food-note">\u26a0 ' + esc(f.dataNote) + '</div>' : '') +
       '<div class="serving-qty">' +
         '<span class="serving-label">Amount</span>' +
         '<button type="button" class="qty-btn" data-action="qty-step" data-dir="-1" aria-label="Less">&minus;</button>' +
@@ -2382,19 +2455,22 @@
   // care which source a result came from.
   function usdaToProductShape(food){
     var n = {};
+    var atwaterKcal = null; // Foundation Foods often report energy only via Atwater factors
     (food.foodNutrients || []).forEach(function(fn){
-      if (fn.nutrientName === 'Energy' && fn.unitName === 'KCAL') n['energy-kcal_100g'] = fn.value;
+      if (fn.unitName === 'KCAL' && /^Energy \(Atwater/.test(fn.nutrientName || '')){ if (atwaterKcal == null) atwaterKcal = fn.value; }
+      else if (fn.nutrientName === 'Energy' && fn.unitName === 'KCAL') n['energy-kcal_100g'] = fn.value;
       else if (fn.nutrientName === 'Protein') n['proteins_100g'] = fn.value;
       else if (fn.nutrientName === 'Carbohydrate, by difference') n['carbohydrates_100g'] = fn.value;
       else if (fn.nutrientName === 'Total lipid (fat)') n['fat_100g'] = fn.value;
       else if (fn.nutrientName === 'Fiber, total dietary') n['fiber_100g'] = fn.value;
-      else if (fn.nutrientName === 'Sugars, total including NLEA' || fn.nutrientName === 'Total Sugars') n['sugars_100g'] = fn.value;
+      else if (fn.nutrientName === 'Sugars, total including NLEA' || fn.nutrientName === 'Total Sugars' || fn.nutrientName === 'Sugars, Total') n['sugars_100g'] = fn.value;
       // USDA reports sodium in mg (unitName 'MG') already, unlike OFF
       // which reports it in g like the other nutrients — kept under
       // its own key so the mg-vs-g unit mismatch can't get mixed up
       // downstream (see pickFoodResult / onBarcodeDetected).
       else if (fn.nutrientName === 'Sodium, Na') n['sodium_100g_mg'] = fn.value;
     });
+    if (n['energy-kcal_100g'] == null && atwaterKcal != null) n['energy-kcal_100g'] = atwaterKcal;
     // USDA's bulk/commodity entries carry long bureaucratic annotations
     // like "(Includes foods for USDA's Food Distribution Program)" —
     // meaningless noise for a personal food log, so strip any
@@ -2690,6 +2766,7 @@
       if (p._source === 'saved') meta.push(esc(p._servingLabel || '100g'), 'Saved');
       else if (p._source === 'techapi'){ if (p._serving) meta.push(esc(p._serving)); }
       else meta.push('per 100 g');
+      if (p._source === 'saved' ? p._note : foodDataNote(p.nutriments)) meta.push('<span class="row-warn">\u26a0 check data</span>');
       return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
         foodThumbHtml(p) +
         '<div class="food-suggest-name">' +
@@ -2750,6 +2827,7 @@
       product_name: food.name,
       brands: food.brand || '',
       _image: food.image || '',
+      _note: food.dataNote || '',
       _source: 'saved',
       _servingLabel: food.whole ? (food.servingLabel || '1 serving') : '100g',
       nutriments: {
@@ -2808,18 +2886,19 @@
       };
       var label = p._serving || p._servingLabel || '1 serving';
       var from = p._source === 'techapi' ? 'Kalori' : 'saved';
+      var dataNote = p._source === 'saved' ? (p._note || '') : foodDataNote(nut);
       if (p._source === 'saved' && /^\s*100\s*g\s*$/i.test(p._servingLabel || '')){
         // saved per-100 g food: comes back with its serving / measures
         ui.selectedFood = {
           name: p.product_name, image: p._image || '', brand: p.brands ? p.brands.split(',')[0] : '', from: from,
           servingGrams: p._servingGrams || null, servingSizeText: p._servingSizeText || null,
-          measures: p._measures || [], per100g: basis
+          measures: p._measures || [], per100g: basis, dataNote: dataNote
         };
       } else {
         var sg = parseServingGrams(label);
         ui.selectedFood = {
           name: p.product_name, image: p._image || '', from: from,
-          whole: basis, servingLabel: label, servingGrams: sg, measures: []
+          whole: basis, servingLabel: label, servingGrams: sg, measures: [], dataNote: dataNote
         };
         // A serving with a known weight can also be measured in g / oz
         if (sg){
@@ -2837,6 +2916,7 @@
         image: p._image || '',
         brand: p.brands ? p.brands.split(',')[0] : '',
         from: 'search',
+        dataNote: foodDataNote(n),
         // Only OFF products reliably carry a serving size (contributor-
         // entered, e.g. "38 g" / "1 slice (38g)"); USDA's generic foods
         // bring household measures instead (see usdaToProductShape).
@@ -3029,6 +3109,7 @@
           image: p.image_front_thumb_url || p.image_thumb_url || p.image_small_url || '',
           brand: p.brands ? p.brands.split(',')[0] : '',
           from: 'search',
+          dataNote: foodDataNote(p.nutriments),
           servingGrams: (p.serving_quantity > 0) ? p.serving_quantity : null,
           servingSizeText: p.serving_size || null,
           measures: [],
@@ -3381,13 +3462,18 @@
 
   function addMealFromForm(){
     var name = document.getElementById('mealName').value.trim();
-    var cal = parseInt(document.getElementById('mealCal').value, 10) || 0;
-    var protein = parseInt(document.getElementById('mealProtein').value, 10) || 0;
-    var carbs = parseInt(document.getElementById('mealCarbs').value, 10) || 0;
-    var fat = parseInt(document.getElementById('mealFat').value, 10) || 0;
-    var fiber = parseInt(document.getElementById('mealFiber').value, 10) || 0;
-    var sugar = parseInt(document.getElementById('mealSugar').value, 10) || 0;
-    var sodium = parseInt(document.getElementById('mealSodium').value, 10) || 0;
+    // Decimals are rounded (12.7 g -> 13, not cut to 12), negatives count as 0.
+    var field = function(id){
+      var v = parseFloat(document.getElementById(id).value);
+      return isFinite(v) ? Math.max(0, Math.round(v)) : 0;
+    };
+    var cal = field('mealCal');
+    var protein = field('mealProtein');
+    var carbs = field('mealCarbs');
+    var fat = field('mealFat');
+    var fiber = field('mealFiber');
+    var sugar = field('mealSugar');
+    var sodium = field('mealSodium');
 
     if (!name || cal <= 0) return; // require at least a name + calories
 
@@ -4278,6 +4364,16 @@
     }).join('');
   }
 
+  // Foods logged with no fiber, sugar or sodium at all (common for local
+  // dishes whose database entries only list calories and macros) make
+  // those three totals read lower than what you really had — say so.
+  function microGapNote(meals){
+    var gaps = meals.filter(function(m){ return !m.fiber && !m.sugar && !m.sodium; }).length;
+    if (gaps === 0) return '';
+    return '<div class="data-note">' + gaps + ' of ' + meals.length + ' food' + (meals.length === 1 ? '' : 's') + ' ' +
+      (gaps === 1 ? 'has' : 'have') + ' no fiber, sugar or sodium data, so those totals are lower than what you actually had.</div>';
+  }
+
   function renderInsightsPlain(){
     var todayMeals = mealsForDay(todayKey());
     var todayTotals = totalsFor(todayMeals);
@@ -4301,7 +4397,8 @@
     html += '<h3 class="section-label">Other nutrients</h3>';
     html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
       macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
-      macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg');
+      macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg') +
+      microGapNote(todayMeals);
     // how today's calories split across breakfast / lunch / dinner ...
     var todayByMeal = mealBreakdown(todayMeals);
     if (todayByMeal.length > 0){
@@ -4322,7 +4419,7 @@
     var days = [];
     var weekMeals = [];
     for (var d = 6; d >= 0; d--){
-      var key = dateKey(Date.now() - d * 86400000);
+      var key = dateKeyDaysAgo(d);
       var dayMeals = mealsForDay(key);
       var t = totalsFor(dayMeals);
       weekMeals = weekMeals.concat(dayMeals);
@@ -4342,7 +4439,7 @@
     });
     return {
       days: days, goal: g.calories, goals: g, loggedDays: loggedDays, sum: sum,
-      byMeal: mealBreakdown(weekMeals),
+      byMeal: mealBreakdown(weekMeals), weekMeals: weekMeals,
       avg: function(k){ return loggedDays.length ? sum[k] / loggedDays.length : 0; },
       highest: loggedDays.length ? Math.max.apply(null, loggedDays.map(function(x){ return x.total; })) : 0
     };
@@ -4467,7 +4564,8 @@
       macroBarHtml('Protein', avg('protein'), g.protein, 'protein') +
       macroBarHtml('Carbs', avg('carbs'), g.carbs, 'carbs') +
       macroBarHtml('Fat', avg('fat'), g.fat, 'fat') +
-      macroBarHtml('Fiber', avg('fiber'), g.fiber, 'fiber');
+      macroBarHtml('Fiber', avg('fiber'), g.fiber, 'fiber') +
+      microGapNote(wd.weekMeals);
 
     // ---- where the week's calories came from (4 kcal/g protein & carbs, 9 kcal/g fat)
     var pKcal = sum.protein * 4, cKcal = sum.carbs * 4, fKcal = sum.fat * 9;
@@ -4754,7 +4852,7 @@
         if (!parsed || !Array.isArray(parsed.meals)) throw new Error('Not a valid SaviorFuel backup file');
         if (!window.confirm('Replace everything currently on this device with this backup?')) return;
         STORE = {
-          meals: parsed.meals,
+          meals: parsed.meals.map(sanitizeMeal).filter(Boolean),
           goals: Object.assign({}, DEFAULT_GOALS, parsed.goals || {}),
           profile: parsed.profile || Object.assign({}, DEFAULT_PROFILE),
           appSettings: Object.assign({}, DEFAULT_APP_SETTINGS, parsed.appSettings || {}),
