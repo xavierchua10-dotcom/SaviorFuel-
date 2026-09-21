@@ -464,6 +464,22 @@
   .category-section-label:first-child{margin-top:0;}
   .category-section-total{float:right; color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-weight:400; letter-spacing:0;}
 
+  /* Log meal groups fold away: the header is a button (chevron + name,
+     count while folded, kcal at the right) and the rows slide shut. */
+  .cat-toggle{
+    display:flex; align-items:center; gap:6px; width:100%; margin:16px 0 6px;
+    background:none; border:none; text-align:left; cursor:pointer;
+    font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);
+  }
+  .cat-toggle .category-section-total{margin-left:auto; float:none;}
+  .cat-chev{width:13px; height:13px; flex-shrink:0; transition:transform 0.2s ease;}
+  .cat-toggle[aria-expanded="false"] .cat-chev{transform:rotate(-90deg);}
+  .cat-count{display:none; font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:400; letter-spacing:0; text-transform:none; color:var(--text-faint);}
+  .cat-toggle[aria-expanded="false"] .cat-count{display:inline;}
+  .meal-group .card.flat{margin-bottom:6px;}
+  @media (prefers-reduced-motion: reduce){ .cat-chev{transition:none;} }
+
   /* Subtler in-card category label for History's single-list view —
      just a small text row between groups of meal rows, no card/border
      of its own, unlike Log's standalone .category-section-label. */
@@ -1843,19 +1859,31 @@
 
     var html = '';
     MEAL_CATEGORIES.forEach(function(c){
-      var group = buckets[c.id];
-      if (group.length === 0) return;
-      var subtotal = totalsFor(group).calories;
-      html += '<div class="category-section-label">' + c.label +
-        '<span class="category-section-total">' + subtotal + ' kcal</span></div>' +
-        '<div class="card flat">' + group.map(mealRowHtml).join('') + '</div>';
+      if (buckets[c.id].length > 0) html += mealGroupHtml(c.id, c.label, buckets[c.id]);
     });
-    if (other.length > 0){
-      html += '<div class="category-section-label">Other' +
-        '<span class="category-section-total">' + totalsFor(other).calories + ' kcal</span></div>' +
-        '<div class="card flat">' + other.map(mealRowHtml).join('') + '</div>';
-    }
+    if (other.length > 0) html += mealGroupHtml('other', 'Other', other);
     return html;
+  }
+
+  // One meal time on the Log tab: a header you can tap to fold the group
+  // away (chevron, name, kcal — and a food count while it's folded), and
+  // the rows underneath. Which groups are folded is remembered.
+  function mealGroupHtml(id, label, group){
+    var collapsed = !!(STORE.appSettings.collapsedMeals && STORE.appSettings.collapsedMeals[id]);
+    var subtotal = totalsFor(group).calories;
+    return '<button type="button" class="category-section-label cat-toggle" data-action="toggle-meal-group" data-category="' + id + '" aria-expanded="' + !collapsed + '">' +
+        '<svg class="cat-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
+        '<span class="cat-name">' + label + '</span>' +
+        '<span class="cat-count">' + group.length + (group.length === 1 ? ' food' : ' foods') + '</span>' +
+        '<span class="category-section-total">' + subtotal + ' kcal</span>' +
+      '</button>' +
+      '<div class="acc meal-group' + (collapsed ? '' : ' open') + '"><div><div class="card flat">' + group.map(mealRowHtml).join('') + '</div></div></div>';
+  }
+
+  // A newly logged food shouldn't disappear into a folded group.
+  function expandMealGroup(categoryId){
+    var cm = STORE.appSettings.collapsedMeals;
+    if (cm && cm[categoryId || 'other']) delete cm[categoryId || 'other'];
   }
 
   function macroBarHtml(label, value, goal, cls, unit){
@@ -3296,6 +3324,7 @@
       logged++;
     });
     if (logged === 0) return;
+    expandMealGroup(aiScan.category);
     saveStore();
     maybeVibrate();
     closeAiScanSheet();
@@ -3350,6 +3379,7 @@
       category: ui.selectedCategory,
       loggedAt: Date.now()
     });
+    expandMealGroup(ui.selectedCategory);
     saveStore();
     maybeVibrate();
     closeAddMealOverlay(); // also clears the food selection state
@@ -4895,6 +4925,16 @@
       closeNutrientInfo();
     } else if (action === 'toggle-category-picker'){
       toggleAccordion('mealTimeRow', 'categoryAcc');
+    } else if (action === 'toggle-meal-group'){
+      var groupBody = el.nextElementSibling;
+      if (groupBody){
+        var nowOpen = !groupBody.classList.contains('open');
+        groupBody.classList.toggle('open', nowOpen);
+        el.setAttribute('aria-expanded', String(nowOpen));
+        var folded = STORE.appSettings.collapsedMeals || (STORE.appSettings.collapsedMeals = {});
+        if (nowOpen) delete folded[el.dataset.category]; else folded[el.dataset.category] = true;
+        saveStore();
+      }
     } else if (action === 'toggle-nutrition-fields'){
       toggleAccordion('nutriRow', 'nutriAcc');
     } else if (action === 'select-meal-category'){
