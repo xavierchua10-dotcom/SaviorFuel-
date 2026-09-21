@@ -1361,7 +1361,12 @@
   .face-ring{position:relative; width:38px; height:38px; flex:none;}
   .face-ring svg{width:38px; height:38px; transform:rotate(-90deg);}
   .face-ring-track{fill:none; stroke:var(--panel-3); stroke-width:4.5;}
-  .face-ring-fill{fill:none; stroke-width:4.5; stroke-linecap:round;}
+  /* The ring starts empty and draws itself in each time its side turns
+     toward you (JS adds .in to the tag), then clears again when the side
+     turns away, so it replays on every spin. */
+  .face-ring-fill{fill:none; stroke-width:4.5; stroke-linecap:round; stroke-dashoffset:var(--full, 0);}
+  .face-tag.in .face-ring-fill{stroke-dashoffset:var(--off, 0); transition:stroke-dashoffset 850ms cubic-bezier(0.22,1,0.36,1);}
+  @media (prefers-reduced-motion: reduce){ .face-tag.in .face-ring-fill{transition:none;} }
   .face-ring-fill.protein{stroke:var(--success);}
   .face-ring-fill.carbs{stroke:#5fa8d6;}
   .face-ring-fill.fat{stroke:var(--accent-2);}
@@ -3781,6 +3786,8 @@
           tagToCam.subVectors(camera.position, t.pos).normalize();
           o = Math.max(0, Math.min(1, (tagToCam.dot(t.n) - 0.55) / 0.3));
           sc = 0.82 + 0.18 * o;
+          if (!t.on && o > 0.6){ t.on = true; t.el.classList.add('in'); }        // side turned to you: draw the ring
+          else if (t.on && o < 0.15){ t.on = false; t.el.classList.remove('in'); } // turned away: reset
         }
         var sx = (tagV.x * 0.5 + 0.5) * cw;
         var sy = (-tagV.y * 0.5 + 0.5) * ch;
@@ -3830,7 +3837,8 @@
             el: d.el,
             pos: d.pos ? new THREE.Vector3(d.pos[0], d.pos[1], d.pos[2]) : new THREE.Vector3(),
             n: d.normal ? new THREE.Vector3(d.normal[0], 0, d.normal[1]) : null,
-            follow: d.follow || null
+            follow: d.follow || null,
+            on: false
           };
         });
         if (cfg.onMount) cfg.onMount(ctx, mountState);
@@ -4069,7 +4077,7 @@
         '<svg viewBox="0 0 38 38">' +
           '<circle class="face-ring-track" cx="19" cy="19" r="' + FACE_RING_R + '"></circle>' +
           '<circle class="face-ring-fill ' + f.key + (over ? ' over' : '') + '" cx="19" cy="19" r="' + FACE_RING_R + '" ' +
-            'style="stroke-dasharray:' + FACE_RING_C.toFixed(2) + ';stroke-dashoffset:' + offset.toFixed(2) + ';"></circle>' +
+            'style="stroke-dasharray:' + FACE_RING_C.toFixed(2) + ';--full:' + FACE_RING_C.toFixed(2) + ';--off:' + offset.toFixed(2) + ';"></circle>' +
         '</svg>' +
         '<div class="face-ring-pct' + (over ? ' over' : '') + '">' + percent + '%</div>' +
       '</div>' +
