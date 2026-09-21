@@ -846,13 +846,17 @@
   /* Confirmation sheet — slides up from the bottom (used for deleting a
      logged food). The backdrop fades in, the sheet rides up, and the
      grab handle can be dragged down to dismiss it. */
-  .confirm-overlay{position:absolute; inset:0; z-index:99; display:flex; align-items:flex-end; justify-content:center;}
+  .confirm-overlay{
+    position:absolute; inset:0; z-index:99; display:flex; align-items:flex-end; justify-content:center;
+    overflow:hidden;              /* the closed sheet sits below the screen — don't let it add scroll room */
+    overscroll-behavior:contain;
+  }
   .confirm-overlay.hidden{display:none;}
   .confirm-backdrop{
-    position:absolute; inset:0; background:rgba(8,9,11,0.6);
-    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
-    opacity:0; transition:opacity 220ms ease;
+    position:absolute; inset:0; background:rgba(8,9,11,0.58);
+    opacity:0; transition:opacity 260ms ease;
   }
+  .confirm-backdrop:active{filter:none;}   /* no brightness flash on the big dim layer */
   .confirm-overlay.open .confirm-backdrop{opacity:1;}
   .confirm-sheet{
     position:relative; width:100%; max-width:480px;
@@ -860,10 +864,11 @@
     border-radius:var(--radius-xl) var(--radius-xl) 0 0;
     box-shadow:0 -12px 40px rgba(0,0,0,0.45);
     padding:4px 20px calc(20px + var(--safe-bottom));
-    transform:translateY(100%);
-    transition:transform 290ms cubic-bezier(0.2,0.9,0.25,1);
+    transform:translate3d(0,100%,0);
+    transition:transform 360ms cubic-bezier(0.32,0.72,0,1);
+    will-change:transform;
   }
-  .confirm-overlay.open .confirm-sheet{transform:translateY(0);}
+  .confirm-overlay.open .confirm-sheet{transform:translate3d(0,0,0);}
   .confirm-sheet.dragging{transition:none;}
   .confirm-grab{height:28px; display:flex; align-items:center; justify-content:center; touch-action:none; cursor:grab;}
   .confirm-grab i{display:block; width:40px; height:4px; border-radius:2px; background:var(--text-faint); opacity:0.5;}
@@ -2970,7 +2975,11 @@
     overlay.classList.remove('hidden');
     void overlay.offsetHeight;          // let the closed position paint first, so it animates up
     overlay.classList.add('open');
-    document.getElementById('confirmCancel').focus(); // the safe choice is the default
+    // The safe choice is the default. preventScroll matters: the sheet is
+    // still off-screen when this runs, and a plain focus() makes the
+    // browser scroll the whole app to bring the button into view — that
+    // was the "jump" on open.
+    document.getElementById('confirmCancel').focus({ preventScroll: true });
   }
 
   function closeConfirmSheet(){
@@ -2981,7 +2990,7 @@
     sheet.classList.remove('dragging');
     sheet.style.transform = '';         // hand control back to the CSS slide-down
     confirmState.onConfirm = null;
-    confirmState.closeTimer = setTimeout(function(){ overlay.classList.add('hidden'); }, prefersReducedMotion() ? 0 : 300);
+    confirmState.closeTimer = setTimeout(function(){ overlay.classList.add('hidden'); }, prefersReducedMotion() ? 0 : 380);
   }
 
   function confirmYes(){
