@@ -1275,6 +1275,46 @@
   .day-card-macros .c{color:#5fa8d6;}
   .day-card-macros .f{color:var(--accent-2);}
 
+  /* "Meals today" drawer on the pyramid view: a small tab tucked into the
+     top-left corner (mirroring the 3D/Plain switch on the right) that
+     slides a panel out from the left edge; × or the tab closes it again. */
+  .meal-drawer{
+    position:absolute; top:0; left:0; z-index:3; display:flex; align-items:flex-start;
+    transform:translateX(calc(-100% + 42px));   /* closed: only the tab shows */
+    transition:transform 320ms cubic-bezier(0.32,0.72,0,1);
+    will-change:transform;
+  }
+  .meal-drawer.open{transform:translateX(0);}
+  .meal-drawer-panel{
+    width:min(292px, calc(100vw - 60px)); padding:12px 14px 13px;
+    background:var(--panel); border:1px solid var(--line); border-left:none; border-top:none;
+    border-radius:0 0 var(--radius-lg) 0; box-shadow:var(--card-shadow);
+    visibility:hidden; transition:visibility 0s linear 320ms;
+  }
+  .meal-drawer.open .meal-drawer-panel{visibility:visible; transition:visibility 0s;}
+  .meal-drawer-handle{
+    flex-shrink:0; width:42px; padding:9px 0 8px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    background:var(--panel-2); border:1px solid var(--line); border-left:none; border-top:none;
+    border-radius:0 var(--radius-md) var(--radius-md) 0; color:var(--accent);
+  }
+  .meal-drawer-handle svg{width:18px; height:18px;}
+  .meal-drawer-handle span{font-family:'Oswald',sans-serif; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);}
+  .meal-drawer.open .meal-drawer-handle{color:var(--text-faint);}
+  .meal-drawer-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+  .meal-drawer-head b{font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text);}
+  .meal-drawer-item{margin-bottom:9px;}
+  .meal-drawer-line{display:flex; justify-content:space-between; align-items:baseline; font-size:13px; color:var(--text-dim);}
+  .meal-drawer-line b{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; color:var(--text);}
+  .meal-drawer-bar{height:4px; margin:4px 0 5px; border-radius:2px; background:var(--panel-3); overflow:hidden;}
+  .meal-drawer-bar i{display:block; height:100%; border-radius:2px; background:var(--accent);}
+  .meal-drawer .meal-split-macros{margin-left:0; gap:12px;}
+  .meal-drawer-total{display:flex; justify-content:space-between; align-items:baseline; margin-top:2px; padding-top:8px; border-top:1px solid var(--line); font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim);}
+  .meal-drawer-total b{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; letter-spacing:0; text-transform:none; color:var(--accent);}
+  .meal-drawer-total + .meal-split-macros{margin-top:3px;}
+  .meal-drawer-empty{font-size:12.5px; color:var(--text-faint); padding:2px 0 4px;}
+  @media (prefers-reduced-motion: reduce){ .meal-drawer, .meal-drawer-panel{transition:none;} }
+
   /* 3D view: pinned to the top-right corner of the full-bleed panel. */
   .mode-toggle.floating{position:absolute; top:0; right:0; z-index:2; border-top-right-radius:0;}
 
@@ -4041,13 +4081,22 @@
   }
 
   function renderInsights3D(){
-    var totals = totalsFor(mealsForDay(todayKey()));
+    var todayMeals = mealsForDay(todayKey());
+    var totals = totalsFor(todayMeals);
     var goals = STORE.goals;
     var tagsHtml = PYRAMID_FACES.map(function(f, k){ return faceTagHtml(k, totals, goals); }).join('');
     document.getElementById('view').innerHTML =
       '<div class="card model-card">' +
         '<div class="model-stage" id="modelStage"></div>' +
         tagsHtml +
+        // slide-out "meals today" drawer, tucked into the top-left corner
+        '<div class="meal-drawer" id="mealDrawer">' +
+          '<div class="meal-drawer-panel" id="mealDrawerPanel">' + mealDrawerHtml(mealBreakdown(todayMeals), totals) + '</div>' +
+          '<button type="button" class="meal-drawer-handle" data-action="toggle-meal-drawer" aria-label="Show today\'s meals" aria-expanded="false" aria-controls="mealDrawerPanel">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>' +
+            '<span>Meals</span>' +
+          '</button>' +
+        '</div>' +
         '<div class="model-status" id="modelStatus">' +
           '<span id="modelStatusText">Loading 3D model…</span>' +
           '<div class="model-bar" id="modelBarWrap"><i id="modelBar"></i></div>' +
@@ -4102,6 +4151,31 @@
     return MEAL_NUTRIENTS.map(function(n){
       return '<span class="' + n.cls + '">' + n.short + ' <b>' + Math.round((r[n.key] || 0) / (perDay || 1)) + '</b></span>';
     }).join(' ');
+  }
+
+  // Contents of the pyramid's slide-out "Meals today" drawer: one block per
+  // meal time (name + kcal, a thin share bar, and its protein / carbs /
+  // fat / fibre), then the day's totals.
+  function mealDrawerHtml(rows, totals){
+    var head = '<div class="meal-drawer-head"><b>Today by meal</b>' +
+      '<button type="button" class="day-card-close" data-action="close-meal-drawer" aria-label="Close">&times;</button></div>';
+    if (rows.length === 0) return head + '<div class="meal-drawer-empty">Nothing logged today.</div>';
+    var total = rows.reduce(function(acc, r){ return acc + r.kcal; }, 0);
+    return head + rows.map(function(r){
+      var share = total > 0 ? Math.round(r.kcal / total * 100) : 0;
+      return '<div class="meal-drawer-item">' +
+        '<div class="meal-drawer-line"><span>' + esc(r.label) + '</span> <b>' + r.kcal + ' kcal</b></div>' +
+        '<div class="meal-drawer-bar"><i style="width:' + Math.max(share, 2) + '%"></i></div>' +
+        '<div class="meal-split-macros">' + mealMacrosHtml(r, 1) + '</div>' +
+      '</div>';
+    }).join('') +
+    '<div class="meal-drawer-total"><span>Total</span> <b>' + Math.round(totals.calories) + ' kcal</b></div>' +
+    '<div class="meal-split-macros">' +
+      '<span class="p">P <b>' + Math.round(totals.protein) + '</b></span> ' +
+      '<span class="c">C <b>' + Math.round(totals.carbs) + '</b></span> ' +
+      '<span class="f">F <b>' + Math.round(totals.fat) + '</b></span> ' +
+      '<span class="fi">Fib <b>' + Math.round(totals.fiber) + '</b></span>' +
+    '</div>';
   }
 
   // One entry per meal time: label, a bar sized by its share of the total,
@@ -4771,6 +4845,15 @@
       switchOverviewModeWithFade(el.dataset.mode);
     } else if (action === 'set-weekly-mode'){
       switchWeeklyModeWithFlip(el.dataset.mode);
+    } else if (action === 'toggle-meal-drawer' || action === 'close-meal-drawer'){
+      var drawer = document.getElementById('mealDrawer');
+      if (drawer){
+        var open = action === 'toggle-meal-drawer' ? !drawer.classList.contains('open') : false;
+        drawer.classList.toggle('open', open);
+        var handleBtn = drawer.querySelector('.meal-drawer-handle');
+        handleBtn.setAttribute('aria-expanded', String(open));
+        handleBtn.setAttribute('aria-label', open ? 'Hide today\'s meals' : 'Show today\'s meals');
+      }
     } else if (action === 'close-day-card'){
       WeekWheel3D.ctx.selected = null;
       var dayCardEl = document.getElementById('dayCard');
