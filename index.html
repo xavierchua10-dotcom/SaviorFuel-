@@ -3786,8 +3786,10 @@
           tagToCam.subVectors(camera.position, t.pos).normalize();
           o = Math.max(0, Math.min(1, (tagToCam.dot(t.n) - 0.55) / 0.3));
           sc = 0.82 + 0.18 * o;
-          if (!t.on && o > 0.6){ t.on = true; t.el.classList.add('in'); }        // side turned to you: draw the ring
-          else if (t.on && o < 0.15){ t.on = false; t.el.classList.remove('in'); } // turned away: reset
+          // Draw the ring as its tag starts to fade in; reset it only once the
+          // tag has all but vanished, so nobody sees an emptied ring.
+          if (!t.on && o > 0.35){ t.on = true; t.el.classList.add('in'); }
+          else if (t.on && o < 0.05){ t.on = false; t.el.classList.remove('in'); }
         }
         var sx = (tagV.x * 0.5 + 0.5) * cw;
         var sy = (-tagV.y * 0.5 + 0.5) * ch;
