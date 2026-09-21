@@ -1052,6 +1052,45 @@
   body[data-density="compact"] #view > .overview-plain:first-child{padding:0 14px;}
   .overview-plain .today-card-head{min-height:34px; margin-bottom:8px;}
   .overview-plain .mode-toggle{position:absolute; top:0; right:0; border-top-right-radius:0;}
+  /* Week wheel: day tags pinned above each wedge, a summary chip, and
+     the card that opens when you tap a wedge. */
+  .day-tag{
+    position:absolute; left:0; top:0; z-index:2; pointer-events:none;
+    display:flex; flex-direction:column; align-items:center; gap:0;
+    padding:3px 9px 4px; min-width:44px;
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-md);
+    box-shadow:0 3px 10px rgba(0,0,0,0.35);
+    opacity:0; transform:translate3d(-300px,-300px,0); will-change:transform, opacity;
+  }
+  .day-tag-name{font-family:'Oswald',sans-serif; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); line-height:1.3;}
+  .day-tag-val{font-family:'Oswald',sans-serif; font-size:15px; font-weight:700; color:var(--text); line-height:1.1;}
+  .day-tag-val.over{color:var(--accent-2);}
+  .day-tag.today{border-color:var(--accent);}
+  .day-tag.today .day-tag-name{color:var(--accent);}
+  .day-tag.skipped .day-tag-val{color:var(--text-faint); font-weight:400;}
+  .week-chip{
+    position:absolute; top:10px; left:12px; z-index:2; pointer-events:none;
+    padding:6px 12px; border-radius:var(--radius-pill);
+    background:var(--panel); border:1px solid var(--line);
+    font-size:11.5px; color:var(--text-dim);
+  }
+  .week-chip b{color:var(--text);}
+  .day-card{
+    position:absolute; left:12px; right:12px; bottom:14px; z-index:3;
+    padding:12px 14px; background:var(--panel); border:1px solid var(--line);
+    border-radius:var(--radius-lg); box-shadow:var(--card-shadow);
+  }
+  .day-card.hidden{display:none;}
+  .day-card-head{display:flex; align-items:baseline; gap:10px;}
+  .day-card-head b{font-family:'Oswald',sans-serif; font-size:16px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text);}
+  .day-card-head span{flex:1; font-size:13px; color:var(--text-dim);}
+  .day-card-close{background:none; border:none; color:var(--text-faint); font-size:22px; line-height:1; padding:0 2px; cursor:pointer; align-self:center;}
+  .day-card-macros{display:flex; justify-content:space-between; gap:8px; margin-top:8px; font-size:12px; color:var(--text-dim);}
+  .day-card-macros b{color:var(--text);}
+  .day-card-macros .p{color:var(--success);}
+  .day-card-macros .c{color:#5fa8d6;}
+  .day-card-macros .f{color:var(--accent-2);}
+
   /* 3D view: pinned to the top-right corner of the full-bleed panel. */
   .mode-toggle.floating{position:absolute; top:0; right:0; z-index:2; border-top-right-radius:0;}
 
@@ -1329,7 +1368,7 @@
     return 'dinner';
   }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
-  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d', aiScanConsent: false };
+  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d', weeklyMode: '3d', aiScanConsent: false };
   var APP_VERSION = '0.1.0';
 
   function cmToIn(cm){ return cm / 2.54; }
@@ -2900,37 +2939,45 @@
   }
 
   /* =========================================================
-     3D MODEL — Insights > Daily Overview panel
-     Three.js (r128, same build as the Demo3d viewer) is loaded from
-     CDN the first time the panel is actually opened — same lazy
-     pattern as the food-photo model — so it costs nothing on app
-     start. One renderer/scene lives for the whole session: the
-     panel's DOM is rebuilt on every render, so mount() just moves
-     the existing canvas into the fresh container, and unmount()
-     stops the render loop whenever the panel isn't on screen.
-     models/food-pyramid-v2.glb is a decimated copy of the source
-     model (~58k triangles, 2048px colour map) so it loads in
-     seconds on a phone; the service worker caches it after the
+     3D VIEWERS — Insights > Daily Overview (food pyramid) and
+     Insights > Weekly Overview (week wheel)
+     Three.js (r128) is loaded from CDN the first time a 3D panel
+     is actually opened — same lazy pattern as the food-photo model —
+     so it costs nothing on app start. createModelViewer() builds one
+     viewer per model; each keeps ONE renderer/scene for the whole
+     session: the panel's DOM is rebuilt on every render, so mount()
+     just moves the existing canvas into the fresh container, and
+     unmount() stops the render loop whenever the panel isn't on
+     screen. The .glb files in /models are decimated copies of the
+     source models (~60k triangles, 2048px colour map) so they load in
+     seconds on a phone; the service worker caches them after the
      first load.
      ========================================================= */
-  var Model3D = (function(){
-    var MODEL_URL = 'models/food-pyramid-v2.glb';
-    var MODEL_BYTES_ESTIMATE = 2748140; // for the progress bar when the server sends no length
-    var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-    var GLTF_LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
-    var ORBIT_CONTROLS_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+  var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+  var GLTF_LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
+  var ORBIT_CONTROLS_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
 
+  function prefersReducedMotion(){
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  // cfg: url, bytes (size estimate for the progress bar), aria, az/el/lift
+  // (starting camera angle and vertical nudge), widthFactor/heightFactor
+  // (how much of the panel the model fills), autoRotateSpeed, tagMode
+  // ('facing' = a tag fades with its side of the model turning away;
+  // 'billboard' = always shown, a little fainter when far), and optional
+  // hooks: onModel(ctx), onMount(ctx, state), onFrame(ctx, now) -> true
+  // while animating, onTap(ctx, pickedObjectOrNull), onUnmount(ctx).
+  function createModelViewer(cfg){
     var readyPromise = null;  // libs + scene + model; cleared on failure so reopening the tab retries
     var stage = null;         // container currently on screen, null when the panel isn't showing
     var scene, camera, renderer, controls, model = null;
-    var fit = { center: null, hx: 0.5, hy: 0.4, hz: 0.47, rxz: 0.69, az: 0.32, el: 0.2, lift: -0.04 };
+    var ctx = {};             // shared with the hooks above
+    var fit = { center: null, hx: 0.5, hy: 0.4, hz: 0.47, rxz: 0.69, az: cfg.az, el: cfg.el, lift: cfg.lift };
     var placed = false, userMoved = false, dirty = true;
     var rafId = 0, resumeTimer = 0, resizeObserver = null;
     var tagDefs = [], tagList = [], tagV = null, tagToCam = null; // labels pinned to points on the model (see updateTags)
-
-    function reduceMotion(){
-      return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    }
+    var mountState = null, pointerDown = null;
 
     function setStatus(text, progress){
       var box = document.getElementById('modelStatus');
@@ -2972,7 +3019,7 @@
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.setClearColor(0x000000, 0);
       renderer.domElement.setAttribute('role', 'img');
-      renderer.domElement.setAttribute('aria-label', 'Interactive 3D food pyramid. Drag to rotate, pinch to zoom.');
+      renderer.domElement.setAttribute('aria-label', cfg.aria);
       // Phones drop the GL context when the browser is backgrounded;
       // three.js rebuilds its state on restore, we just need to redraw.
       renderer.domElement.addEventListener('webglcontextlost', function(e){ e.preventDefault(); });
@@ -3000,31 +3047,50 @@
       // Horizontal spin only: min = max pins the camera at one
       // elevation, so vertical drags do nothing.
       controls.minPolarAngle = controls.maxPolarAngle = Math.PI / 2 - fit.el;
-      controls.autoRotateSpeed = 1.2;
+      controls.autoRotateSpeed = cfg.autoRotateSpeed || 1.2;
       controls.addEventListener('start', function(){
         userMoved = true;
         controls.autoRotate = false;
         clearTimeout(resumeTimer);
       });
       controls.addEventListener('end', function(){
-        if (reduceMotion()) return;
+        if (prefersReducedMotion()) return;
         resumeTimer = setTimeout(function(){ controls.autoRotate = true; }, 3500);
       });
       controls.addEventListener('change', function(){ dirty = true; });
+
+      // A short press with barely any movement is a tap (a drag is the
+      // camera's): find which model part is under the finger.
+      if (cfg.onTap){
+        var el = renderer.domElement;
+        el.addEventListener('pointerdown', function(e){ pointerDown = { x: e.clientX, y: e.clientY, t: Date.now() }; });
+        el.addEventListener('pointerup', function(e){
+          var d = pointerDown; pointerDown = null;
+          if (!d || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 8 || Date.now() - d.t > 450) return;
+          var rect = el.getBoundingClientRect();
+          var ndc = new THREE.Vector2(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
+          var rc = new THREE.Raycaster();
+          rc.setFromCamera(ndc, camera);
+          scene.updateMatrixWorld();
+          var hits = rc.intersectObjects(ctx.pickables || [], false);
+          cfg.onTap(ctx, hits.length ? hits[0].object : null);
+          dirty = true;
+        });
+      }
     }
 
     function loadModel(){
       if (model) return Promise.resolve();
       return new Promise(function(resolve, reject){
-        new THREE.GLTFLoader().load(MODEL_URL, function(gltf){
+        new THREE.GLTFLoader().load(cfg.url, function(gltf){
           model = gltf.scene;
           var maxAniso = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
           model.traverse(function(node){
             if (!node.isMesh) return;
             (Array.isArray(node.material) ? node.material : [node.material]).forEach(function(m){
-              // Nothing on a food pyramid is really metal, and with no
-              // environment map any metalness would render near-black —
-              // so ignore the metal channel and keep the roughness one.
+              // Nothing here is really metal, and with no environment
+              // map any metalness would render near-black — so ignore
+              // the metal channel and keep the roughness one.
               m.metalness = 0;
               m.metalnessMap = null;
               if (m.map) m.map.anisotropy = maxAniso;
@@ -3039,26 +3105,27 @@
           fit.hy = size.y / 2;
           fit.hz = size.z / 2;
           fit.rxz = Math.sqrt(size.x * size.x + size.z * size.z) / 2; // spins around Y, so use the footprint's radius
+          ctx.model = model; ctx.scene = scene; ctx.camera = camera; ctx.controls = controls; ctx.renderer = renderer; ctx.fit = fit;
+          if (cfg.onModel) cfg.onModel(ctx);
           resolve();
         }, function(evt){
-          var total = (evt.lengthComputable && evt.total) ? evt.total : MODEL_BYTES_ESTIMATE;
+          var total = (evt.lengthComputable && evt.total) ? evt.total : cfg.bytes;
           setStatus('Loading 3D model…', Math.min(evt.loaded / total, 0.95));
         }, function(err){
-          reject(err || new Error('Could not load ' + MODEL_URL));
+          reject(err || new Error('Could not load ' + cfg.url));
         });
       });
     }
 
-    // Default camera distance: big and close — the pyramid is about
-    // 60% of the panel's height and its base runs past the screen
-    // edges (matches the size picked from a screenshot; pinch to zoom
-    // out for the whole thing). On a very wide/short screen the
-    // height limit wins so it never overflows top/bottom.
+    // Default camera distance: how much of the panel the model fills is
+    // set by cfg.widthFactor (>1 = the model runs past the screen edges,
+    // like the pyramid; <1 = fully in view with margin). On a very
+    // wide/short screen the height limit wins so it never overflows.
     function fitDistance(){
       var tanV = Math.tan(camera.fov * Math.PI / 360);
       var tanH = tanV * camera.aspect;
-      var byWidth = fit.hx / (1.40 * tanH) + fit.hz;
-      var byHeight = fit.hy / (0.92 * tanV) + fit.hz * 0.6;
+      var byWidth = fit.hx / (cfg.widthFactor * tanH) + fit.hz;
+      var byHeight = fit.hy / (cfg.heightFactor * tanV) + fit.hz * 0.6;
       return Math.max(byWidth, byHeight);
     }
 
@@ -3100,28 +3167,40 @@
 
     // Pins HTML labels to points on the model: each frame the 3D point
     // is projected to screen coordinates, so the label rides along as
-    // the pyramid turns. A label fades in as its side turns toward the
-    // camera (fully visible within ~30 degrees, gone past ~60) and
-    // shrinks a little as it turns away.
+    // the model turns. 'facing' tags fade in as their side turns toward
+    // the camera (fully visible within ~30 degrees, gone past ~60) and
+    // shrink a little as it turns away; 'billboard' tags stay visible
+    // and just get a little fainter and smaller on the far side.
     function updateTags(){
       if (!tagList.length || !stage) return;
       var cw = stage.clientWidth, ch = stage.clientHeight;
+      var camDist = camera.position.distanceTo(controls.target);
       for (var i = 0; i < tagList.length; i++){
         var t = tagList[i];
+        if (t.follow) t.follow(ctx, t.pos); // pinned to something that moves (e.g. a rising wedge)
         tagV.copy(t.pos).project(camera);
-        tagToCam.subVectors(camera.position, t.pos).normalize();
-        var o = Math.max(0, Math.min(1, (tagToCam.dot(t.n) - 0.55) / 0.3));
+        var o, sc;
+        if (cfg.tagMode === 'billboard'){
+          var far = Math.max(0, Math.min(1, (camera.position.distanceTo(t.pos) - (camDist - fit.rxz)) / (2 * fit.rxz)));
+          o = 1 - 0.5 * far;
+          sc = 1 - 0.16 * far;
+        } else {
+          tagToCam.subVectors(camera.position, t.pos).normalize();
+          o = Math.max(0, Math.min(1, (tagToCam.dot(t.n) - 0.55) / 0.3));
+          sc = 0.82 + 0.18 * o;
+        }
         var sx = (tagV.x * 0.5 + 0.5) * cw;
         var sy = (-tagV.y * 0.5 + 0.5) * ch;
         t.el.style.opacity = o.toFixed(3);
-        t.el.style.transform = 'translate3d(' + sx.toFixed(1) + 'px,' + sy.toFixed(1) + 'px,0) translate(-50%,-50%) scale(' + (0.82 + 0.18 * o).toFixed(3) + ')';
+        t.el.style.transform = 'translate3d(' + sx.toFixed(1) + 'px,' + sy.toFixed(1) + 'px,0) translate(-50%,-50%) scale(' + sc.toFixed(3) + ')';
       }
     }
 
     function tick(){
       rafId = requestAnimationFrame(tick);
+      var animating = cfg.onFrame ? cfg.onFrame(ctx, performance.now()) : false;
       var moved = controls.update();
-      if (moved || dirty || controls.autoRotate){
+      if (moved || dirty || controls.autoRotate || animating){
         renderer.render(scene, camera);
         updateTags();
         dirty = false;
@@ -3134,10 +3213,14 @@
 
     // tags: [{ el, pos: [x, y, z], normal: [nx, nz] }] — labels to pin
     // to points on the model (positions are in the model's own
-    // coordinates; normal = the direction that side faces).
-    function mount(container, tags){
+    // coordinates; normal = the direction that side faces), or
+    // [{ el, follow: function(ctx, outVector3) }] for labels that follow
+    // a moving part. state: whatever the model's hooks need (the wheel
+    // gets the week's numbers).
+    function mount(container, tags, state){
       stage = container;
       tagDefs = tags || [];
+      mountState = state || null;
       layout();
       if (!readyPromise){
         readyPromise = ensureLibs()
@@ -3150,9 +3233,15 @@
         tagV = tagV || new THREE.Vector3();
         tagToCam = tagToCam || new THREE.Vector3();
         tagList = tagDefs.map(function(d){
-          return { el: d.el, pos: new THREE.Vector3(d.pos[0], d.pos[1], d.pos[2]), n: new THREE.Vector3(d.normal[0], 0, d.normal[1]) };
+          return {
+            el: d.el,
+            pos: d.pos ? new THREE.Vector3(d.pos[0], d.pos[1], d.pos[2]) : new THREE.Vector3(),
+            n: d.normal ? new THREE.Vector3(d.normal[0], 0, d.normal[1]) : null,
+            follow: d.follow || null
+          };
         });
-        controls.autoRotate = !reduceMotion();
+        if (cfg.onMount) cfg.onMount(ctx, mountState);
+        controls.autoRotate = !prefersReducedMotion();
         layout();
         resize();
         hideStatus();
@@ -3176,6 +3265,8 @@
       stage = null;
       tagDefs = [];
       tagList = [];
+      mountState = null;
+      if (cfg.onUnmount) cfg.onUnmount(ctx);
       stopLoop();
       clearTimeout(resumeTimer);
       if (resizeObserver){ resizeObserver.disconnect(); resizeObserver = null; }
@@ -3183,8 +3274,114 @@
 
     window.addEventListener('resize', function(){ layout(); });
 
-    return { mount: mount, unmount: unmount };
-  })();
+    return {
+      mount: mount,
+      unmount: unmount,
+      ctx: ctx,                                 // for the panel's own controls (e.g. closing the day card)
+      redraw: function(){ dirty = true; }
+    };
+  }
+
+  // Daily Overview: the food pyramid (four sides = four nutrients).
+  var Model3D = createModelViewer({
+    url: 'models/food-pyramid-v2.glb',
+    bytes: 2748140, // for the progress bar when the server sends no length
+    aria: 'Interactive 3D food pyramid. Drag to rotate, pinch to zoom.',
+    az: 0.32, el: 0.2, lift: -0.04,
+    widthFactor: 1.40, heightFactor: 0.92,
+    autoRotateSpeed: 1.2,
+    tagMode: 'facing'
+  });
+
+  // Weekly Overview: the week wheel — a wooden platter cut into seven
+  // wedges, one per day (models/week-wheel-v1.glb has them as separate
+  // parts named day0 = six days ago ... day6 = today). Each wedge rises
+  // with that day's calories against the goal, dims if nothing was
+  // logged, glows red when over the goal, and today gently pulses; a
+  // thin ring marks the goal height. Tap a wedge to select it.
+  var WHEEL_LIFT_MAX = 0.17;  // how far a wedge rises at 140% of the goal
+  var WHEEL_LIFT_AT_CAP = 1.4;
+  var WHEEL_PLATTER_TOP = 0.067; // height of the wooden surface, for the goal ring and tags
+  var WeekWheel3D = createModelViewer({
+    url: 'models/week-wheel-v1.glb',
+    bytes: 2723556,
+    aria: 'Interactive 3D week wheel: one wedge for each of the last seven days, rising with that day\'s calories. Drag to spin, tap a wedge for details.',
+    az: 0, el: 0.85, lift: -0.02,
+    widthFactor: 0.88, heightFactor: 0.92,
+    autoRotateSpeed: 0.7,
+    tagMode: 'billboard',
+
+    onModel: function(ctx){
+      ctx.wedges = [];
+      ctx.pickables = [];
+      ctx.model.children.forEach(function(mesh){
+        if (!mesh.isMesh || mesh.userData.day == null) return;
+        mesh.material = mesh.material.clone(); // its own copy, so each day can be tinted on its own
+        ctx.wedges[mesh.userData.day] = {
+          mesh: mesh, mat: mesh.material,
+          cx: mesh.userData.cx, cz: mesh.userData.cz, topY: mesh.userData.topY,
+          target: 0, selCur: 0, over: false, today: false
+        };
+        ctx.pickables.push(mesh);
+      });
+      // goal ring: sits just outside the platter at the height a wedge
+      // reaches when the day exactly meets the calorie goal
+      ctx.ring = new THREE.Mesh(
+        new THREE.TorusGeometry(0.535, 0.0035, 6, 120),
+        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 })
+      );
+      ctx.ring.rotation.x = Math.PI / 2;
+      ctx.scene.add(ctx.ring);
+    },
+
+    onMount: function(ctx, state){
+      ctx.state = state;
+      ctx.selected = null;
+      ctx.startTime = performance.now();
+      var goal = state && state.goal > 0 ? state.goal : 0;
+      ctx.ring.visible = goal > 0;
+      ctx.ring.position.y = WHEEL_PLATTER_TOP + WHEEL_LIFT_MAX / WHEEL_LIFT_AT_CAP;
+      ctx.wedges.forEach(function(w, k){
+        var d = state.days[k];
+        var ratio = goal > 0 ? d.total / goal : 0;
+        w.target = d.logged ? WHEEL_LIFT_MAX * Math.min(ratio, WHEEL_LIFT_AT_CAP) / WHEEL_LIFT_AT_CAP : 0;
+        w.over = goal > 0 && d.total > goal;
+        w.today = !!d.isToday;
+        w.selCur = 0;
+        w.mat.color.setScalar(d.logged ? 1 : 0.45); // days with nothing logged look faded
+        w.mesh.position.y = 0;
+      });
+    },
+
+    onFrame: function(ctx, now){
+      if (!ctx.state) return false;
+      var calm = prefersReducedMotion();
+      var t = now - ctx.startTime, busy = false;
+      var pulse = 0.5 + 0.5 * Math.sin(now / 420);
+      ctx.wedges.forEach(function(w, k){
+        var local = calm ? 1 : Math.max(0, Math.min(1, (t - k * 70) / 800)); // wedges rise one after another
+        var e = 1 - Math.pow(1 - local, 3);
+        if (local < 1) busy = true;
+        var sel = ctx.selected === k ? 0.035 : 0;
+        w.selCur += (sel - w.selCur) * (calm ? 1 : 0.22);
+        if (Math.abs(sel - w.selCur) > 0.0005) busy = true;
+        w.mesh.position.y = w.target * e + w.selCur;
+        var r = 0, g = 0, b = 0;
+        if (w.over){ r += 0.20; g += 0.045; b += 0.03; }                       // over the goal: red glow
+        if (ctx.selected === k){ r += 0.30; g += 0.22; b += 0.05; }            // selected: gold
+        else if (w.today){ var a = calm ? 0.12 : 0.06 + 0.12 * pulse; r += a * 0.95; g += a * 0.7; b += a * 0.2; } // today: soft gold pulse
+        w.mat.emissive.setRGB(r, g, b);
+      });
+      return busy || !calm; // the today pulse needs a frame every tick
+    },
+
+    onTap: function(ctx, obj){
+      var k = obj && obj.userData ? obj.userData.day : null;
+      ctx.selected = (k == null || k === ctx.selected) ? null : k;
+      if (ctx.state && ctx.state.onSelect) ctx.state.onSelect(ctx.selected);
+    }
+  });
+
 
   /* =========================================================
      RENDER — INSIGHTS TAB
@@ -3216,17 +3413,35 @@
     return STORE.appSettings.overviewMode === 'plain' ? 'plain' : '3d';
   }
 
-  function overviewModeToggleHtml(extraClass){
-    var mode = overviewMode();
+  // The two-icon 3D / Plain switch. `action` is the click action to fire
+  // (set-overview-mode for the Daily view, set-weekly-mode for the
+  // Weekly view), `mode` the one currently showing.
+  function modeToggleHtml(action, mode, plainIcon, plainLabel, extraClass){
     var svgAttrs = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
-    return '<div class="mode-toggle' + (extraClass ? ' ' + extraClass : '') + '" role="group" aria-label="Overview style">' +
-      '<button type="button" data-action="set-overview-mode" data-mode="3d" aria-label="3D view" aria-pressed="' + (mode === '3d') + '" class="' + (mode === '3d' ? 'active' : '') + '">' +
+    return '<div class="mode-toggle' + (extraClass ? ' ' + extraClass : '') + '" role="group" aria-label="View style">' +
+      '<button type="button" data-action="' + action + '" data-mode="3d" aria-label="3D view" aria-pressed="' + (mode === '3d') + '" class="' + (mode === '3d' ? 'active' : '') + '">' +
         '<svg ' + svgAttrs + '><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' +
       '</button>' +
-      '<button type="button" data-action="set-overview-mode" data-mode="plain" aria-label="Plain view (rings and numbers)" aria-pressed="' + (mode === 'plain') + '" class="' + (mode === 'plain' ? 'active' : '') + '">' +
-        '<svg ' + svgAttrs + '><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>' +
+      '<button type="button" data-action="' + action + '" data-mode="plain" aria-label="' + plainLabel + '" aria-pressed="' + (mode === 'plain') + '" class="' + (mode === 'plain' ? 'active' : '') + '">' +
+        '<svg ' + svgAttrs + '>' + plainIcon + '</svg>' +
       '</button>' +
     '</div>';
+  }
+
+  var ICON_PIE = '<path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path>';
+  var ICON_BARS = '<line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>';
+
+  function overviewModeToggleHtml(extraClass){
+    return modeToggleHtml('set-overview-mode', overviewMode(), ICON_PIE, 'Plain view (rings and numbers)', extraClass);
+  }
+
+  // Weekly Overview has the same two modes: '3d' (the week wheel) and
+  // 'plain' (the bars and averages).
+  function weeklyMode(){
+    return STORE.appSettings.weeklyMode === 'plain' ? 'plain' : '3d';
+  }
+  function weeklyModeToggleHtml(extraClass){
+    return modeToggleHtml('set-weekly-mode', weeklyMode(), ICON_BARS, 'Plain view (bars and averages)', extraClass);
   }
 
   function renderInsightsToday(){
@@ -3328,30 +3543,121 @@
     document.getElementById('view').innerHTML = html;
   }
 
-  function renderInsightsTrends(){
-    // Last 7 calendar days (today plus the 6 before it), each bar showing
-    // that day's total calories so day-to-day swings stay visible, then
-    // a few week-level numbers worked out from the same meals: averages
-    // (over the days you actually logged), how the week's calories split
-    // between protein/carbs/fat, and how many days landed near the goal.
-    var DAYS_TO_SHOW = 7;
+  // The last 7 calendar days (today plus the 6 before it) worked out
+  // from the meals: per-day totals, plus the numbers both Weekly views
+  // share. days[0] is six days ago, days[6] is today.
+  function weekData(){
     var g = STORE.goals;
     var days = [];
-    for (var d = DAYS_TO_SHOW - 1; d >= 0; d--){
+    for (var d = 6; d >= 0; d--){
       var key = dateKey(Date.now() - d * 86400000);
       var dayMeals = mealsForDay(key);
       var t = totalsFor(dayMeals);
       days.push({
         label: d === 0 ? 'Today' : new Date(key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }),
+        isToday: d === 0,
         logged: dayMeals.length > 0,
         total: Math.round(t.calories),
         t: t
       });
     }
+    var loggedDays = days.filter(function(x){ return x.logged; });
+    var sum = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
+    loggedDays.forEach(function(x){
+      Object.keys(sum).forEach(function(k){ sum[k] += x.t[k] || 0; });
+    });
+    return {
+      days: days, goal: g.calories, goals: g, loggedDays: loggedDays, sum: sum,
+      avg: function(k){ return loggedDays.length ? sum[k] / loggedDays.length : 0; },
+      highest: loggedDays.length ? Math.max.apply(null, loggedDays.map(function(x){ return x.total; })) : 0
+    };
+  }
+
+  function renderInsightsTrends(){
+    if (weeklyMode() === 'plain') renderTrendsPlain();
+    else renderTrends3D();
+  }
+
+  // ---- Weekly Overview, 3D: a wooden wheel of seven wedges, one per day
+  function dayTagHtml(d, k){
+    var cls = 'day-tag' + (d.isToday ? ' today' : '') + (!d.logged ? ' skipped' : '');
+    return '<div class="' + cls + '" id="dayTag' + k + '">' +
+      '<span class="day-tag-name">' + esc(d.label) + '</span>' +
+      '<span class="day-tag-val" data-over="' + (d.logged ? '1' : '0') + '">' + (d.logged ? d.total : '—') + '</span>' +
+    '</div>';
+  }
+
+  function dayCardHtml(d, goal){
+    var head = '<div class="day-card-head"><b>' + esc(d.label) + '</b>';
+    if (!d.logged){
+      return head + '<span>Nothing logged</span><button type="button" class="day-card-close" data-action="close-day-card" aria-label="Close">&times;</button></div>';
+    }
+    var pctGoal = goal > 0 ? Math.round(d.total / goal * 100) : 0;
+    return head + '<span>' + d.total + ' kcal' + (goal > 0 ? ' · ' + pctGoal + '% of goal' : '') + '</span>' +
+      '<button type="button" class="day-card-close" data-action="close-day-card" aria-label="Close">&times;</button></div>' +
+      '<div class="day-card-macros">' +
+        '<span class="p">Protein <b>' + Math.round(d.t.protein) + 'g</b></span>' +
+        '<span class="c">Carbs <b>' + Math.round(d.t.carbs) + 'g</b></span>' +
+        '<span class="f">Fat <b>' + Math.round(d.t.fat) + 'g</b></span>' +
+      '</div>';
+  }
+
+  function renderTrends3D(){
+    var wd = weekData();
+    var tagsHtml = wd.days.map(dayTagHtml).join('');
+    var chip = wd.loggedDays.length
+      ? '<div class="week-chip"><b>' + Math.round(wd.avg('calories')) + '</b> kcal/day avg · <b>' + wd.loggedDays.length + '/7</b> days logged</div>'
+      : '<div class="week-chip">Nothing logged in the last 7 days</div>';
+    document.getElementById('view').innerHTML =
+      '<div class="card model-card">' +
+        '<div class="model-stage" id="modelStage"></div>' +
+        tagsHtml + chip +
+        '<div class="day-card hidden" id="dayCard"></div>' +
+        '<div class="model-status" id="modelStatus">' +
+          '<span id="modelStatusText">Loading 3D model…</span>' +
+          '<div class="model-bar" id="modelBarWrap"><i id="modelBar"></i></div>' +
+        '</div>' +
+        weeklyModeToggleHtml('floating') +
+      '</div>';
+    // tags float just above their wedge, and ride up with it as it rises
+    var tags = wd.days.map(function(d, k){
+      return { el: document.getElementById('dayTag' + k), follow: function(ctx, out){
+        var w = ctx.wedges[k];
+        if (w) out.set(w.cx * 1.02, w.topY + w.mesh.position.y + 0.08, w.cz * 1.02);
+      } };
+    });
+    try {
+      WeekWheel3D.mount(document.getElementById('modelStage'), tags, {
+        days: wd.days, goal: wd.goal,
+        onSelect: function(k){
+          var card = document.getElementById('dayCard');
+          if (!card) return;
+          if (k == null){ card.classList.add('hidden'); return; }
+          card.innerHTML = dayCardHtml(wd.days[k], wd.goal);
+          card.classList.remove('hidden');
+        }
+      });
+      // colour a day's number red when it went over the goal
+      wd.days.forEach(function(d, k){
+        var el = document.querySelector('#dayTag' + k + ' .day-tag-val');
+        if (el && d.logged && wd.goal > 0 && d.total > wd.goal) el.classList.add('over');
+      });
+    } catch (err){
+      console.error('SaviorFuel: 3D week wheel failed to start —', err);
+    }
+  }
+
+  // ---- Weekly Overview, plain: the bars, week numbers, average macros,
+  // calorie split and consistency line.
+  function renderTrendsPlain(){
+    var wd = weekData();
+    var g = wd.goals, days = wd.days, loggedDays = wd.loggedDays, avg = wd.avg, sum = wd.sum;
+    var DAYS_TO_SHOW = 7;
     var dayMax = Math.max(g.calories, Math.max.apply(null, days.map(function(x){ return x.total; })), 1);
     var goalPos = pct(g.calories, dayMax); // where the goal line sits along each bar
 
-    var html = '<div class="card flat"><h3 class="section-label">Last 7 days — daily calories</h3>';
+    var html = '<div class="overview-plain"><div class="today-card-head"><h3 class="section-label">Last 7 days — daily calories</h3>' +
+      weeklyModeToggleHtml('') + '</div>';
     html += days.map(function(x){
       return '<div class="insight-bar-row">' +
         '<div class="insight-bar-day">' + x.label + '</div>' +
@@ -3364,25 +3670,17 @@
     }).join('');
     if (g.calories > 0) html += '<div class="week-legend-note"><i></i>Goal ' + g.calories + ' kcal</div>';
 
-    var loggedDays = days.filter(function(x){ return x.logged; });
     if (loggedDays.length === 0){
       html += '<div class="insight-caption">Log a meal to see your weekly averages and macro split.</div></div>';
       document.getElementById('view').innerHTML = html;
       return;
     }
 
-    var sum = { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
-    loggedDays.forEach(function(x){
-      Object.keys(sum).forEach(function(k){ sum[k] += x.t[k] || 0; });
-    });
-    var avg = function(k){ return sum[k] / loggedDays.length; };
-    var highest = Math.max.apply(null, loggedDays.map(function(x){ return x.total; }));
-
     // ---- headline numbers
     html += '<div class="week-divider"></div><div class="week-stats">' +
       '<div class="week-stat"><b>' + Math.round(avg('calories')) + '</b><span>Avg kcal / day</span></div>' +
       '<div class="week-stat"><b>' + loggedDays.length + '/' + DAYS_TO_SHOW + '</b><span>Days logged</span></div>' +
-      '<div class="week-stat"><b>' + highest + '</b><span>Highest day</span></div>' +
+      '<div class="week-stat"><b>' + wd.highest + '</b><span>Highest day</span></div>' +
     '</div><div class="week-note">Averages count only the days you logged.</div>';
 
     // ---- average macros against goals
@@ -3719,11 +4017,15 @@
   function renderApp(){
     // The 3D panel only exists on Insights > Daily Overview; stop its
     // render loop everywhere else so it isn't drawing off-screen.
-    var showModel = state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends' && overviewMode() === '3d';
-    if (!showModel) Model3D.unmount();
-    document.getElementById('view').classList.toggle('model-fullscreen', showModel);
+    var onInsights = state.tab === 'insights' && STORE.meals.length > 0;
+    var weekly = ui.insightsView === 'trends';
+    var showPyramid = onInsights && !weekly && overviewMode() === '3d';
+    var showWheel = onInsights && weekly && weeklyMode() === '3d';
+    if (!showPyramid) Model3D.unmount();
+    if (!showWheel) WeekWheel3D.unmount();
+    document.getElementById('view').classList.toggle('model-fullscreen', showPyramid || showWheel);
     document.getElementById('view').classList.toggle('plain-fullscreen',
-      state.tab === 'insights' && STORE.meals.length > 0 && ui.insightsView !== 'trends' && overviewMode() === 'plain');
+      onInsights && (weekly ? weeklyMode() === 'plain' : overviewMode() === 'plain'));
     document.querySelectorAll('.tabbar button').forEach(function(btn){
       btn.classList.toggle('active', btn.dataset.tab === state.tab);
     });
@@ -3774,18 +4076,17 @@
     }, 140);
   }
 
-  // 3D <-> Plain switch on Daily Overview: the whole panel flips like a
-  // card (see the flip-* CSS). With reduced motion on, it just swaps.
-  function switchOverviewModeWithFade(newMode){
-    if (newMode === overviewMode()) return;
+  // 3D <-> Plain switch (Daily and Weekly Overview): the whole panel flips
+  // like a card (see the flip-* CSS). With reduced motion on, it just swaps.
+  function flipToMode(setting, newMode, currentMode){
+    if (newMode === currentMode) return;
     function apply(){
-      STORE.appSettings.overviewMode = newMode;
+      STORE.appSettings[setting] = newMode;
       saveStore();
       renderApp();
     }
     var viewEl = document.getElementById('view');
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion){ apply(); return; }
+    if (prefersReducedMotion()){ apply(); return; }
     var dir = newMode === 'plain' ? 'l' : 'r';
     viewEl.classList.remove('subtab-fade-in', 'subtab-fade-out');
     viewEl.classList.add('flip-out-' + dir);
@@ -3797,6 +4098,8 @@
       setTimeout(function(){ v.classList.remove('flip-in-' + dir); }, 250);
     }, 190);
   }
+  function switchOverviewModeWithFade(newMode){ flipToMode('overviewMode', newMode, overviewMode()); }
+  function switchWeeklyModeWithFlip(newMode){ flipToMode('weeklyMode', newMode, weeklyMode()); }
 
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
   function switchTab(newTab){
@@ -3837,6 +4140,13 @@
       switchInsightsViewWithFade(el.dataset.view);
     } else if (action === 'set-overview-mode'){
       switchOverviewModeWithFade(el.dataset.mode);
+    } else if (action === 'set-weekly-mode'){
+      switchWeeklyModeWithFlip(el.dataset.mode);
+    } else if (action === 'close-day-card'){
+      WeekWheel3D.ctx.selected = null;
+      var dayCardEl = document.getElementById('dayCard');
+      if (dayCardEl) dayCardEl.classList.add('hidden');
+      WeekWheel3D.redraw();
     } else if (action === 'add-meal'){
       addMealFromForm();
     } else if (action === 'close-add-meal-overlay'){
