@@ -113,6 +113,17 @@
     min-height:100vh;
     min-height:100dvh;
   }
+  /* No browser highlights: tapping shows the app's own pressed state
+     (the brightness rule below) instead of Chrome's grey flash box;
+     text in the app's screens can't be selected by accident with a
+     long-press or double-tap; buttons don't keep a focus ring after a
+     tap (keyboard users still get one via :focus-visible). Fields stay
+     selectable so you can edit and copy what you type. */
+  *{-webkit-tap-highlight-color:transparent;}
+  body{-webkit-user-select:none; user-select:none; -webkit-touch-callout:none;}
+  input, textarea, select, [contenteditable]{-webkit-user-select:text; user-select:text;}
+  button:focus:not(:focus-visible), [data-action]:focus:not(:focus-visible), canvas:focus{outline:none;}
+
   button{font-family:inherit;}
   button:active, [data-action]:active{
     filter:brightness(1.2);
