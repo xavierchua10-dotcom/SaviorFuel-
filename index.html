@@ -1081,7 +1081,36 @@
   }
   .add-meal-close svg{width:15px;height:15px;}
   .add-meal-close:active{background:var(--panel-2);}
-  .add-meal-body{overflow-y:auto;}
+  .add-meal-body{overflow-y:auto; flex:1 1 auto; min-height:0;}
+  /* the Add Meal button sits outside the scrolling part, so it never gets pushed off screen */
+  .add-meal-footer{flex-shrink:0; padding-top:10px;}
+
+  /* One-line summaries (Meal time, Nutrition) that open into the full
+     controls; the panel slides open with the same 0fr -> 1fr trick as
+     the Log's macro card. */
+  .sum-row{
+    display:flex; align-items:center; gap:10px; width:100%; margin:0 0 8px; text-align:left;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:var(--radius);
+    color:var(--text); padding:11px 12px; cursor:pointer;
+  }
+  .sum-row:active{background:var(--panel-3);}
+  .sum-row-label{
+    flex-shrink:0; font-family:'Oswald',sans-serif; font-size:10.5px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--text-faint); min-width:62px;
+  }
+  .sum-row-value{flex:1; min-width:0; font-size:13.5px; font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .sum-row-edit{flex-shrink:0; font-size:11.5px; font-weight:600; color:var(--accent);}
+  .sum-row-chev{flex-shrink:0; width:16px; height:16px; color:var(--text-faint); transition:transform 0.2s ease;}
+  .sum-row[aria-expanded="true"] .sum-row-chev{transform:rotate(180deg);}
+  .acc{
+    display:grid; grid-template-rows:0fr; visibility:hidden;
+    transition:grid-template-rows 240ms ease, visibility 0s linear 240ms;
+  }
+  .acc.open{grid-template-rows:1fr; visibility:visible; transition:grid-template-rows 240ms ease, visibility 0s;}
+  .acc > div{overflow:hidden; min-height:0;}
+  .acc .category-picker{margin-bottom:8px;}
+  .acc-fields{padding:2px 1px 0;}
+  @media (prefers-reduced-motion: reduce){ .acc, .acc.open, .sum-row-chev{transition:none;} }
 
   /* AI food scan result sheet (rows of name + grams, live macros) */
   .ai-scan-note{font-size:12px; line-height:1.45; color:var(--text-faint); margin-bottom:12px;}
@@ -1394,23 +1423,40 @@
       </button>
     </div>
     <div class="add-meal-body" id="addMealBody">
-      <div class="category-picker" id="categoryPicker"></div>
       <div class="field-row"><input type="text" id="mealName" placeholder="Meal name"></div>
-      <div class="field-row">
-        <div class="field-labeled"><label>Calories</label><input type="number" inputmode="numeric" id="mealCal" placeholder="0"></div>
-        <div class="field-labeled"><label>Protein (g)</label><input type="number" inputmode="numeric" id="mealProtein" placeholder="0"></div>
-      </div>
-      <div class="field-row">
-        <div class="field-labeled"><label>Carbs (g)</label><input type="number" inputmode="numeric" id="mealCarbs" placeholder="0"></div>
-        <div class="field-labeled"><label>Fat (g)</label><input type="number" inputmode="numeric" id="mealFat" placeholder="0"></div>
-      </div>
-      <div class="field-row">
-        <div class="field-labeled"><label>Fiber (g)</label><input type="number" inputmode="numeric" id="mealFiber" placeholder="0"></div>
-        <div class="field-labeled"><label>Sugar (g)</label><input type="number" inputmode="numeric" id="mealSugar" placeholder="0"></div>
-      </div>
-      <div class="field-row">
-        <div class="field-labeled"><label>Sodium (mg)</label><input type="number" inputmode="numeric" id="mealSodium" placeholder="0"></div>
-      </div>
+
+      <!-- Meal time and nutrition are shown as one-line summaries; tap to open the pills / the number fields -->
+      <button type="button" class="sum-row" id="mealTimeRow" data-action="toggle-category-picker" aria-expanded="false">
+        <span class="sum-row-label">Meal</span>
+        <span class="sum-row-value" id="mealTimeValue"></span>
+        <span class="sum-row-edit">Change</span><svg class="sum-row-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="acc" id="categoryAcc"><div><div class="category-picker" id="categoryPicker"></div></div></div>
+
+      <button type="button" class="sum-row" id="nutriRow" data-action="toggle-nutrition-fields" aria-expanded="false">
+        <span class="sum-row-label">Nutrition</span>
+        <span class="sum-row-value" id="nutriSummaryValue"></span>
+        <span class="sum-row-edit">Edit</span><svg class="sum-row-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="acc" id="nutriAcc"><div class="acc-fields">
+        <div class="field-row">
+          <div class="field-labeled"><label>Calories</label><input type="number" inputmode="numeric" id="mealCal" placeholder="0"></div>
+          <div class="field-labeled"><label>Protein (g)</label><input type="number" inputmode="numeric" id="mealProtein" placeholder="0"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-labeled"><label>Carbs (g)</label><input type="number" inputmode="numeric" id="mealCarbs" placeholder="0"></div>
+          <div class="field-labeled"><label>Fat (g)</label><input type="number" inputmode="numeric" id="mealFat" placeholder="0"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-labeled"><label>Fiber (g)</label><input type="number" inputmode="numeric" id="mealFiber" placeholder="0"></div>
+          <div class="field-labeled"><label>Sugar (g)</label><input type="number" inputmode="numeric" id="mealSugar" placeholder="0"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-labeled"><label>Sodium (mg)</label><input type="number" inputmode="numeric" id="mealSodium" placeholder="0"></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="add-meal-footer">
       <button class="btn-primary" data-action="add-meal">+ Add Meal</button>
     </div>
   </div>
@@ -1994,9 +2040,30 @@
   // Populates the real form fields (#mealName etc.) directly rather
   // than going through a full renderApp(), since the sheet is its
   // own layer on top of whatever the Log tab is currently showing.
+  // Add Meal shows the meal time and the numbers as one-line summaries.
+  function setAccordion(rowId, accId, open){
+    var row = document.getElementById(rowId), acc = document.getElementById(accId);
+    if (!row || !acc) return;
+    acc.classList.toggle('open', open);
+    row.setAttribute('aria-expanded', String(open));
+  }
+  function toggleAccordion(rowId, accId){
+    setAccordion(rowId, accId, !document.getElementById(accId).classList.contains('open'));
+  }
+  function updateMealSummary(){
+    var num = function(id){ return Math.round(parseFloat(document.getElementById(id).value) || 0); };
+    var el = document.getElementById('nutriSummaryValue');
+    if (el) el.textContent = num('mealCal') + ' kcal · P' + num('mealProtein') + ' · C' + num('mealCarbs') + ' · F' + num('mealFat');
+  }
+
   function renderCategoryPicker(){
     var el = document.getElementById('categoryPicker');
     if (!el) return;
+    var valueEl = document.getElementById('mealTimeValue');
+    if (valueEl){
+      var cur = MEAL_CATEGORIES.filter(function(c){ return c.id === ui.selectedCategory; })[0];
+      valueEl.textContent = cur ? cur.label : '';
+    }
     el.innerHTML = MEAL_CATEGORIES.map(function(c){
       return '<button type="button" class="category-pill' + (c.id === ui.selectedCategory ? ' active' : '') + '" data-action="select-meal-category" data-category="' + c.id + '">' + c.label + '</button>';
     }).join('');
@@ -2093,6 +2160,13 @@
     document.getElementById('mealFiber').value = ui.prefillFiber != null ? ui.prefillFiber : '';
     document.getElementById('mealSugar').value = ui.prefillSugar != null ? ui.prefillSugar : '';
     document.getElementById('mealSodium').value = ui.prefillSodium != null ? ui.prefillSodium : '';
+
+    // Compact by default: the numbers stay tucked away behind their
+    // summary when a food was picked (they're already filled in); a
+    // custom entry needs typing, so that one starts open.
+    updateMealSummary();
+    setAccordion('nutriRow', 'nutriAcc', !ui.selectedFood);
+    setAccordion('mealTimeRow', 'categoryAcc', false);
 
     var overlay = document.getElementById('addMealOverlay');
     var sheet = document.getElementById('addMealSheet');
@@ -2705,6 +2779,7 @@
       var v = ui[map[id]];
       document.getElementById(id).value = v != null ? v : '';
     });
+    updateMealSummary();
   }
 
   function setServingQty(qty){
@@ -4614,9 +4689,14 @@
       showNutrientInfo();
     } else if (action === 'close-nutrient-info'){
       closeNutrientInfo();
+    } else if (action === 'toggle-category-picker'){
+      toggleAccordion('mealTimeRow', 'categoryAcc');
+    } else if (action === 'toggle-nutrition-fields'){
+      toggleAccordion('nutriRow', 'nutriAcc');
     } else if (action === 'select-meal-category'){
       ui.selectedCategory = el.dataset.category;
       renderCategoryPicker();
+      setAccordion('mealTimeRow', 'categoryAcc', false); // picked one — fold the pills away again
     } else if (action === 'open-food-photo'){
       openFoodPhoto();
     } else if (action === 'close-food-photo'){
@@ -4752,6 +4832,12 @@
     if (e.target.dataset && e.target.dataset.actionChange === 'save-goal'){
       saveGoalsFromInputs();
     }
+  });
+
+  // Keep the Nutrition summary line in step with what's typed in the fields.
+  document.addEventListener('input', function(e){
+    var id = e.target && e.target.id;
+    if (id === 'mealCal' || id === 'mealProtein' || id === 'mealCarbs' || id === 'mealFat') updateMealSummary();
   });
 
   // Typing in the amount box updates the macros live.
