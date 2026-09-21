@@ -843,6 +843,61 @@
   .food-thumb-btn{border:none;padding:0;cursor:pointer;}
   .food-thumb-btn:active{filter:brightness(1.15);}
 
+  /* Confirmation sheet — slides up from the bottom (used for deleting a
+     logged food). The backdrop fades in, the sheet rides up, and the
+     grab handle can be dragged down to dismiss it. */
+  .confirm-overlay{position:absolute; inset:0; z-index:99; display:flex; align-items:flex-end; justify-content:center;}
+  .confirm-overlay.hidden{display:none;}
+  .confirm-backdrop{
+    position:absolute; inset:0; background:rgba(8,9,11,0.6);
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    opacity:0; transition:opacity 220ms ease;
+  }
+  .confirm-overlay.open .confirm-backdrop{opacity:1;}
+  .confirm-sheet{
+    position:relative; width:100%; max-width:480px;
+    background:var(--panel); border:1px solid var(--line); border-bottom:none;
+    border-radius:var(--radius-xl) var(--radius-xl) 0 0;
+    box-shadow:0 -12px 40px rgba(0,0,0,0.45);
+    padding:4px 20px calc(20px + var(--safe-bottom));
+    transform:translateY(100%);
+    transition:transform 290ms cubic-bezier(0.2,0.9,0.25,1);
+  }
+  .confirm-overlay.open .confirm-sheet{transform:translateY(0);}
+  .confirm-sheet.dragging{transition:none;}
+  .confirm-grab{height:28px; display:flex; align-items:center; justify-content:center; touch-action:none; cursor:grab;}
+  .confirm-grab i{display:block; width:40px; height:4px; border-radius:2px; background:var(--text-faint); opacity:0.5;}
+  .confirm-icon{
+    width:46px; height:46px; margin:0 auto 10px; border-radius:50%;
+    background:rgba(214,72,60,0.14); color:var(--accent-2);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .confirm-icon svg{width:22px; height:22px;}
+  .confirm-title{
+    margin:0; text-align:center; font-family:'Oswald',sans-serif; font-size:19px;
+    font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--text);
+  }
+  .confirm-item{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    margin:14px 0 10px; padding:12px 14px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:var(--radius-lg);
+  }
+  .confirm-item-text{min-width:0;}
+  .confirm-item-name{font-size:15px; font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .confirm-item-detail{margin-top:2px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-faint);}
+  .confirm-item-kcal{flex-shrink:0; font-family:'Oswald',sans-serif; font-size:20px; font-weight:700; color:var(--accent);}
+  .confirm-note{margin:0 0 16px; text-align:center; font-size:12.5px; line-height:1.45; color:var(--text-faint);}
+  .confirm-yes, .confirm-cancel{
+    display:block; width:100%; border-radius:var(--radius-xl);
+    font-family:'Oswald',sans-serif; font-size:14px; font-weight:700;
+    letter-spacing:0.04em; text-transform:uppercase; cursor:pointer;
+  }
+  .confirm-yes{background:var(--accent-2); color:#fff; border:none; padding:14px; margin-bottom:10px;}
+  .confirm-cancel{background:none; color:var(--text-dim); border:1px solid var(--line); padding:13px;}
+  @media (prefers-reduced-motion: reduce){
+    .confirm-sheet, .confirm-backdrop{transition:none;}
+  }
+
   /* Big photo viewer — opened from the Add Meal banner thumbnail. */
   .photo-overlay{
     position:absolute; inset:0; z-index:98;
@@ -1306,6 +1361,24 @@
       <div class="ai-scan-total" id="aiScanTotal"></div>
       <button class="btn-primary" data-action="ai-scan-log">+ Log meal</button>
     </div>
+  </div>
+</div>
+
+<div class="confirm-overlay hidden" id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="confirm-backdrop" data-action="cancel-confirm"></div>
+  <div class="confirm-sheet">
+    <div class="confirm-grab" id="confirmGrab" aria-hidden="true"><i></i></div>
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+    </div>
+    <h2 class="confirm-title" id="confirmTitle">Delete this food?</h2>
+    <div class="confirm-item">
+      <div class="confirm-item-text"><div class="confirm-item-name" id="confirmItemName"></div><div class="confirm-item-detail" id="confirmItemDetail"></div></div>
+      <div class="confirm-item-kcal" id="confirmItemKcal"></div>
+    </div>
+    <p class="confirm-note" id="confirmNote"></p>
+    <button type="button" class="confirm-yes" id="confirmYes" data-action="confirm-yes">Delete</button>
+    <button type="button" class="confirm-cancel" id="confirmCancel" data-action="cancel-confirm">Cancel</button>
   </div>
 </div>
 
@@ -2874,6 +2947,91 @@
     renderApp();
   }
 
+  /* ---- Confirmation bottom sheet ----
+     opts: title, name, detail, kcal, note, confirmLabel, onConfirm.
+     Slides up from the bottom; closes on Cancel, a tap outside, Escape,
+     or by dragging the grab handle down. Nothing happens to the data
+     until "Delete" is pressed. */
+  var confirmState = { onConfirm: null, closeTimer: 0 };
+
+  function openConfirmSheet(opts){
+    clearTimeout(confirmState.closeTimer);
+    confirmState.onConfirm = opts.onConfirm;
+    document.getElementById('confirmTitle').textContent = opts.title;
+    document.getElementById('confirmItemName').textContent = opts.name;
+    document.getElementById('confirmItemDetail').textContent = opts.detail || '';
+    document.getElementById('confirmItemKcal').textContent = opts.kcal != null ? opts.kcal + ' kcal' : '';
+    document.getElementById('confirmNote').textContent = opts.note || '';
+    document.getElementById('confirmYes').textContent = opts.confirmLabel || 'Delete';
+    var overlay = document.getElementById('confirmOverlay');
+    var sheet = overlay.querySelector('.confirm-sheet');
+    sheet.style.transform = '';
+    sheet.classList.remove('dragging');
+    overlay.classList.remove('hidden');
+    void overlay.offsetHeight;          // let the closed position paint first, so it animates up
+    overlay.classList.add('open');
+    document.getElementById('confirmCancel').focus(); // the safe choice is the default
+  }
+
+  function closeConfirmSheet(){
+    var overlay = document.getElementById('confirmOverlay');
+    if (overlay.classList.contains('hidden')) return;
+    overlay.classList.remove('open');
+    var sheet = overlay.querySelector('.confirm-sheet');
+    sheet.classList.remove('dragging');
+    sheet.style.transform = '';         // hand control back to the CSS slide-down
+    confirmState.onConfirm = null;
+    confirmState.closeTimer = setTimeout(function(){ overlay.classList.add('hidden'); }, prefersReducedMotion() ? 0 : 300);
+  }
+
+  function confirmYes(){
+    var fn = confirmState.onConfirm;
+    closeConfirmSheet();
+    if (fn) fn();
+  }
+
+  function requestDeleteMeal(id){
+    var meal = STORE.meals.filter(function(m){ return m.id === id; })[0];
+    if (!meal) return;
+    openConfirmSheet({
+      title: 'Delete this food?',
+      name: meal.name,
+      detail: 'P' + (meal.protein || 0) + ' · C' + (meal.carbs || 0) + ' · F' + (meal.fat || 0),
+      kcal: meal.calories,
+      note: 'It will be removed from your log and from the day\u2019s totals.',
+      confirmLabel: 'Delete',
+      onConfirm: function(){ deleteMeal(id); maybeVibrate(); }
+    });
+  }
+
+  (function(){
+    // drag the grab handle down to dismiss
+    var grab = document.getElementById('confirmGrab');
+    var sheet = document.querySelector('#confirmOverlay .confirm-sheet');
+    var startY = null;
+    grab.addEventListener('pointerdown', function(e){
+      startY = e.clientY;
+      sheet.classList.add('dragging');
+      if (grab.setPointerCapture){ try { grab.setPointerCapture(e.pointerId); } catch (err){} }
+    });
+    grab.addEventListener('pointermove', function(e){
+      if (startY === null) return;
+      sheet.style.transform = 'translateY(' + Math.max(0, e.clientY - startY) + 'px)';
+    });
+    function endDrag(e){
+      if (startY === null) return;
+      var dy = Math.max(0, e.clientY - startY);
+      startY = null;
+      sheet.classList.remove('dragging');
+      if (dy > 90) closeConfirmSheet(); else sheet.style.transform = '';
+    }
+    grab.addEventListener('pointerup', endDrag);
+    grab.addEventListener('pointercancel', endDrag);
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && document.getElementById('confirmOverlay').classList.contains('open')) closeConfirmSheet();
+    });
+  })();
+
   // Clears only today's logged meals — a genuine blank slate for the
   // day, same idea as SaviorFit Logger's reset-log. History and every
   // other day's data stay untouched.
@@ -4184,7 +4342,11 @@
     } else if (action === 'ai-scan-log'){
       logAiScan();
     } else if (action === 'delete-meal'){
-      deleteMeal(el.dataset.id);
+      requestDeleteMeal(el.dataset.id);
+    } else if (action === 'confirm-yes'){
+      confirmYes();
+    } else if (action === 'cancel-confirm'){
+      closeConfirmSheet();
     } else if (action === 'toggle-history-day'){
       var day = el.dataset.day;
       ui.historyOpenDay = (ui.historyOpenDay === day) ? null : day;
