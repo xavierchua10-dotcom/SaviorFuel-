@@ -566,10 +566,10 @@
   .dcm-macros{flex:1; display:flex; gap:9px; justify-content:flex-end;}
   .face-tag.selected{border-color:var(--accent);}
   .face-card-empty{margin-top:6px; font-size:12.5px; color:var(--text-faint);}
-  .meal-stack{display:flex; height:12px; margin-top:10px; border-radius:6px; overflow:hidden; gap:2px;}
+  .meal-stack{display:flex; height:10px; margin-top:8px; border-radius:5px; overflow:hidden; gap:2px;}
   .meal-stack i{display:block; height:100%; min-width:3px;}
-  .meal-stack-legend{margin-top:9px; display:flex; flex-direction:column; gap:5px;}
-  .meal-stack-legend > div{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-dim);}
+  .meal-stack-legend{margin-top:8px; display:flex; flex-direction:column; gap:3px;}
+  .meal-stack-legend > div{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-dim);}
   .meal-stack-legend i{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
   .meal-stack-legend span{flex:1;}
   .meal-stack-legend b{color:var(--text); font-family:'JetBrains Mono',monospace; font-weight:500; font-size:12px;}
@@ -1275,6 +1275,9 @@
     border-radius:var(--radius-lg); box-shadow:var(--card-shadow);
   }
   .day-card.hidden{display:none;}
+  .day-card{transition:opacity 140ms ease;}
+  .day-card.swapping{opacity:0;}
+  @media (prefers-reduced-motion: reduce){ .day-card{transition:none;} }
   .day-card-head{display:flex; align-items:baseline; gap:10px;}
   .day-card-head b{font-family:'Oswald',sans-serif; font-size:16px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text);}
   .day-card-head span{flex:1; font-size:13px; color:var(--text-dim);}
@@ -3763,6 +3766,7 @@
       rafId = requestAnimationFrame(tick);
       var animating = cfg.onFrame ? cfg.onFrame(ctx, performance.now()) : false;
       var moved = controls.update();
+      if (cfg.onAzimuth) cfg.onAzimuth(ctx, controls.getAzimuthalAngle());
       if (moved || dirty || controls.autoRotate || animating){
         renderer.render(scene, camera);
         updateTags();
@@ -3850,21 +3854,38 @@
     url: 'models/food-pyramid-v2.glb',
     bytes: 2748140, // for the progress bar when the server sends no length
     aria: 'Interactive 3D food pyramid. Drag to rotate, pinch to zoom.',
-    az: 0.32, el: 0.2, lift: -0.04,
-    widthFactor: 1.40, heightFactor: 0.92,
+    // lift < 0 sits the pyramid higher in the panel, leaving the bottom
+    // free for the breakdown card; a smaller widthFactor (1.4 -> 1.2)
+    // pulls the camera back so the pyramid is ~10% smaller — together
+    // the top four tiers clear the card (only the base tier is behind it).
+    az: 0.32, el: 0.2, lift: -0.18,
+    widthFactor: 1.2, heightFactor: 0.92,
     autoRotateSpeed: 1.2,
     tagMode: 'facing',
 
-    // Tap the pyramid: whichever side the tap lands on (worked out from
-    // where the point is around the pyramid) opens that nutrient's
-    // breakdown by meal. Tap it again, or empty space, to close.
+    // The card at the bottom follows whichever side faces you: as the
+    // pyramid spins (on its own or under your finger) it swaps to that
+    // side's nutrient. Switching needs an extra ~8 degrees past the
+    // 45-degree midpoint so it doesn't flicker on the corners. A tap on
+    // the pyramid reports which side it landed on (worked out from
+    // where the point is around the pyramid) so the card can pin to it.
     onModel: function(ctx){
       ctx.pickables = [];
       ctx.model.traverse(function(n){ if (n.isMesh) ctx.pickables.push(n); });
     },
     onMount: function(ctx, state){
       ctx.state = state;
-      ctx.selected = null;
+      ctx.facing = -1;
+    },
+    onAzimuth: function(ctx, az){
+      if (!ctx.state || !ctx.state.onFacing) return;
+      var quarter = Math.PI / 2;
+      if (ctx.facing !== -1){
+        var d = az - ctx.facing * quarter;
+        if (Math.abs(Math.atan2(Math.sin(d), Math.cos(d))) <= quarter / 2 + 0.14) return;
+      }
+      ctx.facing = ((Math.round(az / quarter) % 4) + 4) % 4;
+      ctx.state.onFacing(ctx.facing);
     },
     onTap: function(ctx, obj, hit){
       var k = null;
@@ -3872,10 +3893,8 @@
         var a = Math.atan2(hit.point.x, hit.point.z);           // 0 = the +z side, +90deg = the +x side ...
         k = ((Math.round(a / (Math.PI / 2)) % 4) + 4) % 4;
       }
-      ctx.selected = (k === null || k === ctx.selected) ? null : k;
-      if (ctx.state && ctx.state.onSelect) ctx.state.onSelect(ctx.selected);
-    },
-    onUnmount: function(ctx){ ctx.selected = null; }
+      if (ctx.state && ctx.state.onTapSide) ctx.state.onTapSide(k);
+    }
   });
 
   // Weekly Overview: the week wheel — a wooden platter cut into seven
@@ -4073,6 +4092,7 @@
   }
 
   // Colours for the meal-time segments in a nutrient's breakdown card.
+  var faceCardCtl = null; // the pyramid's breakdown-card controller (set up in renderInsights3D)
   var MEAL_COLORS = { 'breakfast': '#f2b134', 'morning-snack': '#e8804a', 'lunch': '#7bc47f', 'evening-snack': '#b58be0', 'dinner': '#5fa8d6', 'other': '#8a8f99' };
 
   // Card that opens when you tap a side of the pyramid: today's total for
@@ -4102,6 +4122,46 @@
     var goals = STORE.goals;
     var todayByMeal = mealBreakdown(todayMeals);
     var tagsHtml = PYRAMID_FACES.map(function(f, k){ return faceTagHtml(k, totals, goals); }).join('');
+
+    // The breakdown card: 'auto' = shows the side facing you and swaps as
+    // the pyramid spins; tap a side to 'pin' the card to it (tap it
+    // again, or empty space, to go back to auto); × hides it until the
+    // next tap on the pyramid.
+    var swapTimer = 0;
+    faceCardCtl = {
+      mode: 'auto', pinned: null, facing: 0, shown: null,
+      current: function(){
+        return this.mode === 'hidden' ? null : (this.mode === 'pinned' ? this.pinned : this.facing);
+      },
+      refresh: function(){
+        var card = document.getElementById('faceCard');
+        if (!card) return;
+        var k = this.current(), self = this;
+        PYRAMID_FACES.forEach(function(x, i){
+          var tag = document.getElementById('faceTag' + i);
+          if (tag) tag.classList.toggle('selected', i === k);
+        });
+        if (k === this.shown) return;
+        clearTimeout(swapTimer);
+        var apply = function(){
+          self.shown = k;
+          if (k == null){ card.classList.add('hidden'); return; }
+          card.innerHTML = faceCardHtml(k, totals, goals, todayByMeal);
+          card.classList.remove('hidden', 'swapping');
+        };
+        if (this.shown == null || k == null || prefersReducedMotion()){ apply(); return; }
+        card.classList.add('swapping');                 // fade out, swap, fade back in
+        swapTimer = setTimeout(apply, 140);
+      },
+      setFacing: function(k){ this.facing = k; this.refresh(); },
+      tap: function(k){
+        if (k == null){ if (this.mode === 'pinned') this.mode = 'auto'; }
+        else if (this.mode === 'pinned' && this.pinned === k){ this.mode = 'auto'; }
+        else { this.mode = 'pinned'; this.pinned = k; }
+        this.refresh();
+      },
+      hide: function(){ this.mode = 'hidden'; this.refresh(); }
+    };
     document.getElementById('view').innerHTML =
       '<div class="card model-card">' +
         '<div class="model-stage" id="modelStage"></div>' +
@@ -4119,17 +4179,8 @@
         var nx = Math.round(Math.sin(a)), nz = Math.round(Math.cos(a)); // side k faces +z, +x, -z, -x
         return { el: document.getElementById('faceTag' + k), pos: [f.r * nx, f.y, f.r * nz], normal: [nx, nz] };
       }), {
-        onSelect: function(k){
-          var card = document.getElementById('faceCard');
-          PYRAMID_FACES.forEach(function(x, i){
-            var tag = document.getElementById('faceTag' + i);
-            if (tag) tag.classList.toggle('selected', i === k);
-          });
-          if (!card) return;
-          if (k == null){ card.classList.add('hidden'); return; }
-          card.innerHTML = faceCardHtml(k, totals, goals, todayByMeal);
-          card.classList.remove('hidden');
-        }
+        onFacing: function(k){ faceCardCtl.setFacing(k); },
+        onTapSide: function(k){ faceCardCtl.tap(k); }
       });
     } catch (err){
       console.error('SaviorFuel: 3D panel failed to start —', err);
@@ -4843,11 +4894,7 @@
     } else if (action === 'set-weekly-mode'){
       switchWeeklyModeWithFlip(el.dataset.mode);
     } else if (action === 'close-face-card'){
-      Model3D.ctx.selected = null;
-      var faceCardEl = document.getElementById('faceCard');
-      if (faceCardEl) faceCardEl.classList.add('hidden');
-      document.querySelectorAll('.face-tag.selected').forEach(function(t){ t.classList.remove('selected'); });
-      Model3D.redraw();
+      if (faceCardCtl) faceCardCtl.hide();
     } else if (action === 'close-day-card'){
       WeekWheel3D.ctx.selected = null;
       var dayCardEl = document.getElementById('dayCard');
