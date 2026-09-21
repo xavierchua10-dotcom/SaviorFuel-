@@ -125,20 +125,24 @@ export async function handleScan(req, { ip = 'unknown', store, env = {}, fetchIm
 
   // ---- daily limits (per person and for everyone), counted before the AI call ----
   const perIp = parseInt(env.PER_IP_DAILY || '25', 10);
+  // DAILY_CAP=0 turns the everyone-combined counter off (one storage write
+  // per scan instead of two — useful where writes are scarce, e.g. Cloudflare
+  // KV's free plan). The per-person limit and Google's own quota still apply.
   const globalCap = parseInt(env.DAILY_CAP || '1500', 10);
+  const useGlobal = globalCap > 0;
   const day = now().toISOString().slice(0, 10);
   const ipKey = `ip:${day}:${await sha256Hex(ip + (env.IP_SALT || ''))}`;
   const allKey = `all:${day}`;
-  let ipN, allN;
+  let ipN, allN = 0;
   try {
-    [ipN, allN] = await Promise.all([readCount(store, ipKey), readCount(store, allKey)]);
-    if (allN >= globalCap) {
+    [ipN, allN] = await Promise.all([readCount(store, ipKey), useGlobal ? readCount(store, allKey) : 0]);
+    if (useGlobal && allN >= globalCap) {
       return json(429, { error: 'The scanner has hit its daily limit for everyone. Try again tomorrow.', code: 'global_limit' }, cors);
     }
     if (ipN >= perIp) {
       return json(429, { error: 'You\'ve used today\'s free scans. Try again tomorrow.', code: 'ip_limit' }, cors);
     }
-    await Promise.all([store.setJSON(ipKey, { n: ipN + 1 }), store.setJSON(allKey, { n: allN + 1 })]);
+    await Promise.all([store.setJSON(ipKey, { n: ipN + 1 }), useGlobal ? store.setJSON(allKey, { n: allN + 1 }) : null]);
   } catch (err) {
     console.error('limit store failed:', err && err.message);
     return json(503, { error: 'The scanner is temporarily unavailable.', code: 'limit_store' }, cors);

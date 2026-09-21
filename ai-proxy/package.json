@@ -3,6 +3,14 @@
   "private": true,
   "type": "module",
   "description": "Tiny proxy that keeps the Gemini API key off the public app: photo in, estimated foods out.",
-  "scripts": { "test": "node scan-core.test.mjs" },
-  "dependencies": { "@netlify/blobs": "^11.1.0" }
+  "scripts": {
+    "test": "node scan-core.test.mjs && node cloudflare/worker.test.mjs",
+    "build:worker": "esbuild cloudflare/worker.src.mjs --bundle --format=esm --outfile=cloudflare/worker.js"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
 }

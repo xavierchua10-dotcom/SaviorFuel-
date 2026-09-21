@@ -2,3 +2,7 @@
 [build]
   publish = "public"
   functions = "netlify/functions"
+  # Only rebuild when something inside ai-proxy/ changed. Without this, every
+  # push to the app (index.html etc.) would trigger a deploy too, and on
+  # Netlify's free plan each production deploy costs credits.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."

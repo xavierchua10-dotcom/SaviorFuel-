@@ -65,6 +65,12 @@ await t('global daily cap stops everyone', async () => {
   await handleScan(post(good), { ip: 'a', store: s, env: e, fetchImpl: f }); await handleScan(post(good), { ip: 'b', store: s, env: e, fetchImpl: f });
   const r = await handleScan(post(good), { ip: 'c', store: s, env: e, fetchImpl: f }); assert.equal(r.status, 429); assert.equal((await r.json()).code, 'global_limit');
 });
+await t('DAILY_CAP=0 skips the everyone-combined counter (one write per scan)', async () => {
+  const s = memStore(); const e = { ...env, DAILY_CAP: '0', PER_IP_DAILY: '2' }; const f = geminiReply({ items: [] });
+  for (let i = 0; i < 2; i++) assert.equal((await handleScan(post(good), { ip: 'z', store: s, env: e, fetchImpl: f })).status, 200);
+  assert.ok([...s._m.keys()].every((k) => k.startsWith('ip:')), 'no all: key written');
+  assert.equal((await handleScan(post(good), { ip: 'z', store: s, env: e, fetchImpl: f })).status, 429); // per-person limit still works
+});
 await t('limits reset on a new day, and IPs are stored hashed', async () => {
   const s = memStore(); const e = { ...env, PER_IP_DAILY: '1' }; const f = geminiReply({ items: [] });
   await handleScan(post(good), { ip: '5.5.5.5', store: s, env: e, fetchImpl: f, now: () => new Date('2026-09-20T10:00:00Z') });
