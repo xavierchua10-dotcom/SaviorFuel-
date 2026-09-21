@@ -261,7 +261,7 @@
     cursor:pointer;
   }
   .insights-subtabbar button + button{border-left:1px solid var(--line);}
-  .insights-subtabbar button.active{color:var(--accent);background:var(--panel-3);}
+  .insights-subtabbar button.active{color:var(--accent);}
   .insights-subtabbar button:active{opacity:0.85;}
 
   /* ---------- Bottom tab bar (same classes as SaviorFit Logger) ---------- */
@@ -289,6 +289,27 @@
     cursor:pointer;
   }
   .tabbar button.active{color:var(--accent);}
+  .tab-glyph{display:inline-block; transition:transform 120ms ease;}
+  .tabbar button:active .tab-glyph{transform:scale(0.86);}
+
+  /* Sliding highlight: one pill sits behind the active tab and glides to
+     the tapped one (the bar's --i = index of the active tab, --n = how
+     many tabs). Tabs are equal width, so the slider is 1/n wide and
+     moves by whole multiples of its own width. The buttons sit above it. */
+  .tabbar, .insights-subtabbar{position:relative; isolation:isolate; --i:0;}
+  .tabbar{--n:5;}
+  .insights-subtabbar{--n:2;}
+  .tab-slider, .subtab-slider{
+    position:absolute; left:0; top:0; bottom:0; z-index:-1; pointer-events:none;
+    width:calc(100% / var(--n));
+    transform:translateX(calc(var(--i) * 100%));
+    transition:transform 360ms cubic-bezier(0.32,0.72,0,1);
+  }
+  .tab-slider{top:6px; bottom:calc(6px + var(--safe-bottom)); padding:0 7px; box-sizing:border-box;}
+  .tab-slider::before{content:''; display:block; height:100%; border-radius:14px; background:rgba(var(--accent-rgb),0.16);}
+  .subtab-slider{background:var(--panel-3);}
+  .no-slide .tab-slider, .no-slide .subtab-slider{transition:none;}
+  @media (prefers-reduced-motion: reduce){ .tab-slider, .subtab-slider, .tab-glyph{transition:none;} }
   .tab-glyph svg{width:22px;height:22px;}
 
   /* ---------- Scan tab ---------- */
@@ -1438,10 +1459,12 @@
 
   <div class="bottom-nav" id="bottomNav">
   <nav class="insights-subtabbar hidden" id="insightsSubtabbar">
+    <span class="subtab-slider" aria-hidden="true"></span>
     <button data-action="set-insights-view" data-view="today">Daily Overview</button>
     <button data-action="set-insights-view" data-view="trends">Weekly Overview</button>
   </nav>
   <nav class="tabbar" id="tabbar">
+    <span class="tab-slider" aria-hidden="true"></span>
     <button data-action="set-tab" data-tab="log" class="active">
       <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="4" width="4" height="16" rx="1.3"/><rect x="19" y="4" width="4" height="16" rx="1.3"/><rect x="5" y="10.4" width="14" height="3.2" rx="1"/></svg></span>
       Log
@@ -4778,6 +4801,26 @@
       '</div>';
   }
 
+  // Moves the sliding highlight of a tab bar to tab number `index`.
+  // Without `animate` it jumps there instantly (first paint, or when the
+  // bar wasn't on screen), so nothing glides in from the first tab.
+  function setSlider(barEl, index, animate){
+    if (!barEl) return;
+    if (!animate) barEl.classList.add('no-slide');
+    barEl.style.setProperty('--i', String(index));
+    if (!animate){
+      void barEl.offsetWidth;
+      barEl.classList.remove('no-slide');
+    }
+  }
+  var slidersReady = false; // false until the first render has placed them
+
+  function tabIndexOf(tab){
+    var btns = document.querySelectorAll('.tabbar button');
+    for (var i = 0; i < btns.length; i++) if (btns[i].dataset.tab === tab) return i;
+    return 0;
+  }
+
   function renderApp(){
     // The 3D panel only exists on Insights > Daily Overview; stop its
     // render loop everywhere else so it isn't drawing off-screen.
@@ -4793,6 +4836,7 @@
     document.querySelectorAll('.tabbar button').forEach(function(btn){
       btn.classList.toggle('active', btn.dataset.tab === state.tab);
     });
+    setSlider(document.getElementById('tabbar'), tabIndexOf(state.tab), slidersReady);
     if (state.tab === 'log') renderLog();
     else if (state.tab === 'history') renderHistory();
     else if (state.tab === 'scan') renderScan();
@@ -4810,7 +4854,9 @@
       insightsSubtabbarEl.querySelectorAll('button').forEach(function(btn){
         btn.classList.toggle('active', btn.dataset.view === ui.insightsView);
       });
+      setSlider(insightsSubtabbarEl, ui.insightsView === 'trends' ? 1 : 0, slidersReady);
     }
+    slidersReady = true;
   }
 
   // Fades the current Insights sub-tab panel out, swaps to the new
@@ -4819,6 +4865,7 @@
   // progression switch.
   function switchInsightsViewWithFade(newView){
     if (newView === ui.insightsView) return;
+    setSlider(document.getElementById('insightsSubtabbar'), newView === 'trends' ? 1 : 0, true);
     var viewEl = document.getElementById('view');
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion){
@@ -4868,6 +4915,7 @@
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
   function switchTab(newTab){
     if (newTab === state.tab) return;
+    setSlider(document.getElementById('tabbar'), tabIndexOf(newTab), true); // the highlight starts gliding on the tap itself
     closeScanner(); // safety: release the camera if it was somehow left open
     closeFoodSearchOverlay();
     closeAddMealOverlay();
