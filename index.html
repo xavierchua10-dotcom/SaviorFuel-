@@ -546,14 +546,34 @@
 
   /* Weekly Overview extras (inside the same card, below the bars) */
   /* Calories by meal time: label, bar (share of the total), number + % */
-  .meal-split-row{display:flex; align-items:center; gap:10px; margin-bottom:9px;}
+  .meal-split-item{margin-bottom:11px;}
+  .meal-split-row{display:flex; align-items:center; gap:10px; margin-bottom:3px;}
+  .meal-split-macros{display:flex; gap:11px; margin-left:116px; font-size:11px; color:var(--text-faint);}
+  .meal-split-macros b, .dcm-macros b{font-family:'JetBrains Mono',monospace; font-weight:500;}
+  .meal-split-macros .p, .dcm-macros .p{color:var(--success);}
+  .meal-split-macros .c, .dcm-macros .c{color:#5fa8d6;}
+  .meal-split-macros .f, .dcm-macros .f{color:var(--accent-2);}
+  .meal-split-macros .fi, .dcm-macros .fi{color:#a97c50;}
   .meal-split-label{width:106px; flex-shrink:0; font-size:13px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .meal-split-track{flex:1; min-width:0; height:14px; background:var(--panel-3); border-radius:var(--radius-xs); overflow:hidden;}
   .meal-split-fill{height:100%; background:var(--accent); border-radius:var(--radius-xs);}
   .meal-split-val{width:74px; flex-shrink:0; text-align:right; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text);}
   .meal-split-val span{margin-left:6px; color:var(--text-faint);}
-  .day-card-meals{margin-top:7px; padding-top:7px; border-top:1px solid var(--line); font-size:11.5px; line-height:1.5; color:var(--text-faint);}
-  .day-card-meals b{color:var(--text);}
+  .day-card-meals{margin-top:8px; padding-top:6px; border-top:1px solid var(--line); font-size:11.5px; color:var(--text-faint);}
+  .dcm-row{display:flex; align-items:baseline; gap:8px; padding:3px 0;}
+  .dcm-name{flex:0 0 86px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .dcm-row > b{flex:0 0 34px; text-align:right; color:var(--text); font-family:'JetBrains Mono',monospace; font-weight:500;}
+  .dcm-macros{flex:1; display:flex; gap:9px; justify-content:flex-end;}
+  .face-tag.selected{border-color:var(--accent);}
+  .face-card-empty{margin-top:6px; font-size:12.5px; color:var(--text-faint);}
+  .meal-stack{display:flex; height:12px; margin-top:10px; border-radius:6px; overflow:hidden; gap:2px;}
+  .meal-stack i{display:block; height:100%; min-width:3px;}
+  .meal-stack-legend{margin-top:9px; display:flex; flex-direction:column; gap:5px;}
+  .meal-stack-legend > div{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-dim);}
+  .meal-stack-legend i{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
+  .meal-stack-legend span{flex:1;}
+  .meal-stack-legend b{color:var(--text); font-family:'JetBrains Mono',monospace; font-weight:500; font-size:12px;}
+  .meal-stack-legend em{width:38px; text-align:right; font-style:normal; font-size:11.5px; color:var(--text-faint);}
   .week-legend-note{display:flex;align-items:center;gap:8px;margin:-2px 0 0 62px;font-size:11px;color:var(--text-faint);}
   .week-legend-note i{display:inline-block;width:0;height:12px;border-left:2px dashed rgba(255,255,255,0.55);}
   .week-divider{height:1px;background:var(--line);margin:18px 0 16px;}
@@ -3616,7 +3636,7 @@
           rc.setFromCamera(ndc, camera);
           scene.updateMatrixWorld();
           var hits = rc.intersectObjects(ctx.pickables || [], false);
-          cfg.onTap(ctx, hits.length ? hits[0].object : null);
+          cfg.onTap(ctx, hits.length ? hits[0].object : null, hits.length ? hits[0] : null);
           dirty = true;
         });
       }
@@ -3833,7 +3853,29 @@
     az: 0.32, el: 0.2, lift: -0.04,
     widthFactor: 1.40, heightFactor: 0.92,
     autoRotateSpeed: 1.2,
-    tagMode: 'facing'
+    tagMode: 'facing',
+
+    // Tap the pyramid: whichever side the tap lands on (worked out from
+    // where the point is around the pyramid) opens that nutrient's
+    // breakdown by meal. Tap it again, or empty space, to close.
+    onModel: function(ctx){
+      ctx.pickables = [];
+      ctx.model.traverse(function(n){ if (n.isMesh) ctx.pickables.push(n); });
+    },
+    onMount: function(ctx, state){
+      ctx.state = state;
+      ctx.selected = null;
+    },
+    onTap: function(ctx, obj, hit){
+      var k = null;
+      if (hit){
+        var a = Math.atan2(hit.point.x, hit.point.z);           // 0 = the +z side, +90deg = the +x side ...
+        k = ((Math.round(a / (Math.PI / 2)) % 4) + 4) % 4;
+      }
+      ctx.selected = (k === null || k === ctx.selected) ? null : k;
+      if (ctx.state && ctx.state.onSelect) ctx.state.onSelect(ctx.selected);
+    },
+    onUnmount: function(ctx){ ctx.selected = null; }
   });
 
   // Weekly Overview: the week wheel — a wooden platter cut into seven
@@ -4030,14 +4072,41 @@
     '</div>';
   }
 
+  // Colours for the meal-time segments in a nutrient's breakdown card.
+  var MEAL_COLORS = { 'breakfast': '#f2b134', 'morning-snack': '#e8804a', 'lunch': '#7bc47f', 'evening-snack': '#b58be0', 'dinner': '#5fa8d6', 'other': '#8a8f99' };
+
+  // Card that opens when you tap a side of the pyramid: today's total for
+  // that nutrient, then how it splits across breakfast / lunch / dinner ...
+  function faceCardHtml(k, totals, goals, byMeal){
+    var f = PYRAMID_FACES[k];
+    var total = totals[f.key] || 0;
+    var goal = goals[f.key] || 0;
+    var head = '<div class="day-card-head"><b>' + f.label + '</b><span>' + Math.round(total) + (goal ? ' / ' + goal : '') + ' g' +
+      (goal ? ' · ' + pctUncapped(total, goal) + '%' : '') + '</span>' +
+      '<button type="button" class="day-card-close" data-action="close-face-card" aria-label="Close">&times;</button></div>';
+    var parts = byMeal.filter(function(r){ return (r[f.key] || 0) > 0; });
+    if (total <= 0 || parts.length === 0) return head + '<div class="face-card-empty">Nothing logged today.</div>';
+    var sum = parts.reduce(function(acc, r){ return acc + r[f.key]; }, 0);
+    return head +
+      '<div class="meal-stack">' + parts.map(function(r){
+        return '<i style="width:' + (r[f.key] / sum * 100).toFixed(1) + '%;background:' + (MEAL_COLORS[r.id] || MEAL_COLORS.other) + '"></i>';
+      }).join('') + '</div>' +
+      '<div class="meal-stack-legend">' + parts.map(function(r){
+        return '<div><i style="background:' + (MEAL_COLORS[r.id] || MEAL_COLORS.other) + '"></i><span>' + esc(r.label) + '</span> <b>' + Math.round(r[f.key]) + 'g</b> <em>' + Math.round(r[f.key] / sum * 100) + '%</em></div>';
+      }).join('') + '</div>';
+  }
+
   function renderInsights3D(){
-    var totals = totalsFor(mealsForDay(todayKey()));
+    var todayMeals = mealsForDay(todayKey());
+    var totals = totalsFor(todayMeals);
     var goals = STORE.goals;
+    var todayByMeal = mealBreakdown(todayMeals);
     var tagsHtml = PYRAMID_FACES.map(function(f, k){ return faceTagHtml(k, totals, goals); }).join('');
     document.getElementById('view').innerHTML =
       '<div class="card model-card">' +
         '<div class="model-stage" id="modelStage"></div>' +
         tagsHtml +
+        '<div class="day-card hidden" id="faceCard"></div>' +
         '<div class="model-status" id="modelStatus">' +
           '<span id="modelStatusText">Loading 3D model…</span>' +
           '<div class="model-bar" id="modelBarWrap"><i id="modelBar"></i></div>' +
@@ -4049,7 +4118,19 @@
         var a = k * Math.PI / 2;
         var nx = Math.round(Math.sin(a)), nz = Math.round(Math.cos(a)); // side k faces +z, +x, -z, -x
         return { el: document.getElementById('faceTag' + k), pos: [f.r * nx, f.y, f.r * nz], normal: [nx, nz] };
-      }));
+      }), {
+        onSelect: function(k){
+          var card = document.getElementById('faceCard');
+          PYRAMID_FACES.forEach(function(x, i){
+            var tag = document.getElementById('faceTag' + i);
+            if (tag) tag.classList.toggle('selected', i === k);
+          });
+          if (!card) return;
+          if (k == null){ card.classList.add('hidden'); return; }
+          card.innerHTML = faceCardHtml(k, totals, goals, todayByMeal);
+          card.classList.remove('hidden');
+        }
+      });
     } catch (err){
       console.error('SaviorFuel: 3D panel failed to start —', err);
     }
@@ -4060,29 +4141,51 @@
   // times existed) fall into "Other". Only meal times that have
   // something logged are returned.
   function mealBreakdown(meals){
-    var rows = MEAL_CATEGORIES.map(function(c){ return { id: c.id, label: c.label, kcal: 0, count: 0 }; });
-    var other = { id: 'other', label: 'Other', kcal: 0, count: 0 };
+    var blank = function(id, label){ return { id: id, label: label, kcal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, count: 0 }; };
+    var rows = MEAL_CATEGORIES.map(function(c){ return blank(c.id, c.label); });
+    var other = blank('other', 'Other');
     meals.forEach(function(m){
       var row = rows.filter(function(r){ return r.id === m.category; })[0] || other;
       row.kcal += m.calories || 0;
+      row.protein += m.protein || 0;
+      row.carbs += m.carbs || 0;
+      row.fat += m.fat || 0;
+      row.fiber += m.fiber || 0;
       row.count += 1;
     });
     if (other.count > 0) rows.push(other);
     return rows.filter(function(r){ return r.count > 0; }).map(function(r){
-      return { id: r.id, label: r.label, kcal: Math.round(r.kcal), count: r.count };
+      return { id: r.id, label: r.label, kcal: Math.round(r.kcal), protein: r.protein, carbs: r.carbs, fat: r.fat, fiber: r.fiber, count: r.count };
     });
   }
 
-  // One row per meal time: label, a bar sized by its share of the total,
-  // and the number (divided by `perDay` for a weekly average) with its %.
+  // The four tracked nutrients, in the colours used across the app.
+  var MEAL_NUTRIENTS = [
+    { key: 'protein', short: 'P', cls: 'p' },
+    { key: 'carbs', short: 'C', cls: 'c' },
+    { key: 'fat', short: 'F', cls: 'f' },
+    { key: 'fiber', short: 'Fib', cls: 'fi' }
+  ];
+
+  // "P 35 · C 78 · F 52 · Fib 4" for one meal time (grams, divided by
+  // `perDay` for a weekly average), each letter in its nutrient's colour.
+  function mealMacrosHtml(r, perDay){
+    return MEAL_NUTRIENTS.map(function(n){
+      return '<span class="' + n.cls + '">' + n.short + ' <b>' + Math.round((r[n.key] || 0) / (perDay || 1)) + '</b></span>';
+    }).join(' ');
+  }
+
+  // One entry per meal time: label, a bar sized by its share of the total,
+  // the kcal (divided by `perDay` for a weekly average) with its %, and a
+  // line underneath with that meal's protein / carbs / fat / fibre.
   function mealSplitHtml(rows, total, perDay){
     return rows.map(function(r){
       var share = total > 0 ? Math.round(r.kcal / total * 100) : 0;
-      return '<div class="meal-split-row">' +
+      return '<div class="meal-split-item"><div class="meal-split-row">' +
         '<div class="meal-split-label">' + esc(r.label) + '</div>' +
         '<div class="meal-split-track"><div class="meal-split-fill" style="width:' + Math.max(share, 2) + '%"></div></div>' +
         '<div class="meal-split-val">' + Math.round(r.kcal / (perDay || 1)) + '<span>' + share + '%</span></div>' +
-      '</div>';
+      '</div><div class="meal-split-macros">' + mealMacrosHtml(r, perDay) + '</div></div>';
     }).join('');
   }
 
@@ -4183,7 +4286,10 @@
         '<span class="c">Carbs <b>' + Math.round(d.t.carbs) + 'g</b></span>' +
         '<span class="f">Fat <b>' + Math.round(d.t.fat) + 'g</b></span>' +
       '</div>' +
-      '<div class="day-card-meals">' + d.byMeal.map(function(r){ return esc(r.label) + ' <b>' + r.kcal + '</b>'; }).join(' · ') + '</div>';
+      '<div class="day-card-meals">' + d.byMeal.map(function(r){
+        return '<div class="dcm-row"><span class="dcm-name">' + esc(r.label) + '</span> <b>' + r.kcal + '</b> ' +
+          '<span class="dcm-macros">' + mealMacrosHtml(r, 1) + '</span></div>';
+      }).join('') + '</div>';
   }
 
   function renderTrends3D(){
@@ -4736,6 +4842,12 @@
       switchOverviewModeWithFade(el.dataset.mode);
     } else if (action === 'set-weekly-mode'){
       switchWeeklyModeWithFlip(el.dataset.mode);
+    } else if (action === 'close-face-card'){
+      Model3D.ctx.selected = null;
+      var faceCardEl = document.getElementById('faceCard');
+      if (faceCardEl) faceCardEl.classList.add('hidden');
+      document.querySelectorAll('.face-tag.selected').forEach(function(t){ t.classList.remove('selected'); });
+      Model3D.redraw();
     } else if (action === 'close-day-card'){
       WeekWheel3D.ctx.selected = null;
       var dayCardEl = document.getElementById('dayCard');
