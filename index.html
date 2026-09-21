@@ -3328,7 +3328,7 @@
     var dayMax = Math.max(g.calories, Math.max.apply(null, days.map(function(x){ return x.total; })), 1);
     var goalPos = pct(g.calories, dayMax); // where the goal line sits along each bar
 
-    var html = '<div class="card"><h3 class="section-label">Last 7 days — daily calories</h3>';
+    var html = '<div class="card flat"><h3 class="section-label">Last 7 days — daily calories</h3>';
     html += days.map(function(x){
       return '<div class="insight-bar-row">' +
         '<div class="insight-bar-day">' + x.label + '</div>' +
