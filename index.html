@@ -555,7 +555,8 @@
   .insight-bar-day{width:52px;font-size:11px;color:var(--text-faint);flex-shrink:0;}
   .insight-bar-track{flex:1;height:16px;background:var(--panel-3);border-radius:var(--radius-xs);overflow:hidden;position:relative;}
   .insight-bar-fill{height:100%;background:var(--accent);border-radius:var(--radius-xs);}
-  .insight-bar-fill.over{background:var(--accent-2);}
+  .insight-bar-fill.today{background:#28c4d4;}   /* today's bar is cyan so it stands out from the gold days */
+  .insight-bar-fill.over{background:var(--accent-2);}   /* going over the goal is still red, cyan or not (listed after .today so it wins) */
   /* dashed line across the bars at your calorie goal */
   .insight-goal-mark{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed rgba(255,255,255,0.55);}
   .insight-bar-val{width:48px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0;}
@@ -4415,7 +4416,7 @@
       return '<div class="insight-bar-row">' +
         '<div class="insight-bar-day">' + x.label + '</div>' +
         '<div class="insight-bar-track">' +
-          '<div class="insight-bar-fill' + (g.calories > 0 && x.total > g.calories ? ' over' : '') + '" style="width:' + pct(x.total, dayMax) + '%"></div>' +
+          '<div class="insight-bar-fill' + (x.isToday ? ' today' : '') + (g.calories > 0 && x.total > g.calories ? ' over' : '') + '" style="width:' + pct(x.total, dayMax) + '%"></div>' +
           (g.calories > 0 ? '<i class="insight-goal-mark" style="left:' + goalPos + '%"></i>' : '') +
         '</div>' +
         '<div class="insight-bar-val">' + x.total + '</div>' +
