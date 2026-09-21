@@ -388,6 +388,23 @@
     color:var(--text-dim);cursor:pointer;padding:0;
   }
   .macro-collapse-toggle svg{width:16px;height:16px;transition:transform 0.2s ease;}
+  .macro-summary-card.collapsed .macro-collapse-toggle svg{transform:rotate(180deg);}
+
+  /* Minimize: the protein/carbs/fat bars slide shut (height animates
+     0fr <-> 1fr), leaving the calorie number and a slim progress line. */
+  .macro-bars{display:grid; grid-template-rows:1fr; opacity:1; transition:grid-template-rows 260ms ease, opacity 200ms ease;}
+  .macro-bars > div{overflow:hidden; min-height:0;}
+  .macro-summary-card.collapsed .macro-bars{
+    grid-template-rows:0fr; opacity:0; visibility:hidden;
+    transition:grid-template-rows 260ms ease, opacity 160ms ease, visibility 0s linear 260ms;
+  }
+  .macro-mini-bar{height:4px; border-radius:2px; background:var(--panel-3); overflow:hidden; margin:2px 0 12px;}
+  .macro-mini-bar i{display:block; height:100%; border-radius:2px; background:var(--accent);}
+  .macro-mini-bar i.over{background:var(--accent-2);}
+  .macro-summary-card:not(.collapsed) .macro-mini-bar{display:none;}
+  @media (prefers-reduced-motion: reduce){
+    .macro-bars, .macro-summary-card.collapsed .macro-bars, .macro-collapse-toggle svg{transition:none;}
+  }
   .macro-collapse-toggle:active{background:var(--panel-2);}
   .macro-cal-row-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
   .reset-log-btn{
@@ -1507,7 +1524,7 @@
     return 'dinner';
   }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
-  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d', weeklyMode: '3d', aiScanConsent: false };
+  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d', weeklyMode: '3d', macroCardCollapsed: true, aiScanConsent: false };
   var APP_VERSION = '0.1.0';
 
   function cmToIn(cm){ return cm / 2.54; }
@@ -1539,7 +1556,6 @@
     searchDebounce: null,
     dangerZoneOpen: false,
     justFilledFood: false,
-    macroCardCollapsed: false,
     selectedCategory: 'breakfast', // set properly each time the Add Meal overlay opens
     insightsView: 'today', // 'today' | 'trends' — which Insights sub-tab panel is showing
     serving: null // { unitId, qty } — how the picked food is being measured (see the serving picker)
@@ -1657,21 +1673,28 @@
     var totals = totalsFor(todayMeals);
     var g = STORE.goals;
 
-    var collapsed = ui.macroCardCollapsed;
+    // Minimized by default (just the calorie count and a slim progress
+    // line); the chevron expands the protein/carbs/fat bars, and the
+    // choice is remembered between visits.
+    var collapsed = STORE.appSettings.macroCardCollapsed !== false;
     var resetBtn = todayMeals.length > 0
       ? '<button class="reset-log-btn" data-action="reset-today-log" aria-label="Reset today\u2019s log">&#8635;</button>'
       : '';
-    var chevron = '<button class="macro-collapse-toggle" data-action="toggle-macro-card" aria-label="' + (collapsed ? 'Expand' : 'Collapse') + '">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(' + (collapsed ? '180deg' : '0deg') + ')"><polyline points="18 15 12 9 6 15"></polyline></svg>' +
+    var chevron = '<button class="macro-collapse-toggle" data-action="toggle-macro-card" aria-label="' + (collapsed ? 'Show macros' : 'Hide macros') + '" aria-expanded="' + (!collapsed) + '">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>' +
     '</button>';
+    var calPct = pct(totals.calories, g.calories);
 
-    var html = '<div class="card flat macro-summary-card">' +
+    var html = '<div class="card flat macro-summary-card' + (collapsed ? ' collapsed' : '') + '">' +
       '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div><div class="macro-cal-row-actions">' + resetBtn + chevron + '</div></div>' +
-      (collapsed ? '' :
+      // slim calorie progress line — only visible while the bars are tucked away
+      '<div class="macro-mini-bar"><i class="' + (g.calories > 0 && totals.calories > g.calories ? 'over' : '') + '" style="width:' + calPct + '%"></i></div>' +
+      // the bars always exist; collapsing just slides them shut
+      '<div class="macro-bars"><div>' +
         macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
         macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
-        macroBarHtml('Fat', totals.fat, g.fat, 'fat')
-      ) +
+        macroBarHtml('Fat', totals.fat, g.fat, 'fat') +
+      '</div></div>' +
       '<button class="food-search-trigger" data-action="open-food-search-overlay">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
         'Search or scan a food...' +
@@ -4639,8 +4662,16 @@
     } else if (action === 'close-food-search-overlay'){
       closeFoodSearchOverlay();
     } else if (action === 'toggle-macro-card'){
-      ui.macroCardCollapsed = !ui.macroCardCollapsed;
-      renderApp();
+      var nowCollapsed = !(STORE.appSettings.macroCardCollapsed !== false);
+      STORE.appSettings.macroCardCollapsed = nowCollapsed;
+      saveStore();
+      // flip the class instead of re-rendering, so the panel can animate
+      var macroCard = document.querySelector('.macro-summary-card');
+      if (macroCard){
+        macroCard.classList.toggle('collapsed', nowCollapsed);
+        el.setAttribute('aria-label', nowCollapsed ? 'Show macros' : 'Hide macros');
+        el.setAttribute('aria-expanded', String(!nowCollapsed));
+      }
     } else if (action === 'reset-today-log'){
       resetTodayLog();
     } else if (action === 'calculate-plan'){
