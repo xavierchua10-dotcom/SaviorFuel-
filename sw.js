@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v2';
+var SHELL_CACHE = 'saviorfuel-shell-v3';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Only files confirmed to actually exist in the repo right now.
@@ -27,8 +27,7 @@ var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 var SHELL_FILES = [
   './',
   './index.html',
-  './manifest.json',
-  './images/bg-nutrition.webp'
+  './manifest.json'
 ];
 
 var NEVER_CACHE_HOSTS = [

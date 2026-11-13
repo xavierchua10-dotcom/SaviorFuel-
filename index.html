@@ -141,10 +141,6 @@
     display:flex;
     flex-direction:column;
     background-color:var(--bg);
-    background-image:linear-gradient(rgba(20,22,26,0.88), rgba(20,22,26,0.88)), url('images/bg-nutrition.webp');
-    background-size:cover;
-    background-position:center top;
-    background-repeat:no-repeat;
     overflow:hidden;
   }
   /* Toggled off via Settings > Appearance — plain background color
@@ -1535,8 +1531,7 @@
     --c-carbs:#b98100;
     --c-fat:#1d79ad;
   }
-  #app{background-image:linear-gradient(rgba(14,23,18,0.90), rgba(14,23,18,0.94)), url('images/bg-nutrition.webp');}
-  body[data-theme="light"] #app{background-image:linear-gradient(rgba(241,246,239,0.93), rgba(241,246,239,0.96)), url('images/bg-nutrition.webp');}
+  #app{background-image:none;}
   body[data-bg-art="off"] #app{background-image:none;}
   body[data-theme="light"] .category-pill.active, body[data-theme="light"] .unit-toggle button.active{color:#fff;}
   .macro-bar-fill.protein, .macro-ring-fill.protein{background:var(--c-protein);} .macro-ring-fill.protein{stroke:var(--c-protein);}
@@ -1560,20 +1555,19 @@
   .tabbar button.active{background:rgba(var(--accent-rgb),.16);}
   .tabbar button:active{background:var(--panel-2);}
   .tabbar button[data-tab="scan"]{
-    flex:0 0 66px; width:66px; height:58px; margin-top:-28px; padding:0;
-    font-size:0; justify-content:center; align-items:center;
-  }
-  .tabbar button[data-tab="scan"] .tab-glyph{
-    display:flex; align-items:center; justify-content:center;
-    width:60px; height:60px; border-radius:50%;
-    background:linear-gradient(135deg,#a6e36b,#3fae66); color:#0b1a10;
-    box-shadow:0 8px 22px rgba(80,200,110,.45), 0 0 0 5px var(--bg);
+    --fab-bg:linear-gradient(135deg,#a6e36b,#3fae66);
+    flex:0 0 62px; width:62px; height:62px; margin:-12px 4px 0; padding:0; align-self:center;
+    border-radius:50%; font-size:0; display:flex; align-items:center; justify-content:center;
+    background:var(--fab-bg); color:#0b1a10;
+    box-shadow:0 6px 18px rgba(80,200,110,.4), 0 0 0 4px var(--bg);
     transition:transform 120ms ease, box-shadow 120ms ease;
   }
+  .tabbar button[data-tab="scan"] .tab-glyph{display:flex; align-items:center; justify-content:center; transform:none;}
   .tabbar button[data-tab="scan"] .tab-glyph svg{width:28px; height:28px;}
-  .tabbar button[data-tab="scan"].active{background:none;}
-  .tabbar button[data-tab="scan"].active .tab-glyph{box-shadow:0 8px 26px rgba(80,200,110,.7), 0 0 0 5px var(--bg), 0 0 0 7px rgba(var(--accent-rgb),.55);}
-  body[data-theme="light"] .tabbar button[data-tab="scan"] .tab-glyph{background:linear-gradient(135deg,#5fae22,#2f7d32); color:#fff; box-shadow:0 8px 20px rgba(47,125,50,.4), 0 0 0 5px var(--bg);}
+  .tabbar button[data-tab="scan"]:active, .tabbar button[data-tab="scan"].active{background:var(--fab-bg);}
+  .tabbar button[data-tab="scan"]:active{transform:scale(.94);}
+  .tabbar button[data-tab="scan"].active{box-shadow:0 6px 22px rgba(80,200,110,.65), 0 0 0 4px var(--bg), 0 0 0 6px rgba(var(--accent-rgb),.55);}
+  body[data-theme="light"] .tabbar button[data-tab="scan"]{--fab-bg:linear-gradient(135deg,#5fae22,#2f7d32); color:#fff; box-shadow:0 6px 16px rgba(47,125,50,.4), 0 0 0 4px var(--bg);}
   main#view{padding-bottom:calc(76px + var(--safe-bottom));}
 
   /* ---- Log: header row, week strip ---- */
@@ -5129,11 +5123,6 @@
               '<div class="seg">' +
                 '<button data-action="set-theme" data-theme="dark" class="' + (s.theme !== 'light' ? 'active' : '') + '">Dark</button>' +
                 '<button data-action="set-theme" data-theme="light" class="' + (s.theme === 'light' ? 'active' : '') + '">Light</button>' +
-              '</div></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">Background image</div><div class="sr-sub">The food illustration behind everything</div></div>' +
-              '<div class="seg">' +
-                '<button data-action="set-bg-art" data-val="on" class="' + (s.bgArt !== false ? 'active' : '') + '">On</button>' +
-                '<button data-action="set-bg-art" data-val="off" class="' + (s.bgArt === false ? 'active' : '') + '">Off</button>' +
               '</div></div>';
     html += '<div class="settings-row"><div><div class="sr-label">Density</div><div class="sr-sub">Fit more on screen in Log &amp; History</div></div>' +
               '<div class="seg">' +
