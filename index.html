@@ -1540,6 +1540,19 @@
   body[data-theme="light"] .tabbar button[data-tab="scan"]{--fab-bg:linear-gradient(135deg,#5fae22,#2f7d32); color:#fff; box-shadow:0 6px 16px rgba(47,125,50,.4), 0 0 0 4px var(--bg);}
   main#view{padding-bottom:calc(76px + var(--safe-bottom));}
 
+  /* Content dissolves into the floating nav (same fade as SaviorFit Logger): a scrim behind the buttons, taller than the nav by 56px. */
+  .bottom-nav::before{
+    content:'';position:absolute;left:0;right:0;bottom:0;top:-56px;z-index:-1;pointer-events:none;
+    background:linear-gradient(to bottom,transparent 0,var(--bg) 78px);
+  }
+  /* Press feedback: the whole tab button lights up and squeezes in while a finger is down. */
+  .tabbar button:not([data-tab="scan"]){transition:scale .24s cubic-bezier(.3,1.7,.5,1),background-color .26s ease;}
+  .tabbar button:not([data-tab="scan"]):active{scale:.92;background:rgba(255,255,255,.13);transition-duration:.07s,.07s;}
+  .tabbar button.active:not([data-tab="scan"]):active{background:rgba(var(--accent-rgb),.30);}
+  body[data-theme="light"] .tabbar button:not([data-tab="scan"]):active{background:rgba(23,38,29,.10);}
+  body[data-theme="light"] .tabbar button.active:not([data-tab="scan"]):active{background:rgba(var(--accent-rgb),.30);}
+  .tabbar button:not([data-tab="scan"]):active .tab-glyph{transform:none;}
+
   /* ---- Log: header row, week strip ---- */
   .log-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
   .log-head-title{display:flex; align-items:baseline; gap:8px;}
