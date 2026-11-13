@@ -17,17 +17,25 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v4';
+var SHELL_CACHE = 'saviorfuel-shell-v5';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
-// Only files confirmed to actually exist in the repo right now.
-// manifest.json references icons/icon-*.png that don't exist yet —
-// left out here on purpose, since cache.addAll() aborts the whole
-// install if even one URL in the list 404s.
+// Required: cache.addAll() aborts the whole install if even one URL in
+// this list 404s, so only files that certainly exist go here.
 var SHELL_FILES = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/apple-touch-icon.png',
+  './images/logo-mark.png'
+];
+// Nice-to-have (big 3D models for the Insights tab): fetched after install,
+// one by one, and a failure here never blocks the install.
+var EXTRA_FILES = [
+  './models/food-pyramid-v2.glb',
+  './models/week-wheel-v1.glb'
 ];
 
 var NEVER_CACHE_HOSTS = [
@@ -44,7 +52,12 @@ var NEVER_CACHE_HOSTS = [
 self.addEventListener('install', function(event){
   event.waitUntil(
     caches.open(SHELL_CACHE)
-      .then(function(cache){ return cache.addAll(SHELL_FILES); })
+      .then(function(cache){
+        return cache.addAll(SHELL_FILES).then(function(){
+          // not awaited by the install itself — keeps first install fast
+          EXTRA_FILES.forEach(function(u){ cache.add(u).catch(function(){}); });
+        });
+      })
       .then(function(){ return self.skipWaiting(); }) // new SW takes over without waiting for all tabs to close
   );
 });

@@ -1,23 +1,97 @@
 {
-  "id": "/",
   "name": "SaviorFuel",
   "short_name": "SaviorFuel",
   "description": "Log your meals and macros. A free food tracker by Savior.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "portrait",
   "background_color": "#0e1712",
   "theme_color": "#0a120d",
   "lang": "en",
   "dir": "ltr",
-  "gcm_sender_id": "103953800507",
-  "categories": ["health", "food", "lifestyle"],
-  "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  "categories": [
+    "health",
+    "food",
+    "lifestyle"
   ],
-  "prefer_related_applications": false
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Scan a food",
+      "short_name": "Scan",
+      "url": "./?tab=scan",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Today's log",
+      "short_name": "Log",
+      "url": "./?tab=log",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Insights",
+      "short_name": "Insights",
+      "url": "./?tab=insights",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/log.png",
+      "sizes": "720x1560",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Log your meals"
+    },
+    {
+      "src": "screenshots/insights.png",
+      "sizes": "720x1560",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Insights in 3D"
+    }
+  ]
 }

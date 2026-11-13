@@ -1716,6 +1716,23 @@
   body[data-theme="light"] .welcome-primary{color:#fff;}
   .welcome-primary:active{transform:scale(.98);}
   .welcome-skip{border:none; background:none; color:var(--text-faint); font-size:13px; padding:10px; cursor:pointer;}
+
+  /* ---- Install banner / iOS help ---- */
+  .install-banner{display:flex; align-items:center; gap:12px; background:var(--panel); border:1px solid rgba(var(--accent-rgb),.45); border-radius:var(--radius-xl); padding:10px 8px 10px 10px; margin-bottom:12px;}
+  .install-banner-icon{width:42px; height:42px; border-radius:12px; flex-shrink:0;}
+  .install-banner-text{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+  .install-banner-text b{font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text);}
+  .install-banner-text span{font-size:12px; color:var(--text-faint);}
+  .install-banner-btn{border:none; background:var(--accent); color:#0f2410; border-radius:var(--radius-pill); padding:9px 16px; font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.07em; text-transform:uppercase; font-weight:700; cursor:pointer;}
+  body[data-theme="light"] .install-banner-btn{color:#fff;}
+  .install-banner-x{border:none; background:none; color:var(--text-faint); font-size:22px; line-height:1; width:32px; height:32px; cursor:pointer;}
+  .install-help{position:fixed; inset:0; z-index:320; background:rgba(0,0,0,.6); display:flex; align-items:flex-end; justify-content:center;}
+  .install-help-card{width:100%; max-width:480px; background:var(--panel); border-radius:26px 26px 0 0; padding:22px 22px calc(22px + var(--safe-bottom)); display:flex; flex-direction:column; gap:12px; color:var(--text);}
+  .install-help-logo{width:64px; height:64px; align-self:center;}
+  .install-help-card h3{margin:0; text-align:center; font-family:'Oswald',sans-serif; font-size:20px; letter-spacing:0.05em; text-transform:uppercase;}
+  .install-help-card ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:10px; font-size:14px; line-height:1.5; color:var(--text-dim);}
+  .install-help-card ol b{color:var(--text);}
+  .ih-share{display:inline-block; color:var(--accent); font-weight:700;}
 </style>
 </head>
 <body>
@@ -2234,7 +2251,7 @@
     var chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>';
     var chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
 
-    var html = '<div class="log-head">' +
+    var html = installBannerHtml() + '<div class="log-head">' +
         '<div class="log-head-title"><b>' + formatDateLabel(viewKey) + '</b>' +
           (isToday ? '<span>' + new Date(viewKey + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }) + '</span>' : '') + '</div>' +
         '<div class="log-head-actions">' + resetBtn +
@@ -5303,6 +5320,10 @@
               '<div class="sr-sub">Kalori (Malaysian foods) · USDA FoodData Central · Open Food Facts. Product photos come from Open Food Facts contributors (CC BY-SA).</div></div></div>';
     html += '<div class="settings-row"><div><div class="sr-label">About SaviorFuel</div>' +
               '<div class="sr-sub">\u00a9 2026 Xavier Chua (Savior). All rights reserved. The app\'s code and design may not be copied or reused.</div></div></div>';
+    if (canOfferInstall()){
+      html += '<div class="settings-row"><div><div class="sr-label">Install app</div><div class="sr-sub">' + (deferredInstall ? 'Add SaviorFuel to your home screen' : 'Add it to your home screen from Safari') + '</div></div>' +
+              '<button class="sr-action" data-action="install-app">Install</button></div>';
+    }
     html += '<div class="settings-row"><div><div class="sr-label">Export backup</div><div class="sr-sub">Download a JSON file of your log</div></div>' +
               '<button class="sr-action" data-action="export-data">Export</button></div>';
     html += '<div class="settings-row"><div><div class="sr-label">Import backup</div><div class="sr-sub">Restore from a JSON file</div></div>' +
@@ -5676,6 +5697,14 @@
         el.setAttribute('aria-label', nowCollapsed ? 'Show macros' : 'Hide macros');
         el.setAttribute('aria-expanded', String(!nowCollapsed));
       }
+    } else if (action === 'install-app'){
+      installApp();
+    } else if (action === 'dismiss-install'){
+      STORE.appSettings.installDismissed = true;
+      saveStore();
+      renderApp();
+    } else if (action === 'close-install-help'){
+      var ih = document.getElementById('installHelp'); if (ih) ih.remove();
     } else if (action === 'copy-meal'){
       copyMealToToday(el.dataset.id);
     } else if (action === 'toggle-fav'){
@@ -5788,6 +5817,77 @@
     }
   });
 
+
+
+  /* =========================================================
+     INSTALL AS AN APP (PWA)
+     Android/desktop Chrome: capture the browser's install prompt and
+     offer it from Settings + a dismissible banner on Log.
+     iPhone/iPad: no prompt exists, so show "Share > Add to Home Screen".
+     ========================================================= */
+  var deferredInstall = null;
+  function isStandalone(){
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  }
+  function isIOSDevice(){
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+  function canOfferInstall(){
+    return !isStandalone() && (!!deferredInstall || isIOSDevice());
+  }
+
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();               // we show our own button instead of the mini-bar
+    deferredInstall = e;
+    if (state.tab === 'log' || state.tab === 'settings') renderApp();
+  });
+  window.addEventListener('appinstalled', function(){
+    deferredInstall = null;
+    STORE.appSettings.installDismissed = true;
+    saveStore();
+    renderApp();
+    showToast('SaviorFuel installed');
+  });
+
+  function installApp(){
+    if (deferredInstall){
+      var promptEvent = deferredInstall;
+      promptEvent.prompt();
+      promptEvent.userChoice.then(function(choice){
+        deferredInstall = null;
+        if (choice && choice.outcome !== 'accepted'){ STORE.appSettings.installDismissed = true; saveStore(); }
+        renderApp();
+      });
+    } else if (isIOSDevice()){
+      openInstallHelp();
+    }
+  }
+
+  function openInstallHelp(){
+    if (document.getElementById('installHelp')) return;
+    var el = document.createElement('div');
+    el.id = 'installHelp';
+    el.className = 'install-help';
+    el.innerHTML = '<div class="install-help-card" role="dialog" aria-label="Install SaviorFuel">' +
+        '<img src="images/logo-mark.png" alt="" class="install-help-logo">' +
+        '<h3>Add to Home Screen</h3>' +
+        '<ol><li>Tap the <b>Share</b> button <span class="ih-share">⬆︎</span> in Safari’s toolbar</li>' +
+        '<li>Scroll down and tap <b>Add to Home Screen</b></li>' +
+        '<li>Tap <b>Add</b> — SaviorFuel opens like a normal app</li></ol>' +
+        '<button type="button" class="welcome-primary" data-action="close-install-help">Got it</button>' +
+      '</div>';
+    document.body.appendChild(el);
+  }
+
+  function installBannerHtml(){
+    if (!canOfferInstall() || STORE.appSettings.installDismissed || STORE.meals.length === 0) return '';
+    return '<div class="install-banner">' +
+      '<img src="icons/icon-192.png" alt="" class="install-banner-icon">' +
+      '<div class="install-banner-text"><b>Install SaviorFuel</b><span>Opens like an app, works offline</span></div>' +
+      '<button type="button" class="install-banner-btn" data-action="install-app">Install</button>' +
+      '<button type="button" class="install-banner-x" data-action="dismiss-install" aria-label="Dismiss">×</button>' +
+    '</div>';
+  }
 
   /* =========================================================
      FIRST-RUN WELCOME — 4 short steps, skippable at any point.
@@ -5929,6 +6029,12 @@
     }
     renderWelcome();
   });
+
+  // App shortcuts (long-press the icon) open e.g. "./?tab=scan".
+  try {
+    var launchTab = new URLSearchParams(location.search).get('tab');
+    if (['log', 'history', 'scan', 'insights', 'settings'].indexOf(launchTab) !== -1) state.tab = launchTab;
+  } catch (e) {}
 
   applyAppearanceSettings();
   document.getElementById('bootLoading').classList.add('hidden');
