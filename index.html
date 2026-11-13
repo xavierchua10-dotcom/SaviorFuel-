@@ -1482,6 +1482,174 @@
     color:var(--text);
   }
   .boot-loading-mark span{color:var(--accent);}
+
+  /* =========================================================
+     SAVIORFUEL LOOK — "Fresh Plate"
+     Deep green + lime. Its own identity (not SaviorFit's gold).
+     Overrides the shared tokens above; layout rules below add the
+     week strip, ring hero, meal cards and the floating nav with a
+     raised Scan button in the middle.
+     ========================================================= */
+  :root{
+    --bg:#0e1712;
+    --panel:#17261d;
+    --panel-2:#1d3025;
+    --panel-3:#2a4a35;
+    --line:#263b2d;
+    --text:#e6efe8;
+    --text-dim:#9bb8a4;
+    --text-faint:#86a38f;
+    --accent:#a6e36b;
+    --accent-dim:#3b5a24;
+    --accent-rgb:166,227,107;
+    --accent-2:#ee5d5d;
+    --accent-2-dim:#4a2323;
+    --success:#4fb870;
+    --success-dim:#1f3a2a;
+    --c-protein:#ff8a65;
+    --c-carbs:#ffd166;
+    --c-fat:#6cc4ee;
+    --header-bg:rgba(10,18,13,0.78);
+    --header-text:#e6efe8;
+    --header-text-faint:#86a38f;
+    --header-accent:#a6e36b;
+    --header-line:#223629;
+  }
+  body[data-theme="light"]{
+    --bg:#f1f6ef;
+    --panel:#ffffff;
+    --panel-2:#e9f1e6;
+    --panel-3:#d9e8d3;
+    --line:#d3e0cf;
+    --text:#17261d;
+    --text-dim:#4d6657;
+    --text-faint:#587261;
+    --accent:#3f7a12;
+    --accent-dim:#dcefc8;
+    --accent-rgb:63,122,18;
+    --accent-2:#c93a3a;
+    --accent-2-dim:#f7dcdc;
+    --success:#2c7a47;
+    --success-dim:#dff1e5;
+    --c-protein:#d9552b;
+    --c-carbs:#b98100;
+    --c-fat:#1d79ad;
+  }
+  #app{background-image:linear-gradient(rgba(14,23,18,0.90), rgba(14,23,18,0.94)), url('images/bg-nutrition.webp');}
+  body[data-theme="light"] #app{background-image:linear-gradient(rgba(241,246,239,0.93), rgba(241,246,239,0.96)), url('images/bg-nutrition.webp');}
+  body[data-bg-art="off"] #app{background-image:none;}
+  body[data-theme="light"] .category-pill.active, body[data-theme="light"] .unit-toggle button.active{color:#fff;}
+  .macro-bar-fill.protein, .macro-ring-fill.protein{background:var(--c-protein);} .macro-ring-fill.protein{stroke:var(--c-protein);}
+  .macro-bar-fill.carbs{background:var(--c-carbs);} .macro-ring-fill.carbs{stroke:var(--c-carbs);}
+  .macro-bar-fill.fat{background:var(--c-fat);} .macro-ring-fill.fat{stroke:var(--c-fat);}
+  .macro-bar-fill.over{background:var(--accent-2);} .macro-ring-fill.over{stroke:var(--accent-2);}
+
+  /* ---- Floating nav with raised Scan button ---- */
+  .tabbar{
+    margin:0 12px calc(8px + var(--safe-bottom));
+    padding:6px;
+    gap:2px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:32px;
+    box-shadow:0 10px 28px rgba(0,0,0,.35);
+  }
+  body[data-theme="light"] .tabbar{box-shadow:0 8px 22px rgba(23,38,29,.14);}
+  .tabbar .tab-slider{display:none;}
+  .tabbar button{border-radius:24px; padding:8px 2px 6px; letter-spacing:0.05em;}
+  .tabbar button.active{background:rgba(var(--accent-rgb),.16);}
+  .tabbar button:active{background:var(--panel-2);}
+  .tabbar button[data-tab="scan"]{
+    flex:0 0 66px; width:66px; height:58px; margin-top:-28px; padding:0;
+    font-size:0; justify-content:center; align-items:center;
+  }
+  .tabbar button[data-tab="scan"] .tab-glyph{
+    display:flex; align-items:center; justify-content:center;
+    width:60px; height:60px; border-radius:50%;
+    background:linear-gradient(135deg,#a6e36b,#3fae66); color:#0b1a10;
+    box-shadow:0 8px 22px rgba(80,200,110,.45), 0 0 0 5px var(--bg);
+    transition:transform 120ms ease, box-shadow 120ms ease;
+  }
+  .tabbar button[data-tab="scan"] .tab-glyph svg{width:28px; height:28px;}
+  .tabbar button[data-tab="scan"].active{background:none;}
+  .tabbar button[data-tab="scan"].active .tab-glyph{box-shadow:0 8px 26px rgba(80,200,110,.7), 0 0 0 5px var(--bg), 0 0 0 7px rgba(var(--accent-rgb),.55);}
+  body[data-theme="light"] .tabbar button[data-tab="scan"] .tab-glyph{background:linear-gradient(135deg,#5fae22,#2f7d32); color:#fff; box-shadow:0 8px 20px rgba(47,125,50,.4), 0 0 0 5px var(--bg);}
+  main#view{padding-bottom:calc(76px + var(--safe-bottom));}
+
+  /* ---- Log: header row, week strip ---- */
+  .log-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .log-head-title{display:flex; align-items:baseline; gap:8px;}
+  .log-head-title b{font-family:'Oswald',sans-serif; font-size:20px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text);}
+  .log-head-title span{font-size:12px; color:var(--text-faint);}
+  .log-head-actions{display:flex; align-items:center; gap:6px;}
+  .week-nav{
+    width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:var(--panel);
+    color:var(--text-dim); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .week-nav svg{width:15px; height:15px;}
+  .week-nav:disabled{opacity:.35; cursor:default;}
+  .week-nav:active:not(:disabled){background:var(--panel-2);}
+  .week-strip{display:flex; justify-content:space-between; gap:6px;}
+  .week-day{
+    flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:6px;
+    background:none; border:none; padding:0; cursor:pointer; color:var(--text-faint);
+    font-family:'Inter',sans-serif; font-size:11px;
+  }
+  .week-day .wd-num{
+    width:100%; max-width:44px; height:44px; border-radius:16px; background:var(--panel);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald',sans-serif; font-weight:600; font-size:16px; color:var(--text-dim);
+  }
+  .week-day.is-today .wd-num{box-shadow:inset 0 0 0 1.5px rgba(var(--accent-rgb),.6);}
+  .week-day.active{color:var(--accent);}
+  .week-day.active .wd-num{background:var(--accent); color:#0f2410; font-weight:700; box-shadow:none;}
+  body[data-theme="light"] .week-day.active .wd-num{color:#fff;}
+  .week-day:disabled{opacity:.35; cursor:default;}
+  .week-day:active:not(:disabled) .wd-num{transform:scale(.94);}
+
+  /* ---- Log: ring hero ---- */
+  .hero-ring{position:relative; width:min(100%,250px); margin:16px auto 6px; aspect-ratio:1;}
+  .hero-ring-svg{width:100%; height:100%; transform:rotate(-90deg); display:block;}
+  .hero-ring-track{fill:none; stroke:var(--panel-2);}
+  .hero-ring-fill{fill:none; stroke-linecap:round; transition:stroke-dashoffset 500ms ease;}
+  .hero-ring-fill.ring-cal{stroke:var(--accent);}
+  .hero-ring-fill.ring-cal.over{stroke:var(--accent-2);}
+  .hero-ring-fill.ring-protein{stroke:var(--c-protein);}
+  .hero-ring-fill.ring-carbs{stroke:var(--c-carbs);}
+  .hero-ring-fill.ring-fat{stroke:var(--c-fat);}
+  .hero-ring-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; pointer-events:none;}
+  .hero-ring-num{font-family:'Oswald',sans-serif; font-weight:700; font-size:36px; line-height:1; color:var(--text);}
+  .hero-ring-num.over{color:var(--accent-2);}
+  .hero-ring-sub{margin-top:4px; font-size:10px; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-faint);}
+  .macro-tiles{display:flex; gap:8px; margin-top:6px;}
+  .macro-tile{flex:1; min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-xl); padding:10px 12px;}
+  .macro-tile-label{display:flex; align-items:center; gap:6px; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint);}
+  .macro-tile-label .dot{width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0;}
+  .macro-tile-label .dot.protein{background:var(--c-protein);}
+  .macro-tile-label .dot.carbs{background:var(--c-carbs);}
+  .macro-tile-label .dot.fat{background:var(--c-fat);}
+  .macro-tile-val{margin-top:4px; font-family:'Oswald',sans-serif; font-size:22px; font-weight:700; color:var(--text);}
+  .macro-tile-val span{font-size:11px; font-weight:500; color:var(--text-faint); margin-left:2px;}
+  .macro-tile-val.over{color:var(--accent-2);}
+  .food-search-trigger{border-radius:var(--radius-pill); margin-top:12px; padding:13px 18px;}
+
+  /* ---- Log: meal cards ---- */
+  .meal-group .card.flat{background:none; border:none; box-shadow:none; padding:0;}
+  .meal-group .meal-row, #view .meal-row{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-xl);
+    padding:11px 12px; margin-bottom:8px; gap:10px; display:flex; align-items:center;
+  }
+  .meal-row:last-child{border-bottom:1px solid var(--line);}
+  .meal-badge{
+    width:42px; height:42px; flex-shrink:0; border-radius:15px; background:var(--panel-3); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; font-family:'Oswald',sans-serif; font-weight:700; font-size:18px;
+  }
+  .meal-row-cal{font-size:19px;}
+  .meal-row-name-text{font-size:14.5px;}
+  .category-section-label{margin-top:18px;}
+
+  /* ---- Insights: segmented bar sits above the floating nav ---- */
+  .insights-subtabbar{margin:0 12px 34px; border-radius:var(--radius-pill); overflow:hidden; border:1px solid var(--line);}
 </style>
 </head>
 <body>
@@ -1504,14 +1672,14 @@
   <nav class="tabbar" id="tabbar">
     <span class="tab-slider" aria-hidden="true"></span>
     <button data-action="set-tab" data-tab="log" class="active">
-      <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="4" width="4" height="16" rx="1.3"/><rect x="19" y="4" width="4" height="16" rx="1.3"/><rect x="5" y="10.4" width="14" height="3.2" rx="1"/></svg></span>
+      <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v7.2c0 1 .7 1.8 1.6 2V22h2V11.2c.9-.2 1.6-1 1.6-2V2h-1.6v5.6h-1.1V2H8.7v5.6H7.6V2zM17.2 2c-2 1.3-3.2 3.8-3.2 6.6 0 2 .9 3.2 2.2 3.6V22h2V2z"/></svg></span>
       Log
     </button>
     <button data-action="set-tab" data-tab="history">
       <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="5" width="18" height="3" rx="1"/><rect x="3" y="10.5" width="18" height="3" rx="1"/><rect x="3" y="16" width="12" height="3" rx="1"/></svg></span>
       History
     </button>
-    <button data-action="set-tab" data-tab="scan">
+    <button data-action="set-tab" data-tab="scan" aria-label="Scan">
       <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h6v2.4H5.4V9H3z"/><path d="M15 3h6v6h-2.4V5.4H15z"/><path d="M3 15h2.4v3.6H9V21H3z"/><path d="M18.6 15H21v6h-6v-2.4h3.6z"/><rect x="6.5" y="11" width="11" height="2" rx="1"/></svg></span>
       Scan
     </button>
@@ -1754,6 +1922,7 @@
   var state = { tab: 'log' };
   var ui = {
     historyOpenDay: null,
+    logDay: null,         // day the Log tab shows (null = today); set by the week strip
     selectedFood: null,   // { name, brand, per100g: {cal,protein,carbs,fat} } once a search result is tapped
     grams: 100,            // serving size in grams, scales the selected food's macros
     prefillName: null, prefillCal: null, prefillProtein: null, prefillCarbs: null, prefillFat: null,
@@ -1919,49 +2088,119 @@
   /* =========================================================
      RENDER — LOG TAB
      ========================================================= */
+  // ---- Log day / week strip helpers ----
+  // ui.logDay is the day the Log tab is showing (null = today). The week
+  // strip above the ring lets you flip to any earlier day and see/edit it.
+  function addDaysKey(key, n){
+    var d = new Date(key + 'T00:00:00');
+    d.setDate(d.getDate() + n);
+    return dateKey(d.getTime());
+  }
+  function logDayKey(){
+    var t = todayKey();
+    return (ui.logDay && ui.logDay <= t) ? ui.logDay : t;
+  }
+  function weekStartKey(key){
+    var d = new Date(key + 'T00:00:00');
+    return addDaysKey(key, -((d.getDay() + 6) % 7)); // Monday
+  }
+
+  var HERO_RINGS = [
+    { id: 'cal',     r: 119, w: 14 },
+    { id: 'protein', r: 99,  w: 9 },
+    { id: 'carbs',   r: 85,  w: 9 },
+    { id: 'fat',     r: 71,  w: 9 }
+  ];
+  function heroRingSvg(totals, g){
+    var vals = { cal: [totals.calories, g.calories], protein: [totals.protein, g.protein], carbs: [totals.carbs, g.carbs], fat: [totals.fat, g.fat] };
+    var out = '<svg class="hero-ring-svg" viewBox="0 0 260 260" aria-hidden="true">';
+    HERO_RINGS.forEach(function(rg){
+      var c = 2 * Math.PI * rg.r;
+      var v = vals[rg.id];
+      var frac = v[1] > 0 ? Math.min(v[0] / v[1], 1) : 0;
+      var over = v[1] > 0 && v[0] > v[1];
+      out += '<circle class="hero-ring-track" cx="130" cy="130" r="' + rg.r + '" style="stroke-width:' + rg.w + '"></circle>';
+      if (frac > 0){
+        out += '<circle class="hero-ring-fill ring-' + rg.id + (over && rg.id === 'cal' ? ' over' : '') + '" cx="130" cy="130" r="' + rg.r + '" ' +
+          'style="stroke-width:' + rg.w + ';stroke-dasharray:' + c.toFixed(2) + ';stroke-dashoffset:' + (c * (1 - frac)).toFixed(2) + '"></circle>';
+      }
+    });
+    return out + '</svg>';
+  }
+
+  function macroTileHtml(label, value, goal, cls){
+    var over = goal > 0 && value > goal;
+    return '<div class="macro-tile">' +
+      '<div class="macro-tile-label"><i class="dot ' + cls + '"></i>' + label + '</div>' +
+      '<div class="macro-tile-val' + (over ? ' over' : '') + '">' + Math.round(value) + '<span>/' + goal + 'g</span></div>' +
+    '</div>';
+  }
+
+  function weekStripHtml(viewKey){
+    var today = todayKey();
+    var start = weekStartKey(viewKey);
+    var names = ['M','T','W','T','F','S','S'];
+    var html = '<div class="week-strip" role="tablist" aria-label="Pick a day">';
+    for (var i = 0; i < 7; i++){
+      var k = addDaysKey(start, i);
+      var future = k > today;
+      var dayNum = Number(k.slice(8));
+      html += '<button type="button" class="week-day' + (k === viewKey ? ' active' : '') + (k === today ? ' is-today' : '') + '"' +
+        (future ? ' disabled' : '') + ' data-action="set-log-day" data-day="' + k + '" aria-label="' + esc(formatDateLabel(k)) + '">' +
+        '<span class="wd-name">' + names[i] + '</span><span class="wd-num">' + dayNum + '</span></button>';
+    }
+    return html + '</div>';
+  }
+
   function renderLog(){
-    var todayMeals = mealsForDay(todayKey()).sort(function(a,b){ return b.loggedAt - a.loggedAt; });
-    var totals = totalsFor(todayMeals);
+    var viewKey = logDayKey();
+    var isToday = viewKey === todayKey();
+    var dayMeals = mealsForDay(viewKey).sort(function(a,b){ return b.loggedAt - a.loggedAt; });
+    var totals = totalsFor(dayMeals);
     var g = STORE.goals;
+    var left = g.calories - totals.calories;
+    var overCal = g.calories > 0 && totals.calories > g.calories;
 
-    // Minimized by default (just the calorie count and a slim progress
-    // line); the chevron expands the protein/carbs/fat bars, and the
-    // choice is remembered between visits.
-    var collapsed = STORE.appSettings.macroCardCollapsed !== false;
-    var resetBtn = todayMeals.length > 0
-      ? '<button class="reset-log-btn" data-action="reset-today-log" aria-label="Reset today\u2019s log">&#8635;</button>'
+    var resetBtn = (isToday && dayMeals.length > 0)
+      ? '<button class="reset-log-btn" data-action="reset-today-log" aria-label="Reset today’s log">&#8635;</button>'
       : '';
-    var chevron = '<button class="macro-collapse-toggle" data-action="toggle-macro-card" aria-label="' + (collapsed ? 'Show macros' : 'Hide macros') + '" aria-expanded="' + (!collapsed) + '">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>' +
-    '</button>';
-    var calPct = pct(totals.calories, g.calories);
+    var weekNext = addDaysKey(weekStartKey(viewKey), 7) <= todayKey();
+    var chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>';
+    var chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
 
-    var html = '<div class="card flat macro-summary-card' + (collapsed ? ' collapsed' : '') + '">' +
-      '<div class="macro-cal-row"><div class="num">' + totals.calories + ' <span>/ ' + g.calories + ' kcal</span></div><div class="macro-cal-row-actions">' + resetBtn + chevron + '</div></div>' +
-      // slim calorie progress line — only visible while the bars are tucked away
-      '<div class="macro-mini-bar"><i class="' + (g.calories > 0 && totals.calories > g.calories ? 'over' : '') + '" style="width:' + calPct + '%"></i></div>' +
-      // the bars always exist; collapsing just slides them shut
-      '<div class="macro-bars"><div>' +
-        macroBarHtml('Protein', totals.protein, g.protein, 'protein') +
-        macroBarHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
-        macroBarHtml('Fat', totals.fat, g.fat, 'fat') +
-      '</div></div>' +
+    var html = '<div class="log-head">' +
+        '<div class="log-head-title"><b>' + formatDateLabel(viewKey) + '</b>' +
+          (isToday ? '<span>' + new Date(viewKey + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }) + '</span>' : '') + '</div>' +
+        '<div class="log-head-actions">' + resetBtn +
+          '<button class="week-nav" data-action="log-week" data-dir="-1" aria-label="Previous week">' + chevL + '</button>' +
+          '<button class="week-nav" data-action="log-week" data-dir="1" aria-label="Next week"' + (weekNext ? '' : ' disabled') + '>' + chevR + '</button>' +
+        '</div>' +
+      '</div>' +
+      weekStripHtml(viewKey) +
+      '<div class="hero-ring">' +
+        heroRingSvg(totals, g) +
+        '<div class="hero-ring-center">' +
+          '<div class="hero-ring-num' + (overCal ? ' over' : '') + '">' + Math.round(totals.calories).toLocaleString() + '</div>' +
+          '<div class="hero-ring-sub">' + (g.calories > 0 ? (overCal ? Math.round(-left).toLocaleString() + ' kcal over' : Math.round(left).toLocaleString() + ' kcal left') : 'kcal eaten') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="macro-tiles">' +
+        macroTileHtml('Protein', totals.protein, g.protein, 'protein') +
+        macroTileHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
+        macroTileHtml('Fat', totals.fat, g.fat, 'fat') +
+      '</div>' +
       '<button class="food-search-trigger" data-action="open-food-search-overlay">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
         'Search or scan a food...' +
-      '</button>' +
-    '</div>';
+      '</button>';
 
-    // Add Meal now lives in its own overlay (see openAddMealOverlay) —
-    // nothing rendered inline here for it anymore.
-
-    if (todayMeals.length === 0){
+    if (dayMeals.length === 0){
       html += '<div class="empty tab-empty-state"><div class="glyph">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
           '<path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path>' +
-        '</svg></div><p>Nothing logged yet today.<br>Add your first meal above.</p></div>';
+        '</svg></div><p>' + (isToday ? 'Nothing logged yet today.' : 'Nothing logged this day.') + '<br>Add a meal above.</p></div>';
     } else {
-      html += groupedMealsHtml(todayMeals);
+      html += groupedMealsHtml(dayMeals);
     }
 
     document.getElementById('view').innerHTML = html;
@@ -2128,7 +2367,9 @@
   }
 
   function mealRowHtml(m){
+    var badge = (CATEGORY_LABELS[m.category] || 'Other').charAt(0);
     return '<div class="meal-row" data-action="edit-meal" data-id="' + m.id + '">' +
+      '<span class="meal-badge" aria-hidden="true">' + badge + '</span>' +
       '<div class="meal-row-name">' +
         '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(m.name) + '</div>' +
         '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
@@ -2454,7 +2695,7 @@
     document.getElementById('addMealSubmit').textContent = editing ? 'Save changes' : '+ Add Meal';
     var dateInput = document.getElementById('mealDate');
     dateInput.max = todayKey();
-    dateInput.value = editing ? dateKey(editing.loggedAt) : todayKey();
+    dateInput.value = editing ? dateKey(editing.loggedAt) : logDayKey();
     updateDayValue();
     setAccordion('dayRow', 'dayAcc', false);
 
@@ -5289,6 +5530,14 @@
         el.setAttribute('aria-label', nowCollapsed ? 'Show macros' : 'Hide macros');
         el.setAttribute('aria-expanded', String(!nowCollapsed));
       }
+    } else if (action === 'set-log-day'){
+      ui.logDay = el.dataset.day;
+      renderApp();
+    } else if (action === 'log-week'){
+      var dirW = Number(el.dataset.dir) || 0;
+      var shifted = addDaysKey(logDayKey(), dirW * 7);
+      ui.logDay = shifted > todayKey() ? todayKey() : shifted;
+      renderApp();
     } else if (action === 'reset-today-log'){
       resetTodayLog();
     } else if (action === 'calculate-plan'){
