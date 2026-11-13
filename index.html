@@ -1843,10 +1843,10 @@
   .hist-month-nav{display:flex; gap:6px;}
   .hist-month-nav button{width:38px; height:32px; border-radius:999px; border:1px solid var(--line); background:var(--panel); color:var(--text); font-size:18px; line-height:1; cursor:pointer;}
   .hist-month-nav button:disabled{opacity:.35; cursor:default;}
-  .hist-cal{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:12px 12px 6px;}
+  .hist-cal{display:grid; grid-template-columns:repeat(7,1fr); gap:5px; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:12px 12px 6px;}
   .hc-h{text-align:center; font:700 9px 'JetBrains Mono',monospace; color:var(--text-faint); padding-bottom:2px;}
-  .hc-blank{height:34px;}
-  .hc-day{height:34px; border-radius:10px; border:none; background:var(--panel-2); color:var(--text-dim); font:600 11px 'JetBrains Mono',monospace; display:flex; align-items:center; justify-content:center; padding:0;}
+  .hc-blank{height:28px;}
+  .hc-day{height:28px; border-radius:10px; border:none; background:var(--panel-2); color:var(--text-dim); font:600 11px 'JetBrains Mono',monospace; display:flex; align-items:center; justify-content:center; padding:0;}
   button.hc-day{cursor:pointer;}
   .hc-day.on{background:rgba(var(--accent-rgb),.3); color:var(--text);}
   .hc-day.low{background:rgba(var(--accent-rgb),.12); color:var(--text);}
@@ -2139,7 +2139,6 @@
   var ui = {
     historyOpenDay: null,
     histMonth: null,
-    histQuery: '',
     settingsOpen: null,
     logDay: null,         // day the Log tab shows (null = today); set by the week strip
     selectedFood: null,   // { name, brand, per100g: {cal,protein,carbs,fat} } once a search result is tapped
@@ -4077,13 +4076,6 @@
   // Editing a name or grams updates that row's numbers and the total in
   // place (no re-render, so the keyboard and cursor stay put).
   document.addEventListener('input', function(e){
-    if (e.target && e.target.id === 'histSearch'){
-      ui.histQuery = e.target.value;
-      var listEl = document.getElementById('histList');
-      if (listEl) listEl.innerHTML = historyListHtml(dayStatsMap(), STORE.goals.calories);
-    }
-  });
-  document.addEventListener('input', function(e){
     var t = e.target;
     if (!t || !t.getAttribute) return;
     var field = t.getAttribute('data-ai-field');
@@ -4419,19 +4411,10 @@
   // The list part is its own function so typing in the search box can
   // redraw just this, without losing focus in the input.
   function historyListHtml(map, goal){
-    var q = (ui.histQuery || '').trim().toLowerCase();
     var keys = Object.keys(map).sort().reverse();
-    var label, rows;
-    if (q){
-      rows = keys.filter(function(k){
-        return map[k].meals.some(function(m){ return String(m.name || '').toLowerCase().indexOf(q) !== -1; });
-      });
-      label = rows.length + ' day' + (rows.length === 1 ? '' : 's') + ' with “' + esc(ui.histQuery.trim()) + '”';
-    } else {
-      var mk = historyMonthKey();
-      rows = keys.filter(function(k){ return k.slice(0, 7) === mk; });
-      label = rows.length ? 'Tap a day' : 'Nothing logged this month';
-    }
+    var mk = historyMonthKey();
+    var rows = keys.filter(function(k){ return k.slice(0, 7) === mk; });
+    var label = rows.length ? 'Tap a day' : 'Nothing logged this month';
     return '<h3 class="section-label">' + label + '</h3>' +
       rows.map(function(k){ return historyDayHtml(map[k], goal); }).join('');
   }
@@ -4454,7 +4437,6 @@
       '<div class="hist-month-nav"><button type="button" data-action="history-month" data-dir="-1" aria-label="Previous month">‹</button>' +
       '<button type="button" data-action="history-month" data-dir="1" aria-label="Next month"' + (atNow ? ' disabled' : '') + '>›</button></div></div>' +
       historyCalendarHtml(map, goal, mk) +
-      '<input type="search" id="histSearch" class="hist-search" placeholder="Search past meals…" value="' + esc(ui.histQuery || '') + '" autocomplete="off">' +
       '<div id="histList">' + historyListHtml(map, goal) + '</div>';
     document.getElementById('view').innerHTML = html;
   }
@@ -4476,33 +4458,7 @@
     showToast('Copied ' + meals.length + ' meal' + (meals.length === 1 ? '' : 's') + ' to today');
   }
 
-  // ---- Insights extras (Weekly view): stat cards + achievement coins.
-  // Coins unlock from the logged data itself.
-  var ACHIEVEMENTS = [
-    { id: 'first',  glyph: '1',   label: 'First log',   tier: 1, hint: 'Log your first meal' },
-    { id: 'st3',    glyph: '3',   label: '3 day',       tier: 1, hint: 'Log 3 days in a row' },
-    { id: 'st7',    glyph: '7',   label: '7 day',       tier: 2, hint: 'Log 7 days in a row' },
-    { id: 'st30',   glyph: '30',  label: '30 day',      tier: 3, hint: 'Log 30 days in a row' },
-    { id: 'prot',   glyph: 'P',   label: 'Protein',     tier: 2, hint: 'Hit your protein goal in a day' },
-    { id: 'fib',    glyph: 'F',   label: 'Fibre',       tier: 1, hint: 'Hit your fibre goal in a day' },
-    { id: 'm50',    glyph: '50',  label: '50 meals',    tier: 2, hint: 'Log 50 meals' },
-    { id: 'm100',   glyph: '100', label: '100 meals',   tier: 3, hint: 'Log 100 meals' }
-  ];
-
-  function achievementsUnlocked(map, streak){
-    var g = STORE.goals, days = Object.keys(map).map(function(k){ return map[k]; });
-    var u = {};
-    u.first = STORE.meals.length >= 1;
-    u.st3 = streak.best >= 3;
-    u.st7 = streak.best >= 7;
-    u.st30 = streak.best >= 30;
-    u.prot = g.protein > 0 && days.some(function(d){ return d.protein >= g.protein; });
-    u.fib = g.fiber > 0 && days.some(function(d){ return d.fiber >= g.fiber; });
-    u.m50 = STORE.meals.length >= 50;
-    u.m100 = STORE.meals.length >= 100;
-    return u;
-  }
-
+  // ---- Insights extras (Weekly view): four stat cards.
   function insightsExtraParts(){
     var g = STORE.goals;
     var map = dayStatsMap();
@@ -4525,20 +4481,11 @@
         statCardHtml(String(streak.current), streak.current === 1 ? 'day' : 'days', 'Logging streak', '') +
         statCardHtml(bestLabel, '', 'Best day', '') +
       '</div>';
-    var unlocked = achievementsUnlocked(map, streak);
-    var count = ACHIEVEMENTS.filter(function(a){ return unlocked[a.id]; }).length;
-    var html = '<h3 class="section-label">Achievements <span class="ach-count">' + count + '/' + ACHIEVEMENTS.length + '</span></h3><div class="ach-grid">' +
-      ACHIEVEMENTS.map(function(a){
-        var on = !!unlocked[a.id];
-        return '<div class="ach' + (on ? ' on t' + a.tier : '') + '" title="' + esc(a.hint) + '">' +
-          '<div class="ach-coin"><span>' + a.glyph + '</span></div>' +
-          '<div class="ach-name">' + esc(a.label) + '</div></div>';
-      }).join('') + '</div>';
-    return { stats: statsHtml, coins: html };
+    return { stats: statsHtml };
   }
   function insightsExtrasHtml(){
     var p = insightsExtraParts();
-    return '<div class="insights-extras">' + p.stats + p.coins + '</div>';
+    return '<div class="insights-extras">' + p.stats + '</div>';
   }
 
   // One stat card: big Oswald number, small unit, mono label (same
@@ -5051,16 +4998,13 @@
       // 3D panels are full-screen and don't scroll, so the stats and
       // coins open from a button instead of sitting underneath.
       card3d.insertAdjacentHTML('beforeend',
-        '<button type="button" class="stats-fab" data-action="open-stats-sheet" aria-label="Show stats and achievements">' +
+        '<button type="button" class="stats-fab" data-action="open-stats-sheet" aria-label="Show weekly stats">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v5a5 5 0 0 1-10 0z"></path><path d="M17 5h3v2a3 3 0 0 1-3 3"></path><path d="M7 5H4v2a3 3 0 0 0 3 3"></path></svg>' +
           '<span>Stats</span></button>');
     } else {
-      // plain weekly: stat cards go right under the heading, coins at the end
-      var parts = insightsExtraParts();
+      // plain weekly: stat cards go right under the heading
       var head = viewEl.querySelector('.today-card-head');
-      if (head) head.insertAdjacentHTML('afterend', parts.stats);
-      var wrap = viewEl.querySelector('.overview-plain') || viewEl;
-      wrap.insertAdjacentHTML('beforeend', '<div class="insights-extras">' + parts.coins + '</div>');
+      if (head) head.insertAdjacentHTML('afterend', insightsExtraParts().stats);
     }
   }
 
@@ -5068,7 +5012,7 @@
     closeStatsSheet();
     var el = document.createElement('div');
     el.className = 'stats-sheet'; el.id = 'statsSheet';
-    el.innerHTML = '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>Stats &amp; achievements</h3>' +
+    el.innerHTML = '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>This week</h3>' +
       '<button type="button" class="stats-sheet-x" data-action="close-stats-sheet" aria-label="Close">&times;</button></div>' +
       insightsExtrasHtml() + '</div>';
     el.addEventListener('click', function(e){ if (e.target === el) closeStatsSheet(); });
@@ -5481,14 +5425,6 @@
       return;
     }
 
-    // ---- average macros against goals
-    html += '<div class="week-divider"></div><h3 class="section-label">Daily average vs goal</h3>' +
-      macroBarHtml('Protein', avg('protein'), g.protein, 'protein') +
-      macroBarHtml('Carbs', avg('carbs'), g.carbs, 'carbs') +
-      macroBarHtml('Fat', avg('fat'), g.fat, 'fat') +
-      macroBarHtml('Fiber', avg('fiber'), g.fiber, 'fiber') +
-      microGapNote(wd.weekMeals);
-
     // ---- where the week's calories came from (4 kcal/g protein & carbs, 9 kcal/g fat)
     var pKcal = sum.protein * 4, cKcal = sum.carbs * 4, fKcal = sum.fat * 9;
     var macroKcal = pKcal + cKcal + fKcal;
@@ -5503,16 +5439,6 @@
           '<span><i class="c"></i>Carbs <b>' + pC + '%</b></span>' +
           '<span><i class="f"></i>Fat <b>' + pF + '%</b></span>' +
         '</div>';
-    }
-
-    // ---- calories by meal time (average per logged day)
-    var weekByMeal = wd.byMeal;
-    if (weekByMeal.length > 0){
-      var weekKcal = weekByMeal.reduce(function(acc, r){ return acc + r.kcal; }, 0);
-      var biggest = weekByMeal.slice().sort(function(a, b){ return b.kcal - a.kcal; })[0];
-      html += '<div class="week-divider"></div><h3 class="section-label">Calories by meal</h3>' +
-        mealSplitHtml(weekByMeal, weekKcal, loggedDays.length) +
-        '<div class="week-note">Average per logged day · biggest share: <b>' + esc(biggest.label) + '</b> (' + (weekKcal > 0 ? Math.round(biggest.kcal / weekKcal * 100) : 0) + '%)</div>';
     }
 
     // ---- consistency: days close to the calorie goal (85%–110%)
@@ -6122,7 +6048,6 @@
       renderApp();
     } else if (action === 'history-pick-day'){
       ui.historyOpenDay = el.dataset.day;
-      ui.histQuery = '';
       renderApp();
       var hd = document.getElementById('hd-' + el.dataset.day);
       if (hd) hd.scrollIntoView({ block: 'center', behavior: 'smooth' });
