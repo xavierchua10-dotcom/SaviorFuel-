@@ -1656,6 +1656,11 @@
   .food-fav.on{color:var(--c-carbs);}
   .food-fav.on svg{fill:currentColor;}
   .food-fav:active{background:var(--panel-2);}
+
+  /* ---- Header: logo mark instead of the wordmark (same idea as SaviorFit Logger) ---- */
+  .topbar{padding:calc(10px + env(safe-area-inset-top, 0px) * 0.65) 18px 8px;}
+  .topbar-brand{display:flex; align-items:center; margin:0; line-height:0;}
+  .topbar-logo{height:48px; width:auto; display:block;}
 </style>
 </head>
 <body>
@@ -1664,7 +1669,7 @@
 
 <div id="app" class="hidden">
   <header class="topbar">
-    <h1>SAVIOR<span>FUEL</span><small>Food Tracker</small></h1>
+    <h1 class="topbar-brand"><img src="images/logo-mark.png" alt="SaviorFuel" class="topbar-logo"></h1>
   </header>
 
   <main id="view"></main>
