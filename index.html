@@ -1837,6 +1837,35 @@
   .stats-sheet-x{border:none; background:none; color:var(--text-faint); font-size:26px; line-height:1; width:36px; height:36px; cursor:pointer;}
   .stats-sheet .insights-extras{margin-top:6px;}
   .hist-sub{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:.04em; font-size:9.5px;}
+
+  .hist-month-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .hist-month{font:700 20px 'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.03em;}
+  .hist-month-nav{display:flex; gap:6px;}
+  .hist-month-nav button{width:38px; height:32px; border-radius:999px; border:1px solid var(--line); background:var(--panel); color:var(--text); font-size:18px; line-height:1; cursor:pointer;}
+  .hist-month-nav button:disabled{opacity:.35; cursor:default;}
+  .hist-cal{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:12px 12px 6px;}
+  .hc-h{text-align:center; font:700 9px 'JetBrains Mono',monospace; color:var(--text-faint); padding-bottom:2px;}
+  .hc-blank{height:34px;}
+  .hc-day{height:34px; border-radius:10px; border:none; background:var(--panel-2); color:var(--text-dim); font:600 11px 'JetBrains Mono',monospace; display:flex; align-items:center; justify-content:center; padding:0;}
+  button.hc-day{cursor:pointer;}
+  .hc-day.on{background:rgba(var(--accent-rgb),.3); color:var(--text);}
+  .hc-day.low{background:rgba(var(--accent-rgb),.12); color:var(--text);}
+  .hc-day.over{background:rgba(224,87,79,.32); color:var(--text);}
+  .hc-day.future{background:none; color:var(--text-faint); opacity:.5;}
+  .hc-day.now{box-shadow:inset 0 0 0 2px var(--accent);}
+  .hc-day.picked{box-shadow:inset 0 0 0 2px var(--text);}
+  .hist-legend{grid-column:1/-1; display:flex; gap:14px; padding:6px 2px 8px; font:500 9px 'JetBrains Mono',monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint);}
+  .hist-legend span{display:flex; align-items:center; gap:5px;}
+  .hist-legend i{width:9px; height:9px; border-radius:50%; display:block;}
+  .hist-legend i.on,.hist-status.on{background:var(--accent);} .hist-legend i.low,.hist-status.low{background:rgba(var(--accent-rgb),.4);} .hist-legend i.over,.hist-status.over{background:var(--accent-2);}
+  .hist-status{width:9px; height:9px; border-radius:50%; display:block; background:var(--panel-3);}
+  .hist-search{width:100%; height:42px; border-radius:14px; border:1px solid var(--line); background:var(--panel); color:var(--text); padding:0 14px; font:400 14px 'Inter',sans-serif; margin:12px 0 0; outline:none;}
+  .hist-search:focus{border-color:rgba(var(--accent-rgb),.6);}
+  #histList .hist-item{background:var(--panel);}
+  #histList .section-label{margin-top:18px;}
+  .hist-day-tot{font:500 10px 'JetBrains Mono',monospace; letter-spacing:.1em; color:var(--text-faint); text-transform:uppercase; padding:10px 14px 2px;}
+  .hist-copy{display:block; width:calc(100% - 28px); margin:8px 14px 12px; height:38px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.55); background:transparent; color:var(--accent); font:700 13px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
+  .overview-plain .pf-stats{margin:12px 0 16px;}
 </style>
 </head>
 <body>
@@ -2109,7 +2138,8 @@
   var state = { tab: 'log' };
   var ui = {
     historyOpenDay: null,
-    historyWeeks: {},
+    histMonth: null,
+    histQuery: '',
     settingsOpen: null,
     logDay: null,         // day the Log tab shows (null = today); set by the week strip
     selectedFood: null,   // { name, brand, per100g: {cal,protein,carbs,fat} } once a search result is tapped
@@ -4047,6 +4077,13 @@
   // Editing a name or grams updates that row's numbers and the total in
   // place (no re-render, so the keyboard and cursor stay put).
   document.addEventListener('input', function(e){
+    if (e.target && e.target.id === 'histSearch'){
+      ui.histQuery = e.target.value;
+      var listEl = document.getElementById('histList');
+      if (listEl) listEl.innerHTML = historyListHtml(dayStatsMap(), STORE.goals.calories);
+    }
+  });
+  document.addEventListener('input', function(e){
     var t = e.target;
     if (!t || !t.getAttribute) return;
     var field = t.getAttribute('data-ai-field');
@@ -4320,25 +4357,83 @@
     return '<div class="hist-ring ' + cls + '" style="--p:' + Math.min(p, 100) + '"><span>' + p + '%</span></div>';
   }
 
+  // ---- History: a month heat map up top, then the days of that month
+  // (or every day matching the search). Rows stay slim; macros appear
+  // only once a day is opened.
+  function historyMonthKey(){
+    var cur = todayKey().slice(0, 7);
+    return (ui.histMonth && ui.histMonth <= cur) ? ui.histMonth : cur;
+  }
+  function addMonthKey(mk, n){
+    var y = parseInt(mk.slice(0, 4), 10), m = parseInt(mk.slice(5, 7), 10) - 1 + n;
+    var d = new Date(y, m, 1);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+  }
+
+  function historyCalendarHtml(map, goal, mk){
+    var y = parseInt(mk.slice(0, 4), 10), mo = parseInt(mk.slice(5, 7), 10) - 1;
+    var daysIn = new Date(y, mo + 1, 0).getDate();
+    var lead = (new Date(y, mo, 1).getDay() + 6) % 7; // Monday first
+    var today = todayKey();
+    var html = '<div class="hist-cal">' + ['M','T','W','T','F','S','S'].map(function(l){ return '<div class="hc-h">' + l + '</div>'; }).join('');
+    for (var i = 0; i < lead; i++) html += '<div class="hc-blank"></div>';
+    for (var d = 1; d <= daysIn; d++){
+      var key = mk + '-' + String(d).padStart(2, '0');
+      var info = map[key];
+      var cls = 'hc-day';
+      if (info) cls += ' ' + dayStatus(info.calories, goal);
+      else if (key > today) cls += ' future';
+      if (key === today) cls += ' now';
+      if (ui.historyOpenDay === key) cls += ' picked';
+      html += info
+        ? '<button type="button" class="' + cls + '" data-action="history-pick-day" data-day="' + key + '">' + d + '</button>'
+        : '<div class="' + cls + '">' + d + '</div>';
+    }
+    html += '</div><div class="hist-legend"><span><i class="on"></i>On goal</span><span><i class="low"></i>Low</span><span><i class="over"></i>Over</span></div>';
+    return html;
+  }
+
   function historyDayHtml(day, goal){
     var key = day.key;
     var meals = day.meals.slice().sort(function(a,b){ return b.loggedAt - a.loggedAt; });
     var isOpen = ui.historyOpenDay === key;
     var label = formatDateLabel(key);
-    var dow = new Date(key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric' });
-    var showDow = (label === 'Today' || label === 'Yesterday');
-    return '<div class="hist-item' + (isOpen ? ' open' : '') + (key === todayKey() ? ' is-today' : '') + '">' +
+    var body = '';
+    if (isOpen){
+      body = '<div class="hist-item-body"><div class="hist-day-tot">' + Math.round(day.calories) + ' kcal · P ' + Math.round(day.protein) + ' · C ' + Math.round(day.carbs) + ' · F ' + Math.round(day.fat) + '</div>' +
+        categorizedMealRowsHtml(meals) +
+        (key !== todayKey() ? '<button type="button" class="hist-copy" data-action="copy-day" data-day="' + key + '">Copy day to today</button>' : '') +
+      '</div>';
+    }
+    return '<div class="hist-item' + (isOpen ? ' open' : '') + (key === todayKey() ? ' is-today' : '') + '" id="hd-' + key + '">' +
       '<div class="hist-item-head history-day-head" data-action="toggle-history-day" data-day="' + key + '">' +
-        '<div class="hist-item-main">' +
-          '<div class="hist-name">' + esc(label) + (showDow ? ' <span>· ' + esc(dow) + '</span>' : '') + '</div>' +
-          '<div class="hist-sub">' + meals.length + ' meal' + (meals.length === 1 ? '' : 's') + ' · P ' + Math.round(day.protein) + ' · C ' + Math.round(day.carbs) + ' · F ' + Math.round(day.fat) + '</div>' +
-        '</div>' +
-        '<div class="hist-item-side"><div class="hist-kcal">' + Math.round(day.calories) + '</div>' +
-          goalRingHtml(day.calories, goal) +
+        '<div class="hist-item-main"><div class="hist-name">' + esc(label) + '</div>' +
+          '<div class="hist-sub">' + meals.length + ' meal' + (meals.length === 1 ? '' : 's') + '</div></div>' +
+        '<div class="hist-item-side"><div class="hist-kcal">' + Math.round(day.calories).toLocaleString() + '</div>' +
+          '<i class="hist-status ' + dayStatus(day.calories, goal) + '"></i>' +
           '<span class="hist-chev">' + CHEV_SVG + '</span></div>' +
-      '</div>' +
-      (isOpen ? '<div class="hist-item-body">' + categorizedMealRowsHtml(meals) + '</div>' : '') +
+      '</div>' + body +
     '</div>';
+  }
+
+  // The list part is its own function so typing in the search box can
+  // redraw just this, without losing focus in the input.
+  function historyListHtml(map, goal){
+    var q = (ui.histQuery || '').trim().toLowerCase();
+    var keys = Object.keys(map).sort().reverse();
+    var label, rows;
+    if (q){
+      rows = keys.filter(function(k){
+        return map[k].meals.some(function(m){ return String(m.name || '').toLowerCase().indexOf(q) !== -1; });
+      });
+      label = rows.length + ' day' + (rows.length === 1 ? '' : 's') + ' with “' + esc(ui.histQuery.trim()) + '”';
+    } else {
+      var mk = historyMonthKey();
+      rows = keys.filter(function(k){ return k.slice(0, 7) === mk; });
+      label = rows.length ? 'Tap a day' : 'Nothing logged this month';
+    }
+    return '<h3 class="section-label">' + label + '</h3>' +
+      rows.map(function(k){ return historyDayHtml(map[k], goal); }).join('');
   }
 
   function renderHistory(){
@@ -4350,62 +4445,39 @@
           '</svg></div><p>No meal history yet.<br>Logged meals will show up here.</p></div>';
       return;
     }
-
     var goal = STORE.goals.calories;
     var map = dayStatsMap();
-    var keys = Object.keys(map).sort().reverse();
-
-    // top stat cards: average kcal per logged day (last 30 days) and how
-    // many of the last 7 days landed on goal
-    var recent = keys.filter(function(k){ return k >= dateKeyDaysAgo(29); });
-    var avg = recent.length ? Math.round(recent.reduce(function(a, k){ return a + map[k].calories; }, 0) / recent.length) : 0;
-    var onGoal = 0;
-    for (var i = 0; i < 7; i++){
-      var dk = map[dateKeyDaysAgo(i)];
-      if (dk && dayStatus(dk.calories, goal) === 'on') onGoal++;
-    }
-    var html = '<div class="pf-stats hist-stats">' +
-      statCardHtml(avg.toLocaleString(), 'kcal', 'Avg per day', '') +
-      statCardHtml(String(onGoal), '/7 days', 'On goal this week', 'accent') +
-    '</div>';
-
-    // group days into Monday-start weeks, newest first
-    var weeks = {}, weekOrder = [];
-    keys.forEach(function(k){
-      var w = weekStartKey(k);
-      if (!weeks[w]){ weeks[w] = []; weekOrder.push(w); }
-      weeks[w].push(map[k]);
-    });
-    var thisWeek = weekStartKey(todayKey());
-    html += '<h3 class="section-label">History</h3>';
-    weekOrder.forEach(function(w){
-      var days = weeks[w];
-      var explicit = ui.historyWeeks[w];
-      var open = explicit === undefined ? (w === thisWeek) : explicit;
-      var total = Math.round(days.reduce(function(a, d){ return a + d.calories; }, 0));
-      var dots = '';
-      for (var j = 0; j < 7; j++){
-        var dkey = addDaysKey(w, j);
-        var d = map[dkey];
-        dots += '<i class="hist-dot ' + (d ? dayStatus(d.calories, goal) : (dkey > todayKey() ? 'future' : 'none')) + '"></i>';
-      }
-      var startL = new Date(w + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-      var endL = new Date(addDaysKey(w, 6) + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-      html += '<div class="hist-week' + (open ? ' open' : '') + '">' +
-        '<div class="hist-week-head" data-action="toggle-history-week" data-week="' + w + '">' +
-          '<div class="hist-item-main"><div class="hist-name">' + (w === thisWeek ? 'This week' : esc(startL + ' – ' + endL)) + '</div>' +
-            '<div class="hist-sub">' + days.length + ' day' + (days.length === 1 ? '' : 's') + ' · ' + total.toLocaleString() + ' kcal</div></div>' +
-          '<div class="hist-dots">' + dots + '</div><span class="hist-chev">' + CHEV_SVG + '</span>' +
-        '</div>' +
-        (open ? '<div class="hist-week-body">' + days.map(function(d){ return historyDayHtml(d, goal); }).join('') + '</div>' : '') +
-      '</div>';
-    });
-
+    var mk = historyMonthKey();
+    var monthLabel = new Date(mk + '-01T00:00:00').toLocaleDateString(undefined, { month: 'long', year: mk.slice(0, 4) === todayKey().slice(0, 4) ? undefined : 'numeric' });
+    var atNow = mk === todayKey().slice(0, 7);
+    var html = '<div class="hist-month-head"><div class="hist-month">' + esc(monthLabel) + '</div>' +
+      '<div class="hist-month-nav"><button type="button" data-action="history-month" data-dir="-1" aria-label="Previous month">‹</button>' +
+      '<button type="button" data-action="history-month" data-dir="1" aria-label="Next month"' + (atNow ? ' disabled' : '') + '>›</button></div></div>' +
+      historyCalendarHtml(map, goal, mk) +
+      '<input type="search" id="histSearch" class="hist-search" placeholder="Search past meals…" value="' + esc(ui.histQuery || '') + '" autocomplete="off">' +
+      '<div id="histList">' + historyListHtml(map, goal) + '</div>';
     document.getElementById('view').innerHTML = html;
   }
 
-  // ---- Insights extras: stat cards + achievement coins, shown under
-  // every Insights view. Coins unlock from the logged data itself.
+  // Copies every meal of a past day onto today.
+  function copyDayToToday(key){
+    var meals = mealsForDay(key);
+    if (!meals.length) return;
+    var now = Date.now();
+    meals.forEach(function(m, i){
+      STORE.meals.push(Object.assign({}, m, {
+        id: 'm_' + now + '_' + i + '_' + Math.random().toString(36).slice(2, 6),
+        loggedAt: now + i
+      }));
+    });
+    saveStore();
+    maybeVibrate();
+    renderApp();
+    showToast('Copied ' + meals.length + ' meal' + (meals.length === 1 ? '' : 's') + ' to today');
+  }
+
+  // ---- Insights extras (Weekly view): stat cards + achievement coins.
+  // Coins unlock from the logged data itself.
   var ACHIEVEMENTS = [
     { id: 'first',  glyph: '1',   label: 'First log',   tier: 1, hint: 'Log your first meal' },
     { id: 'st3',    glyph: '3',   label: '3 day',       tier: 1, hint: 'Log 3 days in a row' },
@@ -4431,39 +4503,42 @@
     return u;
   }
 
-  function insightsExtrasHtml(){
+  function insightsExtraParts(){
     var g = STORE.goals;
     var map = dayStatsMap();
     var streak = streakInfo(map);
-    var today = map[todayKey()] || { calories: 0, protein: 0 };
-    var left = Math.max(0, Math.round(g.calories - today.calories));
-    var protPct = pctUncapped(today.protein, g.protein);
-    // best day = the day this week closest to the calorie goal
-    var best = null;
+    // last 7 days: average per logged day, days on goal, best day
+    var logged = 0, sum = 0, onGoal = 0, best = null;
     for (var i = 0; i < 7; i++){
       var k = dateKeyDaysAgo(i), d = map[k];
-      if (!d || !g.calories) continue;
+      if (!d) continue;
+      logged++; sum += d.calories;
+      if (dayStatus(d.calories, g.calories) === 'on') onGoal++;
       var diff = Math.abs(d.calories - g.calories);
-      if (!best || diff < best.diff) best = { key: k, diff: diff };
+      if (g.calories && (!best || diff < best.diff)) best = { key: k, diff: diff };
     }
+    var avg = logged ? Math.round(sum / logged) : 0;
     var bestLabel = best ? new Date(best.key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }) : '—';
-    var html = '<div class="insights-extras">' +
-      '<div class="pf-stats">' +
-        statCardHtml(String(left), 'kcal', 'Left today', 'accent') +
+    var statsHtml = '<div class="pf-stats">' +
+        statCardHtml(avg.toLocaleString(), 'kcal', 'Avg per day', 'accent') +
+        statCardHtml(String(onGoal), '/7 on goal', 'This week', '') +
         statCardHtml(String(streak.current), streak.current === 1 ? 'day' : 'days', 'Logging streak', '') +
-        statCardHtml(String(protPct), '%', 'Protein goal', 'protein') +
-        statCardHtml(bestLabel, '', 'Best day this week', '') +
+        statCardHtml(bestLabel, '', 'Best day', '') +
       '</div>';
     var unlocked = achievementsUnlocked(map, streak);
     var count = ACHIEVEMENTS.filter(function(a){ return unlocked[a.id]; }).length;
-    html += '<h3 class="section-label">Achievements <span class="ach-count">' + count + '/' + ACHIEVEMENTS.length + '</span></h3><div class="ach-grid">' +
+    var html = '<h3 class="section-label">Achievements <span class="ach-count">' + count + '/' + ACHIEVEMENTS.length + '</span></h3><div class="ach-grid">' +
       ACHIEVEMENTS.map(function(a){
         var on = !!unlocked[a.id];
         return '<div class="ach' + (on ? ' on t' + a.tier : '') + '" title="' + esc(a.hint) + '">' +
           '<div class="ach-coin"><span>' + a.glyph + '</span></div>' +
           '<div class="ach-name">' + esc(a.label) + '</div></div>';
-      }).join('') + '</div></div>';
-    return html;
+      }).join('') + '</div>';
+    return { stats: statsHtml, coins: html };
+  }
+  function insightsExtrasHtml(){
+    var p = insightsExtraParts();
+    return '<div class="insights-extras">' + p.stats + p.coins + '</div>';
   }
 
   // One stat card: big Oswald number, small unit, mono label (same
@@ -4969,6 +5044,7 @@
 
     if (ui.insightsView === 'trends') renderInsightsTrends();
     else renderInsightsToday();
+    if (ui.insightsView !== 'trends') return; // Daily stays as the pyramid / plain macros
     var viewEl = document.getElementById('view');
     var card3d = viewEl.querySelector('.card.model-card');
     if (card3d){
@@ -4979,7 +5055,12 @@
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v5a5 5 0 0 1-10 0z"></path><path d="M17 5h3v2a3 3 0 0 1-3 3"></path><path d="M7 5H4v2a3 3 0 0 0 3 3"></path></svg>' +
           '<span>Stats</span></button>');
     } else {
-      viewEl.insertAdjacentHTML('beforeend', insightsExtrasHtml());
+      // plain weekly: stat cards go right under the heading, coins at the end
+      var parts = insightsExtraParts();
+      var head = viewEl.querySelector('.today-card-head');
+      if (head) head.insertAdjacentHTML('afterend', parts.stats);
+      var wrap = viewEl.querySelector('.overview-plain') || viewEl;
+      wrap.insertAdjacentHTML('beforeend', '<div class="insights-extras">' + parts.coins + '</div>');
     }
   }
 
@@ -5400,13 +5481,6 @@
       return;
     }
 
-    // ---- headline numbers
-    html += '<div class="week-divider"></div><div class="week-stats">' +
-      '<div class="week-stat"><b>' + Math.round(avg('calories')) + '</b><span>Avg kcal / day</span></div>' +
-      '<div class="week-stat"><b>' + loggedDays.length + '/' + DAYS_TO_SHOW + '</b><span>Days logged</span></div>' +
-      '<div class="week-stat"><b>' + wd.highest + '</b><span>Highest day</span></div>' +
-    '</div><div class="week-note">Averages count only the days you logged.</div>';
-
     // ---- average macros against goals
     html += '<div class="week-divider"></div><h3 class="section-label">Daily average vs goal</h3>' +
       macroBarHtml('Protein', avg('protein'), g.protein, 'protein') +
@@ -5605,12 +5679,6 @@
         '<div class="pf-since">Goal · <b>' + esc(goalLabel) + '</b></div></div></div>' +
       '<div class="pf-acts"><button type="button" class="pf-share" data-action="open-settings-sec" data-sec="profile">Recalculate plan</button>' +
         '<button type="button" class="pf-edit" data-action="open-settings-sec" data-sec="goals" aria-label="Edit daily goals">' + SET_ICONS.edit + '</button></div>' +
-    '</div>' +
-    '<div class="pf-stats">' +
-      statCardHtml(Math.round(g.calories).toLocaleString(), 'kcal', 'Daily calories', 'accent') +
-      statCardHtml(String(g.protein), 'g', 'Protein', 'protein') +
-      statCardHtml(String(g.carbs), 'g', 'Carbs', 'carbs') +
-      statCardHtml(String(g.fat), 'g', 'Fat', 'fat') +
     '</div>';
 
     html += '<h3 class="section-label">Settings</h3>';
@@ -6048,11 +6116,18 @@
       renderApp();
       var secEl = document.getElementById('setc-' + sec);
       if (secEl && ui.settingsOpen === sec) secEl.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    } else if (action === 'toggle-history-week'){
-      var wk = el.dataset.week;
-      var wasOpen = el.parentNode.classList.contains('open');
-      ui.historyWeeks[wk] = !wasOpen;
+    } else if (action === 'history-month'){
+      ui.histMonth = addMonthKey(historyMonthKey(), parseInt(el.dataset.dir, 10));
+      ui.historyOpenDay = null;
       renderApp();
+    } else if (action === 'history-pick-day'){
+      ui.historyOpenDay = el.dataset.day;
+      ui.histQuery = '';
+      renderApp();
+      var hd = document.getElementById('hd-' + el.dataset.day);
+      if (hd) hd.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    } else if (action === 'copy-day'){
+      copyDayToToday(el.dataset.day);
     } else if (action === 'clear-data'){
       if (window.confirm('Erase all logged meals and reset goals? This can\'t be undone.')){
         STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [] };
