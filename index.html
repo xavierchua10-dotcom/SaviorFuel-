@@ -1285,8 +1285,8 @@
   .mode-toggle{
     display:inline-flex; overflow:hidden;
     background:var(--panel-2);
-    border:1px solid var(--line); border-top:none; border-right:none;
-    border-radius:0 0 0 var(--radius-md);
+    border:1px solid var(--line); border-right:none;
+    border-radius:var(--radius-md) 0 0 var(--radius-md);
   }
   .mode-toggle button{
     display:flex; align-items:center; justify-content:center;
@@ -1304,7 +1304,7 @@
   #view > .overview-plain:first-child{position:relative; margin-top:0; padding:0 20px;}
   body[data-density="compact"] #view > .overview-plain:first-child{padding:0 14px;}
   .overview-plain .today-card-head{min-height:34px; margin-bottom:8px;}
-  .overview-plain .mode-toggle{position:absolute; top:0; right:0; border-top-right-radius:0;}
+  .overview-plain .mode-toggle{position:absolute; top:0; right:0;}
   .day-card-close{background:none; border:none; color:var(--text-faint); font-size:22px; line-height:1; padding:0 2px; cursor:pointer; align-self:center;}
 
   /* "Meals today" drawer on the pyramid view: a small tab tucked into the
@@ -1319,15 +1319,15 @@
   .meal-drawer.open{transform:translateX(0);}
   .meal-drawer-panel{
     width:min(292px, calc(100vw - 60px)); padding:12px 14px 13px;
-    background:var(--panel); border:1px solid var(--line); border-left:none; border-top:none;
-    border-radius:0 0 var(--radius-lg) 0; box-shadow:var(--card-shadow);
+    background:var(--panel); border:1px solid var(--line); border-left:none;
+    border-radius:0 var(--radius-lg) var(--radius-lg) 0; box-shadow:var(--card-shadow);
     visibility:hidden; transition:visibility 0s linear 320ms;
   }
   .meal-drawer.open .meal-drawer-panel{visibility:visible; transition:visibility 0s;}
   .meal-drawer-handle{
     flex-shrink:0; width:42px; padding:9px 0 8px; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; gap:3px;
-    background:var(--panel-2); border:1px solid var(--line); border-left:none; border-top:none;
+    background:var(--panel-2); border:1px solid var(--line); border-left:none;
     border-radius:0 var(--radius-md) var(--radius-md) 0; color:var(--accent);
   }
   .meal-drawer-handle svg{width:18px; height:18px;}
@@ -1348,7 +1348,7 @@
   @media (prefers-reduced-motion: reduce){ .meal-drawer, .meal-drawer-panel{transition:none;} }
 
   /* 3D view: pinned to the top-right corner of the full-bleed panel. */
-  .mode-toggle.floating{position:absolute; top:0; right:0; z-index:2; border-top-right-radius:0;}
+  .mode-toggle.floating{position:absolute; top:0; right:0; z-index:2;}
 
   /* ---------- Insights "Daily Overview" — 3D model panel ----------
      The card is sized to fill the space between the top bar and the
