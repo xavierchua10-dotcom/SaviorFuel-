@@ -1,16 +1,39 @@
 # SaviorFuel
 
-Food/macro tracker by Savior — companion app to [SaviorFit Logger](https://github.com/xavierchua10-dotcom/IronLedger).
+Free food and macro tracker by Savior. Log meals, hit your daily goals, see where your calories come from. Companion to [SaviorFit Logger](https://github.com/xavierchua10-dotcom/IronLedger).
 
-Starter scaffold: visual design (colors, fonts, tab bar, cards, buttons,
-fade transition) copied to match SaviorFit Logger's look. No backend,
-auth, or real food-logging logic yet — that comes next.
+Single-file web app (`index.html`), installable as a PWA. No account, no backend: your log lives on your device.
 
-## Still needed before this is a working app
-- Firebase project (new, or reuse the existing `iron-ledge` project?)
-- Decide what a logged meal stores (name, calories, macros, serving size, photo?)
-- Auth flow (same email/password + Google pattern as SaviorFit Logger?)
-- Real icon set in `/icons` (currently referenced in manifest.json but not present)
+## Features
+
+- **Log** meals by type, edit or delete them, and log for any day
+- **Food search** across three sources: Open Food Facts (packaged foods and barcodes), USDA FoodData Central (generic and whole foods) and Kalori (Malaysian foods)
+- **Scan** a barcode or snap a photo of a meal; the photo guess runs on-device with TensorFlow.js (MobileNet)
+- **History** of past days
+- **Insights** with a 3D food pyramid (or plain rings and macro bars), 7-day calories, daily average vs goal, calories by meal and macro source
+- **Settings** for profile, daily goals (calories, protein, carbs, fat, fiber, sugar, sodium), units, theme, density, corners, background image and haptics
+- **Backup**: export and import your log as a JSON file
+- Works offline once installed (app shell is cached; food search and 3D need internet)
+
+## Project layout
+
+| Path | What it is |
+|---|---|
+| `index.html` | The whole app |
+| `sw.js`, `manifest.json`, `icons/` | PWA service worker, manifest and icons |
+| `models/` | GLB models for the Insights tab |
+| `images/` | Background and guide illustrations |
+| `ai-proxy/` | Optional proxy for a Gemini photo scan (Cloudflare Worker or Netlify). Built and tested, not switched on yet: `AI_SCAN_URL` in `index.html` is empty. See [`ai-proxy/README.md`](ai-proxy/README.md) |
+
+## Run it
+
+Serve the folder with any static host (GitHub Pages, Netlify) or locally, for example `python3 -m http.server`. A service worker needs `https` or `localhost`.
+
+## Roadmap
+
+- Play Store listing
+- Offline food library (copies of USDA, Open Food Facts and Kalori data)
+- Gemini AI food scan via the proxy
 
 ## License
 
