@@ -1644,6 +1644,18 @@
 
   /* ---- Insights: segmented bar sits above the floating nav ---- */
   .insights-subtabbar{margin:0 12px 34px; border-radius:var(--radius-pill); overflow:hidden; border:1px solid var(--line);}
+
+  /* ---- Favorites / Recent in food search ---- */
+  .food-home-label{font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); margin:14px 2px 6px;}
+  .food-home-label:first-child{margin-top:4px;}
+  .food-fav{
+    width:34px; height:34px; flex-shrink:0; border:none; background:none; padding:0; cursor:pointer;
+    color:var(--text-faint); display:flex; align-items:center; justify-content:center; border-radius:50%;
+  }
+  .food-fav svg{width:20px; height:20px; fill:none;}
+  .food-fav.on{color:var(--c-carbs);}
+  .food-fav.on svg{fill:currentColor;}
+  .food-fav:active{background:var(--panel-2);}
 </style>
 </head>
 <body>
@@ -2500,8 +2512,8 @@
   function openFoodSearchOverlay(){
     var overlay = document.getElementById('foodSearchOverlay');
     var input = document.getElementById('foodSearchInput');
-    document.getElementById('foodSearchResults').innerHTML = '';
     input.value = '';
+    renderFoodHome();
     overlay.classList.remove('hidden');
     input.focus();
   }
@@ -2738,8 +2750,9 @@
   function searchFoodDebounced(query){
     clearTimeout(ui.searchDebounce);
     if (!query || query.trim().length < 2){
-      var resultsEl = document.getElementById('foodSearchResults');
-      if (resultsEl) resultsEl.innerHTML = '';
+      if (searchAbort) searchAbort.abort(); // drop any search still in flight
+      searchRequestId++;
+      renderFoodHome();
       return;
     }
     // Foods you've saved before are local, so if nothing's on screen yet
@@ -3082,6 +3095,66 @@
   document.getElementById('foodSearchResults').addEventListener('error', foodThumbErrorHandler, true);
   document.getElementById('addMealBody').addEventListener('error', foodThumbErrorHandler, true);
 
+  // One result row — shared by live search results and the empty-search
+  // "Favorites / Recent" home. Saved foods get a star to pin them.
+  var STAR_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><polygon points="12 2.5 14.9 8.6 21.5 9.4 16.6 14 17.9 20.6 12 17.3 6.1 20.6 7.4 14 2.5 9.4 9.1 8.6"></polygon></svg>';
+  function foodRowHtml(p, i){
+    var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
+    // Right-hand tag is just the calories; the serving basis goes in
+    // the small line under the name so the name gets the room.
+    var meta = [];
+    var brand = p.brands ? p.brands.split(',')[0].trim() : '';
+    if (brand) meta.push(esc(brand));
+    if (p._source === 'saved') meta.push(esc(p._servingLabel || '100g'), 'Saved');
+    else if (p._source === 'techapi'){ if (p._serving) meta.push(esc(p._serving)); }
+    else meta.push('per 100 g');
+    if (p._source === 'saved' ? p._note : foodDataNote(p.nutriments)) meta.push('<span class="row-warn">⚠ check data</span>');
+    var star = p._source === 'saved'
+      ? '<button type="button" class="food-fav' + (p._fav ? ' on' : '') + '" data-action="toggle-fav" data-name="' + esc(p.product_name) + '" aria-label="' + (p._fav ? 'Remove from favorites' : 'Add to favorites') + '" aria-pressed="' + (!!p._fav) + '">' + STAR_SVG + '</button>'
+      : '';
+    return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
+      foodThumbHtml(p) +
+      '<div class="food-suggest-name">' +
+        '<div class="food-suggest-title">' + esc(p.product_name) + '</div>' +
+        (meta.length ? '<div class="brand">' + meta.join(' · ') + '</div>' : '') +
+      '</div>' +
+      star +
+      '<div class="food-suggest-tag">' + cal + ' kcal</div>' +
+    '</div>';
+  }
+
+  // Empty search box: show your pinned favorites, then the foods you
+  // logged most recently (the saved-foods cache is already newest-first),
+  // so a food you eat often is one tap away.
+  function renderFoodHome(){
+    var resultsEl = document.getElementById('foodSearchResults');
+    if (!resultsEl) return;
+    var all = STORE.savedFoods || [];
+    var favs = all.filter(function(f){ return f._fav; });
+    var recents = all.filter(function(f){ return !f._fav; }).slice(0, 8);
+    var products = favs.concat(recents);
+    foodSearch = { id: searchRequestId, query: '', products: products, pending: 0, stale: false };
+    ui.lastSearchProducts = products;
+    if (products.length === 0){
+      resultsEl.innerHTML = '<div class="food-suggest-status">Foods you log show up here for one-tap logging. Tap the star to pin your favorites.</div>';
+      return;
+    }
+    var html = '';
+    if (favs.length) html += '<div class="food-home-label">Favorites</div>' + favs.map(function(p, i){ return foodRowHtml(p, i); }).join('');
+    if (recents.length) html += '<div class="food-home-label">Recent</div>' + recents.map(function(p, i){ return foodRowHtml(p, favs.length + i); }).join('');
+    resultsEl.innerHTML = html;
+  }
+
+  function toggleFavorite(name){
+    var key = (name || '').trim().toLowerCase();
+    var entry = (STORE.savedFoods || []).filter(function(f){ return f.product_name.trim().toLowerCase() === key; })[0];
+    if (!entry) return;
+    if (entry._fav) delete entry._fav; else entry._fav = true;
+    saveStore();
+    maybeVibrate();
+    if (!foodSearch.query) renderFoodHome(); else renderFoodSearchResults();
+  }
+
   function renderFoodSearchResults(){
     var resultsEl = document.getElementById('foodSearchResults');
     if (!resultsEl) return;
@@ -3106,26 +3179,7 @@
     var customBtn = exactMatch ? '' :
       '<button type="button" class="food-suggest-custom" data-action="use-custom-food-name" data-name="' + esc(trimmed) + '">Use \u201c' + esc(trimmed) + '\u201d</button>';
 
-    var rows = products.map(function(p, i){
-      var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
-      // Right-hand tag is just the calories; the serving basis goes in
-      // the small line under the name so the name gets the room.
-      var meta = [];
-      var brand = p.brands ? p.brands.split(',')[0].trim() : '';
-      if (brand) meta.push(esc(brand));
-      if (p._source === 'saved') meta.push(esc(p._servingLabel || '100g'), 'Saved');
-      else if (p._source === 'techapi'){ if (p._serving) meta.push(esc(p._serving)); }
-      else meta.push('per 100 g');
-      if (p._source === 'saved' ? p._note : foodDataNote(p.nutriments)) meta.push('<span class="row-warn">\u26a0 check data</span>');
-      return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
-        foodThumbHtml(p) +
-        '<div class="food-suggest-name">' +
-          '<div class="food-suggest-title">' + esc(p.product_name) + '</div>' +
-          (meta.length ? '<div class="brand">' + meta.join(' \u00b7 ') + '</div>' : '') +
-        '</div>' +
-        '<div class="food-suggest-tag">' + cal + ' kcal</div>' +
-      '</div>';
-    }).join('');
+    var rows = products.map(foodRowHtml).join('');
 
     var status = '';
     if (foodSearch.pending > 0) status = '<div class="food-suggest-status">' + (products.length ? 'Searching more...' : 'Searching...') + '</div>';
@@ -3198,6 +3252,8 @@
     // De-dupe by name so re-picking the same food refreshes its
     // numbers and bumps it back to most-recently-used, rather than
     // piling up duplicate entries.
+    var prevEntry = (STORE.savedFoods || []).filter(function(f){ return f.product_name.trim().toLowerCase() === key; })[0];
+    if (prevEntry && prevEntry._fav) entry._fav = true; // a pinned favorite stays pinned
     STORE.savedFoods = (STORE.savedFoods || []).filter(function(f){
       return f.product_name.trim().toLowerCase() !== key;
     });
@@ -5519,6 +5575,8 @@
         el.setAttribute('aria-label', nowCollapsed ? 'Show macros' : 'Hide macros');
         el.setAttribute('aria-expanded', String(!nowCollapsed));
       }
+    } else if (action === 'toggle-fav'){
+      toggleFavorite(el.dataset.name);
     } else if (action === 'set-log-day'){
       ui.logDay = el.dataset.day;
       renderApp();
