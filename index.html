@@ -802,10 +802,12 @@
   }
   .scan-overlay-frame{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:88%;max-width:360px;aspect-ratio:4/3;
+    width:94%;max-width:560px;aspect-ratio:4/3;
     border:2px solid var(--accent);border-radius:var(--radius-md);
     box-shadow:0 0 0 2000px rgba(0,0,0,0.4);
   }
+  /* photo mode: a taller frame so a whole plate fits */
+  .scan-overlay.photo-mode .scan-overlay-frame{aspect-ratio:1/1;}
   .scan-overlay-controls{
     position:absolute;bottom:calc(30px + var(--safe-bottom));left:0;right:0;
     display:flex;align-items:center;justify-content:center;gap:18px;
@@ -3823,6 +3825,7 @@
         scanState.stream = stream;
         video.srcObject = stream;
         overlay.classList.remove('hidden');
+        overlay.classList.toggle('photo-mode', mode !== 'barcode');
         document.getElementById('scanCaptureBtn').classList.toggle('hidden', mode === 'barcode');
         scanState.detector = (mode === 'photo') ? null : new BarcodeDetector({
           formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128']
