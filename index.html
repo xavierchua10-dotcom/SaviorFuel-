@@ -1733,6 +1733,110 @@
   .install-help-card ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:10px; font-size:14px; line-height:1.5; color:var(--text-dim);}
   .install-help-card ol b{color:var(--text);}
   .ih-share{display:inline-block; color:var(--accent); font-weight:700;}
+
+  /* ===== Polish: History, Insights, Settings (SaviorFit Logger building blocks) ===== */
+  .pf-stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0 4px;}
+  .pf-stat{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px 14px 12px; min-width:0;}
+  .pf-stat-v{font:700 26px/1 'Oswald',sans-serif; color:var(--text); white-space:nowrap;}
+  .pf-stat-v small{font:500 12px 'Inter',sans-serif; color:var(--text-faint);}
+  .pf-stat-l{font:700 10px 'JetBrains Mono',ui-monospace,monospace; letter-spacing:.12em; color:var(--text-faint); margin-top:7px; text-transform:uppercase;}
+  .pf-stat.accent .pf-stat-v{color:var(--accent);}
+  .pf-stat.protein .pf-stat-v{color:var(--c-protein);}
+  .pf-stat.carbs .pf-stat-v{color:var(--c-carbs);}
+  .pf-stat.fat .pf-stat-v{color:var(--c-fat);}
+  .hist-stats{margin-top:0;}
+  .chev-rot,.hist-chev{display:inline-flex; width:16px; height:16px; color:var(--text-faint); transition:transform .18s ease; flex:0 0 auto;}
+  .hist-chev svg{width:100%; height:100%;}
+  .hist-week.open > .hist-week-head .hist-chev,.hist-item.open > .hist-item-head .hist-chev,.setc-wrap.open > .setc .hist-chev{transform:rotate(180deg);}
+  .hist-chev.go{transform:rotate(-90deg);}
+  /* history */
+  .hist-week{background:var(--panel); border:1px solid var(--line); border-radius:16px; margin-bottom:10px;}
+  .hist-week-head,.hist-item-head{display:flex; align-items:center; gap:10px; padding:13px 14px; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+  .hist-item-main{min-width:0; flex:1;}
+  .hist-name{font:600 15px 'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.03em; color:var(--text);}
+  .hist-name span{color:var(--text-faint); font-weight:500;}
+  .hist-sub{font:500 10px 'JetBrains Mono',ui-monospace,monospace; letter-spacing:.1em; color:var(--text-faint); margin-top:3px; text-transform:uppercase;}
+  .hist-dots{display:flex; gap:5px;}
+  .hist-dot{width:7px; height:7px; border-radius:50%; background:var(--panel-3); display:block;}
+  .hist-dot.on{background:var(--accent);} .hist-dot.over{background:var(--accent-2);}
+  .hist-dot.low{background:rgba(var(--accent-rgb),.4);} .hist-dot.future{background:transparent; box-shadow:inset 0 0 0 1px var(--line);}
+  .hist-week-body{padding:0 10px 4px;}
+  .hist-item{background:var(--panel-2); border:1px solid var(--line); border-radius:14px; margin-bottom:8px;}
+  .hist-item.is-today{border-color:rgba(var(--accent-rgb),.55);}
+  .hist-item-head{padding:11px 12px;}
+  .hist-item-side{display:flex; align-items:center; gap:9px;}
+  .hist-kcal{font:700 17px 'Oswald',sans-serif; color:var(--text); text-align:right;}
+  .hist-kcal small{font:500 9px 'JetBrains Mono',monospace; color:var(--text-faint); margin-left:3px; letter-spacing:.08em; text-transform:uppercase;}
+  .hist-ring{--p:0; width:34px; height:34px; border-radius:50%; position:relative; display:grid; place-items:center; background:conic-gradient(var(--accent) calc(var(--p) * 1%), var(--panel-3) 0);}
+  .hist-ring::before{content:""; position:absolute; inset:4px; border-radius:50%; background:var(--panel-2);}
+  .hist-ring span{position:relative; font:700 9px 'JetBrains Mono',monospace; color:var(--text);}
+  .hist-ring.over{background:conic-gradient(var(--accent-2) 100%, var(--panel-3) 0);}
+  .hist-ring.low{background:conic-gradient(rgba(var(--accent-rgb),.5) calc(var(--p) * 1%), var(--panel-3) 0);}
+  .hist-item-body{border-top:1px solid var(--line); padding:2px 0 6px;}
+  /* insights extras */
+  .insights-extras{margin-top:14px; padding-bottom:30px;}
+  .insights-extras .pf-stats{margin-top:0;}
+  .ach-count{color:var(--accent); margin-left:6px;}
+  .ach-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+  .ach{padding:12px 4px 10px; border-radius:16px; background:rgba(255,255,255,.03); border:1px solid var(--line); text-align:center; opacity:.55;}
+  .ach.on{opacity:1;}
+  .ach-coin{--c1:#30343a; --c2:#1d2024; --c3:#3d424a; --ic:#6b717b; width:52px; height:52px; border-radius:50%; margin:0 auto; display:grid; place-items:center; font:700 16px 'Oswald',sans-serif; color:var(--ic);
+    background:radial-gradient(circle at 30% 24%, rgba(255,255,255,.3), transparent 46%), linear-gradient(145deg, var(--c1), var(--c2)); box-shadow:inset 0 0 0 3px var(--c3), 0 6px 14px rgba(0,0,0,.45);}
+  .ach.t1 .ach-coin{--c1:#d98a4e; --c2:#8a4a1e; --c3:#f0b183; --ic:#2a1204;}
+  .ach.t2 .ach-coin{--c1:#d4dae1; --c2:#7d8793; --c3:#f4f6f8; --ic:#1c2229;}
+  .ach.t3 .ach-coin{--c1:#ffd266; --c2:#c98a10; --c3:#fff0b8; --ic:#3a2500;}
+  .ach-name{font:700 9px 'JetBrains Mono',monospace; letter-spacing:.08em; text-transform:uppercase; margin-top:8px; color:var(--text);}
+  /* settings */
+  .pf-hero{border-radius:22px; border:1px solid rgba(var(--accent-rgb),.55); background:linear-gradient(160deg, rgba(var(--accent-rgb),.16), var(--panel) 55%); padding:20px 18px 18px; box-shadow:0 14px 40px rgba(0,0,0,.3);}
+  .pf-id{display:flex; align-items:center; gap:14px;}
+  .pf-av{width:68px; height:68px; border-radius:50%; border:2.5px solid var(--accent); background:#000; flex:0 0 auto; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .pf-av img{width:60px; height:60px; object-fit:contain; display:block;}
+  .pf-id-tx{min-width:0; flex:1;}
+  .pf-name{font:700 26px/1.05 'Oswald',sans-serif; color:var(--text); text-transform:uppercase;}
+  .pf-since{font:500 12px 'Inter',sans-serif; color:var(--text-faint); margin-top:4px;}
+  .pf-since b{color:var(--accent); font-weight:700;}
+  .pf-acts{display:flex; gap:10px; margin-top:16px;}
+  .pf-share{flex:1; height:44px; border-radius:12px; border:none; background:var(--accent); color:#0b1a10; font:700 14px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
+  .pf-share:active{transform:scale(.98);}
+  .pf-edit{flex:0 0 44px; height:44px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.55); background:transparent; color:var(--accent); display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer;}
+  .pf-edit svg{width:18px; height:18px;}
+  .setc-wrap{background:var(--panel); border:1px solid var(--line); border-radius:18px; margin-bottom:10px; scroll-margin-top:70px;}
+  .setc-wrap.open{border-color:rgba(var(--accent-rgb),.45);}
+  .setc-wrap.install{border-color:rgba(var(--accent-rgb),.45);}
+  .setc{display:flex; align-items:center; gap:14px; padding:13px 14px; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+  .setc-ic{width:38px; height:38px; border-radius:12px; background:rgba(var(--accent-rgb),.14); color:var(--accent); display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+  .setc-ic.solid{background:var(--accent); color:#0b1a10;}
+  .setc-ic svg{width:19px; height:19px;}
+  .setc-tx{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+  .setc-t{font:600 15px 'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.03em; color:var(--text);}
+  .setc-d{font-size:11px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .setc-body{padding:0 12px 12px; border-top:1px solid var(--line);}
+  .setc-body .settings-section{margin:12px 0 0;}
+  .setc-body .settings-section h3{display:none;}
+  .setc-body .settings-group,.setc-body .card{margin-top:12px; margin-bottom:0;}
+  .setc-body .settings-section .card{margin-top:0;}
+  .setc-body .plan-result-banner{margin:12px 0 0;}
+  .theme-pick{display:flex; gap:10px; padding:2px 0 10px;}
+  .theme-opt{flex:1; border:2px solid var(--line); border-radius:16px; padding:8px; background:var(--bg); cursor:pointer; color:var(--text);}
+  .theme-opt.active{border-color:var(--accent);}
+  .theme-opt b{display:block; font:700 11px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; text-align:center; margin-top:6px;}
+  .theme-opt.active b{color:var(--accent);}
+  .theme-prev{display:flex; flex-direction:column; gap:4px; height:46px; border-radius:9px; padding:7px; background:#17261d;}
+  .theme-prev i{display:block; height:6px; border-radius:3px; background:#2a4a35;}
+  .theme-prev i:first-child{width:60%; background:#a6e36b;} .theme-prev i:last-child{width:85%;}
+  .theme-opt.light{background:#f1f6ef;} .theme-opt.light .theme-prev{background:#fff;}
+  .theme-opt.light .theme-prev i{background:#d9e8d3;} .theme-opt.light .theme-prev i:first-child{background:#3f7a12;}
+  .theme-opt.light b{color:#4d6657;} .theme-opt.light.active b{color:#3f7a12;}
+
+  .stats-fab{position:absolute; left:12px; bottom:12px; z-index:3; display:flex; align-items:center; gap:7px; height:38px; padding:0 14px 0 11px; border-radius:19px; border:1px solid rgba(var(--accent-rgb),.55); background:var(--panel); color:var(--accent); font:700 12px 'Oswald',sans-serif; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.35);}
+  .stats-fab svg{width:17px; height:17px;}
+  .stats-sheet{position:fixed; inset:0; z-index:310; background:rgba(0,0,0,.6); display:flex; align-items:flex-end; justify-content:center;}
+  .stats-sheet-card{width:100%; max-width:480px; max-height:86vh; overflow-y:auto; background:var(--bg); border:1px solid var(--line); border-radius:26px 26px 0 0; padding:16px 16px calc(22px + var(--safe-bottom)); color:var(--text);}
+  .stats-sheet-head{display:flex; align-items:center; justify-content:space-between;}
+  .stats-sheet-head h3{margin:0; font:700 18px 'Oswald',sans-serif; letter-spacing:.05em; text-transform:uppercase;}
+  .stats-sheet-x{border:none; background:none; color:var(--text-faint); font-size:26px; line-height:1; width:36px; height:36px; cursor:pointer;}
+  .stats-sheet .insights-extras{margin-top:6px;}
+  .hist-sub{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:.04em; font-size:9.5px;}
 </style>
 </head>
 <body>
@@ -2005,6 +2109,8 @@
   var state = { tab: 'log' };
   var ui = {
     historyOpenDay: null,
+    historyWeeks: {},
+    settingsOpen: null,
     logDay: null,         // day the Log tab shows (null = today); set by the week strip
     selectedFood: null,   // { name, brand, per100g: {cal,protein,carbs,fat} } once a search result is tapped
     grams: 100,            // serving size in grams, scales the selected food's macros
@@ -4162,6 +4268,79 @@
   /* =========================================================
      RENDER — HISTORY TAB
      ========================================================= */
+  // ---- Per-day numbers shared by History and Insights ----
+  // Every day that has at least one meal, with its totals. Keys are
+  // YYYY-MM-DD so they sort as dates.
+  function dayStatsMap(){
+    var map = {};
+    STORE.meals.forEach(function(m){
+      var k = dateKey(m.loggedAt);
+      if (!map[k]) map[k] = { key: k, meals: [], calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 };
+      var d = map[k];
+      d.meals.push(m);
+      d.calories += m.calories || 0;
+      d.protein += m.protein || 0;
+      d.carbs += m.carbs || 0;
+      d.fat += m.fat || 0;
+      d.fiber += m.fiber || 0;
+    });
+    return map;
+  }
+
+  // A day counts as "on goal" when calories land between 75% and 110%
+  // of the goal; above that it is "over", below it is "low".
+  function dayStatus(calories, goal){
+    if (!goal || calories <= 0) return 'none';
+    var p = calories / goal;
+    if (p > 1.1) return 'over';
+    if (p >= 0.75) return 'on';
+    return 'low';
+  }
+
+  // Current logging streak (consecutive days with a meal, still alive if
+  // today is empty but yesterday was logged) and the longest streak ever.
+  function streakInfo(map){
+    var keys = Object.keys(map).sort();
+    var cur = 0, d = map[todayKey()] ? 0 : 1;
+    while (map[dateKeyDaysAgo(d)]){ cur++; d++; }
+    var best = 0, run = 0, prev = null;
+    keys.forEach(function(k){
+      if (prev && addDaysKey(prev, 1) === k) run++; else run = 1;
+      if (run > best) best = run;
+      prev = k;
+    });
+    return { current: cur, best: best };
+  }
+
+  var CHEV_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+  function goalRingHtml(calories, goal){
+    var p = pctUncapped(calories, goal);
+    var cls = dayStatus(calories, goal);
+    return '<div class="hist-ring ' + cls + '" style="--p:' + Math.min(p, 100) + '"><span>' + p + '%</span></div>';
+  }
+
+  function historyDayHtml(day, goal){
+    var key = day.key;
+    var meals = day.meals.slice().sort(function(a,b){ return b.loggedAt - a.loggedAt; });
+    var isOpen = ui.historyOpenDay === key;
+    var label = formatDateLabel(key);
+    var dow = new Date(key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric' });
+    var showDow = (label === 'Today' || label === 'Yesterday');
+    return '<div class="hist-item' + (isOpen ? ' open' : '') + (key === todayKey() ? ' is-today' : '') + '">' +
+      '<div class="hist-item-head history-day-head" data-action="toggle-history-day" data-day="' + key + '">' +
+        '<div class="hist-item-main">' +
+          '<div class="hist-name">' + esc(label) + (showDow ? ' <span>· ' + esc(dow) + '</span>' : '') + '</div>' +
+          '<div class="hist-sub">' + meals.length + ' meal' + (meals.length === 1 ? '' : 's') + ' · P ' + Math.round(day.protein) + ' · C ' + Math.round(day.carbs) + ' · F ' + Math.round(day.fat) + '</div>' +
+        '</div>' +
+        '<div class="hist-item-side"><div class="hist-kcal">' + Math.round(day.calories) + '</div>' +
+          goalRingHtml(day.calories, goal) +
+          '<span class="hist-chev">' + CHEV_SVG + '</span></div>' +
+      '</div>' +
+      (isOpen ? '<div class="hist-item-body">' + categorizedMealRowsHtml(meals) + '</div>' : '') +
+    '</div>';
+  }
+
   function renderHistory(){
     if (STORE.meals.length === 0){
       document.getElementById('view').innerHTML =
@@ -4172,29 +4351,126 @@
       return;
     }
 
-    var byDay = {};
-    STORE.meals.forEach(function(m){
-      var key = dateKey(m.loggedAt);
-      if (!byDay[key]) byDay[key] = [];
-      byDay[key].push(m);
-    });
-    var days = Object.keys(byDay).sort().reverse();
+    var goal = STORE.goals.calories;
+    var map = dayStatsMap();
+    var keys = Object.keys(map).sort().reverse();
 
-    var html = days.map(function(key){
-      var meals = byDay[key].sort(function(a,b){ return b.loggedAt - a.loggedAt; });
-      var totals = totalsFor(meals);
-      var isOpen = ui.historyOpenDay === key;
-      var inner = isOpen ? categorizedMealRowsHtml(meals) : '';
-      return '<div class="card flat history-day-card">' +
-        '<div class="history-day-head" data-action="toggle-history-day" data-day="' + key + '" style="cursor:pointer;">' +
-          '<span class="date">' + formatDateLabel(key) + '</span>' +
-          '<span class="total">' + totals.calories + ' kcal</span>' +
+    // top stat cards: average kcal per logged day (last 30 days) and how
+    // many of the last 7 days landed on goal
+    var recent = keys.filter(function(k){ return k >= dateKeyDaysAgo(29); });
+    var avg = recent.length ? Math.round(recent.reduce(function(a, k){ return a + map[k].calories; }, 0) / recent.length) : 0;
+    var onGoal = 0;
+    for (var i = 0; i < 7; i++){
+      var dk = map[dateKeyDaysAgo(i)];
+      if (dk && dayStatus(dk.calories, goal) === 'on') onGoal++;
+    }
+    var html = '<div class="pf-stats hist-stats">' +
+      statCardHtml(avg.toLocaleString(), 'kcal', 'Avg per day', '') +
+      statCardHtml(String(onGoal), '/7 days', 'On goal this week', 'accent') +
+    '</div>';
+
+    // group days into Monday-start weeks, newest first
+    var weeks = {}, weekOrder = [];
+    keys.forEach(function(k){
+      var w = weekStartKey(k);
+      if (!weeks[w]){ weeks[w] = []; weekOrder.push(w); }
+      weeks[w].push(map[k]);
+    });
+    var thisWeek = weekStartKey(todayKey());
+    html += '<h3 class="section-label">History</h3>';
+    weekOrder.forEach(function(w){
+      var days = weeks[w];
+      var explicit = ui.historyWeeks[w];
+      var open = explicit === undefined ? (w === thisWeek) : explicit;
+      var total = Math.round(days.reduce(function(a, d){ return a + d.calories; }, 0));
+      var dots = '';
+      for (var j = 0; j < 7; j++){
+        var dkey = addDaysKey(w, j);
+        var d = map[dkey];
+        dots += '<i class="hist-dot ' + (d ? dayStatus(d.calories, goal) : (dkey > todayKey() ? 'future' : 'none')) + '"></i>';
+      }
+      var startL = new Date(w + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      var endL = new Date(addDaysKey(w, 6) + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      html += '<div class="hist-week' + (open ? ' open' : '') + '">' +
+        '<div class="hist-week-head" data-action="toggle-history-week" data-week="' + w + '">' +
+          '<div class="hist-item-main"><div class="hist-name">' + (w === thisWeek ? 'This week' : esc(startL + ' – ' + endL)) + '</div>' +
+            '<div class="hist-sub">' + days.length + ' day' + (days.length === 1 ? '' : 's') + ' · ' + total.toLocaleString() + ' kcal</div></div>' +
+          '<div class="hist-dots">' + dots + '</div><span class="hist-chev">' + CHEV_SVG + '</span>' +
         '</div>' +
-        inner +
+        (open ? '<div class="hist-week-body">' + days.map(function(d){ return historyDayHtml(d, goal); }).join('') + '</div>' : '') +
       '</div>';
-    }).join('');
+    });
 
     document.getElementById('view').innerHTML = html;
+  }
+
+  // ---- Insights extras: stat cards + achievement coins, shown under
+  // every Insights view. Coins unlock from the logged data itself.
+  var ACHIEVEMENTS = [
+    { id: 'first',  glyph: '1',   label: 'First log',   tier: 1, hint: 'Log your first meal' },
+    { id: 'st3',    glyph: '3',   label: '3 day',       tier: 1, hint: 'Log 3 days in a row' },
+    { id: 'st7',    glyph: '7',   label: '7 day',       tier: 2, hint: 'Log 7 days in a row' },
+    { id: 'st30',   glyph: '30',  label: '30 day',      tier: 3, hint: 'Log 30 days in a row' },
+    { id: 'prot',   glyph: 'P',   label: 'Protein',     tier: 2, hint: 'Hit your protein goal in a day' },
+    { id: 'fib',    glyph: 'F',   label: 'Fibre',       tier: 1, hint: 'Hit your fibre goal in a day' },
+    { id: 'm50',    glyph: '50',  label: '50 meals',    tier: 2, hint: 'Log 50 meals' },
+    { id: 'm100',   glyph: '100', label: '100 meals',   tier: 3, hint: 'Log 100 meals' }
+  ];
+
+  function achievementsUnlocked(map, streak){
+    var g = STORE.goals, days = Object.keys(map).map(function(k){ return map[k]; });
+    var u = {};
+    u.first = STORE.meals.length >= 1;
+    u.st3 = streak.best >= 3;
+    u.st7 = streak.best >= 7;
+    u.st30 = streak.best >= 30;
+    u.prot = g.protein > 0 && days.some(function(d){ return d.protein >= g.protein; });
+    u.fib = g.fiber > 0 && days.some(function(d){ return d.fiber >= g.fiber; });
+    u.m50 = STORE.meals.length >= 50;
+    u.m100 = STORE.meals.length >= 100;
+    return u;
+  }
+
+  function insightsExtrasHtml(){
+    var g = STORE.goals;
+    var map = dayStatsMap();
+    var streak = streakInfo(map);
+    var today = map[todayKey()] || { calories: 0, protein: 0 };
+    var left = Math.max(0, Math.round(g.calories - today.calories));
+    var protPct = pctUncapped(today.protein, g.protein);
+    // best day = the day this week closest to the calorie goal
+    var best = null;
+    for (var i = 0; i < 7; i++){
+      var k = dateKeyDaysAgo(i), d = map[k];
+      if (!d || !g.calories) continue;
+      var diff = Math.abs(d.calories - g.calories);
+      if (!best || diff < best.diff) best = { key: k, diff: diff };
+    }
+    var bestLabel = best ? new Date(best.key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }) : '—';
+    var html = '<div class="insights-extras">' +
+      '<div class="pf-stats">' +
+        statCardHtml(String(left), 'kcal', 'Left today', 'accent') +
+        statCardHtml(String(streak.current), streak.current === 1 ? 'day' : 'days', 'Logging streak', '') +
+        statCardHtml(String(protPct), '%', 'Protein goal', 'protein') +
+        statCardHtml(bestLabel, '', 'Best day this week', '') +
+      '</div>';
+    var unlocked = achievementsUnlocked(map, streak);
+    var count = ACHIEVEMENTS.filter(function(a){ return unlocked[a.id]; }).length;
+    html += '<h3 class="section-label">Achievements <span class="ach-count">' + count + '/' + ACHIEVEMENTS.length + '</span></h3><div class="ach-grid">' +
+      ACHIEVEMENTS.map(function(a){
+        var on = !!unlocked[a.id];
+        return '<div class="ach' + (on ? ' on t' + a.tier : '') + '" title="' + esc(a.hint) + '">' +
+          '<div class="ach-coin"><span>' + a.glyph + '</span></div>' +
+          '<div class="ach-name">' + esc(a.label) + '</div></div>';
+      }).join('') + '</div></div>';
+    return html;
+  }
+
+  // One stat card: big Oswald number, small unit, mono label (same
+  // building block as SaviorFit Logger's profile stats).
+  function statCardHtml(value, unit, label, tone){
+    return '<div class="pf-stat' + (tone ? ' ' + tone : '') + '"><div class="pf-stat-v">' + esc(value) +
+      (unit ? '<small> ' + esc(unit) + '</small>' : '') + '</div><div class="pf-stat-l">' + esc(label) + '</div></div>';
   }
 
   // Groups meals by category (Breakfast -> ... -> Dinner -> Other) and
@@ -4693,6 +4969,33 @@
 
     if (ui.insightsView === 'trends') renderInsightsTrends();
     else renderInsightsToday();
+    var viewEl = document.getElementById('view');
+    var card3d = viewEl.querySelector('.card.model-card');
+    if (card3d){
+      // 3D panels are full-screen and don't scroll, so the stats and
+      // coins open from a button instead of sitting underneath.
+      card3d.insertAdjacentHTML('beforeend',
+        '<button type="button" class="stats-fab" data-action="open-stats-sheet" aria-label="Show stats and achievements">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v5a5 5 0 0 1-10 0z"></path><path d="M17 5h3v2a3 3 0 0 1-3 3"></path><path d="M7 5H4v2a3 3 0 0 0 3 3"></path></svg>' +
+          '<span>Stats</span></button>');
+    } else {
+      viewEl.insertAdjacentHTML('beforeend', insightsExtrasHtml());
+    }
+  }
+
+  function openStatsSheet(){
+    closeStatsSheet();
+    var el = document.createElement('div');
+    el.className = 'stats-sheet'; el.id = 'statsSheet';
+    el.innerHTML = '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>Stats &amp; achievements</h3>' +
+      '<button type="button" class="stats-sheet-x" data-action="close-stats-sheet" aria-label="Close">&times;</button></div>' +
+      insightsExtrasHtml() + '</div>';
+    el.addEventListener('click', function(e){ if (e.target === el) closeStatsSheet(); });
+    document.body.appendChild(el);
+  }
+  function closeStatsSheet(){
+    var el = document.getElementById('statsSheet');
+    if (el) el.remove();
   }
 
   // ---- Daily Overview has two modes, switched by the icon pair in its
@@ -5258,16 +5561,71 @@
     renderApp();
   }
 
+  // One collapsible settings card: icon + title + one-line summary, and
+  // the real controls open underneath when tapped. Only one is open at a
+  // time (ui.settingsOpen).
+  function settingsCardHtml(id, iconSvg, title, desc, body){
+    var open = ui.settingsOpen === id;
+    return '<div class="setc-wrap' + (open ? ' open' : '') + '" id="setc-' + id + '">' +
+      '<div class="setc" data-action="toggle-settings-sec" data-sec="' + id + '">' +
+        '<span class="setc-ic">' + iconSvg + '</span>' +
+        '<span class="setc-tx"><span class="setc-t">' + title + '</span><span class="setc-d">' + desc + '</span></span>' +
+        '<span class="hist-chev">' + CHEV_SVG + '</span>' +
+      '</div>' +
+      (open ? '<div class="setc-body">' + body + '</div>' : '') +
+    '</div>';
+  }
+
+  var SET_ICONS = (function(){
+    var o = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+    return {
+      profile: o + '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+      goals: o + '<circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>',
+      prefs: o + '<line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>',
+      look: o + '<circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"></path></svg>',
+      data: o + '<ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>',
+      install: o + '<path d="M12 3v12"></path><polyline points="7 10 12 15 17 10"></polyline><path d="M5 21h14"></path></svg>',
+      info: o + '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
+      edit: o + '<path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>'
+    };
+  })();
+
   function renderSettings(){
     var g = STORE.goals;
     var s = STORE.appSettings;
-    var html = profileFormHtml();
+    var p = STORE.profile;
+    var imperial = s.unit === 'imperial';
+    var goalLabel = (GOAL_OPTIONS.find(function(o){ return o.id === p.goal; }) || GOAL_OPTIONS[1]).label;
+    var weightLabel = imperial ? Math.round(kgToLb(p.weightKg)) + ' lb' : p.weightKg + ' kg';
 
+    // ---- hero: your plan at a glance
+    var html = '<div class="pf-hero">' +
+      '<div class="pf-id"><div class="pf-av"><img src="images/logo-mark.png" alt=""></div>' +
+        '<div class="pf-id-tx"><div class="pf-name">Your plan</div>' +
+        '<div class="pf-since">Goal · <b>' + esc(goalLabel) + '</b></div></div></div>' +
+      '<div class="pf-acts"><button type="button" class="pf-share" data-action="open-settings-sec" data-sec="profile">Recalculate plan</button>' +
+        '<button type="button" class="pf-edit" data-action="open-settings-sec" data-sec="goals" aria-label="Edit daily goals">' + SET_ICONS.edit + '</button></div>' +
+    '</div>' +
+    '<div class="pf-stats">' +
+      statCardHtml(Math.round(g.calories).toLocaleString(), 'kcal', 'Daily calories', 'accent') +
+      statCardHtml(String(g.protein), 'g', 'Protein', 'protein') +
+      statCardHtml(String(g.carbs), 'g', 'Carbs', 'carbs') +
+      statCardHtml(String(g.fat), 'g', 'Fat', 'fat') +
+    '</div>';
+
+    html += '<h3 class="section-label">Settings</h3>';
+
+    // ---- profile & plan
+    var profBody = '';
     if (STORE.lastPlanTdee){
-      html += '<div class="plan-result-banner">Estimated maintenance (TDEE): <b>' + STORE.lastPlanTdee + ' kcal/day</b> — your goals below were calculated from this.</div>';
+      profBody += '<div class="plan-result-banner">Estimated maintenance (TDEE): <b>' + STORE.lastPlanTdee + ' kcal/day</b> — your goals were calculated from this.</div>';
     }
+    profBody += profileFormHtml();
+    html += settingsCardHtml('profile', SET_ICONS.profile, 'Profile &amp; plan',
+      (p.sex === 'female' ? 'Female' : 'Male') + ' · ' + p.age + ' · ' + weightLabel + ' · ' + esc(goalLabel), profBody);
 
-    html += '<div class="settings-section"><h3>Daily goals</h3><div class="card">' +
+    // ---- daily goals
+    var goalsBody = '<div class="settings-section"><div class="card">' +
       settingsGoalRow('Calories', 'goalCalories', g.calories) +
       settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
       settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
@@ -5276,67 +5634,81 @@
       settingsGoalRow('Sugar (g)', 'goalSugar', g.sugar) +
       settingsGoalRow('Sodium (mg)', 'goalSodium', g.sodium) +
     '</div></div>';
+    html += settingsCardHtml('goals', SET_ICONS.goals, 'Daily goals',
+      Math.round(g.calories) + ' kcal · P ' + g.protein + ' · C ' + g.carbs + ' · F ' + g.fat, goalsBody);
 
-    html += '<div class="section-label">Preferences</div>';
-    html += '<div class="settings-group">';
-    html += '<div class="settings-row"><div><div class="sr-label">Units</div><div class="sr-sub">Applies to height and bodyweight above</div></div>' +
-              '<div class="seg">' +
-                '<button data-action="set-unit" data-unit="metric" class="' + (s.unit === 'metric' ? 'active' : '') + '">METRIC</button>' +
-                '<button data-action="set-unit" data-unit="imperial" class="' + (s.unit === 'imperial' ? 'active' : '') + '">IMPERIAL</button>' +
-              '</div></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">Haptic feedback</div><div class="sr-sub">Short vibration when you log a meal</div></div>' +
-              '<div class="seg">' +
-                '<button data-action="toggle-haptic" data-val="on" class="' + (s.haptic !== false ? 'active' : '') + '">ON</button>' +
-                '<button data-action="toggle-haptic" data-val="off" class="' + (s.haptic === false ? 'active' : '') + '">OFF</button>' +
-              '</div></div>';
-    html += '</div>';
+    // ---- preferences
+    var prefBody = '<div class="settings-group">' +
+      '<div class="settings-row"><div><div class="sr-label">Units</div><div class="sr-sub">Applies to height and bodyweight</div></div>' +
+        '<div class="seg">' +
+          '<button data-action="set-unit" data-unit="metric" class="' + (s.unit === 'metric' ? 'active' : '') + '">METRIC</button>' +
+          '<button data-action="set-unit" data-unit="imperial" class="' + (s.unit === 'imperial' ? 'active' : '') + '">IMPERIAL</button>' +
+        '</div></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Haptic feedback</div><div class="sr-sub">Short vibration when you log a meal</div></div>' +
+        '<div class="seg">' +
+          '<button data-action="toggle-haptic" data-val="on" class="' + (s.haptic !== false ? 'active' : '') + '">ON</button>' +
+          '<button data-action="toggle-haptic" data-val="off" class="' + (s.haptic === false ? 'active' : '') + '">OFF</button>' +
+        '</div></div>' +
+    '</div>';
+    html += settingsCardHtml('prefs', SET_ICONS.prefs, 'Preferences',
+      (imperial ? 'Imperial' : 'Metric') + ' · Haptics ' + (s.haptic === false ? 'off' : 'on'), prefBody);
 
-    html += '<div class="section-label">Appearance</div>';
-    html += '<div class="settings-group">';
-    html += '<div class="settings-row"><div><div class="sr-label">Theme</div><div class="sr-sub">Header always stays dark either way</div></div>' +
-              '<div class="seg">' +
-                '<button data-action="set-theme" data-theme="dark" class="' + (s.theme !== 'light' ? 'active' : '') + '">Dark</button>' +
-                '<button data-action="set-theme" data-theme="light" class="' + (s.theme === 'light' ? 'active' : '') + '">Light</button>' +
-              '</div></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">Density</div><div class="sr-sub">Fit more on screen in Log &amp; History</div></div>' +
-              '<div class="seg">' +
-                '<button data-action="set-density" data-density="comfortable" class="' + (s.density === 'comfortable' ? 'active' : '') + '">Comfortable</button>' +
-                '<button data-action="set-density" data-density="compact" class="' + (s.density === 'compact' ? 'active' : '') + '">Compact</button>' +
-              '</div></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">Corners</div><div class="sr-sub">Rounded or sharp edges throughout the app</div></div>' +
-              '<div class="seg">' +
-                '<button data-action="set-corner-style" data-style="rounded" class="' + (s.corners === 'rounded' ? 'active' : '') + '">Rounded</button>' +
-                '<button data-action="set-corner-style" data-style="sharp" class="' + (s.corners === 'sharp' ? 'active' : '') + '">Sharp</button>' +
-              '</div></div>';
-    html += '</div>';
+    // ---- appearance
+    var lookBody = '<div class="settings-group">' +
+      '<div class="theme-pick">' +
+        '<button type="button" data-action="set-theme" data-theme="dark" class="theme-opt dark' + (s.theme !== 'light' ? ' active' : '') + '"><span class="theme-prev"><i></i><i></i></span><b>Dark</b></button>' +
+        '<button type="button" data-action="set-theme" data-theme="light" class="theme-opt light' + (s.theme === 'light' ? ' active' : '') + '"><span class="theme-prev"><i></i><i></i></span><b>Light</b></button>' +
+      '</div>' +
+      '<div class="settings-row"><div><div class="sr-label">Density</div><div class="sr-sub">Fit more on screen in Log &amp; History</div></div>' +
+        '<div class="seg">' +
+          '<button data-action="set-density" data-density="comfortable" class="' + (s.density === 'comfortable' ? 'active' : '') + '">Comfortable</button>' +
+          '<button data-action="set-density" data-density="compact" class="' + (s.density === 'compact' ? 'active' : '') + '">Compact</button>' +
+        '</div></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Corners</div><div class="sr-sub">Rounded or sharp edges throughout the app</div></div>' +
+        '<div class="seg">' +
+          '<button data-action="set-corner-style" data-style="rounded" class="' + (s.corners === 'rounded' ? 'active' : '') + '">Rounded</button>' +
+          '<button data-action="set-corner-style" data-style="sharp" class="' + (s.corners === 'sharp' ? 'active' : '') + '">Sharp</button>' +
+        '</div></div>' +
+    '</div>';
+    html += settingsCardHtml('look', SET_ICONS.look, 'Appearance',
+      (s.theme === 'light' ? 'Light' : 'Dark') + ' · ' + (s.density === 'compact' ? 'Compact' : 'Comfortable') + ' · ' + (s.corners === 'sharp' ? 'Sharp' : 'Rounded'), lookBody);
 
-    html += '<div class="section-label">Your data</div>';
-    html += '<div class="settings-group">';
-    html += '<div class="settings-row"><div><div class="sr-label">' + STORE.meals.length + ' meal' + (STORE.meals.length === 1 ? '' : 's') + ' logged</div>' +
-              '<div class="sr-sub">Stored only on this device — no account or sync yet</div></div></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">' + (STORE.savedFoods || []).length + ' food' + ((STORE.savedFoods || []).length === 1 ? '' : 's') + ' saved for offline search</div>' +
-              '<div class="sr-sub">Foods you\'ve picked before — found instantly, even with no connection</div></div></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">Food data sources</div>' +
-              '<div class="sr-sub">Kalori (Malaysian foods) · USDA FoodData Central · Open Food Facts. Product photos come from Open Food Facts contributors (CC BY-SA).</div></div></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">About SaviorFuel</div>' +
-              '<div class="sr-sub">\u00a9 2026 Xavier Chua (Savior). All rights reserved. The app\'s code and design may not be copied or reused.</div></div></div>';
+    // ---- install (only when the browser can install it)
     if (canOfferInstall()){
-      html += '<div class="settings-row"><div><div class="sr-label">Install app</div><div class="sr-sub">' + (deferredInstall ? 'Add SaviorFuel to your home screen' : 'Add it to your home screen from Safari') + '</div></div>' +
-              '<button class="sr-action" data-action="install-app">Install</button></div>';
+      html += '<div class="setc-wrap install"><div class="setc" data-action="install-app">' +
+        '<span class="setc-ic solid">' + SET_ICONS.install + '</span>' +
+        '<span class="setc-tx"><span class="setc-t">Install app</span><span class="setc-d">' + (deferredInstall ? 'Add SaviorFuel to your home screen' : 'Add it to your home screen from Safari') + '</span></span>' +
+        '<span class="hist-chev go">' + CHEV_SVG + '</span></div></div>';
     }
-    html += '<div class="settings-row"><div><div class="sr-label">Export backup</div><div class="sr-sub">Download a JSON file of your log</div></div>' +
-              '<button class="sr-action" data-action="export-data">Export</button></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">Import backup</div><div class="sr-sub">Restore from a JSON file</div></div>' +
-              '<button class="sr-action" data-action="import-data">Import</button></div>';
-    html += '</div>';
 
-    html += '<div class="section-label">Support</div>';
-    html += '<div class="settings-group">';
-    html += '<div class="settings-row"><div><div class="sr-label">Instagram</div><div class="sr-sub">@im.savior_</div></div>' +
-              '<a class="sr-action" href="https://instagram.com/im.savior_" target="_blank" rel="noopener">Open</a></div>';
-    html += '<div class="settings-row"><div><div class="sr-label">Email</div><div class="sr-sub">xavierchua10@gmail.com</div></div>' +
-              '<a class="sr-action" href="mailto:xavierchua10@gmail.com">Email</a></div>';
-    html += '</div>';
+    // ---- your data
+    var nFoods = (STORE.savedFoods || []).length;
+    var dataBody = '<div class="settings-group">' +
+      '<div class="settings-row"><div><div class="sr-label">' + STORE.meals.length + ' meal' + (STORE.meals.length === 1 ? '' : 's') + ' logged</div>' +
+        '<div class="sr-sub">Stored only on this device — no account or sync yet</div></div></div>' +
+      '<div class="settings-row"><div><div class="sr-label">' + nFoods + ' food' + (nFoods === 1 ? '' : 's') + ' saved for offline search</div>' +
+        '<div class="sr-sub">Foods you\'ve picked before — found instantly, even with no connection</div></div></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Food data sources</div>' +
+        '<div class="sr-sub">Kalori (Malaysian foods) · USDA FoodData Central · Open Food Facts. Product photos come from Open Food Facts contributors (CC BY-SA).</div></div></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Export backup</div><div class="sr-sub">Download a JSON file of your log</div></div>' +
+        '<button class="sr-action" data-action="export-data">Export</button></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Import backup</div><div class="sr-sub">Restore from a JSON file</div></div>' +
+        '<button class="sr-action" data-action="import-data">Import</button></div>' +
+    '</div>';
+    html += settingsCardHtml('data', SET_ICONS.data, 'Your data',
+      STORE.meals.length + ' meal' + (STORE.meals.length === 1 ? '' : 's') + ' · Export / Import', dataBody);
+
+    // ---- about & support
+    var aboutBody = '<div class="settings-group">' +
+      '<div class="settings-row"><div><div class="sr-label">About SaviorFuel</div>' +
+        '<div class="sr-sub">© 2026 Xavier Chua (Savior). All rights reserved. The app\'s code and design may not be copied or reused.</div></div></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Instagram</div><div class="sr-sub">@im.savior_</div></div>' +
+        '<a class="sr-action" href="https://instagram.com/im.savior_" target="_blank" rel="noopener">Open</a></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Email</div><div class="sr-sub">xavierchua10@gmail.com</div></div>' +
+        '<a class="sr-action" href="mailto:xavierchua10@gmail.com">Email</a></div>' +
+    '</div>';
+    html += settingsCardHtml('about', SET_ICONS.info, 'About &amp; support', 'Sources · Instagram · Email', aboutBody);
+
     html += '<div class="settings-version">SaviorFuel v' + APP_VERSION + '</div>';
 
     var dzOpen = !!ui.dangerZoneOpen;
@@ -5665,6 +6037,21 @@
     } else if (action === 'toggle-history-day'){
       var day = el.dataset.day;
       ui.historyOpenDay = (ui.historyOpenDay === day) ? null : day;
+      renderApp();
+    } else if (action === 'open-stats-sheet'){
+      openStatsSheet();
+    } else if (action === 'close-stats-sheet'){
+      closeStatsSheet();
+    } else if (action === 'toggle-settings-sec' || action === 'open-settings-sec'){
+      var sec = el.dataset.sec;
+      ui.settingsOpen = (action === 'toggle-settings-sec' && ui.settingsOpen === sec) ? null : sec;
+      renderApp();
+      var secEl = document.getElementById('setc-' + sec);
+      if (secEl && ui.settingsOpen === sec) secEl.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    } else if (action === 'toggle-history-week'){
+      var wk = el.dataset.week;
+      var wasOpen = el.parentNode.classList.contains('open');
+      ui.historyWeeks[wk] = !wasOpen;
       renderApp();
     } else if (action === 'clear-data'){
       if (window.confirm('Erase all logged meals and reset goals? This can\'t be undone.')){
