@@ -223,9 +223,6 @@
   /* Extra bottom room on Insights so the last row/card isn't hidden
      behind the sticky Today / Trends bar (mirrors SaviorFit Logger's
      body.has-progress-subtab rule). */
-  body.has-insights-subtab main#view{
-    padding-bottom:calc(136px + var(--safe-bottom));
-  }
 
   /* ---------- Bottom nav stack (tab bar + optional Insights sub-tab bar) ---------- */
   .bottom-nav{
@@ -1613,7 +1610,11 @@
   .category-section-label{margin-top:18px;}
 
   /* ---- Insights: segmented bar sits above the floating nav ---- */
-  .insights-subtabbar{margin:0 12px 34px; border-radius:var(--radius-pill); overflow:hidden; border:1px solid var(--line);}
+  /* Daily / Weekly switch: a slim pill under the header (not stacked on the nav) */
+  .insights-subtabbar{flex-shrink:0; margin:10px 16px 0; border-radius:var(--radius-pill); overflow:hidden; border:1px solid var(--line); background:var(--panel);}
+  .insights-subtabbar button{padding:9px 6px; font-size:12px;}
+  .insights-subtabbar.hidden{display:none;}
+  body.has-insights-subtab main#view:not(.model-fullscreen) > *:first-child{margin-top:12px;}
 
   /* ---- Favorites / Recent in food search ---- */
   .food-home-label{font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); margin:14px 2px 6px;}
@@ -1870,14 +1871,15 @@
     <h1 class="topbar-brand"><img src="images/logo-mark.png" alt="SaviorFuel" class="topbar-logo"></h1>
   </header>
 
-  <main id="view"></main>
-
-  <div class="bottom-nav" id="bottomNav">
   <nav class="insights-subtabbar hidden" id="insightsSubtabbar">
     <span class="subtab-slider" aria-hidden="true"></span>
     <button data-action="set-insights-view" data-view="today">Daily Overview</button>
     <button data-action="set-insights-view" data-view="trends">Weekly Overview</button>
   </nav>
+
+  <main id="view"></main>
+
+  <div class="bottom-nav" id="bottomNav">
   <nav class="tabbar" id="tabbar">
     <span class="tab-slider" aria-hidden="true"></span>
     <button data-action="set-tab" data-tab="log" class="active">
