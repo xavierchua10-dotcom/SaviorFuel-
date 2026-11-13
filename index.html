@@ -9,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#14161a">
+<meta name="theme-color" content="#0a120d">
 <meta name="author" content="Xavier Chua (Savior)">
 <meta name="copyright" content="Copyright (c) 2026 Xavier Chua (Savior). All rights reserved.">
 <title>SaviorFuel — Food Tracker</title>
@@ -1661,11 +1661,66 @@
   .topbar{padding:calc(6px + env(safe-area-inset-top, 0px) * 0.65) 18px 4px;} /* same as SaviorFit Logger */
   .topbar-brand{display:flex; align-items:center; margin:0; line-height:0;}
   .topbar-logo{height:46px; width:auto; display:block;}
+
+  .boot-loading-logo{width:150px; height:150px; display:block; animation:bootPulse 1.6s ease-in-out infinite;}
+  @keyframes bootPulse{0%,100%{opacity:.75; transform:scale(.97);} 50%{opacity:1; transform:scale(1);}}
+  @media (prefers-reduced-motion: reduce){ .boot-loading-logo{animation:none;} }
+
+  .toast.has-action{pointer-events:auto; display:flex; align-items:center; gap:12px; padding-right:8px;}
+  .toast-action{
+    background:rgba(var(--accent-rgb),.18); color:var(--accent); border:none; border-radius:var(--radius-pill);
+    font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; font-weight:700;
+    padding:7px 14px; cursor:pointer;
+  }
+  .meal-row-copy{
+    background:none;border:none;color:var(--text-faint);
+    display:flex;align-items:center;justify-content:center;
+    padding:6px;cursor:pointer;flex-shrink:0;margin-right:-4px;
+  }
+  .meal-row-copy svg{width:16px;height:16px;display:block;}
+  .meal-row-copy:active{color:var(--accent);}
+
+  /* ---- First-run welcome ---- */
+  .welcome-overlay{position:fixed; inset:0; z-index:300; background:var(--bg); display:flex; justify-content:center; overflow-y:auto;}
+  .welcome-card{width:100%; max-width:480px; min-height:100%; display:flex; flex-direction:column; padding:calc(28px + var(--safe-top, 0px)) 22px calc(22px + var(--safe-bottom));}
+  .welcome-dots{display:flex; gap:8px; justify-content:center; margin-bottom:22px;}
+  .welcome-dots i{width:26px; height:5px; border-radius:3px; background:var(--panel-3);}
+  .welcome-dots i.done{background:rgba(var(--accent-rgb),.5);}
+  .welcome-dots i.on{background:var(--accent);}
+  .welcome-body{flex:1; display:flex; flex-direction:column; gap:14px;}
+  .welcome-body h2{margin:0; font-family:'Oswald',sans-serif; font-size:28px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text);}
+  .welcome-body p{margin:0; font-size:14px; line-height:1.55; color:var(--text-dim);}
+  .welcome-logo{width:170px; height:170px; align-self:center; margin:18px 0 6px; display:block;}
+  .welcome-field{display:flex; flex-direction:column; gap:6px; flex:none; min-width:0;}
+  .welcome-row .welcome-field{flex:1;}
+  .welcome-field label{font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);}
+  .welcome-field input, .welcome-field select{
+    width:100%; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-md);
+    color:var(--text); font-size:16px; padding:13px 12px; font-family:inherit;
+  }
+  .welcome-row{display:flex; gap:10px;}
+  .welcome-seg{display:flex; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-pill); padding:4px; gap:4px;}
+  .welcome-seg button{flex:1; border:none; background:none; color:var(--text-dim); border-radius:var(--radius-pill); padding:10px 8px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:0.05em; text-transform:uppercase; font-weight:600; cursor:pointer;}
+  .welcome-seg button.active{background:var(--accent); color:#0f2410;}
+  body[data-theme="light"] .welcome-seg button.active{color:#fff;}
+  .welcome-goals{display:flex; flex-direction:column; gap:8px;}
+  .welcome-goals button{text-align:left; background:var(--panel); border:1.5px solid var(--line); border-radius:var(--radius-xl); padding:14px 16px; color:var(--text); cursor:pointer; display:flex; flex-direction:column; gap:3px;}
+  .welcome-goals button b{font-family:'Oswald',sans-serif; font-size:16px; letter-spacing:0.04em; text-transform:uppercase;}
+  .welcome-goals button span{font-size:12px; color:var(--text-faint);}
+  .welcome-goals button.active{border-color:var(--accent); background:rgba(var(--accent-rgb),.12);}
+  .welcome-plan-kcal{font-family:'Oswald',sans-serif; font-size:64px; font-weight:700; line-height:1; color:var(--accent); text-align:center; margin:10px 0 4px;}
+  .welcome-plan-kcal span{display:block; font-size:12px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-faint); margin-top:6px;}
+  .welcome-note{text-align:center;}
+  .welcome-footer{display:flex; flex-direction:column; gap:8px; margin-top:22px;}
+  .welcome-primary{border:none; border-radius:var(--radius-pill); padding:16px; background:var(--accent); color:#0f2410; font-family:'Oswald',sans-serif; font-size:15px; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; cursor:pointer;}
+  body[data-theme="light"] .welcome-primary{color:#fff;}
+  .welcome-primary:active{transform:scale(.98);}
+  .welcome-skip{border:none; background:none; color:var(--text-faint); font-size:13px; padding:10px; cursor:pointer;}
 </style>
 </head>
 <body>
 
-<div id="bootLoading" class="boot-loading"><div class="boot-loading-mark">SAVIOR<span>FUEL</span></div></div>
+<div id="bootLoading" class="boot-loading"><img class="boot-loading-logo" src="images/logo-mark.png" alt="SaviorFuel"></div>
 
 <div id="app" class="hidden">
   <header class="topbar">
@@ -2386,6 +2441,11 @@
         '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
+      (dateKey(m.loggedAt) !== todayKey()
+        ? '<button class="meal-row-copy" data-action="copy-meal" data-id="' + m.id + '" aria-label="Copy ' + esc(m.name) + ' to today">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg>' +
+          '</button>'
+        : '') +
       '<button class="meal-row-edit" data-action="edit-meal" data-id="' + m.id + '" aria-label="Edit ' + esc(m.name) + '">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>' +
       '</button>' +
@@ -2641,12 +2701,22 @@
 
   /* ---- Editing a logged meal, and choosing the day ---- */
   var toastTimer = 0;
-  function showToast(message){
+  function showToast(message, actionLabel, onAction){
     var el = document.getElementById('toast');
     el.textContent = message;
+    el.classList.toggle('has-action', !!actionLabel);
+    if (actionLabel){
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'toast-action'; btn.textContent = actionLabel;
+      btn.addEventListener('click', function(){
+        el.classList.remove('show'); clearTimeout(toastTimer);
+        if (onAction) onAction();
+      });
+      el.appendChild(btn);
+    }
     el.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, actionLabel ? 6000 : 2600);
   }
 
   function mealById(id){
@@ -3943,9 +4013,33 @@
   }
 
   function deleteMeal(id){
+    var removed = mealById(id);
     STORE.meals = STORE.meals.filter(function(m){ return m.id !== id; });
     saveStore();
     renderApp();
+    if (removed){
+      showToast('Meal deleted', 'Undo', function(){
+        STORE.meals.push(removed);
+        saveStore();
+        renderApp();
+      });
+    }
+  }
+
+  // Copy a meal from another day to today (same food, same meal time).
+  function copyMealToToday(id){
+    var m = mealById(id);
+    if (!m) return;
+    var copy = Object.assign({}, m, {
+      id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      loggedAt: Date.now()
+    });
+    STORE.meals.push(copy);
+    expandMealGroup(copy.category);
+    saveStore();
+    maybeVibrate();
+    renderApp();
+    showToast('Copied to today');
   }
 
   /* ---- Confirmation bottom sheet ----
@@ -5101,6 +5195,25 @@
     '</div></div>';
   }
 
+  // Mifflin-St Jeor plan from a profile (weightKg / heightCm / age / sex /
+  // activityLevel / goal). Used by Settings > "Calculate my plan" and the
+  // first-run welcome.
+  function computePlan(profile){
+    var bmr = profile.sex === 'male'
+      ? (10 * profile.weightKg) + (6.25 * profile.heightCm) - (5 * profile.age) + 5
+      : (10 * profile.weightKg) + (6.25 * profile.heightCm) - (5 * profile.age) - 161;
+    var activityMult = (ACTIVITY_LEVELS.find(function(a){ return a.id === profile.activityLevel; }) || ACTIVITY_LEVELS[2]).mult;
+    var tdee = bmr * activityMult;
+    var goalAdjust = (GOAL_OPTIONS.find(function(g){ return g.id === profile.goal; }) || GOAL_OPTIONS[1]).calAdjust;
+    var calories = Math.max(1200, Math.round(tdee + goalAdjust)); // 1200 floor as a basic safety rail
+    // Macro split: protein by bodyweight (1.8g/kg), fat at 25% of calories, carbs fill the rest.
+    var protein = Math.round(profile.weightKg * 1.8);
+    var fatCal = calories * 0.25;
+    var fat = Math.round(fatCal / 9);
+    var carbs = Math.round(Math.max(0, calories - protein * 4 - fatCal) / 4);
+    return { tdee: tdee, calories: calories, protein: protein, carbs: carbs, fat: fat };
+  }
+
   function calculatePlanFromForm(){
     var imperial = STORE.appSettings.unit === 'imperial';
     var rawHeight = parseFloat(document.getElementById('profHeight').value) || (imperial ? cmToIn(DEFAULT_PROFILE.heightCm) : DEFAULT_PROFILE.heightCm);
@@ -5115,25 +5228,8 @@
     };
     STORE.profile = profile;
 
-    // Mifflin-St Jeor BMR
-    var bmr = profile.sex === 'male'
-      ? (10 * profile.weightKg) + (6.25 * profile.heightCm) - (5 * profile.age) + 5
-      : (10 * profile.weightKg) + (6.25 * profile.heightCm) - (5 * profile.age) - 161;
-
-    var activityMult = (ACTIVITY_LEVELS.find(function(a){ return a.id === profile.activityLevel; }) || ACTIVITY_LEVELS[2]).mult;
-    var tdee = bmr * activityMult;
-
-    var goalAdjust = (GOAL_OPTIONS.find(function(g){ return g.id === profile.goal; }) || GOAL_OPTIONS[1]).calAdjust;
-    var targetCalories = Math.max(1200, Math.round(tdee + goalAdjust)); // 1200 floor as a basic safety rail
-
-    // Macro split: protein by bodyweight (1.8g/kg), fat at 25% of
-    // total calories, carbs fill the remainder.
-    var proteinG = Math.round(profile.weightKg * 1.8);
-    var proteinCal = proteinG * 4;
-    var fatCal = targetCalories * 0.25;
-    var fatG = Math.round(fatCal / 9);
-    var carbCal = Math.max(0, targetCalories - proteinCal - fatCal);
-    var carbG = Math.round(carbCal / 4);
+    var plan = computePlan(profile);
+    var tdee = plan.tdee, targetCalories = plan.calories, proteinG = plan.protein, fatG = plan.fat, carbG = plan.carbs;
 
     // Merge rather than replace — the calculator only derives
     // calories/protein/carbs/fat, so fiber/sugar/sodium goals
@@ -5580,6 +5676,8 @@
         el.setAttribute('aria-label', nowCollapsed ? 'Show macros' : 'Hide macros');
         el.setAttribute('aria-expanded', String(!nowCollapsed));
       }
+    } else if (action === 'copy-meal'){
+      copyMealToToday(el.dataset.id);
     } else if (action === 'toggle-fav'){
       toggleFavorite(el.dataset.name);
     } else if (action === 'set-log-day'){
@@ -5690,10 +5788,153 @@
     }
   });
 
+
+  /* =========================================================
+     FIRST-RUN WELCOME — 4 short steps, skippable at any point.
+     Sets units, profile and daily goals, then never shows again.
+     ========================================================= */
+  var welcome = { step: 0, unit: 'metric', sex: 'male', age: '', height: '', weight: '', goal: 'maintain', activity: 'moderate', plan: null };
+
+  function maybeShowWelcome(){
+    if (STORE.appSettings.welcomed) return;
+    if (STORE.meals.length > 0){ STORE.appSettings.welcomed = true; saveStore(); return; } // existing user
+    welcome.unit = STORE.appSettings.unit === 'imperial' ? 'imperial' : 'metric';
+    welcome.step = 0;
+    renderWelcome();
+  }
+
+  function closeWelcome(){
+    var el = document.getElementById('welcomeOverlay');
+    if (el) el.remove();
+  }
+
+  function welcomeDone(applyPlan){
+    STORE.appSettings.welcomed = true;
+    if (applyPlan && welcome.plan){
+      STORE.profile = welcome.plan.profile;
+      STORE.goals = Object.assign({}, STORE.goals, { calories: welcome.plan.calories, protein: welcome.plan.protein, carbs: welcome.plan.carbs, fat: welcome.plan.fat });
+      STORE.lastPlanTdee = Math.round(welcome.plan.tdee);
+      STORE.appSettings.unit = welcome.unit;
+    }
+    saveStore();
+    closeWelcome();
+    applyAppearanceSettings();
+    renderApp();
+    if (applyPlan && welcome.plan) showToast('Daily target set: ' + welcome.plan.calories + ' kcal');
+  }
+
+  function welcomeCapture(){
+    var g = function(id){ var e = document.getElementById(id); return e ? e.value : null; };
+    if (g('wAge') !== null) welcome.age = g('wAge');
+    if (g('wHeight') !== null) welcome.height = g('wHeight');
+    if (g('wWeight') !== null) welcome.weight = g('wWeight');
+    if (g('wActivity') !== null) welcome.activity = g('wActivity');
+  }
+
+  function welcomeBuildPlan(){
+    var imperial = welcome.unit === 'imperial';
+    var h = parseFloat(welcome.height), w = parseFloat(welcome.weight), age = parseInt(welcome.age, 10);
+    var profile = {
+      sex: welcome.sex,
+      age: (age >= 10 && age <= 100) ? age : DEFAULT_PROFILE.age,
+      heightCm: Math.round(h > 0 ? (imperial ? inToCm(h) : h) : DEFAULT_PROFILE.heightCm),
+      weightKg: Math.round(w > 0 ? (imperial ? lbToKg(w) : w) : DEFAULT_PROFILE.weightKg),
+      activityLevel: welcome.activity,
+      goal: welcome.goal
+    };
+    var plan = computePlan(profile);
+    plan.profile = profile;
+    welcome.plan = plan;
+  }
+
+  function renderWelcome(){
+    var el = document.getElementById('welcomeOverlay');
+    if (!el){
+      el = document.createElement('div');
+      el.id = 'welcomeOverlay';
+      el.className = 'welcome-overlay';
+      document.getElementById('app').parentNode.appendChild(el);
+    }
+    var imperial = welcome.unit === 'imperial';
+    var st = welcome.step;
+    var dots = '<div class="welcome-dots">' + [0,1,2,3].map(function(i){ return '<i class="' + (i === st ? 'on' : (i < st ? 'done' : '')) + '"></i>'; }).join('') + '</div>';
+    var body = '', footer = '';
+
+    if (st === 0){
+      body = '<img class="welcome-logo" src="images/logo-mark.png" alt="SaviorFuel">' +
+        '<h2>Welcome to SaviorFuel</h2>' +
+        '<p>Log your meals, see your macros and hit your daily goals. Let’s set your target in 30 seconds.</p>';
+      footer = '<button class="welcome-primary" data-w="next">Get started</button><button class="welcome-skip" data-w="skip">Skip for now</button>';
+    } else if (st === 1){
+      body = '<h2>About you</h2><p>Used only to estimate your daily calories. It stays on this device.</p>' +
+        '<div class="welcome-field"><label>Units</label><div class="welcome-seg">' +
+          '<button data-w="unit" data-v="metric" class="' + (!imperial ? 'active' : '') + '">kg / cm</button>' +
+          '<button data-w="unit" data-v="imperial" class="' + (imperial ? 'active' : '') + '">lb / in</button></div></div>' +
+        '<div class="welcome-field"><label>Sex</label><div class="welcome-seg">' +
+          '<button data-w="sex" data-v="male" class="' + (welcome.sex === 'male' ? 'active' : '') + '">Male</button>' +
+          '<button data-w="sex" data-v="female" class="' + (welcome.sex === 'female' ? 'active' : '') + '">Female</button></div></div>' +
+        '<div class="welcome-row">' +
+          '<div class="welcome-field"><label for="wAge">Age</label><input id="wAge" type="number" inputmode="numeric" min="10" max="100" placeholder="' + DEFAULT_PROFILE.age + '" value="' + esc(welcome.age) + '"></div>' +
+          '<div class="welcome-field"><label for="wHeight">Height (' + (imperial ? 'in' : 'cm') + ')</label><input id="wHeight" type="number" inputmode="decimal" placeholder="' + Math.round(imperial ? cmToIn(DEFAULT_PROFILE.heightCm) : DEFAULT_PROFILE.heightCm) + '" value="' + esc(welcome.height) + '"></div>' +
+          '<div class="welcome-field"><label for="wWeight">Weight (' + (imperial ? 'lb' : 'kg') + ')</label><input id="wWeight" type="number" inputmode="decimal" placeholder="' + Math.round(imperial ? kgToLb(DEFAULT_PROFILE.weightKg) : DEFAULT_PROFILE.weightKg) + '" value="' + esc(welcome.weight) + '"></div>' +
+        '</div>';
+      footer = '<button class="welcome-primary" data-w="next">Next</button><button class="welcome-skip" data-w="skip">Skip for now</button>';
+    } else if (st === 2){
+      body = '<h2>Your goal</h2><p>Pick what fits you. You can change it any time in Settings.</p>' +
+        '<div class="welcome-goals">' + GOAL_OPTIONS.map(function(o){
+          return '<button data-w="goal" data-v="' + o.id + '" class="' + (welcome.goal === o.id ? 'active' : '') + '"><b>' + o.label + '</b><span>' +
+            (o.calAdjust < 0 ? 'Eat a bit under maintenance' : (o.calAdjust > 0 ? 'Eat a bit over, with high protein' : 'Eat around maintenance')) + '</span></button>';
+        }).join('') + '</div>' +
+        '<div class="welcome-field"><label for="wActivity">Activity level</label><select id="wActivity">' +
+          ACTIVITY_LEVELS.map(function(a){ return '<option value="' + a.id + '"' + (welcome.activity === a.id ? ' selected' : '') + '>' + a.label + '</option>'; }).join('') +
+        '</select></div>';
+      footer = '<button class="welcome-primary" data-w="next">See my plan</button><button class="welcome-skip" data-w="skip">Skip for now</button>';
+    } else {
+      var pl = welcome.plan;
+      body = '<h2>Your daily target</h2>' +
+        '<div class="welcome-plan-kcal">' + pl.calories.toLocaleString() + '<span>kcal / day</span></div>' +
+        '<div class="macro-tiles">' +
+          macroTileHtml('Protein', pl.protein, pl.protein, 'protein').replace(/<span>\/\d+g<\/span>/, '<span>g</span>') +
+          macroTileHtml('Carbs', pl.carbs, pl.carbs, 'carbs').replace(/<span>\/\d+g<\/span>/, '<span>g</span>') +
+          macroTileHtml('Fat', pl.fat, pl.fat, 'fat').replace(/<span>\/\d+g<\/span>/, '<span>g</span>') +
+        '</div>' +
+        '<p class="welcome-note">An estimate to start from. Adjust any number later in Settings.</p>';
+      footer = '<button class="welcome-primary" data-w="finish">Start logging</button><button class="welcome-skip" data-w="back">Back</button>';
+    }
+    el.innerHTML = '<div class="welcome-card">' + dots + '<div class="welcome-body">' + body + '</div><div class="welcome-footer">' + footer + '</div></div>';
+  }
+
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-w]');
+    if (!b || !document.getElementById('welcomeOverlay')) return;
+    var w = b.dataset.w;
+    welcomeCapture();
+    if (w === 'skip'){ welcomeDone(false); return; }
+    if (w === 'finish'){ welcomeDone(true); return; }
+    if (w === 'unit'){
+      // convert anything already typed so switching units doesn't scramble it
+      var to = b.dataset.v;
+      if (to !== welcome.unit){
+        var h = parseFloat(welcome.height), wt = parseFloat(welcome.weight);
+        if (h > 0) welcome.height = String(Math.round(to === 'imperial' ? cmToIn(h) : inToCm(h)));
+        if (wt > 0) welcome.weight = String(Math.round(to === 'imperial' ? kgToLb(wt) : lbToKg(wt)));
+        welcome.unit = to;
+      }
+    } else if (w === 'sex'){ welcome.sex = b.dataset.v; }
+    else if (w === 'goal'){ welcome.goal = b.dataset.v; }
+    else if (w === 'back'){ welcome.step = Math.max(0, welcome.step - 1); }
+    else if (w === 'next'){
+      welcome.step = Math.min(3, welcome.step + 1);
+      if (welcome.step === 3) welcomeBuildPlan();
+    }
+    renderWelcome();
+  });
+
   applyAppearanceSettings();
   document.getElementById('bootLoading').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   renderApp();
+  maybeShowWelcome();
 
   // Registered after boot so it never delays first paint — this is
   // what lets the app open at all with no connection, and caches
