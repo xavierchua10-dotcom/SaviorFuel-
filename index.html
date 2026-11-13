@@ -1530,11 +1530,11 @@
     --c-protein:#d9552b;
     --c-carbs:#b98100;
     --c-fat:#1d79ad;
-    --header-bg:#ffffff;
+    --header-bg:#ebe6da;
     --header-text:#1c1e23;
     --header-text-faint:#6f747c;
     --header-accent:#3f7a12;
-    --header-line:#dcd6c8;
+    --header-line:#d6cfbf;
   }
   /* Light theme: logo with a black S so it reads on the light header */
   body[data-theme="light"] img[src$="logo-mark.png"]{content:url(images/logo-mark-light.png);}
@@ -5914,7 +5914,7 @@
     document.body.dataset.density = STORE.appSettings.density || 'comfortable';
     document.body.dataset.corners = STORE.appSettings.corners || 'rounded';
     document.body.dataset.theme = STORE.appSettings.theme || 'dark';
-    try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? '#ffffff' : '#1f232b'); }catch(e){}
+    try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? '#ebe6da' : '#1f232b'); }catch(e){}
     document.body.dataset.bgArt = STORE.appSettings.bgArt === false ? 'off' : 'on';
   }
 
