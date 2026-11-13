@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v11';
+var SHELL_CACHE = 'saviorfuel-shell-v12';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -30,6 +30,7 @@ var SHELL_FILES = [
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
   './images/logo-mark.png',
+  './images/logo-mark-light.png',
   './privacy.html'
 ];
 // Nice-to-have (big 3D models for the Insights tab): fetched after install,
