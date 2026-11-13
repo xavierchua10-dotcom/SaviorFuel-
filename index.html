@@ -5905,23 +5905,35 @@
       return;
     }
 
-    // The 3D pyramid's canvas can't ride along in the outgoing page, so leaving
-    // it keeps the old quick fade instead of a slide.
-    var leaving3D = state.tab === 'insights' && ui.insightsView !== 'trends' && overviewMode() === '3d' && STORE.meals.length > 0;
-    if (leaving3D || typeof viewEl.animate !== 'function'){
-      viewEl.classList.remove('subtab-fade-in');
-      viewEl.classList.add('subtab-fade-out');
-      setTimeout(function(){
-        state.tab = newTab;
-        renderApp();
-        viewEl.classList.remove('subtab-fade-out');
-        viewEl.classList.add('subtab-fade-in');
-        setTimeout(function(){ viewEl.classList.remove('subtab-fade-in'); }, 170);
-      }, 140);
+    if (typeof viewEl.animate !== 'function'){
+      state.tab = newTab;
+      renderApp();
       return;
     }
-
     var dir = newIndex > oldIndex ? 1 : -1;
+    // The 3D pyramid's canvas can't be lifted into a ghost pane, so leaving it
+    // is a two-step slide (as in SaviorFit Logger's Insight tab): the live page
+    // slides fully out, the new one is drawn while it's out of sight, then
+    // slides in from the other side.
+    var leaving3D = state.tab === 'insights' && ui.insightsView !== 'trends' && overviewMode() === '3d' && STORE.meals.length > 0;
+    if (leaving3D){
+      var w = viewEl.getBoundingClientRect().width;
+      var outAnim = viewEl.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(' + (-dir * w) + 'px)' }],
+        { duration: 150, easing: 'cubic-bezier(.4,0,1,1)', fill: 'forwards' });
+      tabSlide = { ghost: document.createElement('i'), anims: [outAnim], timer: 0 };
+      outAnim.onfinish = function(){
+        outAnim.onfinish = null;
+        state.tab = newTab;
+        renderApp();
+        viewEl.scrollTop = 0;
+        outAnim.cancel();
+        var inAnim = viewEl.animate([{ transform: 'translateX(' + (dir * w) + 'px)' }, { transform: 'translateX(0)' }],
+          { duration: 220, easing: TAB_SLIDE_EASE, fill: 'both' });
+        tabSlide = { ghost: document.createElement('i'), anims: [inAnim], timer: 0 };
+        tabSlide.timer = setTimeout(endTabSlide, 250);
+      };
+      return;
+    }
     var appEl = document.getElementById('app');
     var ar = appEl.getBoundingClientRect(), vr = viewEl.getBoundingClientRect();
     var ghost = document.createElement('main');
