@@ -1866,6 +1866,31 @@
   .hist-day-tot{font:500 10px 'JetBrains Mono',monospace; letter-spacing:.1em; color:var(--text-faint); text-transform:uppercase; padding:10px 14px 2px;}
   .hist-copy{display:block; width:calc(100% - 28px); margin:8px 14px 12px; height:38px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.55); background:transparent; color:var(--accent); font:700 13px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
   .overview-plain .pf-stats{margin:12px 0 16px;}
+
+  .food-home-actions{display:flex; gap:8px; margin:2px 0 4px;}
+  .food-home-actions button{flex:1; height:40px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.5); background:transparent; color:var(--accent); font:700 13px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
+  .food-fav.edit{color:var(--text-faint);}
+  .food-fav.edit svg{fill:none;}
+  .fs-hint{margin:6px 0 4px; font-size:13px; color:var(--text-dim);}
+  .fs-field{display:flex; flex-direction:column; gap:5px; margin-top:12px; flex:1; min-width:0;}
+  .fs-field label{font:500 10px 'JetBrains Mono',monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint);}
+  .fs-field input{height:44px; border-radius:12px; border:1px solid var(--line); background:var(--panel); color:var(--text); padding:0 12px; font:400 15px 'Inter',sans-serif; outline:none; width:100%;}
+  .fs-field input:focus{border-color:rgba(var(--accent-rgb),.6);}
+  .fs-row{display:flex; gap:10px;}
+  .fs-save{width:100%; height:46px; margin-top:18px; border-radius:12px; border:none; background:var(--accent); color:#0b1a10; font:700 15px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
+  body[data-theme="light"] .fs-save{color:#fff;}
+  .fs-delete{width:100%; height:40px; margin-top:8px; border:none; background:none; color:var(--accent-2); font:600 13px 'Inter',sans-serif; cursor:pointer;}
+  .water-row{display:flex; align-items:center; gap:10px; margin:12px 0 0; padding:10px 12px; border-radius:16px; background:var(--panel); border:1px solid var(--line);}
+  .water-ic{width:30px; height:30px; border-radius:10px; background:rgba(108,196,238,.16); color:var(--c-fat); display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+  .water-ic svg{width:16px; height:16px;}
+  .water-main{flex:1; min-width:0;}
+  .water-top{display:flex; justify-content:space-between; align-items:baseline; font-size:12px; color:var(--text-faint);}
+  .water-top b{font:600 13px 'Oswald',sans-serif; letter-spacing:.04em; text-transform:uppercase; color:var(--text);}
+  .water-bar{height:5px; border-radius:3px; background:var(--panel-3); margin-top:6px; overflow:hidden;}
+  .water-bar i{display:block; height:100%; border-radius:3px; background:var(--c-fat);}
+  .water-btn{height:32px; min-width:38px; padding:0 10px; border-radius:10px; border:1px solid rgba(108,196,238,.5); background:transparent; color:var(--c-fat); font:700 12px 'Oswald',sans-serif; cursor:pointer;}
+  .water-btn.minus{min-width:32px; padding:0; font-size:16px; border-color:var(--line); color:var(--text-faint);}
+  .water-btn:disabled{opacity:.35;}
 </style>
 </head>
 <body>
@@ -2091,7 +2116,7 @@
   // Values (28g, 50g added sugar, 2300mg) — same starting-point
   // convention as the Mifflin-St Jeor calculator below: a sensible
   // default, always overridable in Settings.
-  var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65, fiber: 28, sugar: 50, sodium: 2300 };
+  var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65, fiber: 28, sugar: 50, sodium: 2300, water: 2500 };
 
   var MEAL_CATEGORIES = [
     { id: 'breakfast', label: 'Breakfast' },
@@ -2156,7 +2181,7 @@
   function loadStore(){
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [] };
+      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
       var parsed = JSON.parse(raw);
       // Merge (not replace) so existing saved goals keep whatever the
       // person already customized, while newly-added goal fields
@@ -2172,10 +2197,12 @@
       // same food can be found and re-logged without network next
       // time (see saveFoodToCache / searchSavedFoods).
       if (!parsed.savedFoods) parsed.savedFoods = [];
+      if (!Array.isArray(parsed.myFoods)) parsed.myFoods = [];
+      if (!parsed.water || typeof parsed.water !== 'object') parsed.water = {};
       return parsed;
     } catch (e){
       console.error('SaviorFuel: failed to load local store, starting fresh —', e);
-      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [] };
+      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
     }
   }
 
@@ -2407,6 +2434,7 @@
         macroTileHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
         macroTileHtml('Fat', totals.fat, g.fat, 'fat') +
       '</div>' +
+      waterRowHtml(viewKey) +
       '<button class="food-search-trigger" data-action="open-food-search-overlay">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
         'Search or scan a food...' +
@@ -2697,7 +2725,7 @@
     var f = ui.selectedFood;
     var units = servingUnitsFor(f);
     var cur = currentServingUnit();
-    var from = f.from === 'Kalori' ? 'From Kalori' : (f.from === 'saved' ? 'From your saved foods' : 'From search');
+    var from = f.from === 'Kalori' ? 'From Kalori' : (f.from === 'mine' ? 'From My Foods' : (f.from === 'saved' ? 'From your saved foods' : 'From search'));
     var chips = units.length > 1
       ? '<div class="serving-label">Serving size</div><div class="serving-chips" role="group" aria-label="Serving size">' +
           units.map(function(u){
@@ -3322,6 +3350,138 @@
   document.getElementById('foodSearchResults').addEventListener('error', foodThumbErrorHandler, true);
   document.getElementById('addMealBody').addEventListener('error', foodThumbErrorHandler, true);
 
+  // ---- My Foods + Quick Add ----
+  // My Foods are the person's own foods, stored per serving. They reuse the
+  // "saved food" shape so the existing serving picker and Add Meal flow just
+  // work; _mine marks them so they get an edit button and never land in the
+  // Recent cache.
+  function myFoodToProduct(f){
+    return {
+      product_name: f.name, brands: '', _image: '', _note: '', _source: 'saved', _mine: true, _myId: f.id,
+      _servingLabel: f.serving || '1 serving',
+      nutriments: {
+        'energy-kcal_100g': f.calories || 0, 'proteins_100g': f.protein || 0, 'carbohydrates_100g': f.carbs || 0,
+        'fat_100g': f.fat || 0, 'fiber_100g': f.fiber || 0, 'sugars_100g': 0, 'sodium_100g_mg': 0
+      }
+    };
+  }
+  function myFoodProducts(){ return (STORE.myFoods || []).map(myFoodToProduct); }
+
+  var EDIT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>';
+
+  function closeFoodSheet(){
+    var el = document.getElementById('foodSheet');
+    if (el) el.remove();
+  }
+
+  function sheetField(id, label, ph, type){
+    return '<div class="fs-field"><label for="' + id + '">' + label + '</label>' +
+      '<input id="' + id + '" type="' + (type || 'number') + '"' + (type === 'text' ? '' : ' inputmode="decimal"') + ' placeholder="' + ph + '" autocomplete="off"></div>';
+  }
+
+  // mode: 'quick' (log calories now) | 'mine' (create / edit a My Food)
+  function openFoodSheet(mode, id){
+    closeFoodSheet();
+    var editing = (mode === 'mine' && id) ? (STORE.myFoods || []).filter(function(f){ return f.id === id; })[0] : null;
+    var quick = mode === 'quick';
+    var el = document.createElement('div');
+    el.className = 'stats-sheet'; el.id = 'foodSheet';
+    el.innerHTML = '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>' +
+        (quick ? 'Quick add' : (editing ? 'Edit food' : 'New food')) + '</h3>' +
+        '<button type="button" class="stats-sheet-x" data-action="close-food-sheet" aria-label="Close">&times;</button></div>' +
+      (quick
+        ? '<p class="fs-hint">Know the calories but not the food? Log it in one step.</p>' + sheetField('fsCal', 'Calories', '0') + sheetField('fsName', 'Name (optional)', 'Quick add', 'text')
+        : sheetField('fsName', 'Name', 'e.g. Mum’s nasi lemak', 'text') + sheetField('fsServing', 'One serving is', '1 plate', 'text') + sheetField('fsCal', 'Calories per serving', '0')) +
+      '<div class="fs-row">' + sheetField('fsP', 'Protein g', '0') + sheetField('fsC', 'Carbs g', '0') + sheetField('fsF', 'Fat g', '0') + '</div>' +
+      (quick ? '' : sheetField('fsFib', 'Fibre g (optional)', '0')) +
+      '<button type="button" class="fs-save" data-action="save-food-sheet" data-mode="' + mode + '" data-id="' + (editing ? editing.id : '') + '">' +
+        (quick ? 'Add to ' + (logDayKey() === todayKey() ? 'today' : formatDateLabel(logDayKey())) : 'Save food') + '</button>' +
+      (editing ? '<button type="button" class="fs-delete" data-action="delete-my-food" data-id="' + editing.id + '">Delete this food</button>' : '') +
+    '</div>';
+    el.addEventListener('click', function(e){ if (e.target === el) closeFoodSheet(); });
+    document.body.appendChild(el);
+    if (editing){
+      document.getElementById('fsName').value = editing.name;
+      document.getElementById('fsServing').value = editing.serving || '';
+      document.getElementById('fsCal').value = editing.calories || '';
+      document.getElementById('fsP').value = editing.protein || '';
+      document.getElementById('fsC').value = editing.carbs || '';
+      document.getElementById('fsF').value = editing.fat || '';
+      document.getElementById('fsFib').value = editing.fiber || '';
+    }
+    setTimeout(function(){
+      var first = document.getElementById(quick ? 'fsCal' : 'fsName');
+      if (first) first.focus({ preventScroll: true });
+    }, 120);
+  }
+
+  function saveFoodSheet(mode, id){
+    var num = function(i){ var el = document.getElementById(i); var v = el ? parseFloat(el.value) : 0; return isFinite(v) ? Math.max(0, Math.round(v)) : 0; };
+    var txt = function(i){ var el = document.getElementById(i); return el ? el.value.trim() : ''; };
+    var cal = num('fsCal');
+    if (cal <= 0){ showToast('Add the calories first'); return; }
+    if (mode === 'quick'){
+      var dayKey = logDayKey();
+      var cat = suggestCategoryForNow();
+      STORE.meals.push({
+        id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        name: txt('fsName') || 'Quick add', calories: cal, protein: num('fsP'), carbs: num('fsC'), fat: num('fsF'),
+        fiber: 0, sugar: 0, sodium: 0, category: cat, loggedAt: stampForDay(dayKey, Date.now(), null)
+      });
+      expandMealGroup(cat);
+      saveStore(); maybeVibrate();
+      closeFoodSheet(); closeFoodSearchOverlay();
+      if (state.tab === 'scan') state.tab = 'log';
+      renderApp();
+      showToast('Added ' + cal + ' kcal');
+      return;
+    }
+    var name = txt('fsName');
+    if (!name){ showToast('Give the food a name'); return; }
+    var food = { id: id || ('mf_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)), name: name, serving: txt('fsServing'),
+      calories: cal, protein: num('fsP'), carbs: num('fsC'), fat: num('fsF'), fiber: num('fsFib') };
+    var list = STORE.myFoods || (STORE.myFoods = []);
+    var at = -1;
+    list.forEach(function(f, i){ if (f.id === food.id) at = i; });
+    if (at >= 0) list[at] = food; else list.unshift(food);
+    saveStore(); maybeVibrate();
+    closeFoodSheet();
+    var input = document.getElementById('foodSearchInput');
+    if (input && input.value.trim().length >= 2) searchFoodDebounced(input.value); else renderFoodHome();
+    showToast('Saved to My Foods');
+  }
+
+  function deleteMyFood(id){
+    if (!window.confirm('Delete this food from My Foods? Meals you already logged stay as they are.')) return;
+    STORE.myFoods = (STORE.myFoods || []).filter(function(f){ return f.id !== id; });
+    saveStore();
+    closeFoodSheet();
+    renderFoodHome();
+  }
+
+  // ---- Water ----
+  function waterFor(key){ return Math.max(0, (STORE.water && STORE.water[key]) || 0); }
+  function addWater(delta){
+    var key = logDayKey();
+    if (!STORE.water) STORE.water = {};
+    var next = Math.max(0, waterFor(key) + delta);
+    if (next === 0) delete STORE.water[key]; else STORE.water[key] = next;
+    saveStore();
+    maybeVibrate();
+    renderApp();
+  }
+  function fmtWater(ml){ return ml >= 1000 ? (Math.round(ml / 10) / 100) + ' L' : ml + ' ml'; }
+  function waterRowHtml(key){
+    var goal = STORE.goals.water || DEFAULT_GOALS.water;
+    var ml = waterFor(key);
+    var p = goal > 0 ? Math.min(100, Math.round(ml / goal * 100)) : 0;
+    return '<div class="water-row"><span class="water-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c-3 4.2-6 7.3-6 11a6 6 0 0 0 12 0c0-3.7-3-6.8-6-11z"></path></svg></span>' +
+      '<div class="water-main"><div class="water-top"><b>Water</b><span>' + fmtWater(ml) + ' / ' + fmtWater(goal) + '</span></div>' +
+      '<div class="water-bar"><i style="width:' + p + '%"></i></div></div>' +
+      '<button type="button" class="water-btn minus" data-action="water-add" data-ml="-250" aria-label="Remove 250 ml"' + (ml <= 0 ? ' disabled' : '') + '>−</button>' +
+      '<button type="button" class="water-btn" data-action="water-add" data-ml="250" aria-label="Add 250 ml">+250</button></div>';
+  }
+
   // One result row — shared by live search results and the empty-search
   // "Favorites / Recent" home. Saved foods get a star to pin them.
   var STAR_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><polygon points="12 2.5 14.9 8.6 21.5 9.4 16.6 14 17.9 20.6 12 17.3 6.1 20.6 7.4 14 2.5 9.4 9.1 8.6"></polygon></svg>';
@@ -3332,11 +3492,14 @@
     var meta = [];
     var brand = p.brands ? p.brands.split(',')[0].trim() : '';
     if (brand) meta.push(esc(brand));
-    if (p._source === 'saved') meta.push(esc(p._servingLabel || '100g'), 'Saved');
+    if (p._mine) meta.push(esc(p._servingLabel || '1 serving'), 'My food');
+    else if (p._source === 'saved') meta.push(esc(p._servingLabel || '100g'), 'Saved');
     else if (p._source === 'techapi'){ if (p._serving) meta.push(esc(p._serving)); }
     else meta.push('per 100 g');
     if (p._source === 'saved' ? p._note : foodDataNote(p.nutriments)) meta.push('<span class="row-warn">⚠ check data</span>');
-    var star = p._source === 'saved'
+    var star = p._mine
+      ? '<button type="button" class="food-fav edit" data-action="edit-my-food" data-id="' + esc(p._myId) + '" aria-label="Edit ' + esc(p.product_name) + '">' + EDIT_SVG + '</button>'
+      : p._source === 'saved'
       ? '<button type="button" class="food-fav' + (p._fav ? ' on' : '') + '" data-action="toggle-fav" data-name="' + esc(p.product_name) + '" aria-label="' + (p._fav ? 'Remove from favorites' : 'Add to favorites') + '" aria-pressed="' + (!!p._fav) + '">' + STAR_SVG + '</button>'
       : '';
     return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
@@ -3357,18 +3520,22 @@
     var resultsEl = document.getElementById('foodSearchResults');
     if (!resultsEl) return;
     var all = STORE.savedFoods || [];
+    var mine = myFoodProducts();
     var favs = all.filter(function(f){ return f._fav; });
     var recents = all.filter(function(f){ return !f._fav; }).slice(0, 8);
-    var products = favs.concat(recents);
+    var products = mine.concat(favs, recents);
     foodSearch = { id: searchRequestId, query: '', products: products, pending: 0, stale: false };
     ui.lastSearchProducts = products;
+    var html = '<div class="food-home-actions">' +
+      '<button type="button" data-action="open-quick-add">+ Quick add</button>' +
+      '<button type="button" data-action="open-my-food">+ New food</button></div>';
     if (products.length === 0){
-      resultsEl.innerHTML = '<div class="food-suggest-status">Foods you log show up here for one-tap logging. Tap the star to pin your favorites.</div>';
+      resultsEl.innerHTML = html + '<div class="food-suggest-status">Foods you log show up here for one-tap logging. Tap the star to pin your favorites, or create your own with New food.</div>';
       return;
     }
-    var html = '';
-    if (favs.length) html += '<div class="food-home-label">Favorites</div>' + favs.map(function(p, i){ return foodRowHtml(p, i); }).join('');
-    if (recents.length) html += '<div class="food-home-label">Recent</div>' + recents.map(function(p, i){ return foodRowHtml(p, favs.length + i); }).join('');
+    if (mine.length) html += '<div class="food-home-label">My foods</div>' + mine.map(function(p, i){ return foodRowHtml(p, i); }).join('');
+    if (favs.length) html += '<div class="food-home-label">Favorites</div>' + favs.map(function(p, i){ return foodRowHtml(p, mine.length + i); }).join('');
+    if (recents.length) html += '<div class="food-home-label">Recent</div>' + recents.map(function(p, i){ return foodRowHtml(p, mine.length + favs.length + i); }).join('');
     resultsEl.innerHTML = html;
   }
 
@@ -3492,9 +3659,11 @@
   function searchSavedFoods(query){
     var q = query.trim().toLowerCase();
     if (!q) return [];
-    return (STORE.savedFoods || [])
+    var mine = myFoodProducts().filter(function(f){ return f.product_name.toLowerCase().indexOf(q) !== -1; });
+    var saved = (STORE.savedFoods || [])
       .filter(function(f){ return f.product_name.toLowerCase().indexOf(q) !== -1; })
       .slice(0, 8);
+    return mine.concat(saved);
   }
 
   function pickFoodResult(index){
@@ -3518,7 +3687,7 @@
         sodium: nut['sodium_100g_mg'] || 0
       };
       var label = p._serving || p._servingLabel || '1 serving';
-      var from = p._source === 'techapi' ? 'Kalori' : 'saved';
+      var from = p._source === 'techapi' ? 'Kalori' : (p._mine ? 'mine' : 'saved');
       var dataNote = p._source === 'saved' ? (p._note || '') : foodDataNote(nut);
       if (p._source === 'saved' && /^\s*100\s*g\s*$/i.test(p._servingLabel || '')){
         // saved per-100 g food: comes back with its serving / measures
@@ -5470,7 +5639,8 @@
       fat: parseInt(document.getElementById('goalFat').value, 10) || DEFAULT_GOALS.fat,
       fiber: parseInt(document.getElementById('goalFiber').value, 10) || DEFAULT_GOALS.fiber,
       sugar: parseInt(document.getElementById('goalSugar').value, 10) || DEFAULT_GOALS.sugar,
-      sodium: parseInt(document.getElementById('goalSodium').value, 10) || DEFAULT_GOALS.sodium
+      sodium: parseInt(document.getElementById('goalSodium').value, 10) || DEFAULT_GOALS.sodium,
+      water: parseInt(document.getElementById('goalWater').value, 10) || DEFAULT_GOALS.water
     };
     saveStore();
   }
@@ -5627,6 +5797,7 @@
       settingsGoalRow('Fiber (g)', 'goalFiber', g.fiber) +
       settingsGoalRow('Sugar (g)', 'goalSugar', g.sugar) +
       settingsGoalRow('Sodium (mg)', 'goalSodium', g.sodium) +
+      settingsGoalRow('Water (ml)', 'goalWater', g.water) +
     '</div></div>';
     html += settingsCardHtml('goals', SET_ICONS.goals, 'Daily goals',
       Math.round(g.calories) + ' kcal · P ' + g.protein + ' · C ' + g.carbs + ' · F ' + g.fat, goalsBody);
@@ -5696,6 +5867,8 @@
     var aboutBody = '<div class="settings-group">' +
       '<div class="settings-row"><div><div class="sr-label">About SaviorFuel</div>' +
         '<div class="sr-sub">© 2026 Xavier Chua (Savior). All rights reserved. The app\'s code and design may not be copied or reused.</div></div></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Privacy policy</div><div class="sr-sub">What\'s stored, and what leaves your device</div></div>' +
+        '<a class="sr-action" href="privacy.html" target="_blank" rel="noopener">Read</a></div>' +
       '<div class="settings-row"><div><div class="sr-label">Instagram</div><div class="sr-sub">@im.savior_</div></div>' +
         '<a class="sr-action" href="https://instagram.com/im.savior_" target="_blank" rel="noopener">Open</a></div>' +
       '<div class="settings-row"><div><div class="sr-label">Email</div><div class="sr-sub">xavierchua10@gmail.com</div></div>' +
@@ -5768,7 +5941,9 @@
           goals: Object.assign({}, DEFAULT_GOALS, parsed.goals || {}),
           profile: parsed.profile || Object.assign({}, DEFAULT_PROFILE),
           appSettings: Object.assign({}, DEFAULT_APP_SETTINGS, parsed.appSettings || {}),
-          savedFoods: Array.isArray(parsed.savedFoods) ? parsed.savedFoods : []
+          savedFoods: Array.isArray(parsed.savedFoods) ? parsed.savedFoods : [],
+          myFoods: Array.isArray(parsed.myFoods) ? parsed.myFoods : [],
+          water: (parsed.water && typeof parsed.water === 'object') ? parsed.water : {}
         };
         saveStore();
         applyAppearanceSettings();
@@ -6042,6 +6217,20 @@
       renderApp();
       var secEl = document.getElementById('setc-' + sec);
       if (secEl && ui.settingsOpen === sec) secEl.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    } else if (action === 'open-quick-add'){
+      openFoodSheet('quick');
+    } else if (action === 'open-my-food'){
+      openFoodSheet('mine');
+    } else if (action === 'edit-my-food'){
+      openFoodSheet('mine', el.dataset.id);
+    } else if (action === 'save-food-sheet'){
+      saveFoodSheet(el.dataset.mode, el.dataset.id);
+    } else if (action === 'delete-my-food'){
+      deleteMyFood(el.dataset.id);
+    } else if (action === 'close-food-sheet'){
+      closeFoodSheet();
+    } else if (action === 'water-add'){
+      addWater(parseInt(el.dataset.ml, 10) || 0);
     } else if (action === 'history-month'){
       ui.histMonth = addMonthKey(historyMonthKey(), parseInt(el.dataset.dir, 10));
       ui.historyOpenDay = null;
@@ -6055,7 +6244,7 @@
       copyDayToToday(el.dataset.day);
     } else if (action === 'clear-data'){
       if (window.confirm('Erase all logged meals and reset goals? This can\'t be undone.')){
-        STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [] };
+        STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
         saveStore();
         applyAppearanceSettings();
         renderApp();
