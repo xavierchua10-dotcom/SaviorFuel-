@@ -1308,44 +1308,7 @@
   body[data-density="compact"] #view > .overview-plain:first-child{padding:0 14px;}
   .overview-plain .today-card-head{min-height:34px; margin-bottom:8px;}
   .overview-plain .mode-toggle{position:absolute; top:0; right:0; border-top-right-radius:0;}
-  /* Week wheel: day tags pinned above each wedge, a summary chip, and
-     the card that opens when you tap a wedge. */
-  .day-tag{
-    position:absolute; left:0; top:0; z-index:2; pointer-events:none;
-    display:flex; flex-direction:column; align-items:center; gap:0;
-    padding:3px 9px 4px; min-width:44px;
-    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-md);
-    box-shadow:0 3px 10px rgba(0,0,0,0.35);
-    opacity:0; transform:translate3d(-300px,-300px,0); will-change:transform, opacity;
-  }
-  .day-tag-name{font-family:'Oswald',sans-serif; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); line-height:1.3;}
-  .day-tag-val{font-family:'Oswald',sans-serif; font-size:15px; font-weight:700; color:var(--text); line-height:1.1;}
-  .day-tag-val.over{color:var(--accent-2);}
-  .day-tag.today{border-color:var(--accent);}
-  .day-tag.today .day-tag-name{color:var(--accent);}
-  .day-tag.skipped .day-tag-val{color:var(--text-faint); font-weight:400;}
-  .week-chip{
-    position:absolute; top:10px; left:12px; z-index:2; pointer-events:none;
-    padding:6px 12px; border-radius:var(--radius-pill);
-    background:var(--panel); border:1px solid var(--line);
-    font-size:11.5px; color:var(--text-dim);
-  }
-  .week-chip b{color:var(--text);}
-  .day-card{
-    position:absolute; left:12px; right:12px; bottom:14px; z-index:3;
-    padding:12px 14px; background:var(--panel); border:1px solid var(--line);
-    border-radius:var(--radius-lg); box-shadow:var(--card-shadow);
-  }
-  .day-card.hidden{display:none;}
-  .day-card-head{display:flex; align-items:baseline; gap:10px;}
-  .day-card-head b{font-family:'Oswald',sans-serif; font-size:16px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text);}
-  .day-card-head span{flex:1; font-size:13px; color:var(--text-dim);}
   .day-card-close{background:none; border:none; color:var(--text-faint); font-size:22px; line-height:1; padding:0 2px; cursor:pointer; align-self:center;}
-  .day-card-macros{display:flex; justify-content:space-between; gap:8px; margin-top:8px; font-size:12px; color:var(--text-dim);}
-  .day-card-macros b{color:var(--text);}
-  .day-card-macros .p{color:var(--success);}
-  .day-card-macros .c{color:#5fa8d6;}
-  .day-card-macros .f{color:var(--accent-2);}
 
   /* "Meals today" drawer on the pyramid view: a small tab tucked into the
      top-left corner (mirroring the 3D/Plain switch on the right) that
@@ -1835,8 +1798,6 @@
   .theme-opt.light .theme-prev i{background:#e9e4d9;} .theme-opt.light .theme-prev i:first-child{background:#3f7a12;}
   .theme-opt.light b{color:#5b616a;} .theme-opt.light.active b{color:#3f7a12;}
 
-  .stats-fab{position:absolute; left:12px; bottom:12px; z-index:3; display:flex; align-items:center; gap:7px; height:38px; padding:0 14px 0 11px; border-radius:19px; border:1px solid rgba(var(--accent-rgb),.55); background:var(--panel); color:var(--accent); font:700 12px 'Oswald',sans-serif; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.35);}
-  .stats-fab svg{width:17px; height:17px;}
   .stats-sheet{position:fixed; inset:0; z-index:310; background:rgba(0,0,0,.6); display:flex; align-items:flex-end; justify-content:center;}
   .stats-sheet-card{width:100%; max-width:480px; max-height:86vh; overflow-y:auto; background:var(--bg); border:1px solid var(--line); border-radius:26px 26px 0 0; padding:16px 16px calc(22px + var(--safe-bottom)); color:var(--text);}
   .stats-sheet-head{display:flex; align-items:center; justify-content:space-between;}
@@ -2145,7 +2106,7 @@
     return 'dinner';
   }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
-  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d', weeklyMode: '3d', macroCardCollapsed: true, aiScanConsent: false };
+  var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d', macroCardCollapsed: true, aiScanConsent: false };
   var APP_VERSION = '0.1.0';
 
   function cmToIn(cm){ return cm / 2.54; }
@@ -4699,7 +4660,7 @@
 
   /* =========================================================
      3D VIEWERS — Insights > Daily Overview (food pyramid) and
-     Insights > Weekly Overview (week wheel)
+     Insights > Weekly Overview (plain bars)
      Three.js (r128) is loaded from CDN the first time a 3D panel
      is actually opened — same lazy pattern as the food-photo model —
      so it costs nothing on app start. createModelViewer() builds one
@@ -5057,96 +5018,6 @@
     tagMode: 'facing'
   });
 
-  // Weekly Overview: the week wheel — a wooden platter cut into seven
-  // wedges, one per day (models/week-wheel-v1.glb has them as separate
-  // parts named day0 = six days ago ... day6 = today). Each wedge rises
-  // with that day's calories against the goal, dims if nothing was
-  // logged, glows red when over the goal, and today gently pulses; a
-  // thin ring marks the goal height. Tap a wedge to select it.
-  var WHEEL_LIFT_MAX = 0.17;  // how far a wedge rises at 140% of the goal
-  var WHEEL_LIFT_AT_CAP = 1.4;
-  var WHEEL_PLATTER_TOP = 0.067; // height of the wooden surface, for the goal ring and tags
-  var WeekWheel3D = createModelViewer({
-    url: 'models/week-wheel-v1.glb',
-    bytes: 2723556,
-    aria: 'Interactive 3D week wheel: one wedge for each of the last seven days, rising with that day\'s calories. Drag to spin, tap a wedge for details.',
-    az: 0, el: 0.85, lift: -0.02,
-    widthFactor: 0.88, heightFactor: 0.92,
-    autoRotateSpeed: 0.7,
-    tagMode: 'billboard',
-
-    onModel: function(ctx){
-      ctx.wedges = [];
-      ctx.pickables = [];
-      ctx.model.children.forEach(function(mesh){
-        if (!mesh.isMesh || mesh.userData.day == null) return;
-        mesh.material = mesh.material.clone(); // its own copy, so each day can be tinted on its own
-        ctx.wedges[mesh.userData.day] = {
-          mesh: mesh, mat: mesh.material,
-          cx: mesh.userData.cx, cz: mesh.userData.cz, topY: mesh.userData.topY,
-          target: 0, selCur: 0, over: false, today: false
-        };
-        ctx.pickables.push(mesh);
-      });
-      // goal ring: sits just outside the platter at the height a wedge
-      // reaches when the day exactly meets the calorie goal
-      ctx.ring = new THREE.Mesh(
-        new THREE.TorusGeometry(0.535, 0.0035, 6, 120),
-        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 })
-      );
-      ctx.ring.rotation.x = Math.PI / 2;
-      ctx.scene.add(ctx.ring);
-    },
-
-    onMount: function(ctx, state){
-      ctx.state = state;
-      ctx.selected = null;
-      ctx.startTime = performance.now();
-      var goal = state && state.goal > 0 ? state.goal : 0;
-      ctx.ring.visible = goal > 0;
-      ctx.ring.position.y = WHEEL_PLATTER_TOP + WHEEL_LIFT_MAX / WHEEL_LIFT_AT_CAP;
-      ctx.wedges.forEach(function(w, k){
-        var d = state.days[k];
-        var ratio = goal > 0 ? d.total / goal : 0;
-        w.target = d.logged ? WHEEL_LIFT_MAX * Math.min(ratio, WHEEL_LIFT_AT_CAP) / WHEEL_LIFT_AT_CAP : 0;
-        w.over = goal > 0 && d.total > goal;
-        w.today = !!d.isToday;
-        w.selCur = 0;
-        w.mat.color.setScalar(d.logged ? 1 : 0.45); // days with nothing logged look faded
-        w.mesh.position.y = 0;
-      });
-    },
-
-    onFrame: function(ctx, now){
-      if (!ctx.state) return false;
-      var calm = prefersReducedMotion();
-      var t = now - ctx.startTime, busy = false;
-      var pulse = 0.5 + 0.5 * Math.sin(now / 420);
-      ctx.wedges.forEach(function(w, k){
-        var local = calm ? 1 : Math.max(0, Math.min(1, (t - k * 70) / 800)); // wedges rise one after another
-        var e = 1 - Math.pow(1 - local, 3);
-        if (local < 1) busy = true;
-        var sel = ctx.selected === k ? 0.035 : 0;
-        w.selCur += (sel - w.selCur) * (calm ? 1 : 0.22);
-        if (Math.abs(sel - w.selCur) > 0.0005) busy = true;
-        w.mesh.position.y = w.target * e + w.selCur;
-        var r = 0, g = 0, b = 0;
-        if (w.over){ r += 0.20; g += 0.045; b += 0.03; }                       // over the goal: red glow
-        if (ctx.selected === k){ r += 0.30; g += 0.22; b += 0.05; }            // selected: gold
-        else if (w.today){ var a = calm ? 0.12 : 0.06 + 0.12 * pulse; r += a * 0.95; g += a * 0.7; b += a * 0.2; } // today: soft gold pulse
-        w.mat.emissive.setRGB(r, g, b);
-      });
-      return busy || !calm; // the today pulse needs a frame every tick
-    },
-
-    onTap: function(ctx, obj){
-      var k = obj && obj.userData ? obj.userData.day : null;
-      ctx.selected = (k == null || k === ctx.selected) ? null : k;
-      if (ctx.state && ctx.state.onSelect) ctx.state.onSelect(ctx.selected);
-    }
-  });
-
-
   /* =========================================================
      RENDER — INSIGHTS TAB
      ========================================================= */
@@ -5168,36 +5039,11 @@
     if (ui.insightsView === 'trends') renderInsightsTrends();
     else renderInsightsToday();
     if (ui.insightsView !== 'trends') return; // Daily stays as the pyramid / plain macros
-    var viewEl = document.getElementById('view');
-    var card3d = viewEl.querySelector('.card.model-card');
-    if (card3d){
-      // 3D panels are full-screen and don't scroll, so the stats and
-      // coins open from a button instead of sitting underneath.
-      card3d.insertAdjacentHTML('beforeend',
-        '<button type="button" class="stats-fab" data-action="open-stats-sheet" aria-label="Show weekly stats">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v5a5 5 0 0 1-10 0z"></path><path d="M17 5h3v2a3 3 0 0 1-3 3"></path><path d="M7 5H4v2a3 3 0 0 0 3 3"></path></svg>' +
-          '<span>Stats</span></button>');
-    } else {
-      // plain weekly: stat cards go right under the heading
-      var head = viewEl.querySelector('.today-card-head');
-      if (head) head.insertAdjacentHTML('afterend', insightsExtraParts().stats);
-    }
+    // weekly: stat cards go right under the heading
+    var head = document.getElementById('view').querySelector('.today-card-head');
+    if (head) head.insertAdjacentHTML('afterend', insightsExtraParts().stats);
   }
 
-  function openStatsSheet(){
-    closeStatsSheet();
-    var el = document.createElement('div');
-    el.className = 'stats-sheet'; el.id = 'statsSheet';
-    el.innerHTML = '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>This week</h3>' +
-      '<button type="button" class="stats-sheet-x" data-action="close-stats-sheet" aria-label="Close">&times;</button></div>' +
-      insightsExtrasHtml() + '</div>';
-    el.addEventListener('click', function(e){ if (e.target === el) closeStatsSheet(); });
-    document.body.appendChild(el);
-  }
-  function closeStatsSheet(){
-    var el = document.getElementById('statsSheet');
-    if (el) el.remove();
-  }
 
   // ---- Daily Overview has two modes, switched by the icon pair in its
   // corner: '3d' (the full-bleed food pyramid) and 'plain' (the
@@ -5227,15 +5073,6 @@
 
   function overviewModeToggleHtml(extraClass){
     return modeToggleHtml('set-overview-mode', overviewMode(), ICON_PIE, 'Plain view (rings and numbers)', extraClass);
-  }
-
-  // Weekly Overview has the same two modes: '3d' (the week wheel) and
-  // 'plain' (the bars and averages).
-  function weeklyMode(){
-    return STORE.appSettings.weeklyMode === 'plain' ? 'plain' : '3d';
-  }
-  function weeklyModeToggleHtml(extraClass){
-    return modeToggleHtml('set-weekly-mode', weeklyMode(), ICON_BARS, 'Plain view (bars and averages)', extraClass);
   }
 
   function renderInsightsToday(){
@@ -5494,83 +5331,7 @@
     };
   }
 
-  function renderInsightsTrends(){
-    if (weeklyMode() === 'plain') renderTrendsPlain();
-    else renderTrends3D();
-  }
-
-  // ---- Weekly Overview, 3D: a wooden wheel of seven wedges, one per day
-  function dayTagHtml(d, k){
-    var cls = 'day-tag' + (d.isToday ? ' today' : '') + (!d.logged ? ' skipped' : '');
-    return '<div class="' + cls + '" id="dayTag' + k + '">' +
-      '<span class="day-tag-name">' + esc(d.label) + '</span>' +
-      '<span class="day-tag-val" data-over="' + (d.logged ? '1' : '0') + '">' + (d.logged ? d.total : '—') + '</span>' +
-    '</div>';
-  }
-
-  function dayCardHtml(d, goal){
-    var head = '<div class="day-card-head"><b>' + esc(d.label) + '</b>';
-    if (!d.logged){
-      return head + '<span>Nothing logged</span><button type="button" class="day-card-close" data-action="close-day-card" aria-label="Close">&times;</button></div>';
-    }
-    var pctGoal = goal > 0 ? Math.round(d.total / goal * 100) : 0;
-    return head + '<span>' + d.total + ' kcal' + (goal > 0 ? ' · ' + pctGoal + '% of goal' : '') + '</span>' +
-      '<button type="button" class="day-card-close" data-action="close-day-card" aria-label="Close">&times;</button></div>' +
-      '<div class="day-card-macros">' +
-        '<span class="p">Protein <b>' + Math.round(d.t.protein) + 'g</b></span>' +
-        '<span class="c">Carbs <b>' + Math.round(d.t.carbs) + 'g</b></span>' +
-        '<span class="f">Fat <b>' + Math.round(d.t.fat) + 'g</b></span>' +
-      '</div>' +
-      '<div class="day-card-meals">' + d.byMeal.map(function(r){
-        return '<div class="dcm-row"><span class="dcm-name">' + esc(r.label) + '</span> <b>' + r.kcal + '</b> ' +
-          '<span class="dcm-macros">' + mealMacrosHtml(r, 1) + '</span></div>';
-      }).join('') + '</div>';
-  }
-
-  function renderTrends3D(){
-    var wd = weekData();
-    var tagsHtml = wd.days.map(dayTagHtml).join('');
-    var chip = wd.loggedDays.length
-      ? '<div class="week-chip"><b>' + Math.round(wd.avg('calories')) + '</b> kcal/day avg · <b>' + wd.loggedDays.length + '/7</b> days logged</div>'
-      : '<div class="week-chip">Nothing logged in the last 7 days</div>';
-    document.getElementById('view').innerHTML =
-      '<div class="card model-card">' +
-        '<div class="model-stage" id="modelStage"></div>' +
-        tagsHtml + chip +
-        '<div class="day-card hidden" id="dayCard"></div>' +
-        '<div class="model-status" id="modelStatus">' +
-          '<span id="modelStatusText">Loading 3D model…</span>' +
-          '<div class="model-bar" id="modelBarWrap"><i id="modelBar"></i></div>' +
-        '</div>' +
-        weeklyModeToggleHtml('floating') +
-      '</div>';
-    // tags float just above their wedge, and ride up with it as it rises
-    var tags = wd.days.map(function(d, k){
-      return { el: document.getElementById('dayTag' + k), follow: function(ctx, out){
-        var w = ctx.wedges[k];
-        if (w) out.set(w.cx * 1.02, w.topY + w.mesh.position.y + 0.08, w.cz * 1.02);
-      } };
-    });
-    try {
-      WeekWheel3D.mount(document.getElementById('modelStage'), tags, {
-        days: wd.days, goal: wd.goal,
-        onSelect: function(k){
-          var card = document.getElementById('dayCard');
-          if (!card) return;
-          if (k == null){ card.classList.add('hidden'); return; }
-          card.innerHTML = dayCardHtml(wd.days[k], wd.goal);
-          card.classList.remove('hidden');
-        }
-      });
-      // colour a day's number red when it went over the goal
-      wd.days.forEach(function(d, k){
-        var el = document.querySelector('#dayTag' + k + ' .day-tag-val');
-        if (el && d.logged && wd.goal > 0 && d.total > wd.goal) el.classList.add('over');
-      });
-    } catch (err){
-      console.error('SaviorFuel: 3D week wheel failed to start —', err);
-    }
-  }
+  function renderInsightsTrends(){ renderTrendsPlain(); }
 
   // ---- Weekly Overview, plain: the bars, week numbers, average macros,
   // calorie split and consistency line.
@@ -5581,8 +5342,7 @@
     var dayMax = Math.max(g.calories, Math.max.apply(null, days.map(function(x){ return x.total; })), 1);
     var goalPos = pct(g.calories, dayMax); // where the goal line sits along each bar
 
-    var html = '<div class="overview-plain"><div class="today-card-head"><h3 class="section-label">Last 7 days — daily calories</h3>' +
-      weeklyModeToggleHtml('') + '</div>';
+    var html = '<div class="overview-plain"><div class="today-card-head"><h3 class="section-label">Last 7 days — daily calories</h3></div>';
     html += days.map(function(x){
       return '<div class="insight-bar-row">' +
         '<div class="insight-bar-day">' + x.label + '</div>' +
@@ -6022,12 +5782,10 @@
     var onInsights = state.tab === 'insights' && STORE.meals.length > 0;
     var weekly = ui.insightsView === 'trends';
     var showPyramid = onInsights && !weekly && overviewMode() === '3d';
-    var showWheel = onInsights && weekly && weeklyMode() === '3d';
     if (!showPyramid) Model3D.unmount();
-    if (!showWheel) WeekWheel3D.unmount();
-    document.getElementById('view').classList.toggle('model-fullscreen', showPyramid || showWheel);
+    document.getElementById('view').classList.toggle('model-fullscreen', showPyramid);
     document.getElementById('view').classList.toggle('plain-fullscreen',
-      onInsights && (weekly ? weeklyMode() === 'plain' : overviewMode() === 'plain'));
+      onInsights && (weekly || overviewMode() === 'plain'));
     document.querySelectorAll('.tabbar button').forEach(function(btn){
       btn.classList.toggle('active', btn.dataset.tab === state.tab);
     });
@@ -6105,7 +5863,6 @@
     }, 190);
   }
   function switchOverviewModeWithFade(newMode){ flipToMode('overviewMode', newMode, overviewMode()); }
-  function switchWeeklyModeWithFlip(newMode){ flipToMode('weeklyMode', newMode, weeklyMode()); }
 
   // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
   function switchTab(newTab){
@@ -6147,18 +5904,11 @@
       switchInsightsViewWithFade(el.dataset.view);
     } else if (action === 'set-overview-mode'){
       switchOverviewModeWithFade(el.dataset.mode);
-    } else if (action === 'set-weekly-mode'){
-      switchWeeklyModeWithFlip(el.dataset.mode);
     } else if (action === 'toggle-meal-drawer'){
       var mealDrawerEl = document.getElementById('mealDrawer');
       if (mealDrawerEl) setMealDrawer(!mealDrawerEl.classList.contains('open'));
     } else if (action === 'close-meal-drawer'){
       setMealDrawer(false);
-    } else if (action === 'close-day-card'){
-      WeekWheel3D.ctx.selected = null;
-      var dayCardEl = document.getElementById('dayCard');
-      if (dayCardEl) dayCardEl.classList.add('hidden');
-      WeekWheel3D.redraw();
     } else if (action === 'add-meal'){
       addMealFromForm();
     } else if (action === 'close-add-meal-overlay'){
@@ -6215,10 +5965,6 @@
       var day = el.dataset.day;
       ui.historyOpenDay = (ui.historyOpenDay === day) ? null : day;
       renderApp();
-    } else if (action === 'open-stats-sheet'){
-      openStatsSheet();
-    } else if (action === 'close-stats-sheet'){
-      closeStatsSheet();
     } else if (action === 'toggle-settings-sec' || action === 'open-settings-sec'){
       var sec = el.dataset.sec;
       ui.settingsOpen = (action === 'toggle-settings-sec' && ui.settingsOpen === sec) ? null : sec;
