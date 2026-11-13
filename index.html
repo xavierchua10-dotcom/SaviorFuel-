@@ -192,6 +192,9 @@
     margin-top:16px;
   }
 
+  /* the page being left during a tab slide: same box as #view, laid over it */
+  #app > .view-ghost{position:absolute !important; margin:0 !important; pointer-events:none; z-index:1;}
+
   /* Fade+shift tab transition — same treatment as SaviorFit Logger's
      switchTabWithFade, so switching tabs feels identical across both
      apps. See switchTab() below. */
@@ -5870,13 +5873,29 @@
   }
   function switchOverviewModeWithFade(newMode){ flipToMode('overviewMode', newMode, overviewMode()); }
 
-  // Same fade+shift treatment as SaviorFit Logger's switchTabWithFade.
+  // Tab switch = both pages slide sideways together, like SaviorFit Logger's
+  // switchTabWithFade: the page being left is lifted into a "ghost" pane laid
+  // over #view and slides out; the new page is drawn into #view and slides in
+  // from the other side. #app clips the overflow. The direction follows the
+  // tab order (new tab to the right = slide left).
+  var TAB_SLIDE_MS = 300, TAB_SLIDE_EASE = 'cubic-bezier(.32,.72,0,1)';
+  var tabSlide = null; // { ghost, anims, timer } while a slide is running
+  function endTabSlide(){
+    if (!tabSlide) return;
+    var t = tabSlide; tabSlide = null;
+    clearTimeout(t.timer);
+    try { t.anims.forEach(function(a){ a.cancel(); }); } catch (e) {}
+    if (t.ghost.parentNode) t.ghost.parentNode.removeChild(t.ghost);
+  }
+
   function switchTab(newTab){
     if (newTab === state.tab) return;
-    setSlider(document.getElementById('tabbar'), tabIndexOf(newTab), true); // the highlight starts gliding on the tap itself
+    var oldIndex = tabIndexOf(state.tab), newIndex = tabIndexOf(newTab);
+    setSlider(document.getElementById('tabbar'), newIndex, true); // the highlight starts gliding on the tap itself
     closeScanner(); // safety: release the camera if it was somehow left open
     closeFoodSearchOverlay();
     closeAddMealOverlay();
+    endTabSlide(); // a tap mid-slide finishes the running one first
     var viewEl = document.getElementById('view');
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -5886,18 +5905,46 @@
       return;
     }
 
-    viewEl.classList.remove('subtab-fade-in');
-    viewEl.classList.add('subtab-fade-out');
-
-    setTimeout(function(){
-      state.tab = newTab;
-      renderApp();
-      viewEl.classList.remove('subtab-fade-out');
-      viewEl.classList.add('subtab-fade-in');
+    // The 3D pyramid's canvas can't ride along in the outgoing page, so leaving
+    // it keeps the old quick fade instead of a slide.
+    var leaving3D = state.tab === 'insights' && ui.insightsView !== 'trends' && overviewMode() === '3d' && STORE.meals.length > 0;
+    if (leaving3D || typeof viewEl.animate !== 'function'){
+      viewEl.classList.remove('subtab-fade-in');
+      viewEl.classList.add('subtab-fade-out');
       setTimeout(function(){
-        viewEl.classList.remove('subtab-fade-in');
-      }, 170);
-    }, 140);
+        state.tab = newTab;
+        renderApp();
+        viewEl.classList.remove('subtab-fade-out');
+        viewEl.classList.add('subtab-fade-in');
+        setTimeout(function(){ viewEl.classList.remove('subtab-fade-in'); }, 170);
+      }, 140);
+      return;
+    }
+
+    var dir = newIndex > oldIndex ? 1 : -1;
+    var appEl = document.getElementById('app');
+    var ar = appEl.getBoundingClientRect(), vr = viewEl.getBoundingClientRect();
+    var ghost = document.createElement('main');
+    ghost.id = 'view'; // same id so the #view styles still apply to what's inside
+    ghost.className = viewEl.className + ' view-ghost';
+    ghost.setAttribute('aria-hidden', 'true'); ghost.setAttribute('inert', '');
+    var oldScroll = viewEl.scrollTop;
+    while (viewEl.firstChild) ghost.appendChild(viewEl.firstChild);
+    ghost.style.top = (vr.top - ar.top) + 'px'; ghost.style.left = (vr.left - ar.left) + 'px';
+    ghost.style.width = vr.width + 'px'; ghost.style.height = vr.height + 'px';
+    appEl.appendChild(ghost);
+    ghost.scrollTop = oldScroll;
+
+    viewEl.scrollTop = 0;
+    state.tab = newTab;
+    renderApp(); // draws the new page into the real #view (first #view in the document)
+    viewEl.scrollTop = 0;
+
+    var opts = { duration: TAB_SLIDE_MS, easing: TAB_SLIDE_EASE, fill: 'both' };
+    var a1 = ghost.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(' + (-dir * vr.width) + 'px)' }], opts);
+    var a2 = viewEl.animate([{ transform: 'translateX(' + (dir * vr.width) + 'px)' }, { transform: 'translateX(0)' }], opts);
+    tabSlide = { ghost: ghost, anims: [a1, a2], timer: 0 };
+    tabSlide.timer = setTimeout(endTabSlide, TAB_SLIDE_MS + 30);
   }
 
   document.addEventListener('click', function(e){
