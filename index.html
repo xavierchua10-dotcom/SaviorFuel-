@@ -1875,6 +1875,36 @@
   .water-btn{height:32px; min-width:38px; padding:0 10px; border-radius:10px; border:1px solid rgba(108,196,238,.5); background:transparent; color:var(--c-fat); font:700 12px 'Oswald',sans-serif; cursor:pointer;}
   .water-btn.minus{min-width:32px; padding:0; font-size:16px; border-color:var(--line); color:var(--text-faint);}
   .water-btn:disabled{opacity:.35;}
+
+  /* ---- History (week strip + timeline, SaviorFit style) ---- */
+  .hist-head{display:flex; align-items:center; justify-content:space-between; margin:2px 0 0;}
+  .hist-title{margin:0; font:700 28px 'Oswald',sans-serif; letter-spacing:.03em; text-transform:uppercase;}
+  .hist-cal-btn{display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 13px; border-radius:999px; border:1px solid rgba(var(--accent-rgb),.4); background:rgba(var(--accent-rgb),.1); color:var(--accent); font:600 12px 'JetBrains Mono',monospace; letter-spacing:.04em; cursor:pointer;}
+  .hist-cal-btn svg{width:15px; height:15px;}
+  .hist-sec{display:flex; align-items:center; justify-content:space-between; margin:16px 0 8px; font:500 12px 'Oswald',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--text-faint);}
+  .hist-sec em{font:600 11px 'JetBrains Mono',monospace; font-style:normal; letter-spacing:.06em; color:var(--accent);}
+  .hist-strip{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
+  .hs-day{display:flex; flex-direction:column; align-items:center; gap:3px; padding:8px 0 9px; border-radius:14px; background:var(--panel); border:1px solid var(--line); color:var(--text); font:inherit;}
+  button.hs-day{cursor:pointer;}
+  .hs-day.now{border-color:var(--accent); box-shadow:0 0 0 1px rgba(var(--accent-rgb),.3), 0 6px 16px rgba(var(--accent-rgb),.12);}
+  .hs-day.future{opacity:.45;}
+  .hs-w{font:500 10px 'JetBrains Mono',monospace; color:var(--text-faint);}
+  .hs-n{font:700 17px 'Oswald',sans-serif; line-height:1.2;}
+  .hs-ring{--p:0; display:block; width:26px; height:26px; border-radius:50%; position:relative; background:conic-gradient(var(--accent) calc(var(--p) * 1%), var(--panel-3) 0);}
+  .hs-ring::before{content:""; position:absolute; inset:4px; border-radius:50%; background:var(--panel);}
+  .hs-ring.low{background:conic-gradient(rgba(var(--accent-rgb),.5) calc(var(--p) * 1%), var(--panel-3) 0);}
+  .hs-ring.over{background:conic-gradient(var(--accent-2) 100%, var(--panel-3) 0);}
+  .hs-ring.empty{background:var(--panel-3); opacity:.7;}
+  .hist-mlabel{display:flex; align-items:center; gap:10px; position:relative; padding-left:10px; margin:20px 0 10px; font:600 12.5px 'Oswald',sans-serif; line-height:1; letter-spacing:.16em; text-transform:uppercase; color:var(--text-dim);}
+  .hist-mlabel::before{content:""; position:absolute; left:0; top:-1px; bottom:-1px; width:3px; border-radius:2px; background:var(--accent);}
+  .hist-mlabel::after{content:""; flex:1; height:1px; background:linear-gradient(90deg,rgba(var(--accent-rgb),.35),rgba(var(--accent-rgb),0));}
+  #histList .hist-item.open{border-color:rgba(var(--accent-rgb),.4);}
+  .hist-kcal-col{flex-direction:column; align-items:flex-end; gap:6px;}
+  .hist-pb{width:78px; height:4px; border-radius:2px; background:var(--panel-3); overflow:hidden;}
+  .hist-pb i{display:block; height:100%; border-radius:2px; background:var(--accent);}
+  .hist-pb.low i{background:rgba(var(--accent-rgb),.5);} .hist-pb.over i{background:var(--accent-2);}
+  .hist-more{display:block; width:100%; height:42px; margin:4px 0 8px; border-radius:14px; border:1px solid var(--line); background:var(--panel); color:var(--text-dim); font:600 13px 'Oswald',sans-serif; letter-spacing:.08em; text-transform:uppercase; cursor:pointer;}
+  .stats-sheet .hist-month-nav{align-items:center;}
 </style>
 </head>
 <body>
@@ -2149,6 +2179,7 @@
   var state = { tab: 'log' };
   var ui = {
     historyOpenDay: null,
+    histShow: 21,
     histMonth: null,
     settingsOpen: null,
     logDay: null,         // day the Log tab shows (null = today); set by the week strip
@@ -4562,26 +4593,66 @@
         (key !== todayKey() ? '<button type="button" class="hist-copy" data-action="copy-day" data-day="' + key + '">Copy day to today</button>' : '') +
       '</div>';
     }
+    var st = dayStatus(day.calories, goal);
+    var pct = Math.min(100, pctUncapped(day.calories, goal));
     return '<div class="hist-item' + (isOpen ? ' open' : '') + (key === todayKey() ? ' is-today' : '') + '" id="hd-' + key + '">' +
       '<div class="hist-item-head history-day-head" data-action="toggle-history-day" data-day="' + key + '">' +
         '<div class="hist-item-main"><div class="hist-name">' + esc(label) + '</div>' +
           '<div class="hist-sub">' + meals.length + ' meal' + (meals.length === 1 ? '' : 's') + '</div></div>' +
-        '<div class="hist-item-side"><div class="hist-kcal">' + Math.round(day.calories).toLocaleString() + '</div>' +
-          '<i class="hist-status ' + dayStatus(day.calories, goal) + '"></i>' +
-          '<span class="hist-chev">' + CHEV_SVG + '</span></div>' +
+        '<div class="hist-item-side hist-kcal-col"><div class="hist-kcal">' + Math.round(day.calories).toLocaleString() + '<small>kcal</small></div>' +
+          '<div class="hist-pb ' + st + '"><i style="width:' + pct + '%"></i></div></div>' +
       '</div>' + body +
     '</div>';
   }
 
-  // The list part is its own function so typing in the search box can
-  // redraw just this, without losing focus in the input.
+  // The days, newest first, under a green month label. Shows a page at a
+  // time (ui.histShow); "Show earlier" adds more.
+  function historyKeysSorted(map){ return Object.keys(map).sort().reverse(); }
   function historyListHtml(map, goal){
-    var keys = Object.keys(map).sort().reverse();
-    var mk = historyMonthKey();
-    var rows = keys.filter(function(k){ return k.slice(0, 7) === mk; });
-    var label = rows.length ? 'Tap a day' : 'Nothing logged this month';
-    return '<h3 class="section-label">' + label + '</h3>' +
-      rows.map(function(k){ return historyDayHtml(map[k], goal); }).join('');
+    var keys = historyKeysSorted(map);
+    var shown = keys.slice(0, ui.histShow || 21);
+    var html = '', lastMonth = '';
+    shown.forEach(function(k){
+      var mk = k.slice(0, 7);
+      if (mk !== lastMonth){
+        lastMonth = mk;
+        var d = new Date(mk + '-01T00:00:00');
+        var lab = d.toLocaleDateString(undefined, { month: 'long', year: mk.slice(0, 4) === todayKey().slice(0, 4) ? undefined : 'numeric' });
+        html += '<div class="hist-mlabel">' + esc(lab) + '</div>';
+      }
+      html += historyDayHtml(map[k], goal);
+    });
+    if (keys.length > shown.length) html += '<button type="button" class="hist-more" data-action="history-more">Show earlier</button>';
+    return html;
+  }
+
+  // Monday-to-Sunday strip for the current week, each day a small progress ring.
+  function historyStripHtml(map, goal){
+    var today = todayKey();
+    var dow = (new Date().getDay() + 6) % 7; // Monday = 0
+    var letters = ['M','T','W','T','F','S','S'];
+    var cells = '', sum = 0, n = 0;
+    for (var i = 0; i < 7; i++){
+      var key = dateKeyDaysAgo(dow - i);
+      var info = map[key];
+      var cls = 'hs-day';
+      if (key === today) cls += ' now';
+      if (key > today) cls += ' future';
+      var ring = '';
+      if (info){
+        var st = dayStatus(info.calories, goal);
+        ring = '<i class="hs-ring ' + st + '" style="--p:' + Math.min(100, pctUncapped(info.calories, goal)) + '"></i>';
+        sum += info.calories; n++;
+      } else {
+        ring = '<i class="hs-ring empty"></i>';
+      }
+      var inner = '<span class="hs-w">' + letters[i] + '</span><span class="hs-n">' + parseInt(key.slice(8, 10), 10) + '</span>' + ring;
+      cells += info
+        ? '<button type="button" class="' + cls + '" data-action="history-pick-day" data-day="' + key + '">' + inner + '</button>'
+        : '<div class="' + cls + '">' + inner + '</div>';
+    }
+    var avg = n ? Math.round(sum / n).toLocaleString() + ' avg' : 'nothing logged yet';
+    return '<div class="hist-sec"><span>This week</span><em>' + avg + '</em></div><div class="hist-strip">' + cells + '</div>';
   }
 
   function renderHistory(){
@@ -4595,15 +4666,36 @@
     }
     var goal = STORE.goals.calories;
     var map = dayStatsMap();
-    var mk = historyMonthKey();
-    var monthLabel = new Date(mk + '-01T00:00:00').toLocaleDateString(undefined, { month: 'long', year: mk.slice(0, 4) === todayKey().slice(0, 4) ? undefined : 'numeric' });
-    var atNow = mk === todayKey().slice(0, 7);
-    var html = '<div class="hist-month-head"><div class="hist-month">' + esc(monthLabel) + '</div>' +
-      '<div class="hist-month-nav"><button type="button" data-action="history-month" data-dir="-1" aria-label="Previous month">‹</button>' +
-      '<button type="button" data-action="history-month" data-dir="1" aria-label="Next month"' + (atNow ? ' disabled' : '') + '>›</button></div></div>' +
-      historyCalendarHtml(map, goal, mk) +
+    var calIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="2.5" x2="8" y2="6.5"></line><line x1="16" y1="2.5" x2="16" y2="6.5"></line></svg>';
+    document.getElementById('view').innerHTML =
+      '<div class="hist-head"><h2 class="hist-title">History</h2>' +
+        '<button type="button" class="hist-cal-btn" data-action="open-calendar">' + calIcon + 'Calendar</button></div>' +
+      historyStripHtml(map, goal) +
       '<div id="histList">' + historyListHtml(map, goal) + '</div>';
-    document.getElementById('view').innerHTML = html;
+  }
+
+  // Full-month calendar, opened from the Calendar button.
+  function calendarSheetInner(){
+    var map = dayStatsMap(), goal = STORE.goals.calories, mk = historyMonthKey();
+    var monthLabel = new Date(mk + '-01T00:00:00').toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+    var atNow = mk === todayKey().slice(0, 7);
+    return '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>' + esc(monthLabel) + '</h3>' +
+        '<div class="hist-month-nav"><button type="button" data-action="cal-month" data-dir="-1" aria-label="Previous month">‹</button>' +
+        '<button type="button" data-action="cal-month" data-dir="1" aria-label="Next month"' + (atNow ? ' disabled' : '') + '>›</button>' +
+        '<button type="button" class="stats-sheet-x" data-action="close-calendar" aria-label="Close">&times;</button></div></div>' +
+      '<div style="height:10px"></div>' + historyCalendarHtml(map, goal, mk) + '</div>';
+  }
+  function openCalendarSheet(){
+    closeCalendarSheet();
+    var el = document.createElement('div');
+    el.className = 'stats-sheet'; el.id = 'calSheet';
+    el.innerHTML = calendarSheetInner();
+    el.addEventListener('click', function(e){ if (e.target === el) closeCalendarSheet(); });
+    document.body.appendChild(el);
+  }
+  function closeCalendarSheet(){
+    var el = document.getElementById('calSheet');
+    if (el) el.remove();
   }
 
   // Copies every meal of a past day onto today.
@@ -6068,12 +6160,23 @@
       closeFoodSheet();
     } else if (action === 'water-add'){
       addWater(parseInt(el.dataset.ml, 10) || 0);
-    } else if (action === 'history-month'){
+    } else if (action === 'open-calendar'){
+      ui.histMonth = null;
+      openCalendarSheet();
+    } else if (action === 'close-calendar'){
+      closeCalendarSheet();
+    } else if (action === 'cal-month'){
       ui.histMonth = addMonthKey(historyMonthKey(), parseInt(el.dataset.dir, 10));
-      ui.historyOpenDay = null;
+      var calEl = document.getElementById('calSheet');
+      if (calEl) calEl.innerHTML = calendarSheetInner();
+    } else if (action === 'history-more'){
+      ui.histShow = (ui.histShow || 21) + 21;
       renderApp();
     } else if (action === 'history-pick-day'){
+      closeCalendarSheet();
       ui.historyOpenDay = el.dataset.day;
+      var hIdx = historyKeysSorted(dayStatsMap()).indexOf(el.dataset.day);
+      if (hIdx >= (ui.histShow || 21)) ui.histShow = hIdx + 7; // make sure the picked day is in the list
       renderApp();
       var hd = document.getElementById('hd-' + el.dataset.day);
       if (hd) hd.scrollIntoView({ block: 'center', behavior: 'smooth' });
