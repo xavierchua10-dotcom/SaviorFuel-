@@ -7185,8 +7185,20 @@
   // OFF/Kalori search calls — see sw.js.
   if ('serviceWorker' in navigator){
     window.addEventListener('load', function(){
-      navigator.serviceWorker.register('sw.js')
+      // A new version of the app: look for one every time the app comes back
+      // to the screen, and when one takes over, offer a one-tap refresh.
+      var hadController = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' })
+        .then(function(reg){
+          document.addEventListener('visibilitychange', function(){
+            if (document.visibilityState === 'visible') reg.update().catch(function(){});
+          });
+        })
         .catch(function(err){ console.error('SaviorFuel: service worker registration failed —', err); });
+      navigator.serviceWorker.addEventListener('controllerchange', function(){
+        if (!hadController){ hadController = true; return; } // first-ever install, nothing to refresh
+        showToast('New version ready', 'Refresh', function(){ location.reload(); });
+      });
     });
   }
 </script>

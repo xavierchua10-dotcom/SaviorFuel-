@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v46';
+var SHELL_CACHE = 'saviorfuel-shell-v47';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -88,7 +88,10 @@ self.addEventListener('fetch', function(event){
   // only when there's no connection at all.
   if (event.request.mode === 'navigate' || url.pathname.endsWith('/index.html')){
     event.respondWith(
-      fetch(event.request)
+      // cache:'no-cache' makes the browser ask GitHub Pages "is this still
+      // the latest?" every time, instead of reusing a copy it was told to
+      // keep for ~10 minutes. That is what made new pushes need reloads.
+      fetch(event.request, { cache: 'no-cache' })
         .then(function(res){
           var copy = res.clone();
           caches.open(SHELL_CACHE).then(function(cache){ cache.put(event.request, copy); });
