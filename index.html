@@ -1275,6 +1275,14 @@
   .ai-macro3 .t b{color:var(--text); font-weight:600; font-family:'JetBrains Mono',monospace; font-size:11px;}
   .ai-macro3 .bar{height:5px; border-radius:3px; background:var(--panel-3); overflow:hidden; margin-top:3px;}
   .ai-macro3 .bar i{display:block; height:100%; border-radius:3px;}
+  .food-search-overlay.over-ai{z-index:97;}
+  .ai-search-inst{
+    display:inline-flex; align-items:center; gap:6px; margin-top:10px; padding:7px 14px;
+    background:none; border:1px solid var(--accent); color:var(--accent); border-radius:var(--radius-pill);
+    font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .ai-search-inst svg{width:15px; height:15px;}
+  .ai-search-inst:active{background:rgba(var(--accent-rgb),.12);}
   .ai-zoom{position:fixed; inset:0; z-index:400; background:rgba(0,0,0,0.94); display:flex; align-items:center; justify-content:center; padding:16px;}
   .ai-zoom.hidden{display:none;}
   .ai-zoom img{max-width:100%; max-height:100%; object-fit:contain; border-radius:12px;}
@@ -3190,7 +3198,10 @@
   }
 
   function closeFoodSearchOverlay(){
-    document.getElementById('foodSearchOverlay').classList.add('hidden');
+    var ov = document.getElementById('foodSearchOverlay');
+    ov.classList.add('hidden');
+    ov.classList.remove('over-ai');
+    ui.replaceAiIdx = null;      // "Search instead" from the AI scan sheet is over
   }
 
   // Add Meal is a bottom-sheet overlay rather than an inline card —
@@ -4194,9 +4205,37 @@
     if (p._source !== 'saved') saveFoodToCache(ui.selectedFood);
     initServing();
     applySelectedFoodToForm();
+    if (ui.replaceAiIdx != null){ aiReplaceFromSelected(); return; }
     ui.justFilledFood = true;
     closeFoodSearchOverlay();
     openAddMealOverlay();
+  }
+
+  // "Search instead" on the AI scan sheet: the picked food replaces the
+  // AI's guess, with its numbers coming from the food list, not the AI.
+  function aiReplaceFromSelected(){
+    var idx = ui.replaceAiIdx;
+    var f = ui.selectedFood;
+    var u = currentServingUnit();
+    var q = (ui.serving && ui.serving.qty) || 0;
+    closeFoodSearchOverlay();                 // also clears replace mode
+    if (!aiScan.items[idx] || !f){ clearFoodSelection(); return; }
+    var base = {
+      calories: ui.prefillCal || 0, protein: ui.prefillProtein || 0, carbs: ui.prefillCarbs || 0,
+      fat: ui.prefillFat || 0, fiber: ui.prefillFiber || 0, sugar: ui.prefillSugar || 0, sodium: ui.prefillSodium || 0
+    };
+    var name = String(f.name || 'Food').slice(0, 60);
+    if (u && u.grams != null && u.grams * q > 0){
+      var g = Math.round(u.grams * q);
+      base.grams = g;
+      aiScan.items[idx] = { name: name, grams: g, base: base };
+    } else {
+      base.grams = 100;                       // per-serving food with no weight: one serving, calories editable
+      aiScan.items[idx] = { name: name, grams: 100, manual: true, base: base };
+    }
+    clearFoodSelection();
+    renderAiScanItems();
+    showToast('Swapped to ' + name);
   }
 
   // Recomputes the prefill macro values from the selected food and
@@ -4868,6 +4907,8 @@
         '</div>' +
         '<div class="ai-item-macros" id="aiMacros' + i + '">P' + Math.round(m.protein) + ' &middot; C' + Math.round(m.carbs) + ' &middot; F' + Math.round(m.fat) + '</div>' +
         controls +
+        '<button type="button" class="ai-search-inst" data-action="ai-search-instead" data-i="' + i + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>Wrong food? Search instead</button>' +
       '</div>';
     }).join('');
     renderAiScanTotal();
@@ -6999,6 +7040,25 @@
       pickFoodResult(parseInt(el.dataset.index, 10));
     } else if (action === 'open-food-search-overlay'){
       openFoodSearchOverlay();
+    } else if (action === 'ai-search-instead'){
+      var si = parseInt(el.dataset.i, 10);
+      var sit2 = aiScan.items[si];
+      if (sit2){
+        openFoodSearchOverlay();
+        ui.replaceAiIdx = si;                 // set after open: opening starts from a clean state
+        document.getElementById('foodSearchOverlay').classList.add('over-ai');
+        var sq = String(sit2.name || '').trim();
+        if (sq.length >= 2){
+          document.getElementById('foodSearchInput').value = sq;
+          runFoodSearch(sq);
+        }
+      }
+    } else if (action === 'use-custom-food-name' && ui.replaceAiIdx != null){
+      var rit = aiScan.items[ui.replaceAiIdx];
+      if (rit) rit.name = String(el.dataset.name || '').slice(0, 60);
+      closeFoodSearchOverlay();
+      renderAiScanItems();
+      showToast('Renamed');
     } else if (action === 'use-custom-food-name'){
       ui.prefillName = el.dataset.name;
       ui.prefillCal = ui.prefillProtein = ui.prefillCarbs = ui.prefillFat = null;
