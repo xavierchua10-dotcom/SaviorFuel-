@@ -7099,6 +7099,97 @@
     renderWelcome();
   });
 
+  /* ---------- Phone back button / swipe-back steps back instead of quitting ----------
+     The app is one page, so back used to leave the app even with a panel open.
+     Every open panel (add food, search, scanner, sheets, day view, dialogs) is
+     a "layer" with one history entry; back closes the top layer using its own
+     close/cancel button. With nothing open, back on another tab returns to
+     Log, and on Log the first press shows "Press back again to exit". */
+  var BACK_LAYER_IDS = ['foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
+    'addMealOverlay', 'aiScanOverlay', 'confirmOverlay', 'foodSheet', 'mealMenu', 'calSheet', 'dayOverlay'];
+  var BACK_NEEDS_OPEN = { addMealOverlay: 1, aiScanOverlay: 1, confirmOverlay: 1 };
+  var backDepth = 0, backIgnorePops = 0, backSyncQueued = false, exitArmed = false, exitArmTimer = null;
+  function backLayerEls(){
+    var out = [];
+    BACK_LAYER_IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (el.classList.contains('hidden')) return;
+      if (BACK_NEEDS_OPEN[id] && !el.classList.contains('open')) return;
+      out.push(el);
+    });
+    out.sort(function(a, b){
+      var za = parseInt(window.getComputedStyle(a).zIndex, 10) || 0;
+      var zb = parseInt(window.getComputedStyle(b).zIndex, 10) || 0;
+      if (za !== zb) return za - zb;
+      return (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+    });
+    return out;
+  }
+  function backFirstRun(){ return !!document.querySelector('.welcome-overlay'); }
+  function backTabStep(){ return !backFirstRun() && state.tab !== 'log'; }
+  function backExitGuard(){ return !backFirstRun() && state.tab === 'log' && !exitArmed; }
+  function backLayerCount(){
+    return backLayerEls().length + (backTabStep() ? 1 : 0) + (backExitGuard() ? 1 : 0);
+  }
+  function syncBackHistory(){
+    backSyncQueued = false;
+    var n = backLayerCount();
+    if (n > backDepth){
+      while (backDepth < n){
+        try { history.pushState({ sfLayer: true }, '', location.href); } catch (err){ return; }
+        backDepth++;
+      }
+    } else if (n < backDepth){
+      var diff = backDepth - n;
+      backDepth = n;
+      backIgnorePops++;            // history.go(-diff) fires exactly one popstate
+      history.go(-diff);
+    }
+  }
+  function queueBackSync(){
+    if (backSyncQueued) return;
+    backSyncQueued = true;
+    Promise.resolve().then(syncBackHistory);   // microtask: still inside the same tap
+  }
+  function closeTopBackLayer(){
+    var els = backLayerEls();
+    if (!els.length){
+      if (backTabStep()) switchTab('log');
+      else if (backExitGuard()){
+        exitArmed = true;
+        showToast('Press back again to exit');
+        if (exitArmTimer) clearTimeout(exitArmTimer);
+        exitArmTimer = setTimeout(function(){ exitArmed = false; }, 2500);
+      }
+      return;
+    }
+    var top = els[els.length - 1];
+    var nodes = top.querySelectorAll('[data-action^="close-"],[data-action^="cancel-"]');
+    for (var i = 0; i < nodes.length; i++){
+      if (nodes[i].getClientRects().length){ nodes[i].click(); return; }
+    }
+    top.click();                   // a tap on the backdrop itself
+  }
+  window.addEventListener('popstate', function(){
+    if (backIgnorePops > 0){ backIgnorePops--; return; }
+    if (backDepth <= 0) return;    // not ours
+    backDepth--;
+    closeTopBackLayer();
+    queueBackSync();               // if nothing closed, the entry is pushed back and the press is absorbed
+  });
+  document.addEventListener('click', queueBackSync, true);
+  if (typeof MutationObserver !== 'undefined'){
+    var backMo = new MutationObserver(queueBackSync);
+    BACK_LAYER_IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) backMo.observe(el, { attributes: true, attributeFilter: ['class'] });
+    });
+    backMo.observe(document.body, { childList: true });
+    var appEl = document.getElementById('app');
+    if (appEl) backMo.observe(appEl, { childList: true });
+  }
+
   // App shortcuts (long-press the icon) open e.g. "./?tab=scan".
   try {
     var launchTab = new URLSearchParams(location.search).get('tab');
