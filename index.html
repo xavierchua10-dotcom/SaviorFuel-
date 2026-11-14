@@ -448,7 +448,6 @@
   .macro-bar-fill.protein{background:var(--c-protein);}
   .macro-bar-fill.carbs{background:var(--c-carbs);}
   .macro-bar-fill.fat{background:var(--c-fat);}
-  .macro-bar-fill.fiber{background:var(--c-fiber);}
   .macro-bar-fill.sugar{background:#d67ab1;}
   .macro-bar-fill.sodium{background:#4fc3c9;}
   .macro-bar-fill.over{background:var(--accent-2);}
@@ -599,7 +598,6 @@
   .meal-split-macros .p, .dcm-macros .p{color:var(--c-protein-text);}
   .meal-split-macros .c, .dcm-macros .c{color:var(--c-carbs);}
   .meal-split-macros .f, .dcm-macros .f{color:var(--c-fat);}
-  .meal-split-macros .fi, .dcm-macros .fi{color:var(--c-fiber);}
   .meal-split-label{width:106px; flex-shrink:0; font-size:13px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .meal-split-track{flex:1; min-width:0; height:14px; background:var(--panel-3); border-radius:var(--radius-xs); overflow:hidden;}
   .meal-split-fill{height:100%; background:var(--accent); border-radius:var(--radius-xs);}
@@ -1272,6 +1270,7 @@
   }
   .nutrient-info-head button svg{width:14px;height:14px;}
   .nutrient-info-head button:active{background:var(--panel-2);}
+  .nutrient-info-text p{margin:0 0 12px; font-size:14px; line-height:1.45; color:var(--text-dim);}
   .nutrient-info-image{display:block;width:100%;height:auto;border-radius:var(--radius-md);}
 
   /* Info button on the Today card header, opens the macros/fiber
@@ -1428,7 +1427,6 @@
   .face-ring-fill.protein{stroke:var(--c-protein);}
   .face-ring-fill.carbs{stroke:var(--c-carbs);}
   .face-ring-fill.fat{stroke:var(--c-fat);}
-  .face-ring-fill.fiber{stroke:var(--c-fiber);}
   .face-ring-fill.over{stroke:var(--accent-2);}
   .face-ring-pct{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
@@ -1488,12 +1486,11 @@
     --accent-2-dim:#4a2321;
     --success:#4fb870;
     --success-dim:#233821;
-    /* Macro colours, one meaning everywhere: protein yellow, carbs blue, fat red, fibre green. */
+    /* Macro colours, one meaning everywhere: protein yellow, carbs blue, fat red. */
     --c-protein:#ffd166;
     --c-protein-text:#ffd166;
     --c-carbs:#5aa9ff;
     --c-fat:#ff6b6b;
-    --c-fiber:#4fcf7a;
     --c-water:#6cc4ee;
     --c-cal:var(--accent);
     --c-star:#ffd166;
@@ -1523,7 +1520,6 @@
     --c-protein-text:#8a5d00;   /* fills keep the brighter gold; text needs 4.5:1 on white */
     --c-carbs:#2b6fd6;
     --c-fat:#d33a3a;
-    --c-fiber:#1f8a4c;
     --c-water:#1d79ad;
     --c-cal:var(--accent);
     --c-star:#b98100;
@@ -2113,10 +2109,7 @@
           <div class="field-labeled"><label>Fat (g)</label><input type="number" inputmode="numeric" id="mealFat" placeholder="0"></div>
         </div>
         <div class="field-row">
-          <div class="field-labeled"><label>Fiber (g)</label><input type="number" inputmode="numeric" id="mealFiber" placeholder="0"></div>
           <div class="field-labeled"><label>Sugar (g)</label><input type="number" inputmode="numeric" id="mealSugar" placeholder="0"></div>
-        </div>
-        <div class="field-row">
           <div class="field-labeled"><label>Sodium (mg)</label><input type="number" inputmode="numeric" id="mealSodium" placeholder="0"></div>
         </div>
       </div></div>
@@ -2215,7 +2208,7 @@
   // Values (28g, 50g added sugar, 2300mg) — same starting-point
   // convention as the Mifflin-St Jeor calculator below: a sensible
   // default, always overridable in Settings.
-  var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65, fiber: 28, sugar: 50, sodium: 2300, water: 2500 };
+  var DEFAULT_GOALS = { calories: 2000, protein: 150, carbs: 200, fat: 65, sugar: 50, sodium: 2300, water: 2500 };
 
   var MEAL_CATEGORIES = [
     { id: 'breakfast', label: 'Breakfast' },
@@ -2417,13 +2410,17 @@
   }
 
   function showNutrientInfo(){
-    document.getElementById('nutrientInfoTitle').textContent = 'Macros & Fiber';
+    document.getElementById('nutrientInfoTitle').textContent = 'Macros';
     // Reference image rather than generated text — kept as its own
     // file (images/macros-fiber-guide.webp) rather than inlined,
     // same as the background art, so it's cacheable and doesn't
     // bloat the HTML.
     document.getElementById('nutrientInfoBody').innerHTML =
-      '<img class="nutrient-info-image" src="images/macros-fiber-guide.webp" alt="Guide to protein, carbs, fats, and fiber — what each does and where to find it">';
+      '<div class="nutrient-info-text">' +
+        '<p><b style="color:var(--c-protein-text)">Protein</b> — builds and repairs muscle. Meat, fish, eggs, dairy, tofu, beans.</p>' +
+        '<p><b style="color:var(--c-carbs)">Carbs</b> — your main fuel. Rice, bread, noodles, fruit, potatoes.</p>' +
+        '<p><b style="color:var(--c-fat)">Fat</b> — hormones and steady energy. Oils, nuts, avocado, fatty fish.</p>' +
+      '</div>';
     document.getElementById('nutrientInfoOverlay').classList.remove('hidden');
   }
 
@@ -3263,7 +3260,6 @@
     document.getElementById('mealProtein').value = ui.prefillProtein != null ? ui.prefillProtein : '';
     document.getElementById('mealCarbs').value = ui.prefillCarbs != null ? ui.prefillCarbs : '';
     document.getElementById('mealFat').value = ui.prefillFat != null ? ui.prefillFat : '';
-    document.getElementById('mealFiber').value = ui.prefillFiber != null ? ui.prefillFiber : '';
     document.getElementById('mealSugar').value = ui.prefillSugar != null ? ui.prefillSugar : '';
     document.getElementById('mealSodium').value = ui.prefillSodium != null ? ui.prefillSodium : '';
 
@@ -3700,7 +3696,6 @@
         ? '<p class="fs-hint">Know the calories but not the food? Log it in one step.</p>' + sheetField('fsCal', 'Calories', '0') + sheetField('fsName', 'Name (optional)', 'Quick add', 'text')
         : sheetField('fsName', 'Name', 'e.g. Mum’s nasi lemak', 'text') + sheetField('fsServing', 'One serving is', '1 plate', 'text') + sheetField('fsCal', 'Calories per serving', '0')) +
       '<div class="fs-row">' + sheetField('fsP', 'Protein g', '0') + sheetField('fsC', 'Carbs g', '0') + sheetField('fsF', 'Fat g', '0') + '</div>' +
-      (quick ? '' : sheetField('fsFib', 'Fibre g (optional)', '0')) +
       '<button type="button" class="fs-save" data-action="save-food-sheet" data-mode="' + mode + '" data-id="' + (editing ? editing.id : '') + '">' +
         (quick ? 'Add to ' + (logDayKey() === todayKey() ? 'today' : formatDateLabel(logDayKey())) : 'Save food') + '</button>' +
       (editing ? '<button type="button" class="fs-delete" data-action="delete-my-food" data-id="' + editing.id + '">Delete this food</button>' : '') +
@@ -3714,7 +3709,6 @@
       document.getElementById('fsP').value = editing.protein || '';
       document.getElementById('fsC').value = editing.carbs || '';
       document.getElementById('fsF').value = editing.fat || '';
-      document.getElementById('fsFib').value = editing.fiber || '';
     }
     setTimeout(function(){
       var first = document.getElementById(quick ? 'fsCal' : 'fsName');
@@ -3746,7 +3740,7 @@
     var name = txt('fsName');
     if (!name){ showToast('Give the food a name'); return; }
     var food = { id: id || ('mf_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)), name: name, serving: txt('fsServing'),
-      calories: cal, protein: num('fsP'), carbs: num('fsC'), fat: num('fsF'), fiber: num('fsFib') };
+      calories: cal, protein: num('fsP'), carbs: num('fsC'), fat: num('fsF') };
     var list = STORE.myFoods || (STORE.myFoods = []);
     var at = -1;
     list.forEach(function(f, i){ if (f.id === food.id) at = i; });
@@ -4081,7 +4075,7 @@
   // serving unit or amount changes while the sheet is up).
   function syncMealFieldsFromPrefill(){
     var map = { mealCal: 'prefillCal', mealProtein: 'prefillProtein', mealCarbs: 'prefillCarbs', mealFat: 'prefillFat',
-                mealFiber: 'prefillFiber', mealSugar: 'prefillSugar', mealSodium: 'prefillSodium' };
+                mealSugar: 'prefillSugar', mealSodium: 'prefillSodium' };
     Object.keys(map).forEach(function(id){
       var v = ui[map[id]];
       document.getElementById(id).value = v != null ? v : '';
@@ -4582,7 +4576,7 @@
     var protein = field('mealProtein');
     var carbs = field('mealCarbs');
     var fat = field('mealFat');
-    var fiber = field('mealFiber');
+    var fiber = 0;
     var sugar = field('mealSugar');
     var sodium = field('mealSodium');
 
@@ -4597,7 +4591,7 @@
       // day unless the day was changed.
       var oldKey = dateKey(editing.loggedAt);
       editing.name = name; editing.calories = cal; editing.protein = protein; editing.carbs = carbs;
-      editing.fat = fat; editing.fiber = fiber; editing.sugar = sugar; editing.sodium = sodium;
+      editing.fat = fat; editing.sugar = sugar; editing.sodium = sodium;
       editing.category = ui.selectedCategory;
       editing.loggedAt = stampForDay(dayKey, editing.loggedAt, editing.loggedAt);
       savedId = editing.id;
@@ -5601,7 +5595,7 @@
       '</div>';
     try {
       Model3D.mount(document.getElementById('modelStage'), PYRAMID_FACES.map(function(f, k){
-        var a = k * Math.PI / 2;
+        var a = f.side * Math.PI / 2;
         var nx = Math.round(Math.sin(a)), nz = Math.round(Math.cos(a)); // side k faces +z, +x, -z, -x
         return { el: document.getElementById('faceTag' + k), pos: [f.r * nx, f.y, f.r * nz], normal: [nx, nz] };
       }));
@@ -5650,13 +5644,12 @@
   // (ring + amount) is pinned to that side of the model and travels
   // with it as it turns. Order = the side facing the camera at
   // 0 / 90 / 180 / 270 degrees (+z, +x, -z, -x in the model's own
-  // coordinates). y = height of the tag on the pyramid, r = how far
+  // coordinates; one side has no tag now that fibre is gone). y = height of the tag on the pyramid, r = how far
   // out the food surface is at that height (measured from the model).
   var PYRAMID_FACES = [
-    { key: 'protein', label: 'Protein', y: 0.44, r: 0.245 },
-    { key: 'carbs',   label: 'Carbs',   y: 0.08, r: 0.47 },
-    { key: 'fiber',   label: 'Fibre',   y: 0.26, r: 0.345 },
-    { key: 'fat',     label: 'Fat',     y: 0.60, r: 0.145 }
+    { key: 'protein', label: 'Protein', y: 0.44, r: 0.245, side: 0 },
+    { key: 'carbs',   label: 'Carbs',   y: 0.08, r: 0.47,  side: 1 },
+    { key: 'fat',     label: 'Fat',     y: 0.60, r: 0.145, side: 3 }
   ];
   var FACE_RING_R = 15;
   var FACE_RING_C = 2 * Math.PI * FACE_RING_R;
@@ -5709,7 +5702,7 @@
       '</div>';
     try {
       Model3D.mount(document.getElementById('modelStage'), PYRAMID_FACES.map(function(f, k){
-        var a = k * Math.PI / 2;
+        var a = f.side * Math.PI / 2;
         var nx = Math.round(Math.sin(a)), nz = Math.round(Math.cos(a)); // side k faces +z, +x, -z, -x
         return { el: document.getElementById('faceTag' + k), pos: [f.r * nx, f.y, f.r * nz], normal: [nx, nz] };
       }));
@@ -5745,8 +5738,7 @@
   var MEAL_NUTRIENTS = [
     { key: 'protein', short: 'P', cls: 'p' },
     { key: 'carbs', short: 'C', cls: 'c' },
-    { key: 'fat', short: 'F', cls: 'f' },
-    { key: 'fiber', short: 'Fib', cls: 'fi' }
+    { key: 'fat', short: 'F', cls: 'f' }
   ];
 
   // "P 35 · C 78 · F 52 · Fib 4" for one meal time (grams, divided by
@@ -5797,8 +5789,7 @@
     '<div class="meal-split-macros">' +
       '<span class="p">P <b>' + Math.round(totals.protein) + '</b></span> ' +
       '<span class="c">C <b>' + Math.round(totals.carbs) + '</b></span> ' +
-      '<span class="f">F <b>' + Math.round(totals.fat) + '</b></span> ' +
-      '<span class="fi">Fib <b>' + Math.round(totals.fiber) + '</b></span>' +
+      '<span class="f">F <b>' + Math.round(totals.fat) + '</b></span>' +
     '</div>';
   }
 
@@ -5820,10 +5811,10 @@
   // dishes whose database entries only list calories and macros) make
   // those three totals read lower than what you really had — say so.
   function microGapNote(meals){
-    var gaps = meals.filter(function(m){ return !m.fiber && !m.sugar && !m.sodium; }).length;
+    var gaps = meals.filter(function(m){ return !m.sugar && !m.sodium; }).length;
     if (gaps === 0) return '';
     return '<div class="data-note">' + gaps + ' of ' + meals.length + ' food' + (meals.length === 1 ? '' : 's') + ' ' +
-      (gaps === 1 ? 'has' : 'have') + ' no fiber, sugar or sodium data, so those totals are lower than what you actually had.</div>';
+      (gaps === 1 ? 'has' : 'have') + ' no sugar or sodium data, so those totals are lower than what you actually had.</div>';
   }
 
   function renderInsightsPlain(){
@@ -5841,8 +5832,7 @@
       macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
     '</div>';
     html += '<h3 class="section-label">Other nutrients</h3>';
-    html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
-      macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
+    html += macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
       macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg') +
       microGapNote(todayMeals);
     var caption = macroBalanceCaption(todayMeals, todayTotals, g);
@@ -5955,7 +5945,6 @@
       protein: parseInt(document.getElementById('goalProtein').value, 10) || DEFAULT_GOALS.protein,
       carbs: parseInt(document.getElementById('goalCarbs').value, 10) || DEFAULT_GOALS.carbs,
       fat: parseInt(document.getElementById('goalFat').value, 10) || DEFAULT_GOALS.fat,
-      fiber: parseInt(document.getElementById('goalFiber').value, 10) || DEFAULT_GOALS.fiber,
       sugar: parseInt(document.getElementById('goalSugar').value, 10) || DEFAULT_GOALS.sugar,
       sodium: parseInt(document.getElementById('goalSodium').value, 10) || DEFAULT_GOALS.sodium,
       water: parseInt(document.getElementById('goalWater').value, 10) || DEFAULT_GOALS.water
@@ -6112,7 +6101,6 @@
       settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
       settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
       settingsGoalRow('Fat (g)', 'goalFat', g.fat) +
-      settingsGoalRow('Fiber (g)', 'goalFiber', g.fiber) +
       settingsGoalRow('Sugar (g)', 'goalSugar', g.sugar) +
       settingsGoalRow('Sodium (mg)', 'goalSodium', g.sodium) +
       settingsGoalRow('Water (ml)', 'goalWater', g.water) +
