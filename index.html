@@ -5077,10 +5077,8 @@
     var avg = logged ? Math.round(sum / logged) : 0;
     var bestLabel = best ? new Date(best.key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }) : '—';
     var statsHtml = '<div class="pf-stats">' +
-        statCardHtml(avg.toLocaleString(), 'kcal', 'Avg per day', 'accent') +
-        statCardHtml(String(onGoal), '/7 on goal', 'This week', '') +
-        statCardHtml(String(streak.current), streak.current === 1 ? 'day' : 'days', 'Logging streak', '') +
-        statCardHtml(bestLabel, '', 'Best day', '') +
+        statCardHtml(avg.toLocaleString(), 'kcal', 'Daily avg', 'accent') +
+        statCardHtml(String(onGoal), '/7 on goal', 'Last 7 days', '') +
       '</div>';
     return { stats: statsHtml };
   }
@@ -5738,22 +5736,11 @@
       macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
       macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
     '</div>';
-    html += '<div class="remaining-row">' +
-      remainingStatHtml('Calories', todayTotals.calories, g.calories, ' kcal') +
-      remainingStatHtml('Protein', todayTotals.protein, g.protein, 'g') +
-      remainingStatHtml('Carbs', todayTotals.carbs, g.carbs, 'g') +
-      remainingStatHtml('Fat', todayTotals.fat, g.fat, 'g') +
-    '</div>';
     html += '<h3 class="section-label">Other nutrients</h3>';
     html += macroBarHtml('Fiber', todayTotals.fiber, g.fiber, 'fiber') +
       macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
       macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg') +
       microGapNote(todayMeals);
-    // how today's calories split across breakfast / lunch / dinner ...
-    var todayByMeal = mealBreakdown(todayMeals);
-    if (todayByMeal.length > 0){
-      html += '<h3 class="section-label">Today by meal</h3>' + mealSplitHtml(todayByMeal, todayTotals.calories, 1);
-    }
     var caption = macroBalanceCaption(todayMeals, todayTotals, g);
     html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
     html += '</div>';
@@ -5841,11 +5828,11 @@
         '</div>';
     }
 
-    // ---- consistency: days close to the calorie goal (85%–110%)
+    // ---- consistency: same "on goal" rule as History and the stat card (75%–110%)
     if (g.calories > 0){
-      var onTarget = loggedDays.filter(function(x){ return x.total >= 0.85 * g.calories && x.total <= 1.10 * g.calories; }).length;
+      var onTarget = loggedDays.filter(function(x){ return dayStatus(x.total, g.calories) === 'on'; }).length;
       html += '<div class="insight-caption' + (onTarget * 2 >= loggedDays.length ? ' balanced' : '') + '">' +
-        'Close to your calorie goal (85–110%) on <b>' + onTarget + ' of ' + loggedDays.length + '</b> logged day' + (loggedDays.length === 1 ? '' : 's') + '.</div>';
+        'On your calorie goal (75–110%) on <b>' + onTarget + ' of ' + loggedDays.length + '</b> logged day' + (loggedDays.length === 1 ? '' : 's') + '.</div>';
     }
     html += '</div>';
 
