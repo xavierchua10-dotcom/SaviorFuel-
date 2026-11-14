@@ -825,6 +825,20 @@
   .scan-overlay-capture svg{width:22px;height:22px;}
   .scan-overlay-capture.loading{opacity:0.55;pointer-events:none;}
   .scan-overlay-capture:active{opacity:0.85;}
+  /* analysing: frozen frame, a scan line sweeping over it, step list */
+  .scan-line{display:none;position:absolute;left:3%;right:3%;height:3px;border-radius:2px;background:var(--accent);box-shadow:0 0 14px var(--accent);top:30%;z-index:2;}
+  .scan-overlay.analysing .scan-line{display:block;animation:scanSweep 1.6s ease-in-out infinite alternate;}
+  @keyframes scanSweep{from{top:28%;}to{top:72%;}}
+  .scan-overlay.analysing .scan-overlay-capture{display:none;}
+  .scan-steps{display:flex;flex-direction:column;gap:6px;align-items:center;font-size:13px;}
+  .scan-step{opacity:0.45;display:flex;align-items:center;gap:8px;}
+  .scan-step.on{opacity:1;}
+  .scan-step.done{opacity:0.85;}
+  .scan-step i{width:9px;height:9px;border-radius:50%;border:2px solid #fff;display:inline-block;}
+  .scan-step.on i{border-color:var(--accent);animation:stepPulse 0.9s ease-in-out infinite alternate;}
+  .scan-step.done i{background:var(--accent);border-color:var(--accent);}
+  @keyframes stepPulse{from{transform:scale(0.8);}to{transform:scale(1.25);}}
+  @media (prefers-reduced-motion: reduce){ .scan-overlay.analysing .scan-line,.scan-step.on i{animation:none;} }
 
   /* ---------- Settings — same structural classes as SaviorFit Logger ---------- */
   .section-label{
@@ -1227,6 +1241,19 @@
   .ai-item-grams{width:76px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px;}
   .ai-item-unit{font-size:12px; color:var(--text-faint);}
   .ai-item-macros{margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-align:right;}
+  .ai-scan-head{display:flex; gap:12px; align-items:center; margin-bottom:12px;}
+  .ai-scan-thumb{width:64px; height:64px; border-radius:12px; object-fit:cover; flex-shrink:0; background:var(--panel-2);}
+  .ai-scale{display:flex; gap:6px; margin-top:8px;}
+  .ai-scale button{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:var(--radius-pill);
+    color:var(--text-dim); font-size:12px; padding:5px 12px; cursor:pointer; min-height:30px;
+  }
+  .ai-scale button.active{background:var(--accent); border-color:var(--accent); color:#14161a;}
+  .meal-thumb{width:42px; height:42px; border-radius:15px; object-fit:cover; flex-shrink:0; background:var(--panel-2);}
+  .meal-photo{margin:0 0 12px;}
+  .meal-photo img{display:block; width:100%; height:130px; object-fit:cover; border-radius:12px; background:var(--panel-2);}
+  .meal-photo-row{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:8px; font-size:12px; color:var(--text-faint);}
+  .meal-photo-row button{background:none; border:none; color:var(--accent-2); font-size:12px; padding:6px 0 6px 10px; cursor:pointer;}
   .ai-scan-total{
     display:flex; justify-content:space-between; gap:10px; align-items:baseline;
     padding:12px 0 14px; border-top:1px solid var(--line);
@@ -2050,6 +2077,7 @@
 
 <div id="scanOverlay" class="scan-overlay hidden">
   <video id="scanVideo" playsinline autoplay muted></video>
+  <div class="scan-line" id="scanLine"></div>
   <div class="scan-overlay-status" id="scanStatus">Point at a barcode, or snap a photo of the food</div>
   <div class="scan-overlay-frame"></div>
   <div class="scan-overlay-controls">
@@ -2071,6 +2099,10 @@
       </button>
     </div>
     <div class="add-meal-body" id="addMealBody">
+      <div class="meal-photo hidden" id="mealPhotoBox">
+        <img id="mealPhotoImg" alt="Photo of this meal">
+        <div class="meal-photo-row"><span>Photo stays on this phone</span><button type="button" data-action="remove-meal-photo">Remove photo</button></div>
+      </div>
       <div class="field-row"><input type="text" id="mealName" placeholder="Meal name"></div>
 
       <!-- Which day this counts for (today by default; change it to log something you forgot, or to move an entry) -->
@@ -2133,7 +2165,7 @@
       </button>
     </div>
     <div class="add-meal-body">
-      <div class="ai-scan-note" id="aiScanNote"></div>
+      <div class="ai-scan-head"><img class="ai-scan-thumb hidden" id="aiScanThumb" alt="Your meal photo"><div class="ai-scan-note" id="aiScanNote" style="margin:0"></div></div>
       <div class="category-picker" id="aiCategoryPicker"></div>
       <div id="aiScanItems"></div>
       <div class="ai-scan-total" id="aiScanTotal"></div>
@@ -2277,7 +2309,7 @@
   function loadStore(){
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
+      if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {}, photos: {} };
       var parsed = JSON.parse(raw);
       // Merge (not replace) so existing saved goals keep whatever the
       // person already customized, while newly-added goal fields
@@ -2295,10 +2327,11 @@
       if (!parsed.savedFoods) parsed.savedFoods = [];
       if (!Array.isArray(parsed.myFoods)) parsed.myFoods = [];
       if (!parsed.water || typeof parsed.water !== 'object') parsed.water = {};
+      parsed.photos = cleanPhotos(parsed.photos, parsed.meals);
       return parsed;
     } catch (e){
       console.error('SaviorFuel: failed to load local store, starting fresh —', e);
-      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
+      return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {}, photos: {} };
     }
   }
 
@@ -2329,6 +2362,35 @@
   // "100" would make totals concatenate text), never negative, and an
   // entry without a usable timestamp is dropped. Used for stored data and
   // for imported backups.
+  // Small meal photos (from the AI scan) live in STORE.photos, keyed by id,
+  // and meals point at them with photoId. Only small JPEG data URLs are
+  // accepted, photos no meal uses are dropped, and only the newest few
+  // are kept so the app's storage can't fill up.
+  function cleanPhotos(photos, meals){
+    var out = {};
+    if (!photos || typeof photos !== 'object') return out;
+    var used = {};
+    (meals || []).forEach(function(m){ if (m.photoId) used[m.photoId] = m.loggedAt; });
+    Object.keys(photos).forEach(function(id){
+      var d = photos[id];
+      if (used[id] != null && typeof d === 'string' && d.indexOf('data:image/jpeg;base64,') === 0 && d.length < 120000) out[id] = d;
+    });
+    return capPhotos(out, meals);
+  }
+  function capPhotos(photos, meals){
+    var MAX_PHOTOS = 60;
+    var ids = Object.keys(photos);
+    if (ids.length <= MAX_PHOTOS) return photos;
+    var when = {};
+    (meals || []).forEach(function(m){ if (m.photoId) when[m.photoId] = Math.max(when[m.photoId] || 0, m.loggedAt); });
+    ids.sort(function(a, b){ return (when[b] || 0) - (when[a] || 0); });
+    ids.slice(MAX_PHOTOS).forEach(function(id){ delete photos[id]; });
+    return photos;
+  }
+  function mealPhoto(m){
+    return (m && m.photoId && STORE.photos && STORE.photos[m.photoId]) || '';
+  }
+
   function sanitizeMeal(m){
     if (!m || typeof m !== 'object') return null;
     var t = Number(m.loggedAt);
@@ -2342,6 +2404,7 @@
       loggedAt: t
     };
     if (typeof m.category === 'string') clean.category = m.category;
+    if (typeof m.photoId === 'string' && m.photoId) clean.photoId = m.photoId.slice(0, 60);
     return clean;
   }
 
@@ -2849,8 +2912,9 @@
 
   function mealRowHtml(m){
     var badge = (CATEGORY_LABELS[m.category] || 'Other').charAt(0);
+    var photo = mealPhoto(m);
     return '<div class="meal-row" data-action="edit-meal" data-id="' + m.id + '">' +
-      '<span class="meal-badge" aria-hidden="true">' + badge + '</span>' +
+      (photo ? '<img class="meal-thumb" src="' + photo + '" alt="">' : '<span class="meal-badge" aria-hidden="true">' + badge + '</span>') +
       '<div class="meal-row-name">' +
         '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(m.name) + '</div>' +
         '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
@@ -3194,6 +3258,10 @@
     dateInput.value = editing ? dateKey(editing.loggedAt) : logDayKey();
     updateDayValue();
     setAccordion('dayRow', 'dayAcc', false);
+
+    var editPhoto = editing ? mealPhoto(editing) : '';
+    document.getElementById('mealPhotoBox').classList.toggle('hidden', !editPhoto);
+    if (editPhoto) document.getElementById('mealPhotoImg').src = editPhoto;
 
     document.getElementById('mealName').value = ui.prefillName || '';
     document.getElementById('mealCal').value = ui.prefillCal != null ? ui.prefillCal : '';
@@ -4147,6 +4215,8 @@
     scanState.stream = null;
     scanState.loopId = null;
     document.getElementById('scanOverlay').classList.add('hidden');
+    document.getElementById('scanOverlay').classList.remove('analysing');
+    if (typeof analysing !== 'undefined'){ analysing.timers.forEach(clearTimeout); analysing.timers = []; }
     document.getElementById('scanCaptureBtn').classList.remove('loading'); // reset for next open
   }
 
@@ -4319,8 +4389,10 @@
     // AI scan (Gemini via the proxy) when it's set up and we're online;
     // otherwise — or if it fails — the basic on-device guess below.
     if (aiScanEnabled()){
-      statusEl.textContent = 'Analysing your meal...';
+      aiScan.photo = aiPhotoThumb(canvas);
+      startAnalysing();
       runAiScan(canvas).catch(function(err){
+        stopAnalysing();
         if (err && err.declined){ classifyFoodPhotoLegacy(canvas); return; }
         console.error('SaviorFuel: AI food scan failed —', err);
         if (err && err.status){
@@ -4376,7 +4448,7 @@
      the camera button just uses the basic on-device guess above.
      ========================================================= */
   var AI_SCAN_URL = 'https://saviorfuel-ai.xavierchua10.workers.dev'; // Cloudflare Worker (repo: Saviorfuelwebhook)
-  var aiScan = { items: [], category: 'lunch' };
+  var aiScan = { items: [], category: 'lunch', photo: '' };
 
   function aiScanEnabled(){
     return !!AI_SCAN_URL && navigator.onLine !== false;
@@ -4430,6 +4502,7 @@
       .then(function(data){
         clearTimeout(timer);
         if (!scanState.stream) return; // they hit Cancel while we were waiting
+        stopAnalysing();
         var items = Array.isArray(data.items) ? data.items : [];
         if (items.length === 0){
           document.getElementById('scanStatus').textContent = 'Couldn\'t spot any food — get closer, add light, and try again.';
@@ -4445,6 +4518,47 @@
         clearTimeout(timer);
         throw err;
       });
+  }
+
+  // Small JPEG kept with the meal (~300px) — separate from the bigger
+  // one sent to the AI, so storage stays light.
+  function aiPhotoThumb(canvas){
+    try {
+      var max = 300;
+      var scale = Math.min(1, max / Math.max(canvas.width, canvas.height));
+      var out = document.createElement('canvas');
+      out.width = Math.max(1, Math.round(canvas.width * scale));
+      out.height = Math.max(1, Math.round(canvas.height * scale));
+      out.getContext('2d').drawImage(canvas, 0, 0, out.width, out.height);
+      return out.toDataURL('image/jpeg', 0.6);
+    } catch (e){ return ''; }
+  }
+
+  // While the AI works: freeze the camera on the shot, sweep a scan line
+  // over it and walk through three steps (a guide to the wait, not a
+  // measurement of it).
+  var analysing = { timers: [] };
+  function startAnalysing(){
+    var ov = document.getElementById('scanOverlay');
+    var statusEl = document.getElementById('scanStatus');
+    try { document.getElementById('scanVideo').pause(); } catch (e){}
+    ov.classList.add('analysing');
+    var steps = ['Photo captured', 'Spotting foods', 'Estimating portions'];
+    function paint(n){
+      statusEl.innerHTML = '<div class="scan-steps">' + steps.map(function(t, i){
+        return '<div class="scan-step' + (i < n ? ' done' : (i === n ? ' on' : '')) + '"><i></i>' + t + '</div>';
+      }).join('') + '</div>';
+    }
+    paint(1);
+    analysing.timers.forEach(clearTimeout);
+    analysing.timers = [setTimeout(function(){ paint(2); }, 2200)];
+  }
+  function stopAnalysing(){
+    analysing.timers.forEach(clearTimeout);
+    analysing.timers = [];
+    var ov = document.getElementById('scanOverlay');
+    if (ov) ov.classList.remove('analysing');
+    try { document.getElementById('scanVideo').play(); } catch (e){}
   }
 
   function aiItemMacros(it){
@@ -4481,6 +4595,9 @@
           '<input type="text" class="ai-item-name" data-ai-field="name" data-i="' + i + '" value="' + esc(it.name) + '" maxlength="60" aria-label="Food name">' +
           '<button type="button" class="ai-item-del" data-action="ai-remove-item" data-i="' + i + '" aria-label="Remove ' + esc(it.name) + '">&times;</button>' +
         '</div>' +
+        '<div class="ai-scale">' + [0.5, 1, 1.5].map(function(f){
+          return '<button type="button" data-action="ai-scale" data-i="' + i + '" data-f="' + f + '" class="' + (it.grams === Math.round(it.base.grams * f) ? 'active' : '') + '">&times;' + f + '</button>';
+        }).join('') + '</div>' +
         '<div class="ai-item-bottom">' +
           '<input type="number" inputmode="decimal" class="ai-item-grams" data-ai-field="grams" data-i="' + i + '" value="' + it.grams + '" min="0" max="3000" aria-label="Grams">' +
           '<span class="ai-item-unit">g</span>' +
@@ -4506,6 +4623,8 @@
     aiScan.category = suggestCategoryForNow();
     document.getElementById('aiScanNote').textContent =
       (data.note ? data.note + ' ' : '') + 'These are estimates from a photo — check the names and portions before logging.';
+    var th = document.getElementById('aiScanThumb');
+    if (aiScan.photo){ th.src = aiScan.photo; th.classList.remove('hidden'); } else th.classList.add('hidden');
     renderAiCategoryPicker();
     renderAiScanItems();
     showSheetOverlay(document.getElementById('aiScanOverlay'));
@@ -4514,6 +4633,7 @@
   function closeAiScanSheet(){
     hideSheetOverlay(document.getElementById('aiScanOverlay'));
     aiScan.items = [];
+    aiScan.photo = '';
   }
 
   attachSheetDrag(document.getElementById('addMealGrab'), closeAddMealOverlay);
@@ -4522,6 +4642,7 @@
   function logAiScan(){
     var now = Date.now();
     var logged = 0;
+    var photoId = aiScan.photo ? 'p_' + now + '_' + Math.random().toString(36).slice(2, 6) : '';
     aiScan.items.forEach(function(it, i){
       var name = it.name.trim();
       var m = aiItemMacros(it);
@@ -4537,11 +4658,17 @@
         sugar: Math.round(m.sugar),
         sodium: Math.round(m.sodium),
         category: aiScan.category,
-        loggedAt: now
+        loggedAt: now,
+        photoId: photoId || undefined
       });
       logged++;
     });
     if (logged === 0) return;
+    if (photoId){
+      if (!STORE.photos) STORE.photos = {};
+      STORE.photos[photoId] = aiScan.photo;
+      capPhotos(STORE.photos, STORE.meals);
+    }
     expandMealGroup(aiScan.category);
     saveStore();
     maybeVibrate();
@@ -4566,6 +4693,10 @@
       it.grams = Math.min(3000, Math.max(0, parseFloat(t.value) || 0));
       var line = document.getElementById('aiMacros' + i);
       if (line) line.textContent = aiMacroLine(aiItemMacros(it));
+      var chips = t.closest('.ai-item').querySelectorAll('.ai-scale button');
+      Array.prototype.forEach.call(chips, function(b){
+        b.classList.toggle('active', it.grams === Math.round(it.base.grams * parseFloat(b.getAttribute('data-f'))));
+      });
       renderAiScanTotal();
     }
   });
@@ -4639,6 +4770,19 @@
       newRow.classList.add('glow-once');
       setTimeout(function(){ newRow.classList.remove('glow-once'); }, 900);
     }
+  }
+
+  function removeMealPhoto(){
+    var m = ui.editingMealId ? mealById(ui.editingMealId) : null;
+    if (!m || !m.photoId) return;
+    var pid = m.photoId;
+    delete m.photoId;
+    var shared = STORE.meals.some(function(x){ return x.photoId === pid; });
+    if (!shared && STORE.photos) delete STORE.photos[pid];
+    saveStore();
+    document.getElementById('mealPhotoBox').classList.add('hidden');
+    renderApp();
+    showToast('Photo removed');
   }
 
   function deleteMeal(id){
@@ -6205,8 +6349,10 @@
           appSettings: Object.assign({}, DEFAULT_APP_SETTINGS, parsed.appSettings || {}),
           savedFoods: Array.isArray(parsed.savedFoods) ? parsed.savedFoods : [],
           myFoods: Array.isArray(parsed.myFoods) ? parsed.myFoods : [],
-          water: (parsed.water && typeof parsed.water === 'object') ? parsed.water : {}
+          water: (parsed.water && typeof parsed.water === 'object') ? parsed.water : {},
+          photos: {}
         };
+        STORE.photos = cleanPhotos(parsed.photos, STORE.meals);
         saveStore();
         applyAppearanceSettings();
         renderApp();
@@ -6426,6 +6572,14 @@
     } else if (action === 'ai-select-category'){
       aiScan.category = el.dataset.category;
       renderAiCategoryPicker();
+    } else if (action === 'ai-scale'){
+      var sit = aiScan.items[parseInt(el.dataset.i, 10)];
+      if (sit){
+        sit.grams = Math.max(1, Math.round(sit.base.grams * parseFloat(el.dataset.f)));
+        renderAiScanItems();
+      }
+    } else if (action === 'remove-meal-photo'){
+      removeMealPhoto();
     } else if (action === 'ai-remove-item'){
       aiScan.items.splice(parseInt(el.dataset.i, 10), 1);
       if (aiScan.items.length === 0) closeAiScanSheet(); else renderAiScanItems();
