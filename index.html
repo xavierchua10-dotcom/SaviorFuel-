@@ -1968,6 +1968,8 @@
   .pf-since{font:500 12px 'Inter',sans-serif; color:var(--text-faint); margin-top:4px;}
   .pf-since b{color:var(--accent); font-weight:700;}
   .pf-acts{display:flex; gap:10px; margin-top:16px;}
+  .week-share-btn{display:block; width:100%; height:46px; margin:18px 0 6px; border-radius:12px; border:none; background:var(--accent); color:#0b1a10; font:700 14px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
+  .week-share-btn:active{filter:brightness(.92);}
   .pf-share{flex:1; height:44px; border-radius:12px; border:none; background:var(--accent); color:#0b1a10; font:700 14px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
   .pf-share:active{transform:scale(.98);}
   .pf-edit{flex:0 0 44px; height:44px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.55); background:transparent; color:var(--accent); display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer;}
@@ -6283,6 +6285,7 @@
       html += '<div class="insight-caption' + (onTarget * 2 >= loggedDays.length ? ' balanced' : '') + '">' +
         'On your calorie goal (75–110%) on <b>' + onTarget + ' of ' + loggedDays.length + '</b> logged day' + (loggedDays.length === 1 ? '' : 's') + '.</div>';
     }
+    html += '<button type="button" class="week-share-btn" data-action="share-week">Share my week</button>';
     return html;
   }
 
@@ -6524,6 +6527,91 @@
     img.onload = go; img.onerror = function(){ img = null; go(); };
     img.src = 'images/logo-mark.png';
     if (document.fonts && document.fonts.load){ /* fonts are already in use on screen */ }
+  }
+
+  // Share my week: draws the last 7 days as a picture (bars, goal line,
+  // average, days logged, days on target) and opens the share sheet, or
+  // downloads it where sharing files isn't supported.
+  function shareWeek(){
+    var wd = weekData();
+    if (!wd.loggedDays.length) return;
+    var g = wd.goals;
+    var nm = (STORE.appSettings.name && String(STORE.appSettings.name).trim()) || '';
+    var W = 1080, H = 1350;
+    var c = document.createElement('canvas'); c.width = W; c.height = H;
+    var x = c.getContext('2d');
+    x.fillStyle = '#14161a'; x.fillRect(0, 0, W, H);
+    x.strokeStyle = 'rgba(166,227,107,.55)'; x.lineWidth = 4;
+    x.beginPath(); x.roundRect(40, 40, W - 80, H - 80, 48); x.stroke();
+    function txt(t, px, py, font, color, align, ls){
+      x.font = font; x.fillStyle = color; x.textAlign = align || 'left';
+      if ('letterSpacing' in x) x.letterSpacing = ls || '0px';
+      x.fillText(t, px, py);
+    }
+    function fmtDay(k){ return new Date(k + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); }
+    var onTarget = g.calories > 0 ? wd.loggedDays.filter(function(d){ return dayStatus(d.total, g.calories) === 'on'; }).length : 0;
+    var avg = Math.round(wd.avg('calories'));
+    function draw(logo){
+      if (logo) x.drawImage(logo, 90, 100, 120, 120);
+      txt('YOUR WEEK', 240, 175, "700 76px 'Oswald',sans-serif", '#e9e6df');
+      var sub = fmtDay(dateKeyDaysAgo(6)) + ' – ' + fmtDay(dateKeyDaysAgo(0));
+      txt((nm ? nm.toUpperCase() + '  ·  ' : '') + sub.toUpperCase(), 242, 222, "500 28px 'JetBrains Mono',monospace", '#a6e36b', 'left', '3px');
+      // bars
+      var left = 100, right = W - 100, base = 800, top = 440, hgt = base - top;
+      var maxV = Math.max(g.calories * 1.15, wd.highest, 1);
+      var slot = (right - left) / 7, bw = 78;
+      if (g.calories > 0){
+        var gy = base - g.calories / maxV * hgt;
+        x.strokeStyle = 'rgba(161,167,176,.7)'; x.lineWidth = 3; x.setLineDash([14, 12]);
+        x.beginPath(); x.moveTo(left, gy); x.lineTo(right, gy); x.stroke(); x.setLineDash([]);
+        x.strokeStyle = 'rgba(161,167,176,.7)'; x.lineWidth = 3; x.setLineDash([14, 12]);
+        x.beginPath(); x.moveTo(left, 330); x.lineTo(left + 70, 330); x.stroke(); x.setLineDash([]);
+        txt('GOAL ' + Math.round(g.calories).toLocaleString() + ' KCAL', left + 90, 339, "700 24px 'JetBrains Mono',monospace", '#a1a7b0', 'left', '3px');
+      }
+      wd.days.forEach(function(d, i){
+        var cx = left + slot * i + slot / 2;
+        var h = d.logged ? Math.max(8, d.total / maxV * hgt) : 8;
+        var over = g.calories > 0 && d.total > g.calories * 1.1;
+        x.fillStyle = !d.logged ? '#333a44' : (over ? '#ff8a65' : '#a6e36b');
+        x.beginPath(); x.roundRect(cx - bw / 2, base - h, bw, h, 16); x.fill();
+        if (d.logged){
+          x.font = "600 26px 'JetBrains Mono',monospace"; x.textAlign = 'center';
+          x.lineJoin = 'round'; x.lineWidth = 10; x.strokeStyle = '#14161a';
+          x.strokeText(String(d.total), cx, base - h - 16);
+          txt(String(d.total), cx, base - h - 16, "600 26px 'JetBrains Mono',monospace", '#e9e6df', 'center');
+        }
+        txt(d.isToday ? 'Today' : d.label, cx, base + 52, "600 28px 'Inter',sans-serif", d.isToday ? '#a6e36b' : '#a1a7b0', 'center');
+      });
+      // stats
+      var cells = [
+        [avg.toLocaleString(), 'AVG KCAL', '#e9e6df'],
+        [wd.loggedDays.length + '/7', 'DAYS LOGGED', '#a6e36b'],
+        [g.calories > 0 ? String(onTarget) : '–', 'ON TARGET', '#a6e36b']
+      ];
+      cells.forEach(function(cl, i){
+        var cx = 90 + i * 310, cy = 960;
+        x.fillStyle = '#1f232b'; x.strokeStyle = '#434a57'; x.lineWidth = 3;
+        x.beginPath(); x.roundRect(cx, cy, 280, 200, 32); x.fill(); x.stroke();
+        txt(cl[0], cx + 32, cy + 112, "700 80px 'Oswald',sans-serif", cl[2]);
+        txt(cl[1], cx + 34, cy + 166, "700 24px 'JetBrains Mono',monospace", '#a1a7b0', 'left', '3px');
+      });
+      txt('SAVIORFUEL', W / 2, H - 100, "700 34px 'Oswald',sans-serif", '#a6e36b', 'center', '10px');
+      c.toBlob(function(blob){
+        if (!blob) return;
+        var file = new File([blob], 'saviorfuel-week.png', { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })){
+          navigator.share({ files: [file], title: 'My SaviorFuel week' }).catch(function(){});
+        } else {
+          var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'saviorfuel-week.png';
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+        }
+      }, 'image/png');
+    }
+    var img = new Image();
+    var go = function(){ try { draw(img); } catch (err){ console.error(err); } };
+    img.onload = go; img.onerror = function(){ img = null; go(); };
+    img.src = 'images/logo-mark.png';
   }
 
   function renderSettings(){
@@ -7017,6 +7105,8 @@
       if (secEl && ui.settingsOpen === sec) secEl.scrollIntoView({ block: 'start', behavior: 'smooth' });
     } else if (action === 'share-profile'){
       shareProfile();
+    } else if (action === 'share-week'){
+      shareWeek();
     } else if (action === 'edit-profile-name'){
       editProfileName();
     } else if (action === 'open-quick-add'){
