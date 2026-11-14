@@ -1823,6 +1823,14 @@
   .pf-share:active{transform:scale(.98);}
   .pf-edit{flex:0 0 44px; height:44px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.55); background:transparent; color:var(--accent); display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer;}
   .pf-edit svg{width:18px; height:18px;}
+  .pf-top{padding:12px 14px; margin:12px 0 4px;}
+  .pf-top-h{font:700 10px 'JetBrains Mono',ui-monospace,monospace; letter-spacing:.14em; color:var(--text-faint);}
+  .pf-food{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 0; border-top:1px solid var(--line); margin-top:10px;}
+  .pf-food:first-of-type{margin-top:10px;}
+  .pf-food-n{font:600 14px 'Inter',sans-serif; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .pf-food-v{font:700 20px 'Oswald',sans-serif; color:var(--accent);}
+  .pf-food-v small{font:500 11px 'Inter',sans-serif; color:var(--text-faint);}
+  .pf-empty{font-size:13px; color:var(--text-faint); padding:12px 0 2px;}
   .setc-wrap{background:var(--panel); border:1px solid var(--line); border-radius:18px; margin-bottom:10px; scroll-margin-top:70px;}
   .setc-wrap.open{border-color:rgba(var(--accent-rgb),.45);}
   .setc-wrap.install{border-color:rgba(var(--accent-rgb),.45);}
@@ -2025,8 +2033,8 @@
       Insights
     </button>
     <button data-action="set-tab" data-tab="settings">
-      <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg></span>
-      Settings
+      <span class="tab-glyph"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4.2"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7v.5H4z"/></svg></span>
+      Profile
     </button>
   </nav>
   </div>
@@ -6069,6 +6077,107 @@
     };
   })();
 
+  // ---- Profile tab: numbers for the hero ----
+  function profileStatsFuel(){
+    var map = dayStatsMap();
+    var keys = Object.keys(map).sort();
+    var avgSum = 0, avgN = 0;
+    for (var d = 0; d < 7; d++){
+      var day = map[dateKeyDaysAgo(d)];
+      if (day){ avgSum += day.calories; avgN++; }
+    }
+    var counts = {};
+    STORE.meals.forEach(function(m){
+      var nm = String(m.name || '').trim();
+      if (!nm) return;
+      var k = nm.toLowerCase();
+      if (!counts[k]) counts[k] = { name: nm, n: 0 };
+      counts[k].n++;
+    });
+    var top = Object.keys(counts).map(function(k){ return counts[k]; })
+      .sort(function(a, b){ return b.n - a.n; }).slice(0, 3);
+    var since = '';
+    if (keys.length){
+      var p = keys[0].split('-');
+      since = new Date(+p[0], +p[1] - 1, 1).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+    return { streak: streakInfo(map).current, days: keys.length, meals: STORE.meals.length,
+             avg: avgN ? Math.round(avgSum / avgN) : 0, top: top, since: since };
+  }
+
+  function editProfileName(){
+    var cur = (STORE.appSettings.name || '').trim();
+    var v = window.prompt('Your name', cur);
+    if (v === null) return;
+    STORE.appSettings.name = v.trim().slice(0, 24);
+    saveStore();
+    renderApp();
+  }
+
+  // Share profile: draws the stats on a canvas and opens the share sheet
+  // (or downloads the picture where sharing files isn't supported).
+  function shareProfile(){
+    var ps = profileStatsFuel();
+    var nm = (STORE.appSettings.name && String(STORE.appSettings.name).trim()) || 'SaviorFuel';
+    var W = 1080, H = 1350;
+    var c = document.createElement('canvas'); c.width = W; c.height = H;
+    var x = c.getContext('2d');
+    var g = x.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, '#1b2314'); g.addColorStop(0.55, '#14161a'); g.addColorStop(1, '#14161a');
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    x.strokeStyle = 'rgba(166,227,107,.55)'; x.lineWidth = 4;
+    x.beginPath(); x.roundRect(40, 40, W - 80, H - 80, 48); x.stroke();
+    function txt(t, px, py, font, color, align, ls){
+      x.font = font; x.fillStyle = color; x.textAlign = align || 'left';
+      if ('letterSpacing' in x) x.letterSpacing = ls || '0px';
+      x.fillText(t, px, py);
+    }
+    function draw(logo){
+      if (logo) x.drawImage(logo, 90, 100, 120, 120);
+      txt(nm.toUpperCase(), 240, 175, "700 76px 'Oswald',sans-serif", '#e9e6df');
+      txt(ps.since ? 'LOGGING SINCE ' + ps.since.toUpperCase() : 'SAVIORFUEL', 242, 222, "500 28px 'JetBrains Mono',monospace", '#a6e36b', 'left', '3px');
+      var cells = [
+        [String(ps.streak), 'DAY STREAK', '#a6e36b'],
+        [String(ps.days), 'DAYS LOGGED', '#e9e6df'],
+        [String(ps.meals), 'MEALS LOGGED', '#e9e6df'],
+        [ps.avg ? ps.avg.toLocaleString('en-US') : '-', 'AVG KCAL \u00B7 7D', '#a6e36b']
+      ];
+      cells.forEach(function(cl, i){
+        var cx = 90 + (i % 2) * 460, cy = 300 + Math.floor(i / 2) * 250;
+        x.fillStyle = '#1f232b'; x.strokeStyle = '#434a57'; x.lineWidth = 3;
+        x.beginPath(); x.roundRect(cx, cy, 440, 210, 32); x.fill(); x.stroke();
+        txt(cl[0], cx + 36, cy + 118, "700 100px 'Oswald',sans-serif", cl[2]);
+        txt(cl[1], cx + 38, cy + 172, "700 26px 'JetBrains Mono',monospace", '#a1a7b0', 'left', '4px');
+      });
+      txt('TOP FOODS', 100, 860, "700 28px 'JetBrains Mono',monospace", '#a1a7b0', 'left', '5px');
+      var list = ps.top.length ? ps.top : [{ name: 'Log a few meals to fill this in', n: 0 }];
+      list.forEach(function(f, i){
+        var y = 930 + i * 100;
+        x.strokeStyle = '#343a45'; x.lineWidth = 2; x.beginPath(); x.moveTo(90, y - 56); x.lineTo(W - 90, y - 56); x.stroke();
+        var label = f.name.length > 26 ? f.name.slice(0, 25) + '\u2026' : f.name;
+        txt(label, 100, y, "600 44px 'Inter',sans-serif", '#e9e6df');
+        if (f.n) txt(f.n + ' \u00D7', W - 100, y, "700 52px 'Oswald',sans-serif", '#a6e36b', 'right');
+      });
+      txt('SAVIORFUEL', W / 2, H - 100, "700 34px 'Oswald',sans-serif", '#a6e36b', 'center', '10px');
+      c.toBlob(function(blob){
+        if (!blob) return;
+        var file = new File([blob], 'saviorfuel-profile.png', { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })){
+          navigator.share({ files: [file], title: 'My SaviorFuel profile' }).catch(function(){});
+        } else {
+          var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'saviorfuel-profile.png';
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+        }
+      }, 'image/png');
+    }
+    var go = function(){ try { draw(img); } catch (err){ console.error(err); } };
+    var img = new Image();
+    img.onload = go; img.onerror = function(){ img = null; go(); };
+    img.src = 'images/logo-mark.png';
+    if (document.fonts && document.fonts.load){ /* fonts are already in use on screen */ }
+  }
+
   function renderSettings(){
     var g = STORE.goals;
     var s = STORE.appSettings;
@@ -6077,14 +6186,32 @@
     var goalLabel = (GOAL_OPTIONS.find(function(o){ return o.id === p.goal; }) || GOAL_OPTIONS[1]).label;
     var weightLabel = imperial ? Math.round(kgToLb(p.weightKg)) + ' lb' : p.weightKg + ' kg';
 
-    // ---- hero: your plan at a glance
+    // ---- hero: who you are + your logging stats
+    var ps = profileStatsFuel();
+    var nm = (s.name && String(s.name).trim()) || 'You';
+    var statT = function(v, l, u, cls){ return '<div class="pf-stat ' + (cls || '') + '"><div class="pf-stat-v">' + v + (u ? ' <small>' + u + '</small>' : '') + '</div><div class="pf-stat-l">' + l + '</div></div>'; };
     var html = '<div class="pf-hero">' +
       '<div class="pf-id"><div class="pf-av"><img src="images/logo-mark.png" alt=""></div>' +
-        '<div class="pf-id-tx"><div class="pf-name">Your plan</div>' +
-        '<div class="pf-since">Goal · <b>' + esc(goalLabel) + '</b></div></div></div>' +
-      '<div class="pf-acts"><button type="button" class="pf-share" data-action="open-settings-sec" data-sec="profile">Recalculate plan</button>' +
-        '<button type="button" class="pf-edit" data-action="open-settings-sec" data-sec="goals" aria-label="Edit daily goals">' + SET_ICONS.edit + '</button></div>' +
+        '<div class="pf-id-tx"><div class="pf-name">' + esc(nm) + '</div>' +
+        '<div class="pf-since">' + (ps.since ? 'Logging since <b>' + esc(ps.since) + '</b>' : 'Ready to log your first meal') + '</div></div></div>' +
+      '<div class="pf-acts"><button type="button" class="pf-share" data-action="share-profile">Share profile</button>' +
+        '<button type="button" class="pf-edit" data-action="edit-profile-name" aria-label="Edit name">' + SET_ICONS.edit + '</button></div>' +
     '</div>';
+    html += '<div class="pf-stats">' +
+      statT((ps.streak > 0 ? '\uD83D\uDD25 ' : '') + ps.streak, 'Day streak', ps.streak === 1 ? 'day' : 'days') +
+      statT(ps.days, 'Days logged') +
+      statT(ps.meals, 'Meals logged') +
+      statT(ps.avg ? ps.avg.toLocaleString('en-US') : '\u2014', 'Avg kcal \u00B7 7d', '', 'accent') +
+    '</div>';
+    html += '<div class="card pf-top"><div class="pf-top-h">TOP FOODS</div>';
+    if (ps.top.length){
+      ps.top.forEach(function(f){
+        html += '<div class="pf-food"><div class="pf-food-n">' + esc(f.name) + '</div><div class="pf-food-v">' + f.n + '<small> \u00D7</small></div></div>';
+      });
+    } else {
+      html += '<div class="pf-empty">Log a few meals and the foods you eat most show up here.</div>';
+    }
+    html += '</div>';
 
     html += '<h3 class="section-label">Settings</h3>';
 
@@ -6137,14 +6264,9 @@
           '<button data-action="set-density" data-density="comfortable" class="' + (s.density === 'comfortable' ? 'active' : '') + '">Comfortable</button>' +
           '<button data-action="set-density" data-density="compact" class="' + (s.density === 'compact' ? 'active' : '') + '">Compact</button>' +
         '</div></div>' +
-      '<div class="settings-row"><div><div class="sr-label">Corners</div><div class="sr-sub">Rounded or sharp edges throughout the app</div></div>' +
-        '<div class="seg">' +
-          '<button data-action="set-corner-style" data-style="rounded" class="' + (s.corners === 'rounded' ? 'active' : '') + '">Rounded</button>' +
-          '<button data-action="set-corner-style" data-style="sharp" class="' + (s.corners === 'sharp' ? 'active' : '') + '">Sharp</button>' +
-        '</div></div>' +
     '</div>';
     html += settingsCardHtml('look', SET_ICONS.look, 'Appearance',
-      (s.theme === 'light' ? 'Light' : 'Dark') + ' · ' + (s.density === 'compact' ? 'Compact' : 'Comfortable') + ' · ' + (s.corners === 'sharp' ? 'Sharp' : 'Rounded'), lookBody);
+      (s.theme === 'light' ? 'Light' : 'Dark') + ' · ' + (s.density === 'compact' ? 'Compact' : 'Comfortable'), lookBody);
 
     // ---- install (only when the browser can install it)
     if (canOfferInstall()){
@@ -6157,12 +6279,6 @@
     // ---- your data
     var nFoods = (STORE.savedFoods || []).length;
     var dataBody = '<div class="settings-group">' +
-      '<div class="settings-row"><div><div class="sr-label">' + STORE.meals.length + ' meal' + (STORE.meals.length === 1 ? '' : 's') + ' logged</div>' +
-        '<div class="sr-sub">Stored only on this device — no account or sync yet</div></div></div>' +
-      '<div class="settings-row"><div><div class="sr-label">' + nFoods + ' food' + (nFoods === 1 ? '' : 's') + ' saved for offline search</div>' +
-        '<div class="sr-sub">Foods you\'ve picked before — found instantly, even with no connection</div></div></div>' +
-      '<div class="settings-row"><div><div class="sr-label">Food data sources</div>' +
-        '<div class="sr-sub">Kalori (Malaysian foods) · USDA FoodData Central · Open Food Facts. Product photos come from Open Food Facts contributors (CC BY-SA).</div></div></div>' +
       '<div class="settings-row"><div><div class="sr-label">Export backup</div><div class="sr-sub">Download a JSON file of your log</div></div>' +
         '<button class="sr-action" data-action="export-data">Export</button></div>' +
       '<div class="settings-row"><div><div class="sr-label">Import backup</div><div class="sr-sub">Restore from a JSON file</div></div>' +
@@ -6173,6 +6289,8 @@
 
     // ---- about & support
     var aboutBody = '<div class="settings-group">' +
+      '<div class="settings-row"><div><div class="sr-label">Food data</div>' +
+        '<div class="sr-sub">Kalori (Malaysian foods) · USDA FoodData Central · Open Food Facts (photos CC BY-SA) · ' + nFoods + ' food' + (nFoods === 1 ? '' : 's') + ' saved for offline search</div></div></div>' +
       '<div class="settings-row"><div><div class="sr-label">About SaviorFuel</div>' +
         '<div class="sr-sub">© 2026 Xavier Chua (Savior). All rights reserved. The app\'s code and design may not be copied or reused.</div></div></div>' +
       '<div class="settings-row"><div><div class="sr-label">Privacy policy</div><div class="sr-sub">What\'s stored, and what leaves your device</div></div>' +
@@ -6182,7 +6300,7 @@
       '<div class="settings-row"><div><div class="sr-label">Email</div><div class="sr-sub">xavierchua10@gmail.com</div></div>' +
         '<a class="sr-action" href="mailto:xavierchua10@gmail.com">Email</a></div>' +
     '</div>';
-    html += settingsCardHtml('about', SET_ICONS.info, 'About &amp; support', 'Sources · Instagram · Email', aboutBody);
+    html += settingsCardHtml('about', SET_ICONS.info, 'Help &amp; about', 'Sources · Privacy · Instagram · Email', aboutBody);
 
     html += '<div class="settings-version">SaviorFuel v' + APP_VERSION + '</div>';
 
@@ -6581,6 +6699,10 @@
       renderApp();
       var secEl = document.getElementById('setc-' + sec);
       if (secEl && ui.settingsOpen === sec) secEl.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    } else if (action === 'share-profile'){
+      shareProfile();
+    } else if (action === 'edit-profile-name'){
+      editProfileName();
     } else if (action === 'open-quick-add'){
       openFoodSheet('quick');
     } else if (action === 'open-my-food'){
