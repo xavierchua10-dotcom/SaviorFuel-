@@ -2004,13 +2004,6 @@
     <h1 class="topbar-brand"><img src="images/logo-mark.png" alt="SaviorFuel" class="topbar-logo"></h1>
   </header>
 
-  <div class="insights-subtab-anchor">
-  <nav class="insights-subtabbar hidden" id="insightsSubtabbar">
-    <span class="subtab-slider" aria-hidden="true"></span>
-    <button data-action="set-insights-view" data-view="today">Daily Overview</button>
-    <button data-action="set-insights-view" data-view="trends">Weekly Overview</button>
-  </nav>
-  </div>
 
   <main id="view"></main>
 
@@ -2421,7 +2414,7 @@
   function showNutrientInfo(){
     document.getElementById('nutrientInfoTitle').textContent = 'Macros';
     // Reference image rather than generated text — kept as its own
-    // file (images/macros-fiber-guide.webp) rather than inlined,
+    // file rather than inlined,
     // same as the background art, so it's cacheable and doesn't
     // bloat the HTML.
     document.getElementById('nutrientInfoBody').innerHTML =
@@ -2710,9 +2703,6 @@
     var left = g.calories - totals.calories;
     var overCal = g.calories > 0 && totals.calories > g.calories;
 
-    var resetBtn = (isToday && dayMeals.length > 0)
-      ? '<button class="reset-log-btn" data-action="reset-today-log" aria-label="Reset today’s log">&#8635;</button>'
-      : '';
     var weekNext = addDaysKey(weekStartKey(viewKey), 7) <= todayKey();
     var chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>';
     var chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
@@ -2720,7 +2710,7 @@
     var html = installBannerHtml() + '<div class="log-head">' +
         '<div class="log-head-title"><b>' + formatDateLabel(viewKey) + '</b>' +
           (isToday ? '<span>' + new Date(viewKey + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }) + '</span>' : '') + '</div>' +
-        '<div class="log-head-actions">' + resetBtn +
+        '<div class="log-head-actions">' +
           '<button class="week-nav" data-action="log-week" data-dir="-1" aria-label="Previous week">' + chevL + '</button>' +
           '<button class="week-nav" data-action="log-week" data-dir="1" aria-label="Next week"' + (weekNext ? '' : ' disabled') + '>' + chevR + '</button>' +
         '</div>' +
@@ -2822,23 +2812,6 @@
   var MACRO_RING_R = 32;
   var MACRO_RING_CIRCUMFERENCE = 2 * Math.PI * MACRO_RING_R;
 
-  function macroRingHtml(label, value, goal, colorClass){
-    var percent = pctUncapped(value, goal);
-    var over = percent > 100;
-    var offset = MACRO_RING_CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100);
-    return '<div class="macro-ring-item">' +
-      '<div class="macro-ring-wrap">' +
-        '<svg class="macro-ring-svg" viewBox="0 0 76 76">' +
-          '<circle class="macro-ring-track" cx="38" cy="38" r="' + MACRO_RING_R + '"></circle>' +
-          '<circle class="macro-ring-fill ' + colorClass + (over ? ' over' : '') + '" cx="38" cy="38" r="' + MACRO_RING_R + '" ' +
-            'style="stroke-dasharray:' + MACRO_RING_CIRCUMFERENCE.toFixed(2) + ';stroke-dashoffset:' + offset.toFixed(2) + ';"></circle>' +
-        '</svg>' +
-        '<div class="macro-ring-pct' + (over ? ' over' : '') + '">' + percent + '%</div>' +
-      '</div>' +
-      '<div class="macro-ring-label">' + label + '</div>' +
-      '<div class="macro-ring-sub">' + Math.round(value) + ' / ' + goal + 'g</div>' +
-    '</div>';
-  }
 
   // Bigger hero ring above the macro rings, same technique but its
   // own radius/stroke and the accent gold color rather than a macro
@@ -2846,23 +2819,6 @@
   var CALORIE_RING_R = 48;
   var CALORIE_RING_CIRCUMFERENCE = 2 * Math.PI * CALORIE_RING_R;
 
-  function calorieRingHtml(value, goal){
-    var percent = pctUncapped(value, goal);
-    var over = percent > 100;
-    var offset = CALORIE_RING_CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100);
-    return '<div class="calorie-ring-row"><div class="calorie-ring-item">' +
-      '<div class="calorie-ring-wrap">' +
-        '<svg class="calorie-ring-svg" viewBox="0 0 116 116">' +
-          '<circle class="calorie-ring-track" cx="58" cy="58" r="' + CALORIE_RING_R + '"></circle>' +
-          '<circle class="calorie-ring-fill' + (over ? ' over' : '') + '" cx="58" cy="58" r="' + CALORIE_RING_R + '" ' +
-            'style="stroke-dasharray:' + CALORIE_RING_CIRCUMFERENCE.toFixed(2) + ';stroke-dashoffset:' + offset.toFixed(2) + ';"></circle>' +
-        '</svg>' +
-        '<div class="calorie-ring-pct' + (over ? ' over' : '') + '">' + percent + '%</div>' +
-      '</div>' +
-      '<div class="calorie-ring-label">Calories</div>' +
-      '<div class="calorie-ring-sub">' + Math.round(value) + ' / ' + goal + ' kcal</div>' +
-    '</div></div>';
-  }
 
   // Budget framing to sit alongside the percentage rings above — how
   // much of each goal is left to hit (or how far over), rather than
@@ -2890,31 +2846,6 @@
   var BALANCE_MIN_CALORIE_PCT = 15;
   var BALANCE_SPREAD_THRESHOLD = 15;
 
-  function macroBalanceCaption(todayMeals, todayTotals, g){
-    if (todayMeals.length === 0){
-      return { text: 'Nothing logged yet today — log a meal to see how you\'re tracking.', tone: '' };
-    }
-    var caloriePct = pct(todayTotals.calories, g.calories);
-    if (caloriePct < BALANCE_MIN_CALORIE_PCT){
-      return { text: 'Still early today — log a bit more to get a balance read.', tone: '' };
-    }
-    var macros = [
-      { name: 'Protein', pct: pct(todayTotals.protein, g.protein), cls: 'cap-protein' },
-      { name: 'Carbs', pct: pct(todayTotals.carbs, g.carbs), cls: 'cap-carbs' },
-      { name: 'Fat', pct: pct(todayTotals.fat, g.fat), cls: 'cap-fat' }
-    ];
-    var lowest = macros.reduce(function(a, b){ return b.pct < a.pct ? b : a; });
-    var highest = macros.reduce(function(a, b){ return b.pct > a.pct ? b : a; });
-    var spread = highest.pct - lowest.pct;
-
-    if (spread <= BALANCE_SPREAD_THRESHOLD){
-      return { text: 'Balanced today — protein, carbs, and fat are all tracking evenly.', tone: 'balanced' };
-    }
-    return {
-      text: '<span class="' + lowest.cls + '">' + lowest.name + '</span> is lagging at ' + lowest.pct + '% of today\'s goal, furthest behind of the three.',
-      tone: ''
-    };
-  }
 
   function mealRowHtml(m){
     var badge = (CATEGORY_LABELS[m.category] || 'Other').charAt(0);
@@ -4763,16 +4694,6 @@
     });
   })();
 
-  // Clears only today's logged meals — a genuine blank slate for the
-  // day, same idea as SaviorFit Logger's reset-log. History and every
-  // other day's data stay untouched.
-  function resetTodayLog(){
-    if (!window.confirm('Reset today\u2019s log? This clears every meal logged today \u2014 History and other days aren\u2019t touched.')) return;
-    var today = todayKey();
-    STORE.meals = STORE.meals.filter(function(m){ return dateKey(m.loggedAt) !== today; });
-    saveStore();
-    renderApp();
-  }
 
   /* =========================================================
      RENDER — HISTORY TAB
@@ -5614,40 +5535,10 @@
   }
 
 
-  // ---- Daily Overview has two modes, switched by the icon pair in its
-  // corner: '3d' (the full-bleed food pyramid) and 'plain' (the
-  // original rings / remaining macros / nutrient bars). The choice is
-  // saved in appSettings so it sticks between visits.
-  function overviewMode(){
-    return STORE.appSettings.overviewMode === 'plain' ? 'plain' : '3d';
-  }
 
-  // The two-icon 3D / Plain switch. `action` is the click action to fire
-  // (set-overview-mode for the Daily view, set-weekly-mode for the
-  // Weekly view), `mode` the one currently showing.
-  function modeToggleHtml(action, mode, plainIcon, plainLabel, extraClass){
-    var svgAttrs = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
-    return '<div class="mode-toggle' + (extraClass ? ' ' + extraClass : '') + '" role="group" aria-label="View style">' +
-      '<button type="button" data-action="' + action + '" data-mode="3d" aria-label="3D view" aria-pressed="' + (mode === '3d') + '" class="' + (mode === '3d' ? 'active' : '') + '">' +
-        '<svg ' + svgAttrs + '><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' +
-      '</button>' +
-      '<button type="button" data-action="' + action + '" data-mode="plain" aria-label="' + plainLabel + '" aria-pressed="' + (mode === 'plain') + '" class="' + (mode === 'plain' ? 'active' : '') + '">' +
-        '<svg ' + svgAttrs + '>' + plainIcon + '</svg>' +
-      '</button>' +
-    '</div>';
-  }
 
-  var ICON_PIE = '<path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path>';
-  var ICON_BARS = '<line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>';
 
-  function overviewModeToggleHtml(extraClass){
-    return modeToggleHtml('set-overview-mode', overviewMode(), ICON_PIE, 'Plain view (rings and numbers)', extraClass);
-  }
 
-  function renderInsightsToday(){
-    if (overviewMode() === 'plain') renderInsightsPlain();
-    else renderInsights3D();
-  }
 
   // Each side of the 3D pyramid stands for one nutrient. A small tag
   // (ring + amount) is pinned to that side of the model and travels
@@ -5687,39 +5578,6 @@
     '</div>';
   }
 
-  function renderInsights3D(){
-    var todayMeals = mealsForDay(todayKey());
-    var totals = totalsFor(todayMeals);
-    var goals = STORE.goals;
-    var tagsHtml = PYRAMID_FACES.map(function(f, k){ return faceTagHtml(k, totals, goals); }).join('');
-    document.getElementById('view').innerHTML =
-      '<div class="card model-card">' +
-        '<div class="model-stage" id="modelStage"></div>' +
-        tagsHtml +
-        // slide-out "meals today" drawer, tucked into the top-left corner
-        '<div class="meal-drawer" id="mealDrawer">' +
-          '<div class="meal-drawer-panel" id="mealDrawerPanel">' + mealDrawerHtml(mealBreakdown(todayMeals), totals) + '</div>' +
-          '<button type="button" class="meal-drawer-handle" data-action="toggle-meal-drawer" aria-label="Show today\'s meals" aria-expanded="false" aria-controls="mealDrawerPanel">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>' +
-            '<span>Meals</span>' +
-          '</button>' +
-        '</div>' +
-        '<div class="model-status" id="modelStatus">' +
-          '<span id="modelStatusText">Loading 3D model…</span>' +
-          '<div class="model-bar" id="modelBarWrap"><i id="modelBar"></i></div>' +
-        '</div>' +
-        overviewModeToggleHtml('floating') +
-      '</div>';
-    try {
-      Model3D.mount(document.getElementById('modelStage'), PYRAMID_FACES.map(function(f, k){
-        var a = f.side * Math.PI / 2;
-        var nx = Math.round(Math.sin(a)), nz = Math.round(Math.cos(a)); // side k faces +z, +x, -z, -x
-        return { el: document.getElementById('faceTag' + k), pos: [f.r * nx, f.y, f.r * nz], normal: [nx, nz] };
-      }));
-    } catch (err){
-      console.error('SaviorFuel: 3D panel failed to start —', err);
-    }
-  }
 
   // Calories per meal time (Breakfast, Lunch ...) for a list of meals, in
   // the fixed meal order; meals with no category (logged before meal
@@ -5759,49 +5617,7 @@
     }).join(' ');
   }
 
-  // Open / close the pyramid's "Meals today" drawer. It also closes by
-  // itself when you tap anywhere outside it (which includes touching the
-  // pyramid to spin it — that starts with a touch on the canvas) or press
-  // Escape, so it never lingers over the model.
-  function setMealDrawer(open){
-    var drawer = document.getElementById('mealDrawer');
-    if (!drawer) return;
-    drawer.classList.toggle('open', open);
-    var handleBtn = drawer.querySelector('.meal-drawer-handle');
-    handleBtn.setAttribute('aria-expanded', String(open));
-    handleBtn.setAttribute('aria-label', open ? 'Hide today\'s meals' : 'Show today\'s meals');
-  }
-  document.addEventListener('pointerdown', function(e){
-    var drawer = document.getElementById('mealDrawer');
-    if (drawer && drawer.classList.contains('open') && !drawer.contains(e.target)) setMealDrawer(false);
-  }, true); // capture phase, so it still fires when something on the page stops the event
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') setMealDrawer(false);
-  });
 
-  // Contents of the pyramid's slide-out "Meals today" drawer: one block per
-  // meal time (name + kcal, a thin share bar, and its protein / carbs /
-  // fat / fibre), then the day's totals.
-  function mealDrawerHtml(rows, totals){
-    var head = '<div class="meal-drawer-head"><b>Today by meal</b>' +
-      '<button type="button" class="day-card-close" data-action="close-meal-drawer" aria-label="Close">&times;</button></div>';
-    if (rows.length === 0) return head + '<div class="meal-drawer-empty">Nothing logged today.</div>';
-    var total = rows.reduce(function(acc, r){ return acc + r.kcal; }, 0);
-    return head + rows.map(function(r){
-      var share = total > 0 ? Math.round(r.kcal / total * 100) : 0;
-      return '<div class="meal-drawer-item">' +
-        '<div class="meal-drawer-line"><span>' + esc(r.label) + '</span> <b>' + r.kcal + ' kcal</b></div>' +
-        '<div class="meal-drawer-bar"><i style="width:' + Math.max(share, 2) + '%"></i></div>' +
-        '<div class="meal-split-macros">' + mealMacrosHtml(r, 1) + '</div>' +
-      '</div>';
-    }).join('') +
-    '<div class="meal-drawer-total"><span>Total</span> <b>' + Math.round(totals.calories) + ' kcal</b></div>' +
-    '<div class="meal-split-macros">' +
-      '<span class="p">P <b>' + Math.round(totals.protein) + '</b></span> ' +
-      '<span class="c">C <b>' + Math.round(totals.carbs) + '</b></span> ' +
-      '<span class="f">F <b>' + Math.round(totals.fat) + '</b></span>' +
-    '</div>';
-  }
 
   // One entry per meal time: label, a bar sized by its share of the total,
   // the kcal (divided by `perDay` for a weekly average) with its %, and a
@@ -5817,40 +5633,7 @@
     }).join('');
   }
 
-  // Foods logged with no fiber, sugar or sodium at all (common for local
-  // dishes whose database entries only list calories and macros) make
-  // those three totals read lower than what you really had — say so.
-  function microGapNote(meals){
-    var gaps = meals.filter(function(m){ return !m.sugar && !m.sodium; }).length;
-    if (gaps === 0) return '';
-    return '<div class="data-note">' + gaps + ' of ' + meals.length + ' food' + (meals.length === 1 ? '' : 's') + ' ' +
-      (gaps === 1 ? 'has' : 'have') + ' no sugar or sodium data, so those totals are lower than what you actually had.</div>';
-  }
 
-  function renderInsightsPlain(){
-    var todayMeals = mealsForDay(todayKey());
-    var todayTotals = totalsFor(todayMeals);
-    var g = STORE.goals;
-
-    var html = '<div class="overview-plain"><div class="today-card-head"><h3 class="section-label">Today</h3>' +
-      overviewModeToggleHtml('') +
-    '</div>';
-    html += calorieRingHtml(todayTotals.calories, g.calories);
-    html += '<div class="macro-ring-row">' +
-      macroRingHtml('Protein', todayTotals.protein, g.protein, 'protein') +
-      macroRingHtml('Carbs', todayTotals.carbs, g.carbs, 'carbs') +
-      macroRingHtml('Fat', todayTotals.fat, g.fat, 'fat') +
-    '</div>';
-    html += '<h3 class="section-label">Other nutrients</h3>';
-    html += macroBarHtml('Sugar', todayTotals.sugar, g.sugar, 'sugar') +
-      macroBarHtml('Sodium', todayTotals.sodium, g.sodium, 'sodium', 'mg') +
-      microGapNote(todayMeals);
-    var caption = macroBalanceCaption(todayMeals, todayTotals, g);
-    html += '<div class="insight-caption ' + caption.tone + '">' + caption.text + '</div>';
-    html += '</div>';
-
-    document.getElementById('view').innerHTML = html;
-  }
 
   // The last 7 calendar days (today plus the 6 before it) worked out
   // from the meals: per-day totals, plus the numbers both Weekly views
@@ -6101,7 +5884,8 @@
       var p = keys[0].split('-');
       since = new Date(+p[0], +p[1] - 1, 1).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     }
-    return { streak: streakInfo(map).current, days: keys.length, meals: STORE.meals.length,
+    var si = streakInfo(map);
+    return { streak: si.current, best: si.best, days: keys.length, meals: STORE.meals.length,
              avg: avgN ? Math.round(avgSum / avgN) : 0, top: top, since: since };
   }
 
@@ -6140,7 +5924,7 @@
         [String(ps.streak), 'DAY STREAK', '#a6e36b'],
         [String(ps.days), 'DAYS LOGGED', '#e9e6df'],
         [String(ps.meals), 'MEALS LOGGED', '#e9e6df'],
-        [ps.avg ? ps.avg.toLocaleString('en-US') : '-', 'AVG KCAL \u00B7 7D', '#a6e36b']
+        [String(ps.best), 'BEST STREAK', '#a6e36b']
       ];
       cells.forEach(function(cl, i){
         var cx = 90 + (i % 2) * 460, cy = 300 + Math.floor(i / 2) * 250;
@@ -6201,7 +5985,7 @@
       statT((ps.streak > 0 ? '\uD83D\uDD25 ' : '') + ps.streak, 'Day streak', ps.streak === 1 ? 'day' : 'days') +
       statT(ps.days, 'Days logged') +
       statT(ps.meals, 'Meals logged') +
-      statT(ps.avg ? ps.avg.toLocaleString('en-US') : '\u2014', 'Avg kcal \u00B7 7d', '', 'accent') +
+      statT(ps.best, 'Best streak', ps.best === 1 ? 'day' : 'days', 'accent') +
     '</div>';
     html += '<div class="card pf-top"><div class="pf-top-h">TOP FOODS</div>';
     if (ps.top.length){
@@ -6215,17 +5999,18 @@
 
     html += '<h3 class="section-label">Settings</h3>';
 
-    // ---- profile & plan
-    var profBody = '';
+    // ---- my plan: units, body details + calculator, and the daily goals
+    var unitRow = '<div class="settings-row"><div><div class="sr-label">Units</div><div class="sr-sub">For height and bodyweight below</div></div>' +
+      '<div class="seg">' +
+        '<button data-action="set-unit" data-unit="metric" class="' + (s.unit === 'metric' ? 'active' : '') + '">METRIC</button>' +
+        '<button data-action="set-unit" data-unit="imperial" class="' + (s.unit === 'imperial' ? 'active' : '') + '">IMPERIAL</button>' +
+      '</div></div>';
+    var planBody = '<div class="settings-group">' + unitRow + '</div>';
     if (STORE.lastPlanTdee){
-      profBody += '<div class="plan-result-banner">Estimated maintenance (TDEE): <b>' + STORE.lastPlanTdee + ' kcal/day</b> — your goals were calculated from this.</div>';
+      planBody += '<div class="plan-result-banner">Estimated maintenance (TDEE): <b>' + STORE.lastPlanTdee + ' kcal/day</b> \u2014 your goals were calculated from this.</div>';
     }
-    profBody += profileFormHtml();
-    html += settingsCardHtml('profile', SET_ICONS.profile, 'Profile &amp; plan',
-      (p.sex === 'female' ? 'Female' : 'Male') + ' · ' + p.age + ' · ' + weightLabel + ' · ' + esc(goalLabel), profBody);
-
-    // ---- daily goals
-    var goalsBody = '<div class="settings-section"><div class="card">' +
+    planBody += profileFormHtml();
+    planBody += '<div class="settings-section"><div class="card">' +
       settingsGoalRow('Calories', 'goalCalories', g.calories) +
       settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
       settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
@@ -6234,39 +6019,23 @@
       settingsGoalRow('Sodium (mg)', 'goalSodium', g.sodium) +
       settingsGoalRow('Water (ml)', 'goalWater', g.water) +
     '</div></div>';
-    html += settingsCardHtml('goals', SET_ICONS.goals, 'Daily goals',
-      Math.round(g.calories) + ' kcal · P ' + g.protein + ' · C ' + g.carbs + ' · F ' + g.fat, goalsBody);
+    html += settingsCardHtml('plan', SET_ICONS.goals, 'My plan',
+      Math.round(g.calories) + ' kcal \u00B7 P ' + g.protein + ' \u00B7 C ' + g.carbs + ' \u00B7 F ' + g.fat, planBody);
 
-    // ---- preferences
-    var prefBody = '<div class="settings-group">' +
-      '<div class="settings-row"><div><div class="sr-label">Units</div><div class="sr-sub">Applies to height and bodyweight</div></div>' +
-        '<div class="seg">' +
-          '<button data-action="set-unit" data-unit="metric" class="' + (s.unit === 'metric' ? 'active' : '') + '">METRIC</button>' +
-          '<button data-action="set-unit" data-unit="imperial" class="' + (s.unit === 'imperial' ? 'active' : '') + '">IMPERIAL</button>' +
-        '</div></div>' +
+    // ---- look & feel
+    var lookBody = '<div class="settings-group">' +
+      '<div class="theme-pick">' +
+        '<button type="button" data-action="set-theme" data-theme="dark" class="theme-opt dark' + (s.theme !== 'light' ? ' active' : '') + '"><span class="theme-prev"><i></i><i></i></span><b>Dark</b></button>' +
+        '<button type="button" data-action="set-theme" data-theme="light" class="theme-opt light' + (s.theme === 'light' ? ' active' : '') + '"><span class="theme-prev"><i></i><i></i></span><b>Light</b></button>' +
+      '</div>' +
       '<div class="settings-row"><div><div class="sr-label">Haptic feedback</div><div class="sr-sub">Short vibration when you log a meal</div></div>' +
         '<div class="seg">' +
           '<button data-action="toggle-haptic" data-val="on" class="' + (s.haptic !== false ? 'active' : '') + '">ON</button>' +
           '<button data-action="toggle-haptic" data-val="off" class="' + (s.haptic === false ? 'active' : '') + '">OFF</button>' +
         '</div></div>' +
     '</div>';
-    html += settingsCardHtml('prefs', SET_ICONS.prefs, 'Preferences',
-      (imperial ? 'Imperial' : 'Metric') + ' · Haptics ' + (s.haptic === false ? 'off' : 'on'), prefBody);
-
-    // ---- appearance
-    var lookBody = '<div class="settings-group">' +
-      '<div class="theme-pick">' +
-        '<button type="button" data-action="set-theme" data-theme="dark" class="theme-opt dark' + (s.theme !== 'light' ? ' active' : '') + '"><span class="theme-prev"><i></i><i></i></span><b>Dark</b></button>' +
-        '<button type="button" data-action="set-theme" data-theme="light" class="theme-opt light' + (s.theme === 'light' ? ' active' : '') + '"><span class="theme-prev"><i></i><i></i></span><b>Light</b></button>' +
-      '</div>' +
-      '<div class="settings-row"><div><div class="sr-label">Density</div><div class="sr-sub">Fit more on screen in Log &amp; History</div></div>' +
-        '<div class="seg">' +
-          '<button data-action="set-density" data-density="comfortable" class="' + (s.density === 'comfortable' ? 'active' : '') + '">Comfortable</button>' +
-          '<button data-action="set-density" data-density="compact" class="' + (s.density === 'compact' ? 'active' : '') + '">Compact</button>' +
-        '</div></div>' +
-    '</div>';
-    html += settingsCardHtml('look', SET_ICONS.look, 'Appearance',
-      (s.theme === 'light' ? 'Light' : 'Dark') + ' · ' + (s.density === 'compact' ? 'Compact' : 'Comfortable'), lookBody);
+    html += settingsCardHtml('look', SET_ICONS.look, 'Look &amp; feel',
+      (s.theme === 'light' ? 'Light' : 'Dark') + ' \u00B7 Haptics ' + (s.haptic === false ? 'off' : 'on'), lookBody);
 
     // ---- install (only when the browser can install it)
     if (canOfferInstall()){
@@ -6330,7 +6099,7 @@
      dump/restore of the whole STORE object.
      ========================================================= */
   function applyAppearanceSettings(){
-    document.body.dataset.density = STORE.appSettings.density || 'comfortable';
+    document.body.dataset.density = 'comfortable';
     document.body.dataset.corners = STORE.appSettings.corners || 'rounded';
     document.body.dataset.theme = STORE.appSettings.theme || 'dark';
     try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? '#ebe6da' : '#1f232b'); }catch(e){}
@@ -6451,76 +6220,12 @@
     else if (state.tab === 'insights') renderInsights();
     else if (state.tab === 'settings') renderSettings();
 
-    // Sticky Today / Trends switch — only exists on the Insights tab
-    // once there's something to show, same pattern as SaviorFit
-    // Logger's Volume overview / Exercise progression bar.
-    var showInsightsSubtabbar = false; // Insights is one scrolling page now (pyramid card + weekly), no Daily/Weekly switch
-    document.body.classList.toggle('has-insights-subtab', showInsightsSubtabbar);
-    document.getElementById('view').classList.toggle('has-subtab', showInsightsSubtabbar);
-    var insightsSubtabbarEl = document.getElementById('insightsSubtabbar');
-    insightsSubtabbarEl.classList.toggle('hidden', !showInsightsSubtabbar);
-    if (showInsightsSubtabbar){
-      insightsSubtabbarEl.querySelectorAll('button').forEach(function(btn){
-        btn.classList.toggle('active', btn.dataset.view === ui.insightsView);
-      });
-      setSlider(insightsSubtabbarEl, ui.insightsView === 'trends' ? 1 : 0, slidersReady);
-    }
     slidersReady = true;
     refreshDayOverlay();
     mountHeroRing3d();
   }
 
-  // Fades the current Insights sub-tab panel out, swaps to the new
-  // one, then fades it in — same treatment as SaviorFit Logger's
-  // switchProgressViewWithFade() for its Volume overview / Exercise
-  // progression switch.
-  function switchInsightsViewWithFade(newView){
-    if (newView === ui.insightsView) return;
-    setSlider(document.getElementById('insightsSubtabbar'), newView === 'trends' ? 1 : 0, true);
-    var viewEl = document.getElementById('view');
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion){
-      ui.insightsView = newView;
-      renderApp();
-      return;
-    }
-    viewEl.classList.remove('subtab-fade-in');
-    viewEl.classList.add('subtab-fade-out');
-    setTimeout(function(){
-      ui.insightsView = newView;
-      renderApp();
-      var v = document.getElementById('view');
-      v.classList.remove('subtab-fade-out');
-      v.classList.add('subtab-fade-in');
-      setTimeout(function(){
-        v.classList.remove('subtab-fade-in');
-      }, 170);
-    }, 140);
-  }
 
-  // 3D <-> Plain switch (Daily and Weekly Overview): the whole panel flips
-  // like a card (see the flip-* CSS). With reduced motion on, it just swaps.
-  function flipToMode(setting, newMode, currentMode){
-    if (newMode === currentMode) return;
-    function apply(){
-      STORE.appSettings[setting] = newMode;
-      saveStore();
-      renderApp();
-    }
-    var viewEl = document.getElementById('view');
-    if (prefersReducedMotion()){ apply(); return; }
-    var dir = newMode === 'plain' ? 'l' : 'r';
-    viewEl.classList.remove('subtab-fade-in', 'subtab-fade-out');
-    viewEl.classList.add('flip-out-' + dir);
-    setTimeout(function(){
-      apply();
-      var v = document.getElementById('view');
-      v.classList.remove('flip-out-' + dir);
-      v.classList.add('flip-in-' + dir);
-      setTimeout(function(){ v.classList.remove('flip-in-' + dir); }, 250);
-    }, 190);
-  }
-  function switchOverviewModeWithFade(newMode){ flipToMode('overviewMode', newMode, overviewMode()); }
 
   // Tab switch = both pages slide sideways together, like SaviorFit Logger's
   // switchTabWithFade: the page being left is lifted into a "ghost" pane laid
@@ -6614,15 +6319,6 @@
     var action = el.dataset.action;
     if (action === 'set-tab'){
       switchTab(el.dataset.tab);
-    } else if (action === 'set-insights-view'){
-      switchInsightsViewWithFade(el.dataset.view);
-    } else if (action === 'set-overview-mode'){
-      switchOverviewModeWithFade(el.dataset.mode);
-    } else if (action === 'toggle-meal-drawer'){
-      var mealDrawerEl = document.getElementById('mealDrawer');
-      if (mealDrawerEl) setMealDrawer(!mealDrawerEl.classList.contains('open'));
-    } else if (action === 'close-meal-drawer'){
-      setMealDrawer(false);
     } else if (action === 'add-meal'){
       addMealFromForm();
     } else if (action === 'close-add-meal-overlay'){
@@ -6786,8 +6482,6 @@
       var shifted = addDaysKey(logDayKey(), dirW * 7);
       ui.logDay = shifted > todayKey() ? todayKey() : shifted;
       renderApp();
-    } else if (action === 'reset-today-log'){
-      resetTodayLog();
     } else if (action === 'calculate-plan'){
       calculatePlanFromForm();
     } else if (action === 'open-scanner'){
