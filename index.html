@@ -4323,10 +4323,12 @@
       runAiScan(canvas).catch(function(err){
         if (err && err.declined){ classifyFoodPhotoLegacy(canvas); return; }
         console.error('SaviorFuel: AI food scan failed —', err);
-        if (err && err.status === 429){
-          // Out of scans for today: say so, and stay on the camera so
-          // barcode scanning still works.
-          statusEl.textContent = err.userMessage || 'Scan limit reached for today.';
+        if (err && err.status){
+          // The scanner answered with a problem (out of scans, key not
+          // set, AI busy...): say what it said, and stay on the camera
+          // so barcode scanning still works. Only a dead connection
+          // falls back to the basic on-device guess below.
+          statusEl.textContent = (err.userMessage || 'Scan failed.') + ' (' + (err.code || err.status) + ')';
           captureBtn.classList.remove('loading');
           if (scanState.stream) scanLoop();
           return;
@@ -4418,6 +4420,7 @@
           if (!res.ok){
             var e = new Error(data.error || ('Scan failed (' + res.status + ')'));
             e.status = res.status;
+            e.code = data.code;
             e.userMessage = data.error;
             throw e;
           }
