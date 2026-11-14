@@ -1814,6 +1814,36 @@
   body[data-theme="light"] .welcome-primary{color:#fff;}
   .welcome-primary:active{transform:scale(.98);}
   .welcome-skip{border:none; background:none; color:var(--text-faint); font-size:13px; padding:10px; cursor:pointer;}
+  /* Sign-in screen (first run and from Profile) */
+  .signin-overlay{position:fixed; inset:0; z-index:310; background:var(--bg); display:flex; justify-content:center; overflow-y:auto;}
+  .signin-card{width:100%; max-width:480px; min-height:100%; display:flex; flex-direction:column; padding:calc(28px + var(--safe-top, 0px)) 22px calc(22px + var(--safe-bottom));}
+  .signin-head{text-align:center; margin-top:14px;}
+  .signin-logo{width:140px; height:140px; display:block; margin:0 auto 10px;}
+  .signin-head h2{margin:0; font-family:'Oswald',sans-serif; font-size:28px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text);}
+  .signin-head p{margin:6px 0 0; font-size:14px; color:var(--text-dim);}
+  .signin-points{display:flex; flex-direction:column; gap:12px; margin:26px 4px 0;}
+  .signin-pt{display:flex; align-items:center; gap:12px; font-size:14px; color:var(--text-dim);}
+  .signin-pt i{width:34px; height:34px; flex:none; border-radius:50%; background:var(--panel-2); color:var(--accent); display:flex; align-items:center; justify-content:center;}
+  .signin-pt svg{width:18px; height:18px;}
+  .signin-spacer{flex:1; min-height:24px;}
+  .signin-actions{display:flex; flex-direction:column; gap:10px;}
+  .signin-btn{border:none; border-radius:var(--radius-xl); padding:15px; font-size:15px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;}
+  .signin-btn.primary{background:var(--accent); color:#0f2410;}
+  body[data-theme="light"] .signin-btn.primary{color:#fff;}
+  .signin-btn.alt{background:var(--panel-2); color:var(--text); border:1px solid var(--line);}
+  .signin-btn:active{transform:scale(.98);}
+  .signin-g{width:22px; height:22px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center;}
+  .signin-g svg{width:14px; height:14px;}
+  .signin-msg{min-height:18px; text-align:center; font-size:12px; color:var(--accent);}
+  .signin-skip{border:none; background:none; color:var(--accent); font-size:14px; font-weight:600; padding:8px; cursor:pointer;}
+  .signin-note{text-align:center; font-size:11px; color:var(--text-faint); line-height:1.5;}
+  .pf-account{display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-xl); padding:12px 14px; margin-bottom:12px; color:var(--text); cursor:pointer;}
+  .pf-account-ic{width:36px; height:36px; flex:none; border-radius:50%; background:var(--panel-2); color:var(--accent); display:flex; align-items:center; justify-content:center;}
+  .pf-account-ic svg{width:18px; height:18px;}
+  .pf-account-tx{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+  .pf-account-tx b{font-size:14px; font-weight:600;}
+  .pf-account-tx small{font-size:12px; color:var(--text-faint);}
+  .pf-account-chev{width:16px; height:16px; color:var(--text-faint); flex:none;}
 
   /* ---- Install banner / iOS help ---- */
   .install-banner{display:flex; align-items:center; gap:12px; background:var(--panel); border:1px solid rgba(var(--accent-rgb),.45); border-radius:var(--radius-xl); padding:10px 8px 10px 10px; margin-bottom:12px;}
@@ -6330,6 +6360,11 @@
       '<div class="pf-acts"><button type="button" class="pf-share" data-action="share-profile">Share profile</button>' +
         '<button type="button" class="pf-edit" data-action="edit-profile-name" aria-label="Edit name">' + SET_ICONS.edit + '</button></div>' +
     '</div>';
+    html += '<button type="button" class="pf-account" data-action="open-sign-in">' +
+      '<span class="pf-account-ic">' + SI_ICONS.cloud + '</span>' +
+      '<span class="pf-account-tx"><b>Back up your log</b><small>Sign in to keep it safe and use it on any phone</small></span>' +
+      '<svg class="pf-account-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+    '</button>';
     html += '<div class="pf-stats">' +
       statT((ps.streak > 0 ? '\uD83D\uDD25 ' : '') + ps.streak, 'Day streak', ps.streak === 1 ? 'day' : 'days') +
       statT(ps.days, 'Days logged') +
@@ -6747,6 +6782,8 @@
       }
     } else if (action === 'remove-meal-photo'){
       removeMealPhoto();
+    } else if (action === 'open-sign-in'){
+      openSignIn(false);
     } else if (action === 'ai-step'){
       var stit = aiScan.items[parseInt(el.dataset.i, 10)];
       if (stit){
@@ -7060,9 +7097,58 @@
     if (STORE.appSettings.welcomed) return;
     if (STORE.meals.length > 0){ STORE.appSettings.welcomed = true; saveStore(); return; } // existing user
     welcome.unit = STORE.appSettings.unit === 'imperial' ? 'imperial' : 'metric';
-    welcome.step = 0;
+    welcome.step = 1;            // the sign-in screen below is the intro
     renderWelcome();
+    openSignIn(true);
   }
+
+  /* Sign-in screen. The buttons aren't wired up yet (accounts come with
+     sync); Skip works and the app is fully usable without an account. */
+  var SI_ICONS = {
+    cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+    phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+    camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+    google: '<svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>'
+  };
+
+  function openSignIn(first){
+    if (document.getElementById('signInOverlay')) return;
+    var el = document.createElement('div');
+    el.id = 'signInOverlay';
+    el.className = 'signin-overlay';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Sign in');
+    el.innerHTML = '<div class="signin-card">' +
+      '<div class="signin-head"><img class="signin-logo" src="images/logo-mark.png" alt="SaviorFuel"><h2>SaviorFuel</h2><p>Track your food. Never lose your log.</p></div>' +
+      '<div class="signin-points">' +
+        '<div class="signin-pt"><i>' + SI_ICONS.cloud + '</i>Your log is backed up</div>' +
+        '<div class="signin-pt"><i>' + SI_ICONS.phone + '</i>Same data on every phone</div>' +
+        '<div class="signin-pt"><i>' + SI_ICONS.camera + '</i>Photos stay on this phone</div>' +
+      '</div>' +
+      '<div class="signin-spacer"></div>' +
+      '<div class="signin-actions">' +
+        '<button type="button" class="signin-btn primary" data-si="google"><span class="signin-g">' + SI_ICONS.google + '</span>Continue with Google</button>' +
+        '<button type="button" class="signin-btn alt" data-si="email">' + SI_ICONS.mail + 'Use email instead</button>' +
+        '<div class="signin-msg" id="signInMsg" role="status" aria-live="polite"></div>' +
+        '<button type="button" class="signin-skip" data-action="close-sign-in">' + (first ? 'Skip for now' : 'Not now') + '</button>' +
+        '<div class="signin-note">' + (first ? 'Skipping keeps your log on this phone only. You can sign in later from Profile.' : 'Your log stays on this phone until you sign in.') + '</div>' +
+      '</div>' +
+    '</div>';
+    document.getElementById('app').parentNode.appendChild(el);
+  }
+  function closeSignIn(){
+    var el = document.getElementById('signInOverlay');
+    if (el) el.remove();
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('#signInOverlay [data-si], #signInOverlay [data-action="close-sign-in"]');
+    if (!b) return;
+    if (b.getAttribute('data-action') === 'close-sign-in'){ closeSignIn(); return; }
+    var m = document.getElementById('signInMsg');
+    if (m) m.textContent = 'Sign-in is coming soon. Your log is saved on this phone for now.';
+  });
 
   function closeWelcome(){
     var el = document.getElementById('welcomeOverlay');
@@ -7197,7 +7283,7 @@
      a "layer" with one history entry; back closes the top layer using its own
      close/cancel button. With nothing open, back on another tab returns to
      Log, and on Log the first press shows "Press back again to exit". */
-  var BACK_LAYER_IDS = ['foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
+  var BACK_LAYER_IDS = ['signInOverlay', 'foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
     'addMealOverlay', 'aiScanOverlay', 'confirmOverlay', 'foodSheet', 'mealMenu', 'calSheet', 'dayOverlay'];
   var BACK_NEEDS_OPEN = { addMealOverlay: 1, aiScanOverlay: 1, confirmOverlay: 1 };
   var backDepth = 0, backIgnorePops = 0, backSyncQueued = false, exitArmed = false, exitArmTimer = null;
