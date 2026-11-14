@@ -1275,6 +1275,16 @@
   .ai-macro3 .t b{color:var(--text); font-weight:600; font-family:'JetBrains Mono',monospace; font-size:11px;}
   .ai-macro3 .bar{height:5px; border-radius:3px; background:var(--panel-3); overflow:hidden; margin-top:3px;}
   .ai-macro3 .bar i{display:block; height:100%; border-radius:3px;}
+  .rc-card{display:flex; align-items:center; gap:12px; background:var(--panel-2); border:1px solid var(--line); border-radius:14px; padding:12px;}
+  .rc-img{width:56px; height:56px; flex:none; border-radius:10px; object-fit:cover; background:var(--panel-3);}
+  .rc-tx{flex:1; min-width:0;}
+  .rc-name{font-size:15px; font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .rc-sub{font-size:11px; color:var(--text-faint); margin-top:3px; line-height:1.4;}
+  .rc-kcal{text-align:right; flex:none;}
+  .rc-kcal b{display:block; font-family:'Oswald',sans-serif; font-size:24px; line-height:1; color:var(--accent);}
+  .rc-kcal span{font-size:11px; color:var(--text-dim);}
+  .rc-label{font-size:12px; color:var(--text-dim); margin:14px 0 8px;}
+  .rc-cancel{display:block; width:100%; background:none; border:none; color:var(--text-dim); font-size:14px; padding:12px 0 2px; cursor:pointer;}
   .food-search-overlay.over-ai{z-index:97;}
   .ai-search-inst{
     display:inline-flex; align-items:center; gap:6px; margin-top:10px; padding:7px 14px;
@@ -2299,6 +2309,20 @@
       <div class="ai-foot">Estimates from a photo. Check portions before logging.</div>
       <button class="btn-primary" id="aiLogBtn" data-action="ai-scan-log">+ Log meal</button>
     </div>
+  </div>
+</div>
+
+<div class="add-meal-overlay hidden" id="recentOverlay">
+  <div class="add-meal-backdrop" data-action="close-recent-sheet"></div>
+  <div class="add-meal-sheet">
+    <div class="sheet-grab" id="recentGrab" aria-hidden="true"><i></i></div>
+    <div class="add-meal-head">
+      <h2>Log again?</h2>
+      <button class="add-meal-close" data-action="close-recent-sheet" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="add-meal-body" id="recentBody"></div>
   </div>
 </div>
 
@@ -5132,20 +5156,63 @@
   }
 
   // Copy a meal from another day to today (same food, same meal time).
-  function copyMealToToday(id){
+  function copyMealToToday(id, category){
     var m = mealById(id);
     if (!m) return;
     var copy = Object.assign({}, m, {
       id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
       loggedAt: Date.now()
     });
+    if (category) copy.category = category;
     STORE.meals.push(copy);
     expandMealGroup(copy.category);
     saveStore();
     maybeVibrate();
     renderApp();
-    showToast('Copied to today');
+    showToast(category ? 'Added to ' + (CATEGORY_LABELS[category] || 'today') : 'Copied to today');
   }
+
+  /* "Log again?" sheet for the Recent chips on the Add food screen. */
+  var recentSheet = { id: null, category: null };
+  function lastLoggedLabel(ts){
+    var a = new Date(ts), n = new Date();
+    a.setHours(0, 0, 0, 0); n.setHours(0, 0, 0, 0);
+    var d = Math.round((n - a) / 86400000);
+    if (d <= 0) return 'today';
+    if (d === 1) return 'yesterday';
+    if (d < 7) return d + ' days ago';
+    return a.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+  }
+  function openRecentSheet(id){
+    var m = mealById(id);
+    if (!m) return;
+    recentSheet.id = id;
+    recentSheet.category = suggestCategoryForNow();
+    var ph = mealPhoto(m);
+    var kc = Math.round(m.calories);
+    document.getElementById('recentBody').innerHTML =
+      '<div class="rc-card">' +
+        (ph ? '<img class="rc-img" src="' + ph + '" alt="">' : '') +
+        '<div class="rc-tx"><div class="rc-name">' + esc(m.name) + '</div>' +
+          '<div class="rc-sub">P' + Math.round(m.protein) + ' &middot; C' + Math.round(m.carbs) + ' &middot; F' + Math.round(m.fat) + ' &middot; last logged ' + lastLoggedLabel(m.loggedAt) + '</div></div>' +
+        '<div class="rc-kcal"><b>' + kc + '</b><span>kcal</span></div>' +
+      '</div>' +
+      '<div class="rc-label">Add to today as</div>' +
+      '<div class="category-picker ai-cats" id="recentCats">' + MEAL_CATEGORIES.map(function(c){
+        return '<button type="button" class="category-pill' + (c.id === recentSheet.category ? ' active' : '') + '" data-action="recent-select-category" data-category="' + c.id + '">' + c.label + '</button>';
+      }).join('') + '</div>' +
+      '<button type="button" class="btn-primary" data-action="recent-log">+ Log today &middot; ' + kc + ' kcal</button>' +
+      '<button type="button" class="rc-cancel" data-action="close-recent-sheet">Cancel</button>';
+    showSheetOverlay(document.getElementById('recentOverlay'));
+    var box = document.getElementById('recentCats');
+    var act = box.querySelector('.active');
+    if (act) box.scrollLeft = Math.max(0, act.offsetLeft - (box.clientWidth - act.offsetWidth) / 2);
+  }
+  function closeRecentSheet(){
+    hideSheetOverlay(document.getElementById('recentOverlay'));
+    recentSheet.id = null;
+  }
+  attachSheetDrag(document.getElementById('recentGrab'), closeRecentSheet);
 
   /* ---- Confirmation bottom sheet ----
      opts: title, name, detail, kcal, note, confirmLabel, onConfirm.
@@ -6741,7 +6808,7 @@
     var recentHtml = recent.length ? (
       '<div class="scan-recent-label">Recent</div><div class="scan-recent">' +
         recent.map(function(m){
-          return '<button type="button" class="scan-chip" data-action="copy-meal" data-id="' + m.id + '">' + esc(m.name) + '<span>' + Math.round(m.calories) + '</span></button>';
+          return '<button type="button" class="scan-chip" data-action="open-recent-sheet" data-id="' + m.id + '">' + esc(m.name) + '<span>' + Math.round(m.calories) + '</span></button>';
         }).join('') +
       '</div>') : '';
     document.getElementById('view').innerHTML =
@@ -7089,6 +7156,19 @@
       var ih = document.getElementById('installHelp'); if (ih) ih.remove();
     } else if (action === 'copy-meal'){
       copyMealToToday(el.dataset.id);
+    } else if (action === 'open-recent-sheet'){
+      openRecentSheet(el.dataset.id);
+    } else if (action === 'close-recent-sheet'){
+      closeRecentSheet();
+    } else if (action === 'recent-select-category'){
+      recentSheet.category = el.dataset.category;
+      Array.prototype.forEach.call(document.querySelectorAll('#recentCats .category-pill'), function(b){
+        b.classList.toggle('active', b.getAttribute('data-category') === recentSheet.category);
+      });
+    } else if (action === 'recent-log'){
+      var rid = recentSheet.id, rcat = recentSheet.category;
+      closeRecentSheet();
+      if (rid) copyMealToToday(rid, rcat);
     } else if (action === 'toggle-fav'){
       toggleFavorite(el.dataset.name);
     } else if (action === 'set-log-day'){
@@ -7469,9 +7549,9 @@
      a "layer" with one history entry; back closes the top layer using its own
      close/cancel button. With nothing open, back on another tab returns to
      Log, and on Log the first press shows "Press back again to exit". */
-  var BACK_LAYER_IDS = ['aiZoom', 'signInOverlay', 'foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
+  var BACK_LAYER_IDS = ['aiZoom', 'recentOverlay', 'signInOverlay', 'foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
     'addMealOverlay', 'aiScanOverlay', 'confirmOverlay', 'foodSheet', 'mealMenu', 'calSheet', 'dayOverlay'];
-  var BACK_NEEDS_OPEN = { addMealOverlay: 1, aiScanOverlay: 1, confirmOverlay: 1 };
+  var BACK_NEEDS_OPEN = { addMealOverlay: 1, aiScanOverlay: 1, recentOverlay: 1, confirmOverlay: 1 };
   var backDepth = 0, backIgnorePops = 0, backSyncQueued = false, exitArmed = false, exitArmTimer = null;
   function backLayerEls(){
     var out = [];
