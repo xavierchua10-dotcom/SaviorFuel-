@@ -1427,6 +1427,7 @@
   .face-ring-fill.protein{stroke:var(--c-protein);}
   .face-ring-fill.carbs{stroke:var(--c-carbs);}
   .face-ring-fill.fat{stroke:var(--c-fat);}
+  .face-ring-fill.water{stroke:var(--c-water);}
   .face-ring-fill.over{stroke:var(--accent-2);}
   .face-ring-pct{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
@@ -5649,6 +5650,7 @@
   var PYRAMID_FACES = [
     { key: 'protein', label: 'Protein', y: 0.44, r: 0.245, side: 0 },
     { key: 'carbs',   label: 'Carbs',   y: 0.08, r: 0.47,  side: 1 },
+    { key: 'water',   label: 'Water',   y: 0.26, r: 0.345, side: 2, unit: 'ml' },
     { key: 'fat',     label: 'Fat',     y: 0.60, r: 0.145, side: 3 }
   ];
   var FACE_RING_R = 15;
@@ -5656,7 +5658,7 @@
 
   function faceTagHtml(faceIndex, totals, goals){
     var f = PYRAMID_FACES[faceIndex];
-    var value = totals[f.key] || 0;
+    var value = f.key === 'water' ? waterFor(todayKey()) : (totals[f.key] || 0);
     var goal = goals[f.key] || 0;
     var percent = pctUncapped(value, goal);
     var over = percent > 100;
@@ -5672,7 +5674,7 @@
       '</div>' +
       '<div>' +
         '<div class="face-name">' + f.label + '</div>' +
-        '<div class="face-amount' + (over ? ' over' : '') + '">' + Math.round(value) + ' / ' + goal + 'g</div>' +
+        '<div class="face-amount' + (over ? ' over' : '') + '">' + Math.round(value) + ' / ' + goal + (f.unit || 'g') + '</div>' +
       '</div>' +
     '</div>';
   }
