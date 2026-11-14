@@ -64,13 +64,14 @@
     <tr><td>Open Food Facts</td><td>Your food search text or a scanned barcode, to find packaged foods and product photos</td></tr>
     <tr><td>USDA FoodData Central</td><td>Your food search text, to find generic foods</td></tr>
     <tr><td>Kalori (techapi.my)</td><td>Your food search text, to find Malaysian foods</td></tr>
+    <tr><td>SaviorFuel AI server (Cloudflare) and Google Gemini</td><td>A meal photo, only when you use Snap a photo and have agreed to it (see section 4)</td></tr>
     <tr><td>Public CDNs (Google Fonts, cdnjs, jsDelivr)</td><td>The app loads its fonts and a few code libraries (including the 3D viewer and the photo-recognition model) from these services. Like any website, they can see your IP address. They don't receive your food data.</td></tr>
   </table>
   <p>Each of these services has its own privacy practices.</p>
 
   <h2>4. Camera and photos</h2>
-  <p>The camera opens only when you choose to scan a barcode or snap a photo of a meal, and only while the scanner screen is open. Barcodes and photos are read on your device. A photo is not uploaded anywhere today.</p>
-  <p>An optional AI photo-scan is planned. It is switched off and nothing is sent for it. If it is turned on in a future version, the app will ask for your consent first and this policy will be updated before then.</p>
+  <p>The camera opens only when you choose to scan a barcode or snap a photo of a meal, and only while the scanner screen is open. Barcodes are read on your device.</p>
+  <p><strong>AI photo scan.</strong> When you snap a photo of a meal, the app asks for your consent the first time. If you agree, the photo is sent to a small server run by the developer (on Cloudflare), which passes it to Google&rsquo;s Gemini AI to estimate what is on the plate. The photo is used only to produce that estimate: SaviorFuel does not save it and does not attach your name or account to it. To enforce a daily scan limit, the server keeps a count of scans per device address (a scrambled, one-way version of the IP address, which expires after two days). Google handles the photo under its own terms; on Google&rsquo;s free tier, content sent to it may be used to improve its products, so avoid photos that show people, documents or anything private. If you decline, or the AI is unavailable, the app falls back to a basic guess made on your device and nothing is uploaded.</p>
 
   <h2>5. Your control</h2>
   <ul>
