@@ -64,3 +64,23 @@ Optional settings (either host): `DAILY_CAP` (scans for everyone per day, defaul
 - Counter records are tiny. On Cloudflare they expire by themselves after two days; on Netlify they
   pile up one per active person per day, so clear the `scan-limits` store (Blobs) now and then.
 - Portion sizes from a photo are estimates. The app makes people confirm and edit them.
+
+## Foods proxy (USDA + Kalori keys) — Cloudflare, ~10 minutes
+
+Same idea as the AI scan: the app's food search used to carry the USDA and Kalori keys
+in `index.html`, and the repo is public. `cloudflare/foods-worker.js` holds them instead
+(no storage, no build). Searches are cached for a day, and only the app's own site may call it.
+
+1. In Cloudflare: **Workers & Pages → Create → Create Worker**, name it `saviorfuel-foods`, **Deploy**,
+   **Edit code**, delete the sample, paste the whole of `cloudflare/foods-worker.js`, **Deploy**.
+2. **Settings → Variables and Secrets** — add:
+
+   | Name | Type | Value |
+   |---|---|---|
+   | `USDA_API_KEY` | **Secret** | a NEW key from <https://fdc.nal.usda.gov/api-key-signup> |
+   | `TECHAPI_KEY` | **Secret** | a NEW key from your techapi.my dashboard |
+   | `ALLOWED_ORIGINS` | Text | `https://xavierchua10-dotcom.github.io` |
+
+3. Set `FOODS_PROXY_URL` in `index.html` to `https://saviorfuel-foods.<your-subdomain>.workers.dev` and push.
+   Then delete the two old key lines from `index.html`.
+4. Because the old keys were public, make new ones (step 2) and delete the old ones at USDA / techapi.

@@ -3008,6 +3008,11 @@
   var searchRequestId = 0; // guards against a slow older request overwriting a newer one's results
   var USDA_API_KEY = 'DcPJpdzm8AjRDIpzmzfL3fJavbtVWsAY6bGtEQYi';
 
+  // Foods proxy: when set, USDA and Kalori searches go through your own tiny
+  // Cloudflare Worker (ai-proxy/cloudflare/foods-worker.js) which holds the keys
+  // privately. Once it's set, the two keys below can be deleted from this file.
+  var FOODS_PROXY_URL = ''; // e.g. 'https://saviorfuel-foods.yourname.workers.dev'
+
   var TECHAPI_KEY = 'tech_2f095b353334f3552fb2356065ca43bd9fe42e2e584fc76cda30555e984fb40c';
 
   // Kalori (via techapi.my) — Malaysian food database. Response envelope
@@ -3016,8 +3021,10 @@
   // shapes defensively rather than assuming one and silently returning
   // nothing if it's wrong.
   function fetchKalori(query, signal){
-    var url = 'https://api.techapi.my/api/v2/kalori/foods/search?q=' + encodeURIComponent(query);
-    return fetch(url, { headers: { 'X-API-Key': TECHAPI_KEY }, signal: signal })
+    var url = FOODS_PROXY_URL
+      ? FOODS_PROXY_URL + '/kalori?q=' + encodeURIComponent(query)
+      : 'https://api.techapi.my/api/v2/kalori/foods/search?q=' + encodeURIComponent(query);
+    return fetch(url, { headers: FOODS_PROXY_URL ? {} : { 'X-API-Key': TECHAPI_KEY }, signal: signal })
       .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
       .then(function(json){
         if (!json || json.success === false) return [];
@@ -3090,8 +3097,10 @@
   // exactly the "plain chicken breast," "egg" category Open Food Facts
   // is weakest at, since OFF mostly covers branded/packaged items.
   function fetchUSDA(query, signal){
-    var url = 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + USDA_API_KEY +
-      '&query=' + encodeURIComponent(query) + '&pageSize=10&dataType=Foundation,SR%20Legacy';
+    var url = FOODS_PROXY_URL
+      ? FOODS_PROXY_URL + '/usda?q=' + encodeURIComponent(query)
+      : 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + USDA_API_KEY +
+        '&query=' + encodeURIComponent(query) + '&pageSize=10&dataType=Foundation,SR%20Legacy';
     return fetch(url, { signal: signal })
       .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
       .then(function(data){
