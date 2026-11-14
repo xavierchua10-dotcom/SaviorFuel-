@@ -869,6 +869,25 @@
   .scan-overlay.analysing .scan-line{display:block;animation:scanSweep 1.6s ease-in-out infinite alternate;}
   @keyframes scanSweep{from{top:28%;}to{top:72%;}}
   .scan-overlay.analysing .scan-overlay-capture, .scan-overlay.analysing .scan-gal, .scan-overlay.analysing .scan-torch{display:none;}
+  /* analysing: photo on top, the result sheet's shape shimmering below */
+  .scan-work{--panel-2:#1c1f25;--panel-3:#2a2f38;--line:#2e333b;display:none;position:absolute;inset:0;background:#0e0f12;flex-direction:column;gap:14px;padding:calc(72px + var(--safe-top, 0px)) 14px calc(20px + var(--safe-bottom, 0px));}
+  .scan-overlay.analysing .scan-work{display:flex;}
+  .sw-photo{flex:1;min-height:0;border-radius:16px;overflow:hidden;background:#000;display:flex;align-items:center;justify-content:center;}
+  .sw-photo img{width:100%;height:100%;object-fit:contain;display:block;}
+  .sw-card{flex:none;background:var(--panel-2);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px;}
+  .sw-row{display:flex;align-items:center;gap:16px;}
+  .sw-bars{flex:1;display:flex;flex-direction:column;gap:9px;}
+  .sw-bars i{height:8px;border-radius:4px;}
+  .sw-bars i:nth-child(1){width:100%;} .sw-bars i:nth-child(2){width:78%;} .sw-bars i:nth-child(3){width:56%;}
+  .sw-kcal{width:84px;height:34px;border-radius:8px;flex:none;}
+  .sw-chips{display:flex;gap:8px;}
+  .sw-chips i{height:30px;border-radius:15px;width:76px;} .sw-chips i:nth-child(2){width:92px;} .sw-chips i:nth-child(3){width:60px;}
+  .sw-sk{display:block;background:var(--panel-3);position:relative;overflow:hidden;}
+  .sw-sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,0.09),transparent);animation:swShimmer 1.4s ease-in-out infinite;}
+  @keyframes swShimmer{to{transform:translateX(100%);}}
+  .sw-msg{align-self:center;display:flex;align-items:center;gap:8px;font-size:13px;color:#fff;background:rgba(155,229,100,0.14);border-radius:18px;padding:8px 16px;}
+  .sw-msg::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);animation:stepPulse 0.9s ease-in-out infinite alternate;}
+  .scan-overlay.analysing .scan-overlay-frame, .scan-overlay.analysing .scan-line, .scan-overlay.analysing .scan-overlay-status, .scan-overlay.analysing .scan-overlay-controls, .scan-overlay.analysing .scan-pill{display:none;}
   .scan-steps{display:flex;flex-direction:column;gap:6px;align-items:center;font-size:13px;}
   .scan-step{opacity:0.45;display:flex;align-items:center;gap:8px;}
   .scan-step.on{opacity:1;}
@@ -877,7 +896,7 @@
   .scan-step.on i{border-color:var(--accent);animation:stepPulse 0.9s ease-in-out infinite alternate;}
   .scan-step.done i{background:var(--accent);border-color:var(--accent);}
   @keyframes stepPulse{from{transform:scale(0.8);}to{transform:scale(1.25);}}
-  @media (prefers-reduced-motion: reduce){ .scan-overlay.analysing .scan-line,.scan-step.on i{animation:none;} }
+  @media (prefers-reduced-motion: reduce){ .scan-overlay.analysing .scan-line,.scan-step.on i,.sw-sk::after,.sw-msg::before{animation:none;} }
 
   /* ---------- Settings — same structural classes as SaviorFit Logger ---------- */
   .section-label{
@@ -2199,6 +2218,14 @@
 
 <div id="scanOverlay" class="scan-overlay hidden">
   <video id="scanVideo" playsinline autoplay muted></video>
+  <div class="scan-work" id="scanWork" aria-live="polite">
+    <div class="sw-photo"><img id="scanWorkImg" alt="Your meal photo"></div>
+    <div class="sw-card">
+      <div class="sw-row"><i class="sw-sk sw-kcal"></i><div class="sw-bars"><i class="sw-sk"></i><i class="sw-sk"></i><i class="sw-sk"></i></div></div>
+      <div class="sw-chips"><i class="sw-sk"></i><i class="sw-sk"></i><i class="sw-sk"></i></div>
+      <div class="sw-msg" id="scanWorkMsg">Reading your plate…</div>
+    </div>
+  </div>
   <div class="scan-line" id="scanLine"></div>
   <div class="scan-overlay-frame"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
   <div class="scan-top">
@@ -4786,17 +4813,17 @@
   function startAnalysing(){
     var ov = document.getElementById('scanOverlay');
     var statusEl = document.getElementById('scanStatus');
+    var msg = document.getElementById('scanWorkMsg');
     try { document.getElementById('scanVideo').pause(); } catch (e){}
+    document.getElementById('scanWorkImg').src = aiScan.photo || '';
+    statusEl.textContent = '';
+    msg.textContent = 'Reading your plate\u2026';
     ov.classList.add('analysing');
-    var steps = ['Photo captured', 'Spotting foods', 'Estimating portions'];
-    function paint(n){
-      statusEl.innerHTML = '<div class="scan-steps">' + steps.map(function(t, i){
-        return '<div class="scan-step' + (i < n ? ' done' : (i === n ? ' on' : '')) + '"><i></i>' + t + '</div>';
-      }).join('') + '</div>';
-    }
-    paint(1);
     analysing.timers.forEach(clearTimeout);
-    analysing.timers = [setTimeout(function(){ paint(2); }, 2200)];
+    analysing.timers = [
+      setTimeout(function(){ msg.textContent = 'Estimating portions\u2026'; }, 2200),
+      setTimeout(function(){ msg.textContent = 'Almost there\u2026'; }, 6000)
+    ];
   }
   function stopAnalysing(){
     analysing.timers.forEach(clearTimeout);
