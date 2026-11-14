@@ -4417,6 +4417,35 @@
     return foodClassifierState.loading;
   }
 
+  // The video fills the screen with object-fit:cover, so work out which
+  // part of the real camera frame sits under the on-screen guide frame.
+  function cropToFrame(source, vw, vh){
+    var full = function(){
+      var c = document.createElement('canvas');
+      c.width = vw; c.height = vh;
+      c.getContext('2d').drawImage(source, 0, 0);
+      return c;
+    };
+    try {
+      var video = document.getElementById('scanVideo');
+      var frame = document.querySelector('.scan-overlay-frame');
+      var vr = video.getBoundingClientRect();
+      var fr = frame.getBoundingClientRect();
+      if (!vw || !vh || !vr.width || !vr.height || !fr.width || !fr.height) return full();
+      var sc = Math.max(vr.width / vw, vr.height / vh);
+      var ox = (vr.width - vw * sc) / 2, oy = (vr.height - vh * sc) / 2;
+      var sx = (fr.left - vr.left - ox) / sc, sy = (fr.top - vr.top - oy) / sc;
+      var sw = fr.width / sc, sh = fr.height / sc;
+      sx = Math.max(0, sx); sy = Math.max(0, sy);
+      sw = Math.min(vw - sx, sw); sh = Math.min(vh - sy, sh);
+      if (sw < 50 || sh < 50) return full();
+      var c = document.createElement('canvas');
+      c.width = Math.round(sw); c.height = Math.round(sh);
+      c.getContext('2d').drawImage(source, sx, sy, sw, sh, 0, 0, c.width, c.height);
+      return c;
+    } catch (e){ return full(); }
+  }
+
   function captureFoodPhoto(){
     if (!scanState.stream) return; // scanner already closed
     var video = document.getElementById('scanVideo');
@@ -4432,10 +4461,8 @@
     scanState.loopId = null;
     captureBtn.classList.add('loading');
 
-    var canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
+    // What gets scanned and saved is exactly what sits inside the green frame.
+    var canvas = cropToFrame(video, video.videoWidth, video.videoHeight);
 
     // AI scan (Gemini via the proxy) when it's set up and we're online;
     // otherwise — or if it fails — the basic on-device guess below.
