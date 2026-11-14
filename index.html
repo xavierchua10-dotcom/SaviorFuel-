@@ -1261,21 +1261,26 @@
 
   /* AI food scan result sheet (rows of name + grams, live macros) */
   .ai-scan-note{font-size:12px; line-height:1.45; color:var(--text-faint); margin:0 0 12px;}
-  .ai-hero{position:relative; height:170px; border-radius:14px; overflow:hidden; margin-bottom:8px; background:var(--panel-2);}
-  .ai-hero.hidden{display:none;}
-  .ai-hero img{position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:contain;}
-  .ai-hero img.ai-hero-bg{object-fit:cover; filter:blur(16px) brightness(0.55); transform:scale(1.25);}
-  .ai-badge{position:absolute; left:8px; top:8px; background:var(--accent); color:#14161a; font-size:11px; font-weight:700; padding:3px 9px; border-radius:var(--radius-pill);}
-  .ai-total-card{background:var(--panel-2); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:12px;}
-  .ai-total-kcal{display:flex; align-items:baseline; gap:6px; font-family:'Oswald',sans-serif;}
-  .ai-total-kcal b{font-size:36px; line-height:1; font-weight:700; color:var(--accent);}
+  .ai-badge{position:absolute; left:6px; bottom:6px; background:var(--accent); color:#14161a; font-size:10px; font-weight:700; padding:2px 7px; border-radius:var(--radius-pill);}
+  .ai-total-card{display:flex; align-items:center; gap:12px; background:var(--panel-2); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:6px;}
+  .ai-photo-btn{position:relative; width:104px; height:104px; flex:none; padding:0; border:none; border-radius:12px; overflow:hidden; background:var(--panel-3); cursor:pointer;}
+  .ai-photo-btn.hidden{display:none;}
+  .ai-photo-btn img{display:block; width:100%; height:100%; object-fit:contain;}
+  .ai-total-main{flex:1; min-width:0;}
+  .ai-total-kcal{display:flex; align-items:baseline; gap:5px; font-family:'Oswald',sans-serif;}
+  .ai-total-kcal b{font-size:34px; line-height:1; font-weight:700; color:var(--accent);}
   .ai-total-kcal span{font-size:13px; color:var(--text-faint);}
-  .ai-macro3{display:flex; gap:10px; margin-top:10px;}
-  .ai-macro3 > div{flex:1; min-width:0;}
-  .ai-macro3 .t{display:flex; justify-content:space-between; font-size:12px; color:var(--text-dim);}
+  .ai-macro3{display:flex; flex-direction:column; gap:6px; margin-top:8px;}
+  .ai-macro3 .t{display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim);}
   .ai-macro3 .t b{color:var(--text); font-weight:600; font-family:'JetBrains Mono',monospace; font-size:11px;}
-  .ai-macro3 .bar{height:5px; border-radius:3px; background:var(--panel-3); overflow:hidden; margin-top:5px;}
+  .ai-macro3 .bar{height:5px; border-radius:3px; background:var(--panel-3); overflow:hidden; margin-top:3px;}
   .ai-macro3 .bar i{display:block; height:100%; border-radius:3px;}
+  .ai-zoom{position:fixed; inset:0; z-index:400; background:rgba(0,0,0,0.94); display:flex; align-items:center; justify-content:center; padding:16px;}
+  .ai-zoom.hidden{display:none;}
+  .ai-zoom img{max-width:100%; max-height:100%; object-fit:contain; border-radius:12px;}
+  .ai-zoom-x{position:absolute; top:calc(14px + var(--safe-top, 0px)); right:14px; width:44px; height:44px; border-radius:50%; border:none; background:rgba(255,255,255,0.14); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+  .ai-zoom-x svg{width:20px; height:20px;}
+  #mealPhotoImg{cursor:zoom-in;}
   .ai-cats{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
   .ai-cats::-webkit-scrollbar{display:none;}
   .ai-cats .category-pill{flex:none; white-space:nowrap;}
@@ -2275,9 +2280,11 @@
       </button>
     </div>
     <div class="add-meal-body">
-      <div class="ai-hero hidden" id="aiScanHero"><img class="ai-hero-bg" id="aiScanThumbBg" alt="" aria-hidden="true"><img id="aiScanThumb" alt="Your meal photo"><span class="ai-badge">AI estimate</span></div>
+      <div class="ai-total-card">
+        <button type="button" class="ai-photo-btn hidden" id="aiScanHero" data-action="zoom-ai-photo" aria-label="Enlarge your meal photo"><img id="aiScanThumb" alt="Your meal photo"><span class="ai-badge">AI</span></button>
+        <div class="ai-total-main" id="aiScanTotal"></div>
+      </div>
       <div class="ai-scan-note" id="aiScanNote"></div>
-      <div class="ai-total-card" id="aiScanTotal"></div>
       <div class="category-picker ai-cats" id="aiCategoryPicker"></div>
       <div id="aiScanItems"></div>
       <button type="button" class="ai-add-item" data-action="ai-add-item">+ Add another item</button>
@@ -2285,6 +2292,13 @@
       <button class="btn-primary" id="aiLogBtn" data-action="ai-scan-log">+ Log meal</button>
     </div>
   </div>
+</div>
+
+<div class="ai-zoom hidden" id="aiZoom" role="dialog" aria-modal="true" aria-label="Meal photo">
+  <img id="aiZoomImg" alt="Your meal photo">
+  <button type="button" class="ai-zoom-x" data-action="close-ai-zoom" aria-label="Close photo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  </button>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -4737,7 +4751,7 @@
   // one sent to the AI, so storage stays light.
   function aiPhotoThumb(canvas){
     try {
-      var max = 300;
+      var max = 480;
       var scale = Math.min(1, max / Math.max(canvas.width, canvas.height));
       var out = document.createElement('canvas');
       out.width = Math.max(1, Math.round(canvas.width * scale));
@@ -4873,15 +4887,34 @@
     });
     aiScan.category = suggestCategoryForNow();
     var noteEl = document.getElementById('aiScanNote');
-    noteEl.textContent = data.note ? String(data.note).slice(0, 140) : '';
-    noteEl.style.display = data.note ? '' : 'none';
+    var noteTxt = data.note ? String(data.note).slice(0, 140) : '';
+    if (aiScan.photo) noteTxt += (noteTxt ? (/[.!?]$/.test(noteTxt) ? ' ' : '. ') : '') + 'Tap the photo to enlarge.';
+    noteEl.textContent = noteTxt;
+    noteEl.style.display = noteTxt ? '' : 'none';
     var th = document.getElementById('aiScanThumb');
     var hero = document.getElementById('aiScanHero');
-    if (aiScan.photo){ th.src = aiScan.photo; document.getElementById('aiScanThumbBg').src = aiScan.photo; hero.classList.remove('hidden'); } else hero.classList.add('hidden');
+    if (aiScan.photo){ th.src = aiScan.photo; hero.classList.remove('hidden'); } else hero.classList.add('hidden');
     renderAiCategoryPicker();
     renderAiScanItems();
     showSheetOverlay(document.getElementById('aiScanOverlay'));
   }
+
+  function openAiZoom(src){
+    if (!src) return;
+    document.getElementById('aiZoomImg').src = src;
+    document.getElementById('aiZoom').classList.remove('hidden');
+  }
+  function closeAiZoom(){
+    document.getElementById('aiZoom').classList.add('hidden');
+    document.getElementById('aiZoomImg').removeAttribute('src');
+  }
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (!t || !t.closest) return;
+    if (t.closest('#aiZoom')){ closeAiZoom(); return; }
+    if (t.closest('#aiScanHero')){ openAiZoom(aiScan.photo); return; }
+    if (t.id === 'mealPhotoImg'){ openAiZoom(t.getAttribute('src')); }
+  });
 
   function closeAiScanSheet(){
     hideSheetOverlay(document.getElementById('aiScanOverlay'));
@@ -7376,7 +7409,7 @@
      a "layer" with one history entry; back closes the top layer using its own
      close/cancel button. With nothing open, back on another tab returns to
      Log, and on Log the first press shows "Press back again to exit". */
-  var BACK_LAYER_IDS = ['signInOverlay', 'foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
+  var BACK_LAYER_IDS = ['aiZoom', 'signInOverlay', 'foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
     'addMealOverlay', 'aiScanOverlay', 'confirmOverlay', 'foodSheet', 'mealMenu', 'calSheet', 'dayOverlay'];
   var BACK_NEEDS_OPEN = { addMealOverlay: 1, aiScanOverlay: 1, confirmOverlay: 1 };
   var backDepth = 0, backIgnorePops = 0, backSyncQueued = false, exitArmed = false, exitArmTimer = null;
