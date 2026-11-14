@@ -1239,46 +1239,75 @@
   @media (prefers-reduced-motion: reduce){ .acc, .acc.open, .sum-row-chev{transition:none;} }
 
   /* AI food scan result sheet (rows of name + grams, live macros) */
-  .ai-scan-note{font-size:12px; line-height:1.45; color:var(--text-faint); margin-bottom:12px;}
-  .ai-item{padding:10px 0; border-top:1px solid var(--line);}
-  .ai-item:first-child{border-top:none; padding-top:0;}
+  .ai-scan-note{font-size:12px; line-height:1.45; color:var(--text-faint); margin:0 0 12px;}
+  .ai-hero{position:relative; height:112px; border-radius:14px; overflow:hidden; margin-bottom:8px; background:var(--panel-2);}
+  .ai-hero.hidden{display:none;}
+  .ai-hero img{display:block; width:100%; height:100%; object-fit:cover;}
+  .ai-badge{position:absolute; left:8px; top:8px; background:var(--accent); color:#14161a; font-size:11px; font-weight:700; padding:3px 9px; border-radius:var(--radius-pill);}
+  .ai-total-card{background:var(--panel-2); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:12px;}
+  .ai-total-kcal{display:flex; align-items:baseline; gap:6px; font-family:'Oswald',sans-serif;}
+  .ai-total-kcal b{font-size:36px; line-height:1; font-weight:700; color:var(--accent);}
+  .ai-total-kcal span{font-size:13px; color:var(--text-faint);}
+  .ai-macro3{display:flex; gap:10px; margin-top:10px;}
+  .ai-macro3 > div{flex:1; min-width:0;}
+  .ai-macro3 .t{display:flex; justify-content:space-between; font-size:12px; color:var(--text-dim);}
+  .ai-macro3 .t b{color:var(--text); font-weight:600; font-family:'JetBrains Mono',monospace; font-size:11px;}
+  .ai-macro3 .bar{height:5px; border-radius:3px; background:var(--panel-3); overflow:hidden; margin-top:5px;}
+  .ai-macro3 .bar i{display:block; height:100%; border-radius:3px;}
+  .ai-cats{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+  .ai-cats::-webkit-scrollbar{display:none;}
+  .ai-cats .category-pill{flex:none; white-space:nowrap;}
+  .ai-item{background:var(--panel-2); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:8px;}
   .ai-item-top{display:flex; align-items:center; gap:8px;}
-  .ai-item-name, .ai-item-grams{
-    background:var(--panel-2); border:1px solid var(--line); border-radius:var(--radius-sm);
-    color:var(--text); font-size:14px; padding:8px 10px;
+  .ai-item-name{
+    flex:1; min-width:0; background:transparent; border:1px solid transparent; border-radius:var(--radius-sm);
+    color:var(--text); font-size:15px; font-weight:600; padding:4px 6px; margin-left:-6px;
   }
-  .ai-item-name{flex:1; min-width:0;}
-  .ai-item-name:focus, .ai-item-grams:focus{outline:none; border-color:var(--accent);}
+  .ai-item-name:focus{outline:none; border-color:var(--accent); background:var(--panel-3);}
+  .ai-item-kcal{font-size:13px; font-weight:600; color:var(--accent); font-family:'JetBrains Mono',monospace; white-space:nowrap;}
   .ai-item-del{
     width:28px; height:28px; flex-shrink:0; border-radius:50%; padding:0;
     background:var(--panel-3); border:none; color:var(--text-dim); cursor:pointer;
     display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1;
   }
   .ai-item-del:active{background:var(--panel-2); color:var(--accent-2);}
-  .ai-item-bottom{display:flex; align-items:center; gap:6px; margin-top:8px;}
-  .ai-item-grams{width:76px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px;}
-  .ai-item-unit{font-size:12px; color:var(--text-faint);}
-  .ai-item-macros{margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-align:right;}
-  .ai-scan-head{display:flex; gap:12px; align-items:center; margin-bottom:12px;}
-  .ai-scan-thumb{width:64px; height:64px; border-radius:12px; object-fit:cover; flex-shrink:0; background:var(--panel-2);}
-  .ai-scale{display:flex; gap:6px; margin-top:8px;}
+  .ai-item-macros{margin-top:2px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-faint);}
+  .ai-item-bottom{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px;}
+  .ai-stepper{display:flex; align-items:center; gap:2px; background:var(--panel-3); border-radius:var(--radius-pill); padding:3px;}
+  .ai-stepper button{
+    width:32px; height:32px; border-radius:50%; border:none; padding:0; cursor:pointer;
+    background:var(--panel-2); color:var(--text); font-size:18px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .ai-stepper button:active{filter:brightness(1.15);}
+  .ai-item-grams{
+    width:54px; text-align:center; background:transparent; border:none; color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:600; padding:4px 0; -moz-appearance:textfield;
+  }
+  .ai-item-grams::-webkit-outer-spin-button, .ai-item-grams::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+  .ai-item-grams:focus{outline:none;}
+  .ai-item-unit{font-size:12px; color:var(--text-faint); padding-right:8px;}
+  .ai-item-manual{display:flex; align-items:center; gap:8px; margin-top:10px; font-size:12px; color:var(--text-faint);}
+  .ai-item-manual input{
+    width:90px; background:var(--panel-3); border:1px solid var(--line); border-radius:var(--radius-sm);
+    color:var(--text); font-size:14px; padding:8px 10px; text-align:right; font-family:'JetBrains Mono',monospace;
+  }
+  .ai-item-manual input:focus{outline:none; border-color:var(--accent);}
+  .ai-item-manual input{-moz-appearance:textfield;}
+  .ai-item-manual input::-webkit-outer-spin-button, .ai-item-manual input::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+  .ai-scale{display:flex; gap:6px;}
   .ai-scale button{
-    background:var(--panel-2); border:1px solid var(--line); border-radius:var(--radius-pill);
-    color:var(--text-dim); font-size:12px; padding:5px 12px; cursor:pointer; min-height:30px;
+    background:var(--panel-3); border:1px solid transparent; border-radius:var(--radius-pill);
+    color:var(--text-dim); font-size:12px; padding:5px 11px; cursor:pointer; min-height:32px;
   }
   .ai-scale button.active{background:var(--accent); border-color:var(--accent); color:#14161a;}
+  .ai-add-item{display:block; width:100%; background:none; border:none; color:var(--accent); font-size:13px; font-weight:600; padding:8px 0 4px; cursor:pointer;}
+  .ai-foot{text-align:center; font-size:11px; color:var(--text-faint); margin:0 0 12px;}
   .meal-thumb{width:42px; height:42px; border-radius:15px; object-fit:cover; flex-shrink:0; background:var(--panel-2);}
   .meal-photo{margin:0 0 12px;}
   .meal-photo img{display:block; width:100%; height:130px; object-fit:cover; border-radius:12px; background:var(--panel-2);}
   .meal-photo-row{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:8px; font-size:12px; color:var(--text-faint);}
   .meal-photo-row button{background:none; border:none; color:var(--accent-2); font-size:12px; padding:6px 0 6px 10px; cursor:pointer;}
-  .ai-scan-total{
-    display:flex; justify-content:space-between; gap:10px; align-items:baseline;
-    padding:12px 0 14px; border-top:1px solid var(--line);
-    font-family:'Oswald',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.04em;
-    text-transform:uppercase; color:var(--text);
-  }
-  .ai-scan-total span:last-child{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:400; letter-spacing:0; text-transform:none; color:var(--accent);}
 
   /* ---------- Nutrient info popover — same overlay pattern as Add
      Meal, just a smaller fixed-content card instead of a form. ---------- */
@@ -2183,11 +2212,14 @@
       </button>
     </div>
     <div class="add-meal-body">
-      <div class="ai-scan-head"><img class="ai-scan-thumb hidden" id="aiScanThumb" alt="Your meal photo"><div class="ai-scan-note" id="aiScanNote" style="margin:0"></div></div>
-      <div class="category-picker" id="aiCategoryPicker"></div>
+      <div class="ai-hero hidden" id="aiScanHero"><img id="aiScanThumb" alt="Your meal photo"><span class="ai-badge">AI estimate</span></div>
+      <div class="ai-scan-note" id="aiScanNote"></div>
+      <div class="ai-total-card" id="aiScanTotal"></div>
+      <div class="category-picker ai-cats" id="aiCategoryPicker"></div>
       <div id="aiScanItems"></div>
-      <div class="ai-scan-total" id="aiScanTotal"></div>
-      <button class="btn-primary" data-action="ai-scan-log">+ Log meal</button>
+      <button type="button" class="ai-add-item" data-action="ai-add-item">+ Add another item</button>
+      <div class="ai-foot">Estimates from a photo. Check portions before logging.</div>
+      <button class="btn-primary" id="aiLogBtn" data-action="ai-scan-log">+ Log meal</button>
     </div>
   </div>
 </div>
@@ -4611,6 +4643,9 @@
     document.getElementById('aiCategoryPicker').innerHTML = MEAL_CATEGORIES.map(function(c){
       return '<button type="button" class="category-pill' + (c.id === aiScan.category ? ' active' : '') + '" data-action="ai-select-category" data-category="' + c.id + '">' + c.label + '</button>';
     }).join('');
+    var box = document.getElementById('aiCategoryPicker');
+    var act = box.querySelector('.active');
+    if (act) box.scrollLeft = Math.max(0, act.offsetLeft - (box.clientWidth - act.offsetWidth) / 2);
   }
 
   function renderAiScanTotal(){
@@ -4619,24 +4654,59 @@
       var m = aiItemMacros(it);
       t.calories += m.calories; t.protein += m.protein; t.carbs += m.carbs; t.fat += m.fat;
     });
-    document.getElementById('aiScanTotal').innerHTML = '<span>Total</span><span>' + aiMacroLine(t) + '</span>';
+    var pk = t.protein * 4, ck = t.carbs * 4, fk = t.fat * 9, sum = pk + ck + fk;
+    function share(v){ return sum > 0 ? Math.max(3, Math.round(v / sum * 100)) : 0; }
+    function col(label, g, v, c){
+      return '<div><div class="t"><span>' + label + '</span><b>' + Math.round(g) + 'g</b></div><div class="bar"><i style="width:' + share(v) + '%;background:var(' + c + ')"></i></div></div>';
+    }
+    var kc = Math.round(t.calories);
+    document.getElementById('aiScanTotal').innerHTML =
+      '<div class="ai-total-kcal"><b>' + kc + '</b><span>kcal</span></div>' +
+      '<div class="ai-macro3">' + col('Protein', t.protein, pk, '--c-protein') + col('Carbs', t.carbs, ck, '--c-carbs') + col('Fat', t.fat, fk, '--c-fat') + '</div>';
+    var btn = document.getElementById('aiLogBtn');
+    if (btn) btn.textContent = kc > 0 ? '+ Log meal \u00b7 ' + kc + ' kcal' : '+ Log meal';
   }
+
+  function aiUpdateRowNumbers(i){
+    var it = aiScan.items[i];
+    if (!it) return;
+    var m = aiItemMacros(it);
+    var k = document.getElementById('aiKcal' + i);
+    if (k) k.textContent = Math.round(m.calories) + ' kcal';
+    var l = document.getElementById('aiMacros' + i);
+    if (l) l.innerHTML = 'P' + Math.round(m.protein) + ' &middot; C' + Math.round(m.carbs) + ' &middot; F' + Math.round(m.fat);
+  }
+
+  function aiStep(it){ return Math.max(5, Math.round(it.base.grams * 0.1 / 5) * 5); }
 
   function renderAiScanItems(){
     document.getElementById('aiScanItems').innerHTML = aiScan.items.map(function(it, i){
+      var m = aiItemMacros(it);
+      var controls;
+      if (it.manual){
+        controls = '<div class="ai-item-manual"><span>Calories</span>' +
+          '<input type="number" inputmode="decimal" data-ai-field="kcal" data-i="' + i + '" value="' + (it.base.calories || '') + '" min="0" max="5000" placeholder="0" aria-label="Calories"><span>kcal</span></div>';
+      } else {
+        controls = '<div class="ai-item-bottom">' +
+          '<div class="ai-stepper">' +
+            '<button type="button" data-action="ai-step" data-i="' + i + '" data-d="-1" aria-label="Less">&minus;</button>' +
+            '<input type="number" inputmode="decimal" class="ai-item-grams" data-ai-field="grams" data-i="' + i + '" value="' + it.grams + '" min="0" max="3000" aria-label="Grams">' +
+            '<span class="ai-item-unit">g</span>' +
+            '<button type="button" data-action="ai-step" data-i="' + i + '" data-d="1" aria-label="More">+</button>' +
+          '</div>' +
+          '<div class="ai-scale">' + [0.5, 1, 1.5].map(function(f){
+            return '<button type="button" data-action="ai-scale" data-i="' + i + '" data-f="' + f + '" class="' + (it.grams === Math.round(it.base.grams * f) ? 'active' : '') + '">&times;' + f + '</button>';
+          }).join('') + '</div>' +
+        '</div>';
+      }
       return '<div class="ai-item">' +
         '<div class="ai-item-top">' +
-          '<input type="text" class="ai-item-name" data-ai-field="name" data-i="' + i + '" value="' + esc(it.name) + '" maxlength="60" aria-label="Food name">' +
+          '<input type="text" class="ai-item-name" data-ai-field="name" data-i="' + i + '" value="' + esc(it.name) + '" maxlength="60" placeholder="Food name" aria-label="Food name">' +
+          '<span class="ai-item-kcal" id="aiKcal' + i + '">' + Math.round(m.calories) + ' kcal</span>' +
           '<button type="button" class="ai-item-del" data-action="ai-remove-item" data-i="' + i + '" aria-label="Remove ' + esc(it.name) + '">&times;</button>' +
         '</div>' +
-        '<div class="ai-scale">' + [0.5, 1, 1.5].map(function(f){
-          return '<button type="button" data-action="ai-scale" data-i="' + i + '" data-f="' + f + '" class="' + (it.grams === Math.round(it.base.grams * f) ? 'active' : '') + '">&times;' + f + '</button>';
-        }).join('') + '</div>' +
-        '<div class="ai-item-bottom">' +
-          '<input type="number" inputmode="decimal" class="ai-item-grams" data-ai-field="grams" data-i="' + i + '" value="' + it.grams + '" min="0" max="3000" aria-label="Grams">' +
-          '<span class="ai-item-unit">g</span>' +
-          '<span class="ai-item-macros" id="aiMacros' + i + '">' + aiMacroLine(aiItemMacros(it)) + '</span>' +
-        '</div>' +
+        '<div class="ai-item-macros" id="aiMacros' + i + '">P' + Math.round(m.protein) + ' &middot; C' + Math.round(m.carbs) + ' &middot; F' + Math.round(m.fat) + '</div>' +
+        controls +
       '</div>';
     }).join('');
     renderAiScanTotal();
@@ -4655,10 +4725,12 @@
       };
     });
     aiScan.category = suggestCategoryForNow();
-    document.getElementById('aiScanNote').textContent =
-      (data.note ? data.note + ' ' : '') + 'These are estimates from a photo — check the names and portions before logging.';
+    var noteEl = document.getElementById('aiScanNote');
+    noteEl.textContent = data.note ? String(data.note).slice(0, 140) : '';
+    noteEl.style.display = data.note ? '' : 'none';
     var th = document.getElementById('aiScanThumb');
-    if (aiScan.photo){ th.src = aiScan.photo; th.classList.remove('hidden'); } else th.classList.add('hidden');
+    var hero = document.getElementById('aiScanHero');
+    if (aiScan.photo){ th.src = aiScan.photo; hero.classList.remove('hidden'); } else hero.classList.add('hidden');
     renderAiCategoryPicker();
     renderAiScanItems();
     showSheetOverlay(document.getElementById('aiScanOverlay'));
@@ -4725,12 +4797,17 @@
       it.name = t.value;
     } else if (field === 'grams'){
       it.grams = Math.min(3000, Math.max(0, parseFloat(t.value) || 0));
-      var line = document.getElementById('aiMacros' + i);
-      if (line) line.textContent = aiMacroLine(aiItemMacros(it));
+      aiUpdateRowNumbers(i);
       var chips = t.closest('.ai-item').querySelectorAll('.ai-scale button');
       Array.prototype.forEach.call(chips, function(b){
         b.classList.toggle('active', it.grams === Math.round(it.base.grams * parseFloat(b.getAttribute('data-f'))));
       });
+      renderAiScanTotal();
+    } else if (field === 'kcal'){
+      it.grams = 100;
+      it.base.grams = 100;
+      it.base.calories = Math.min(5000, Math.max(0, parseFloat(t.value) || 0));
+      aiUpdateRowNumbers(i);
       renderAiScanTotal();
     }
   });
@@ -6642,6 +6719,17 @@
       }
     } else if (action === 'remove-meal-photo'){
       removeMealPhoto();
+    } else if (action === 'ai-step'){
+      var stit = aiScan.items[parseInt(el.dataset.i, 10)];
+      if (stit){
+        stit.grams = Math.min(3000, Math.max(1, Math.round(stit.grams + parseInt(el.dataset.d, 10) * aiStep(stit))));
+        renderAiScanItems();
+      }
+    } else if (action === 'ai-add-item'){
+      aiScan.items.push({ name: '', grams: 100, manual: true, base: { grams: 100, calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, sugar: 0, sodium: 0 } });
+      renderAiScanItems();
+      var nm = document.querySelectorAll('#aiScanItems .ai-item-name');
+      if (nm.length) nm[nm.length - 1].focus();
     } else if (action === 'ai-remove-item'){
       aiScan.items.splice(parseInt(el.dataset.i, 10), 1);
       if (aiScan.items.length === 0) closeAiScanSheet(); else renderAiScanItems();
