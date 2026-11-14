@@ -3623,8 +3623,11 @@
   }
 
   // mode: 'quick' (log calories now) | 'mine' (create / edit a My Food)
-  function openFoodSheet(mode, id){
+  var sheetBarcode = '';
+  function openFoodSheet(mode, id, opts){
     closeFoodSheet();
+    opts = opts || {};
+    sheetBarcode = opts.barcode || '';
     var editing = (mode === 'mine' && id) ? (STORE.myFoods || []).filter(function(f){ return f.id === id; })[0] : null;
     var quick = mode === 'quick';
     var el = document.createElement('div');
@@ -3634,7 +3637,7 @@
         '<button type="button" class="stats-sheet-x" data-action="close-food-sheet" aria-label="Close">&times;</button></div>' +
       (quick
         ? '<p class="fs-hint">Know the calories but not the food? Log it in one step.</p>' + sheetField('fsCal', 'Calories', '0') + sheetField('fsName', 'Name (optional)', 'Quick add', 'text')
-        : sheetField('fsName', 'Name', 'e.g. Mum’s nasi lemak', 'text') + sheetField('fsServing', 'One serving is', '1 plate', 'text') + sheetField('fsCal', 'Calories per serving', '0')) +
+        : (opts.hint ? '<p class="fs-hint">' + esc(opts.hint) + '</p>' : '') + sheetField('fsName', 'Name', 'e.g. Mum’s nasi lemak', 'text') + sheetField('fsServing', 'One serving is', '1 plate', 'text') + sheetField('fsCal', 'Calories per serving', '0')) +
       '<div class="fs-row">' + sheetField('fsP', 'Protein g', '0') + sheetField('fsC', 'Carbs g', '0') + sheetField('fsF', 'Fat g', '0') + '</div>' +
       '<button type="button" class="fs-save" data-action="save-food-sheet" data-mode="' + mode + '" data-id="' + (editing ? editing.id : '') + '">' +
         (quick ? 'Add to ' + (logDayKey() === todayKey() ? 'today' : formatDateLabel(logDayKey())) : 'Save food') + '</button>' +
@@ -3649,6 +3652,9 @@
       document.getElementById('fsP').value = editing.protein || '';
       document.getElementById('fsC').value = editing.carbs || '';
       document.getElementById('fsF').value = editing.fat || '';
+      sheetBarcode = editing.barcode || '';
+    } else if (opts.name){
+      document.getElementById('fsName').value = opts.name;
     }
     setTimeout(function(){
       var first = document.getElementById(quick ? 'fsCal' : 'fsName');
@@ -3680,13 +3686,21 @@
     var name = txt('fsName');
     if (!name){ showToast('Give the food a name'); return; }
     var food = { id: id || ('mf_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)), name: name, serving: txt('fsServing'),
-      calories: cal, protein: num('fsP'), carbs: num('fsC'), fat: num('fsF') };
+      calories: cal, protein: num('fsP'), carbs: num('fsC'), fat: num('fsF'), barcode: sheetBarcode || undefined };
+    var scannedBarcode = sheetBarcode;
     var list = STORE.myFoods || (STORE.myFoods = []);
     var at = -1;
     list.forEach(function(f, i){ if (f.id === food.id) at = i; });
     if (at >= 0) list[at] = food; else list.unshift(food);
     saveStore(); maybeVibrate();
     closeFoodSheet();
+    if (scannedBarcode && at < 0){
+      // saved straight from a scan: carry on to logging it
+      ui.lastSearchProducts = [myFoodToProduct(food)];
+      pickFoodResult(0);
+      showToast('Saved — scan it again any time');
+      return;
+    }
     var input = document.getElementById('foodSearchInput');
     if (input && input.value.trim().length >= 2) searchFoodDebounced(input.value); else renderFoodHome();
     showToast('Saved to My Foods');
@@ -4090,9 +4104,7 @@
         overlay.classList.remove('hidden');
         overlay.classList.toggle('photo-mode', mode !== 'barcode');
         document.getElementById('scanCaptureBtn').classList.toggle('hidden', mode === 'barcode');
-        scanState.detector = (mode === 'photo') ? null : new BarcodeDetector({
-          formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128']
-        });
+        scanState.detector = (mode === 'photo') ? null : makeBarcodeDetector();
         statusEl.textContent = mode === 'photo' ? 'Frame your food, then tap the camera button'
           : mode === 'barcode' ? 'Point the camera at a barcode'
           : 'Point at a barcode, or snap a photo of the food';
@@ -4102,6 +4114,12 @@
         console.error('SaviorFuel: camera access failed —', err);
         alert('Couldn\'t access the camera. Check camera permission for this app in your phone settings, or search by name instead.');
       });
+  }
+
+  function makeBarcodeDetector(){
+    var want = ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'];
+    try { return new BarcodeDetector({ formats: want }); }
+    catch (err){ try { return new BarcodeDetector(); } catch (err2){ return null; } }
   }
 
   function scanLoop(){
@@ -4132,52 +4150,97 @@
     document.getElementById('scanCaptureBtn').classList.remove('loading'); // reset for next open
   }
 
+  // ---- Barcode lookup: no single database has every product, so try, in order:
+  // (1) foods the person saved against this barcode, (2) Open Food Facts,
+  // (3) USDA branded foods. If none has it, offer to save it once from the
+  // label — next scan of that barcode then fills in instantly.
+  function stripZeros(c){ return String(c || '').replace(/^0+/, ''); }
+
+  function offKcal(n){
+    var k = Number(n['energy-kcal_100g']);
+    if (k > 0) return k;
+    var kj = Number(n['energy-kj_100g'] || n['energy_100g']);
+    if (kj > 0) return Math.round(kj / 4.184);
+    var fromMacros = 4 * (Number(n['proteins_100g']) || 0) + 4 * (Number(n['carbohydrates_100g']) || 0) + 9 * (Number(n['fat_100g']) || 0);
+    return fromMacros > 0 ? Math.round(fromMacros) : 0;
+  }
+
+  function lookupBarcodeOff(code){
+    var url = 'https://world.openfoodfacts.org/api/v2/product/' + encodeURIComponent(code) + '.json' +
+      '?fields=product_name,brands,nutriments,serving_quantity,serving_size,image_front_thumb_url,image_thumb_url,image_small_url';
+    return fetch(url).then(function(res){ return res.json(); }).then(function(data){
+      if (data.status !== 1 || !data.product) return null;
+      var p = data.product, n = p.nutriments || {};
+      var kcal = offKcal(n);
+      p._source = 'off';
+      p._image = p.image_front_thumb_url || p.image_thumb_url || p.image_small_url || '';
+      p._hasNutrition = kcal > 0;
+      if (kcal > 0){ n = Object.assign({}, n); n['energy-kcal_100g'] = kcal; p.nutriments = n; }
+      return p;
+    });
+  }
+
+  function lookupBarcodeUsda(code){
+    var url = FOODS_PROXY_URL
+      ? FOODS_PROXY_URL + '/usda?q=' + encodeURIComponent(code)
+      : 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + USDA_API_KEY +
+        '&query=' + encodeURIComponent(code) + '&pageSize=5&dataType=Branded';
+    return fetch(url).then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); }).then(function(data){
+      var want = stripZeros(code);
+      var hit = (data.foods || []).filter(function(f){ return stripZeros(f.gtinUpc) === want; })[0];
+      if (!hit) return null;
+      var p = usdaToProductShape(hit);
+      if (p.nutriments['energy-kcal_100g'] == null) return null;
+      var sz = Number(hit.servingSize);
+      if (sz > 0 && /^g/i.test(hit.servingSizeUnit || '')){
+        var label = String(hit.householdServingFullText || 'serving').replace(/\s+/g, ' ').trim();
+        p._measures = [{ label: label, grams: sz }];
+      }
+      p._hasNutrition = true;
+      return p;
+    });
+  }
+
+  function barcodeNotFound(code, name){
+    closeScanner();
+    closeFoodSearchOverlay();
+    openFoodSheet('mine', null, { barcode: code, name: name || '', hint: 'This barcode isn’t in the food databases yet. Add it once from the label — next time you scan it, it fills in instantly.' });
+  }
+
+  function openBarcodeProduct(p){
+    closeScanner();
+    ui.lastSearchProducts = [p];
+    pickFoodResult(0);
+  }
+
   function onBarcodeDetected(code){
     var statusEl = document.getElementById('scanStatus');
     statusEl.textContent = 'Found ' + code + ' — looking it up...';
     if (scanState.loopId) cancelAnimationFrame(scanState.loopId);
     scanState.loopId = null;
 
-    fetch('https://world.openfoodfacts.org/api/v2/product/' + encodeURIComponent(code) + '.json')
-      .then(function(res){ return res.json(); })
-      .then(function(data){
-        closeScanner();
-        closeFoodSearchOverlay();
-        if (data.status !== 1 || !data.product || !data.product.nutriments){
-          alert('That barcode isn\'t in the food database. Try searching by name instead.');
-          return;
+    var mine = (STORE.myFoods || []).filter(function(f){ return f.barcode && stripZeros(f.barcode) === stripZeros(code); })[0];
+    if (mine){ openBarcodeProduct(myFoodToProduct(mine)); return; }
+
+    var partialName = '';
+    lookupBarcodeOff(code)
+      .catch(function(err){ console.error('SaviorFuel: Open Food Facts lookup failed —', err); return 'offline'; })
+      .then(function(p){
+        if (p && p !== 'offline'){
+          if (p._hasNutrition){ openBarcodeProduct(p); return null; }
+          partialName = p.product_name || '';
         }
-        var p = data.product;
-        var n = p.nutriments;
-        ui.selectedFood = {
-          name: p.product_name || 'Scanned item',
-          image: p.image_front_thumb_url || p.image_thumb_url || p.image_small_url || '',
-          brand: p.brands ? p.brands.split(',')[0] : '',
-          from: 'search',
-          dataNote: foodDataNote(p.nutriments),
-          servingGrams: (p.serving_quantity > 0) ? p.serving_quantity : null,
-          servingSizeText: p.serving_size || null,
-          measures: [],
-          per100g: {
-            cal: n['energy-kcal_100g'] || 0,
-            protein: n['proteins_100g'] || 0,
-            carbs: n['carbohydrates_100g'] || 0,
-            fat: n['fat_100g'] || 0,
-            fiber: n['fiber_100g'] || 0,
-            sugar: n['sugars_100g'] || 0,
-            sodium: (n['sodium_100g'] || 0) * 1000 // OFF reports sodium in g like everything else
-          }
-        };
-        saveFoodToCache(ui.selectedFood); // works offline next time, even for a barcode
-        initServing();
-        applySelectedFoodToForm();
-        ui.justFilledFood = true;
-        openAddMealOverlay();
-      })
-      .catch(function(err){
-        console.error('SaviorFuel: barcode lookup failed —', err);
-        closeScanner();
-        alert('Lookup failed — check your connection and try again, or search by name instead.');
+        statusEl.textContent = 'Checking another database...';
+        return lookupBarcodeUsda(code).catch(function(err){ console.error('SaviorFuel: USDA barcode lookup failed —', err); return null; })
+          .then(function(u){
+            if (u){ openBarcodeProduct(u); return; }
+            if (p === 'offline'){
+              closeScanner();
+              alert('Lookup failed — check your connection and try again, or search by name instead.');
+              return;
+            }
+            barcodeNotFound(code, partialName);
+          });
       });
   }
 
