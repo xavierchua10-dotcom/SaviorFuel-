@@ -595,7 +595,7 @@
   .meal-split-row{display:flex; align-items:center; gap:10px; margin-bottom:3px;}
   .meal-split-macros{display:flex; gap:11px; margin-left:116px; font-size:11px; color:var(--text-faint);}
   .meal-split-macros b, .dcm-macros b{font-family:'JetBrains Mono',monospace; font-weight:500;}
-  .meal-split-macros .p, .dcm-macros .p{color:var(--c-protein);}
+  .meal-split-macros .p, .dcm-macros .p{color:var(--c-protein-text);}
   .meal-split-macros .c, .dcm-macros .c{color:var(--c-carbs);}
   .meal-split-macros .f, .dcm-macros .f{color:var(--c-fat);}
   .meal-split-macros .fi, .dcm-macros .fi{color:var(--c-fiber);}
@@ -618,6 +618,7 @@
   .week-stat b{display:block;font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;line-height:1.1;color:var(--text);}
   .week-stat span{display:block;margin-top:3px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);}
   .week-note{margin-top:12px;text-align:center;font-size:11px;color:var(--text-faint);}
+  .split-note{font-size:11.5px; color:var(--text-faint); margin:-4px 0 10px;}
   .split-bar{display:flex;gap:2px;height:16px;border-radius:var(--radius-xs);overflow:hidden;background:var(--panel-3);}
   .split-bar i{display:block;height:100%;}
   .split-bar .p{background:var(--c-protein);}
@@ -685,7 +686,7 @@
     background:var(--panel-3); border-radius:var(--radius-sm);
   }
   .insight-caption.balanced{color:var(--success);background:var(--success-dim);}
-  .insight-caption .cap-protein{color:var(--c-protein);font-weight:700;}
+  .insight-caption .cap-protein{color:var(--c-protein-text);font-weight:700;}
   .insight-caption .cap-carbs{color:var(--c-carbs);font-weight:700;}
   .insight-caption .cap-fat{color:var(--c-fat);font-weight:700;}
 
@@ -1371,6 +1372,7 @@
   .balance-chip{flex:1; min-width:0; background:var(--panel-2); border-radius:var(--radius-md); padding:7px 10px; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);}
   .balance-chip i{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px;}
   .balance-chip b{display:block; margin-top:1px; font-size:19px; font-weight:700; letter-spacing:0; color:var(--text);}
+  .balance-chip b small{font-family:'Inter',sans-serif; font-size:10px; font-weight:500; letter-spacing:0.02em; text-transform:none; color:var(--text-faint);}
   .overview-plain .pf-stats{margin-bottom:6px;}
 
   /* ---------- Insights "Daily Overview" — 3D model panel ----------
@@ -1487,6 +1489,7 @@
     --success-dim:#233821;
     /* Macro colours, one meaning everywhere: protein yellow, carbs blue, fat red, fibre green. */
     --c-protein:#ffd166;
+    --c-protein-text:#ffd166;
     --c-carbs:#5aa9ff;
     --c-fat:#ff6b6b;
     --c-fiber:#4fcf7a;
@@ -1516,6 +1519,7 @@
     --success:#31703e;
     --success-dim:#e2f2e4;
     --c-protein:#b98100;
+    --c-protein-text:#8a5d00;   /* fills keep the brighter gold; text needs 4.5:1 on white */
     --c-carbs:#2b6fd6;
     --c-fat:#d33a3a;
     --c-fiber:#1f8a4c;
@@ -1761,7 +1765,7 @@
   .pf-stat-v small{font:500 12px 'Inter',sans-serif; color:var(--text-faint);}
   .pf-stat-l{font:700 10px 'JetBrains Mono',ui-monospace,monospace; letter-spacing:.12em; color:var(--text-faint); margin-top:7px; text-transform:uppercase;}
   .pf-stat.accent .pf-stat-v{color:var(--accent);}
-  .pf-stat.protein .pf-stat-v{color:var(--c-protein);}
+  .pf-stat.protein .pf-stat-v{color:var(--c-protein-text);}
   .pf-stat.carbs .pf-stat-v{color:var(--c-carbs);}
   .pf-stat.fat .pf-stat-v{color:var(--c-fat);}
   .hist-stats{margin-top:0;}
@@ -5095,7 +5099,7 @@
     var bestLabel = best ? new Date(best.key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }) : '—';
     var statsHtml = '<div class="pf-stats">' +
         statCardHtml(avg.toLocaleString(), 'kcal', 'Daily avg', 'accent') +
-        statCardHtml(String(onGoal), '/7 on goal', 'Last 7 days', '') +
+        statCardHtml(String(onGoal), '/' + logged + ' on goal', 'Logged days · 7d', '') +
       '</div>';
     return { stats: statsHtml };
   }
@@ -5529,7 +5533,7 @@
     var left = goals.calories - totals.calories;
     var tagsHtml = PYRAMID_FACES.map(function(f, k){ return faceTagHtml(k, totals, goals); }).join('');
     function chip(label, key, cls){
-      return '<div class="balance-chip"><i style="background:var(--c-' + cls + ')"></i>' + label + '<b>' + pctUncapped(totals[key], goals[key]) + '%</b></div>';
+      return '<div class="balance-chip"><i style="background:var(--c-' + cls + ')"></i>' + label + '<b>' + pctUncapped(totals[key], goals[key]) + '%<small> of goal</small></b></div>';
     }
     document.getElementById('view').innerHTML =
       '<div class="overview-plain">' +
@@ -5870,7 +5874,8 @@
       var pP = Math.round(pKcal / macroKcal * 100);
       var pC = Math.round(cKcal / macroKcal * 100);
       var pF = Math.max(0, 100 - pP - pC); // so the three always add to 100
-      html += '<div class="week-divider"></div><h3 class="section-label">Where your calories come from</h3>' +
+      html += '<div class="week-divider"></div><h3 class="section-label">7-day calorie split</h3>' +
+        '<div class="split-note">Share of the calories you ate, not % of your goal</div>' +
         '<div class="split-bar"><i class="p" style="width:' + pP + '%"></i><i class="c" style="width:' + pC + '%"></i><i class="f" style="width:' + pF + '%"></i></div>' +
         '<div class="split-legend">' +
           '<span><i class="p"></i>Protein <b>' + pP + '%</b></span>' +
