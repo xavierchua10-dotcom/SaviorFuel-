@@ -4936,6 +4936,49 @@
     el.id = 'dayOverlay'; el.className = 'day-overlay dy-in';
     el.innerHTML = dayOverlayInner(key);
     document.getElementById('app').appendChild(el);
+    attachDaySwipe(el);
+  }
+  // Swipe the day panel down to dismiss. Only takes over once the list is
+  // scrolled to the top and the finger is clearly moving down, so normal
+  // scrolling is untouched.
+  function attachDaySwipe(el){
+    var sx = 0, sy = 0, st = 0, dy = 0, mode = 0; // mode: 0 idle, 1 undecided, 2 dragging, 3 ignore
+    el.addEventListener('touchstart', function(e){
+      if (e.touches.length !== 1){ mode = 3; return; }
+      var sc = el.querySelector('.dy-scroll');
+      mode = (sc && sc.scrollTop > 0) ? 3 : 1;
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now(); dy = 0;
+    }, { passive: true });
+    el.addEventListener('touchmove', function(e){
+      if (mode === 0 || mode === 3) return;
+      var t = e.touches[0], mx = t.clientX - sx;
+      dy = t.clientY - sy;
+      if (mode === 1){
+        if (Math.abs(dy) < 8 && Math.abs(mx) < 8) return;
+        if (dy > 0 && Math.abs(dy) > Math.abs(mx)){ mode = 2; el.style.transition = 'none'; el.style.animation = 'none'; }
+        else { mode = 3; return; }
+      }
+      e.preventDefault();
+      var d = Math.max(0, dy);
+      el.style.transform = 'translateY(' + d + 'px)';
+      el.style.opacity = String(Math.max(0.4, 1 - d / 600));
+    }, { passive: false });
+    function end(){
+      if (mode !== 2){ mode = 0; return; }
+      mode = 0;
+      var fast = dy / Math.max(1, Date.now() - st) > 0.6;
+      if (dy > 110 || (fast && dy > 40)){
+        el.style.transition = 'transform .2s ease-out, opacity .2s';
+        el.style.transform = 'translateY(100%)'; el.style.opacity = '0';
+        setTimeout(function(){ if (document.getElementById('dayOverlay') === el) closeDayOverlay(); }, prefersReducedMotion() ? 0 : 200);
+      } else {
+        el.style.transition = 'transform .2s ease-out, opacity .2s';
+        el.style.transform = ''; el.style.opacity = '';
+        setTimeout(function(){ el.style.transition = ''; el.style.animation = ''; }, 220);
+      }
+    }
+    el.addEventListener('touchend', end);
+    el.addEventListener('touchcancel', end);
   }
   function closeDayOverlay(){
     ui.dayOpen = null;
