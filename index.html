@@ -4373,7 +4373,7 @@
      requests from this app's own site. Leave AI_SCAN_URL empty and
      the camera button just uses the basic on-device guess above.
      ========================================================= */
-  var AI_SCAN_URL = ''; // e.g. 'https://your-site.netlify.app/api/scan-food' (see ai-proxy/README.md)
+  var AI_SCAN_URL = 'https://saviorfuel-ai.xavierchua10.workers.dev'; // Cloudflare Worker (repo: Saviorfuelwebhook)
   var aiScan = { items: [], category: 'lunch' };
 
   function aiScanEnabled(){
