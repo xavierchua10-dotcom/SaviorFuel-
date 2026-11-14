@@ -3492,51 +3492,12 @@
   }
 
   var searchRequestId = 0; // guards against a slow older request overwriting a newer one's results
-  var USDA_API_KEY = 'DcPJpdzm8AjRDIpzmzfL3fJavbtVWsAY6bGtEQYi';
+  // Food lookups (USDA search and barcode) go through your own Cloudflare Worker,
+  // which holds the key privately. No API keys live in this file.
+  var FOODS_PROXY_URL = 'https://saviorfuel-ai.xavierchua10.workers.dev';
 
-  // Foods proxy: when set, USDA and Kalori searches go through your own tiny
-  // Cloudflare Worker (ai-proxy/cloudflare/foods-worker.js) which holds the keys
-  // privately. Once it's set, the two keys below can be deleted from this file.
-  var FOODS_PROXY_URL = ''; // e.g. 'https://saviorfuel-foods.yourname.workers.dev'
+  // (Kalori search was removed — its key leaked. Foods saved from it earlier still show.)
 
-  var TECHAPI_KEY = 'tech_2f095b353334f3552fb2356065ca43bd9fe42e2e584fc76cda30555e984fb40c';
-
-  // Kalori (via techapi.my) — Malaysian food database. Response envelope
-  // is {success, data, meta}; exact nesting of the food list inside
-  // `data` wasn't confirmed from docs, so this checks a few reasonable
-  // shapes defensively rather than assuming one and silently returning
-  // nothing if it's wrong.
-  function fetchKalori(query, signal){
-    var url = FOODS_PROXY_URL
-      ? FOODS_PROXY_URL + '/kalori?q=' + encodeURIComponent(query)
-      : 'https://api.techapi.my/api/v2/kalori/foods/search?q=' + encodeURIComponent(query);
-    return fetch(url, { headers: FOODS_PROXY_URL ? {} : { 'X-API-Key': TECHAPI_KEY }, signal: signal })
-      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
-      .then(function(json){
-        if (!json || json.success === false) return [];
-        var d = json.data;
-        var list = Array.isArray(d) ? d
-          : (d && (d.foods || d.results || d.items)) || [];
-        return list
-          .filter(function(f){ return f && f.name && f.calories != null; })
-          .map(function(f){
-            return {
-              product_name: f.name,
-              brands: f.category || '',
-              nutriments: {
-                'energy-kcal_100g': f.calories,
-                'proteins_100g': f.protein || 0,
-                'carbohydrates_100g': f.carbs || 0,
-                'fat_100g': f.fat || 0
-              },
-              _source: 'techapi',
-              // Not confirmed that Kalori returns pictures; take one if it does.
-              _image: f.image_url || f.image || f.photo || f.thumbnail || '',
-              _serving: f.serving || null
-            };
-          });
-      });
-  }
 
   // Normalizes a USDA FoodData Central food into the same shape as an
   // Open Food Facts product, so the rest of the search/pick pipeline
@@ -3583,10 +3544,7 @@
   // exactly the "plain chicken breast," "egg" category Open Food Facts
   // is weakest at, since OFF mostly covers branded/packaged items.
   function fetchUSDA(query, signal){
-    var url = FOODS_PROXY_URL
-      ? FOODS_PROXY_URL + '/usda?q=' + encodeURIComponent(query)
-      : 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + USDA_API_KEY +
-        '&query=' + encodeURIComponent(query) + '&pageSize=10&dataType=Foundation,SR%20Legacy';
+    var url = FOODS_PROXY_URL + '/usda?q=' + encodeURIComponent(query);
     return fetch(url, { signal: signal })
       .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
       .then(function(data){
@@ -4081,12 +4039,12 @@
     // show immediately, listed first.
     var saved = searchSavedFoods(trimmed);
     var hadResults = !!resultsEl.querySelector('.food-suggest-item');
-    foodSearch = { id: thisRequest, query: trimmed, products: saved, pending: 3, stale: hadResults && saved.length === 0 };
+    foodSearch = { id: thisRequest, query: trimmed, products: saved, pending: 2, stale: hadResults && saved.length === 0 };
     renderFoodSearchResults();
 
-    // Then the three online sources, each landing as soon as it answers.
+    // Then the two online sources, each landing as soon as it answers.
     // Each can fail independently without taking the others down.
-    [['Kalori', fetchKalori], ['USDA', fetchUSDA], ['Open Food Facts', fetchOpenFoodFacts]].forEach(function(src){
+    [['USDA', fetchUSDA], ['Open Food Facts', fetchOpenFoodFacts]].forEach(function(src){
       searchFoodSource(src[0], trimmed, src[1], signal).then(function(list){
         if (thisRequest !== searchRequestId) return; // a newer search has since superseded this one
         foodSearch.pending--;
@@ -4498,10 +4456,7 @@
   }
 
   function lookupBarcodeUsda(code){
-    var url = FOODS_PROXY_URL
-      ? FOODS_PROXY_URL + '/usda?q=' + encodeURIComponent(code)
-      : 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + USDA_API_KEY +
-        '&query=' + encodeURIComponent(code) + '&pageSize=5&dataType=Branded';
+    var url = FOODS_PROXY_URL + '/usda?q=' + encodeURIComponent(code) + '&type=branded';
     return fetch(url).then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); }).then(function(data){
       var want = stripZeros(code);
       var hit = (data.foods || []).filter(function(f){ return stripZeros(f.gtinUpc) === want; })[0];
@@ -6673,7 +6628,7 @@
     // ---- about & support
     var aboutBody = '<div class="settings-group">' +
       '<div class="settings-row"><div><div class="sr-label">Food data</div>' +
-        '<div class="sr-sub">Kalori (Malaysian foods) · USDA FoodData Central · Open Food Facts (photos CC BY-SA) · ' + nFoods + ' food' + (nFoods === 1 ? '' : 's') + ' saved for offline search</div></div></div>' +
+        '<div class="sr-sub">USDA FoodData Central · Open Food Facts (photos CC BY-SA) · ' + nFoods + ' food' + (nFoods === 1 ? '' : 's') + ' saved for offline search</div></div></div>' +
       '<div class="settings-row"><div><div class="sr-label">About SaviorFuel</div>' +
         '<div class="sr-sub">© 2026 Xavier Chua (Savior). All rights reserved. The app\'s code and design may not be copied or reused.</div></div></div>' +
       '<div class="settings-row"><div><div class="sr-label">Privacy policy</div><div class="sr-sub">What\'s stored, and what leaves your device</div></div>' +

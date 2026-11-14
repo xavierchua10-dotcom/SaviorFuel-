@@ -7,7 +7,7 @@
 // connection.
 //
 // Deliberately does NOT cache food-search API calls (USDA, Open
-// Food Facts, Kalori/techapi.my) — those should always hit the
+// Food Facts, the SaviorFuel Worker) — those should always hit the
 // network live, or fail visibly so the app's own offline fallback
 // (the savedFoods cache inside index.html) handles it. An HTTP-level
 // cache silently replaying old search results would be indistinguishable
@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v55';
+var SHELL_CACHE = 'saviorfuel-shell-v56';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -42,7 +42,7 @@ var EXTRA_FILES = [
 var NEVER_CACHE_HOSTS = [
   'api.nal.usda.gov',
   'world.openfoodfacts.org',
-  'api.techapi.my',
+  'saviorfuel-ai.xavierchua10.workers.dev',   // food search and AI scan go through this Worker
   // Product thumbnails shown in food search. Left to the browser's own
   // HTTP cache instead of this file's cache-first store, which would
   // otherwise keep every thumbnail ever searched, forever.

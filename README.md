@@ -7,7 +7,7 @@ Single-file web app (`index.html`), installable as a PWA. No account, no backend
 ## Features
 
 - **Log** meals by type, edit or delete them, and log for any day
-- **Food search** across three sources: Open Food Facts (packaged foods and barcodes), USDA FoodData Central (generic and whole foods) and Kalori (Malaysian foods)
+- **Food search** across Open Food Facts (packaged foods and barcodes) and USDA FoodData Central (generic and whole foods, through the SaviorFuel Cloudflare Worker so the key stays private), plus your own saved foods
 - **Scan** a barcode or snap a photo of a meal; the photo guess runs on-device with TensorFlow.js (MobileNet)
 - **History** of past days
 - **Insights** with a 3D food pyramid (or plain rings and macro bars), 7-day calories, daily average vs goal, calories by meal and macro source
@@ -32,7 +32,7 @@ Serve the folder with any static host (GitHub Pages, Netlify) or locally, for ex
 ## Roadmap
 
 - Play Store listing
-- Offline food library (copies of USDA, Open Food Facts and Kalori data)
+- Offline food library (copies of USDA and Open Food Facts data)
 - Gemini AI food scan via the proxy
 
 ## License
