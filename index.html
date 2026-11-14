@@ -444,10 +444,10 @@
   .macro-bar-label b{color:var(--text);}
   .macro-bar-track{height:5px;border-radius:var(--radius-pill);background:var(--panel-3);overflow:hidden;}
   .macro-bar-fill{height:100%;border-radius:var(--radius-pill);background:var(--accent);}
-  .macro-bar-fill.protein{background:var(--success);}
-  .macro-bar-fill.carbs{background:#5fa8d6;}
-  .macro-bar-fill.fat{background:var(--accent-2);}
-  .macro-bar-fill.fiber{background:#a97c50;}
+  .macro-bar-fill.protein{background:var(--c-protein);}
+  .macro-bar-fill.carbs{background:var(--c-carbs);}
+  .macro-bar-fill.fat{background:var(--c-fat);}
+  .macro-bar-fill.fiber{background:var(--c-fiber);}
   .macro-bar-fill.sugar{background:#d67ab1;}
   .macro-bar-fill.sodium{background:#4fc3c9;}
   .macro-bar-fill.over{background:var(--accent-2);}
@@ -595,10 +595,10 @@
   .meal-split-row{display:flex; align-items:center; gap:10px; margin-bottom:3px;}
   .meal-split-macros{display:flex; gap:11px; margin-left:116px; font-size:11px; color:var(--text-faint);}
   .meal-split-macros b, .dcm-macros b{font-family:'JetBrains Mono',monospace; font-weight:500;}
-  .meal-split-macros .p, .dcm-macros .p{color:var(--success);}
-  .meal-split-macros .c, .dcm-macros .c{color:#5fa8d6;}
-  .meal-split-macros .f, .dcm-macros .f{color:var(--accent-2);}
-  .meal-split-macros .fi, .dcm-macros .fi{color:#a97c50;}
+  .meal-split-macros .p, .dcm-macros .p{color:var(--c-protein);}
+  .meal-split-macros .c, .dcm-macros .c{color:var(--c-carbs);}
+  .meal-split-macros .f, .dcm-macros .f{color:var(--c-fat);}
+  .meal-split-macros .fi, .dcm-macros .fi{color:var(--c-fiber);}
   .meal-split-label{width:106px; flex-shrink:0; font-size:13px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .meal-split-track{flex:1; min-width:0; height:14px; background:var(--panel-3); border-radius:var(--radius-xs); overflow:hidden;}
   .meal-split-fill{height:100%; background:var(--accent); border-radius:var(--radius-xs);}
@@ -620,15 +620,15 @@
   .week-note{margin-top:12px;text-align:center;font-size:11px;color:var(--text-faint);}
   .split-bar{display:flex;gap:2px;height:16px;border-radius:var(--radius-xs);overflow:hidden;background:var(--panel-3);}
   .split-bar i{display:block;height:100%;}
-  .split-bar .p{background:var(--success);}
-  .split-bar .c{background:#5fa8d6;}
-  .split-bar .f{background:var(--accent-2);}
+  .split-bar .p{background:var(--c-protein);}
+  .split-bar .c{background:var(--c-carbs);}
+  .split-bar .f{background:var(--c-fat);}
   .split-legend{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:12px;color:var(--text-dim);}
   .split-legend b{color:var(--text);}
   .split-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;}
-  .split-legend .p{background:var(--success);}
-  .split-legend .c{background:#5fa8d6;}
-  .split-legend .f{background:var(--accent-2);}
+  .split-legend .p{background:var(--c-protein);}
+  .split-legend .c{background:var(--c-carbs);}
+  .split-legend .f{background:var(--c-fat);}
 
   /* ---------- Insights "Today" macro rings ---------- */
   .calorie-ring-row{display:flex;justify-content:center;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);}
@@ -655,9 +655,9 @@
   .macro-ring-svg{width:76px;height:76px;transform:rotate(-90deg);}
   .macro-ring-track{fill:none;stroke:var(--panel-3);stroke-width:7;}
   .macro-ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 500ms ease;}
-  .macro-ring-fill.protein{stroke:var(--success);}
-  .macro-ring-fill.carbs{stroke:#5fa8d6;}
-  .macro-ring-fill.fat{stroke:var(--accent-2);}
+  .macro-ring-fill.protein{stroke:var(--c-protein);}
+  .macro-ring-fill.carbs{stroke:var(--c-carbs);}
+  .macro-ring-fill.fat{stroke:var(--c-fat);}
   .macro-ring-fill.over{stroke:var(--accent-2);}
   .macro-ring-pct{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
@@ -685,9 +685,9 @@
     background:var(--panel-3); border-radius:var(--radius-sm);
   }
   .insight-caption.balanced{color:var(--success);background:var(--success-dim);}
-  .insight-caption .cap-protein{color:var(--success);font-weight:700;}
-  .insight-caption .cap-carbs{color:#5fa8d6;font-weight:700;}
-  .insight-caption .cap-fat{color:var(--accent-2);font-weight:700;}
+  .insight-caption .cap-protein{color:var(--c-protein);font-weight:700;}
+  .insight-caption .cap-carbs{color:var(--c-carbs);font-weight:700;}
+  .insight-caption .cap-fat{color:var(--c-fat);font-weight:700;}
 
   /* ---------- Settings ---------- */
   /* Plain spacing wrapper — used only where a raw <h3> label sits
@@ -1405,10 +1405,10 @@
   .face-ring-fill{fill:none; stroke-width:4.5; stroke-linecap:round; stroke-dashoffset:var(--full, 0);}
   .face-tag.in .face-ring-fill{stroke-dashoffset:var(--off, 0); transition:stroke-dashoffset 850ms cubic-bezier(0.22,1,0.36,1);}
   @media (prefers-reduced-motion: reduce){ .face-tag.in .face-ring-fill{transition:none;} }
-  .face-ring-fill.protein{stroke:var(--success);}
-  .face-ring-fill.carbs{stroke:#5fa8d6;}
-  .face-ring-fill.fat{stroke:var(--accent-2);}
-  .face-ring-fill.fiber{stroke:#a97c50;}
+  .face-ring-fill.protein{stroke:var(--c-protein);}
+  .face-ring-fill.carbs{stroke:var(--c-carbs);}
+  .face-ring-fill.fat{stroke:var(--c-fat);}
+  .face-ring-fill.fiber{stroke:var(--c-fiber);}
   .face-ring-fill.over{stroke:var(--accent-2);}
   .face-ring-pct{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
@@ -1468,9 +1468,14 @@
     --accent-2-dim:#4a2321;
     --success:#4fb870;
     --success-dim:#233821;
-    --c-protein:#ff8a65;
-    --c-carbs:#ffd166;
-    --c-fat:#6cc4ee;
+    /* Macro colours, one meaning everywhere: protein yellow, carbs blue, fat red, fibre green. */
+    --c-protein:#ffd166;
+    --c-carbs:#5aa9ff;
+    --c-fat:#ff6b6b;
+    --c-fiber:#4fcf7a;
+    --c-water:#6cc4ee;
+    --c-cal:#dfe3ea;
+    --c-star:#ffd166;
     --header-bg:#1f232b;
     --header-text:#e9e6df;
     --header-text-faint:#a1a7b0;
@@ -1493,9 +1498,13 @@
     --accent-2-dim:#f6dcda;
     --success:#31703e;
     --success-dim:#e2f2e4;
-    --c-protein:#d9552b;
-    --c-carbs:#b98100;
-    --c-fat:#1d79ad;
+    --c-protein:#b98100;
+    --c-carbs:#2b6fd6;
+    --c-fat:#d33a3a;
+    --c-fiber:#1f8a4c;
+    --c-water:#1d79ad;
+    --c-cal:#4a4f58;
+    --c-star:#b98100;
     --header-bg:#ebe6da;
     --header-text:#1c1e23;
     --header-text-faint:#6f747c;
@@ -1578,14 +1587,14 @@
   .hero-ring-svg{width:100%; height:100%; transform:rotate(-90deg); display:block;}
   .hero-ring-track{fill:none; stroke:var(--panel-2);}
   .hero-ring-fill{fill:none; stroke-linecap:round; transition:stroke-dashoffset 500ms ease;}
-  .hero-ring-fill.ring-cal{stroke:var(--accent);}
+  .hero-ring-fill.ring-cal{stroke:var(--c-cal);}
   .hero-ring-fill.ring-cal.over{stroke:var(--accent-2);}
   .hero-ring-fill.ring-protein{stroke:var(--c-protein);}
   .hero-ring-fill.ring-carbs{stroke:var(--c-carbs);}
   .hero-ring-fill.ring-fat{stroke:var(--c-fat);}
   /* 3D ring: a WebGL canvas laid over the SVG ring once Three.js is ready.
      If it never loads (offline, no WebGL) the flat SVG ring just stays. */
-  .hero-ring canvas.ring3d{position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:pan-y; cursor:grab; -webkit-tap-highlight-color:transparent; animation:ring3dIn 400ms ease both;}
+  .hero-ring canvas.ring3d{position:absolute; left:-8%; top:-8%; width:116%; height:116%; display:block; touch-action:pan-y; cursor:grab; -webkit-tap-highlight-color:transparent; animation:ring3dIn 400ms ease both;}
   .hero-ring canvas.ring3d:active{cursor:grabbing;}
   .hero-ring.is3d .hero-ring-svg{opacity:0;}
   .hero-ring.is3d .hero-ring-center{transform:translateY(-7px);}
@@ -1647,7 +1656,7 @@
     color:var(--text-faint); display:flex; align-items:center; justify-content:center; border-radius:50%;
   }
   .food-fav svg{width:20px; height:20px; fill:none;}
-  .food-fav.on{color:var(--c-carbs);}
+  .food-fav.on{color:var(--c-star);}
   .food-fav.on svg{fill:currentColor;}
   .food-fav:active{background:var(--panel-2);}
 
@@ -1873,14 +1882,14 @@
   body[data-theme="light"] .fs-save{color:#fff;}
   .fs-delete{width:100%; height:40px; margin-top:8px; border:none; background:none; color:var(--accent-2); font:600 13px 'Inter',sans-serif; cursor:pointer;}
   .water-row{display:flex; align-items:center; gap:10px; margin:12px 0 0; padding:10px 12px; border-radius:16px; background:var(--panel); border:1px solid var(--line);}
-  .water-ic{width:30px; height:30px; border-radius:10px; background:rgba(108,196,238,.16); color:var(--c-fat); display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+  .water-ic{width:30px; height:30px; border-radius:10px; background:rgba(108,196,238,.16); color:var(--c-water); display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
   .water-ic svg{width:16px; height:16px;}
   .water-main{flex:1; min-width:0;}
   .water-top{display:flex; justify-content:space-between; align-items:baseline; font-size:12px; color:var(--text-faint);}
   .water-top b{font:600 13px 'Oswald',sans-serif; letter-spacing:.04em; text-transform:uppercase; color:var(--text);}
   .water-bar{height:5px; border-radius:3px; background:var(--panel-3); margin-top:6px; overflow:hidden;}
-  .water-bar i{display:block; height:100%; border-radius:3px; background:var(--c-fat);}
-  .water-btn{height:32px; min-width:38px; padding:0 10px; border-radius:10px; border:1px solid rgba(108,196,238,.5); background:transparent; color:var(--c-fat); font:700 12px 'Oswald',sans-serif; cursor:pointer;}
+  .water-bar i{display:block; height:100%; border-radius:3px; background:var(--c-water);}
+  .water-btn{height:32px; min-width:38px; padding:0 10px; border-radius:10px; border:1px solid rgba(108,196,238,.5); background:transparent; color:var(--c-water); font:700 12px 'Oswald',sans-serif; cursor:pointer;}
   .water-btn.minus{min-width:32px; padding:0; font-size:16px; border-color:var(--line); color:var(--text-faint);}
   .water-btn:disabled{opacity:.35;}
 
@@ -2456,7 +2465,7 @@
   var ring3d = { state: 'idle', canvas: null, renderer: null, scene: null, camera: null, group: null,
     size: 0, rot: 0, vel: 0, drag: null, raf: 0, last: 0, idleAt: 0 };
   var RINGS3D = [
-    { id: 'cal',     r: 3.15, w: 0.5,  css: 'var(--accent)' },
+    { id: 'cal',     r: 3.15, w: 0.5,  css: 'var(--c-cal)' },
     { id: 'protein', r: 2.6,  w: 0.36, css: 'var(--c-protein)' },
     { id: 'carbs',   r: 2.12, w: 0.36, css: 'var(--c-carbs)' },
     { id: 'fat',     r: 1.64, w: 0.36, css: 'var(--c-fat)' }
@@ -2529,7 +2538,7 @@
     r.canvas.className = 'ring3d';
     r.canvas.setAttribute('aria-hidden', 'true');
     r.scene = new T.Scene();
-    r.camera = new T.PerspectiveCamera(30, 1, 0.1, 100);
+    r.camera = new T.PerspectiveCamera(34.6, 1, 0.1, 100)   /* 30deg fov widened to match the 116% canvas, so the ring keeps its size but has room to spin */;
     r.camera.position.set(0, 10.4, 8.1);
     r.camera.lookAt(0, 0.2, 0);
     r.scene.add(new T.HemisphereLight(0xffffff, 0x303846, 0.55));
@@ -2608,7 +2617,7 @@
       prev.classList.remove('is3d');
       prev.removeChild(r.canvas);
     }
-    var size = host.clientWidth || 250;
+    var size = Math.round((host.clientWidth || 250) * 1.16);
     if (size !== r.size){
       r.size = size;
       r.renderer.setSize(size, size, false);
