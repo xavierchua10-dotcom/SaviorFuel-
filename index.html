@@ -1306,7 +1306,7 @@
      bars run edge to edge on the app background (#view drops its side
      padding while this is showing), and the switch is pinned flush to
      the top-right corner of the screen, like in the 3D view. */
-  body.has-insights-subtab main#view.plain-fullscreen{padding-left:0; padding-right:0;}
+  main#view.plain-fullscreen{padding-left:0; padding-right:0;}
   #view > .overview-plain:first-child{position:relative; margin-top:0; padding:0 20px;}
   body[data-density="compact"] #view > .overview-plain:first-child{padding:0 14px;}
   .overview-plain .today-card-head{min-height:34px; margin-bottom:8px;}
@@ -1376,7 +1376,7 @@
   /* Full-screen mode: while the 3D panel is showing, #view drops its
      padding/scroll and the card stretches edge to edge between the
      top bar and the bottom nav (JS sets card bottom = nav height). */
-  body.has-insights-subtab main#view.model-fullscreen{padding:0; overflow:hidden; position:relative;}
+  main#view.model-fullscreen{padding:0; overflow:hidden; position:relative;}
   #view.model-fullscreen > .card.model-card{
     position:absolute; top:0; left:0; right:0; bottom:0;
     height:auto; margin:0;
@@ -1616,12 +1616,18 @@
 
   /* ---- Insights: segmented bar sits above the floating nav ---- */
   /* Daily / Weekly switch: a slim pill under the header (not stacked on the nav) */
-  .insights-subtabbar{flex-shrink:0; margin:10px 16px 0; border-radius:var(--radius-pill); overflow:hidden; border:1px solid var(--line); background:var(--panel);}
+  /* The pill floats over the top of the page (zero-height anchor), so showing or
+     hiding it never resizes #view — that resize was what made tab switches jump. */
+  .insights-subtab-anchor{position:relative; height:0; flex-shrink:0; z-index:6;}
+  .insights-subtabbar{position:absolute; top:10px; left:16px; right:16px; margin:0; border-radius:var(--radius-pill); overflow:hidden; border:1px solid var(--line); background:var(--panel);}
+  .insights-subtabbar:not(.hidden){animation:subtabIn 240ms ease both;}
+  @keyframes subtabIn{from{opacity:0;} to{opacity:1;}}
   .insights-subtabbar button{padding:9px 6px; font-size:12px;}
   .insights-subtabbar.hidden{display:none;}
-  body.has-insights-subtab main#view:not(.model-fullscreen) > *:first-child{margin-top:12px;}
+  /* room for the pill (kept on #view itself so the outgoing page keeps it while sliding) */
+  main#view.has-subtab:not(.model-fullscreen) > *:first-child{margin-top:62px;}
   /* 3D panel: leave a gap under the pill so the corner tabs don't touch it */
-  body.has-insights-subtab #view.model-fullscreen > .card.model-card{top:12px;}
+  #view.has-subtab.model-fullscreen > .card.model-card{top:60px;}
   /* room for the floating tab bar on every tab */
   main#view{padding-bottom:calc(112px + var(--safe-bottom));}
 
@@ -1880,11 +1886,13 @@
     <h1 class="topbar-brand"><img src="images/logo-mark.png" alt="SaviorFuel" class="topbar-logo"></h1>
   </header>
 
+  <div class="insights-subtab-anchor">
   <nav class="insights-subtabbar hidden" id="insightsSubtabbar">
     <span class="subtab-slider" aria-hidden="true"></span>
     <button data-action="set-insights-view" data-view="today">Daily Overview</button>
     <button data-action="set-insights-view" data-view="trends">Weekly Overview</button>
   </nav>
+  </div>
 
   <main id="view"></main>
 
@@ -5820,6 +5828,7 @@
     // Logger's Volume overview / Exercise progression bar.
     var showInsightsSubtabbar = state.tab === 'insights' && STORE.meals.length > 0;
     document.body.classList.toggle('has-insights-subtab', showInsightsSubtabbar);
+    document.getElementById('view').classList.toggle('has-subtab', showInsightsSubtabbar);
     var insightsSubtabbarEl = document.getElementById('insightsSubtabbar');
     insightsSubtabbarEl.classList.toggle('hidden', !showInsightsSubtabbar);
     if (showInsightsSubtabbar){
