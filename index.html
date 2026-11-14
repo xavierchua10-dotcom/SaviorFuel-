@@ -1905,6 +1905,48 @@
   .hist-pb.low i{background:rgba(var(--accent-rgb),.5);} .hist-pb.over i{background:var(--accent-2);}
   .hist-more{display:block; width:100%; height:42px; margin:4px 0 8px; border-radius:14px; border:1px solid var(--line); background:var(--panel); color:var(--text-dim); font:600 13px 'Oswald',sans-serif; letter-spacing:.08em; text-transform:uppercase; cursor:pointer;}
   .stats-sheet .hist-month-nav{align-items:center;}
+
+  /* ---- Full-screen day ---- */
+  .day-overlay{position:absolute; inset:0; z-index:60; background:var(--bg); display:flex; flex-direction:column;}
+  .day-overlay.dy-in{animation:dyIn .22s cubic-bezier(0.16,1,0.3,1);}
+  @keyframes dyIn{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:none;}}
+  @media (prefers-reduced-motion: reduce){ .day-overlay.dy-in{animation:none;} }
+  .dy-scroll{flex:1; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 0 calc(104px + var(--safe-bottom));}
+  .dy-hero{position:relative; padding:calc(18px + env(safe-area-inset-top, 0px)) 16px 18px; background:linear-gradient(170deg,rgba(var(--accent-rgb),.22),rgba(var(--accent-rgb),.04) 60%,transparent); border-bottom:1px solid rgba(var(--accent-rgb),.25);}
+  .dy-x{position:absolute; top:calc(14px + env(safe-area-inset-top, 0px)); right:14px; width:40px; height:40px; border-radius:12px; border:1px solid var(--line); background:var(--bg); color:var(--text-dim); font-size:24px; line-height:1; cursor:pointer; padding:0;}
+  .dy-x:active{transform:scale(.94);}
+  .dy-date{font:500 12px 'JetBrains Mono',monospace; letter-spacing:.06em; color:var(--text-dim); padding-right:52px;}
+  .dy-name{margin:6px 0 0; padding-right:52px; font:700 32px/1.02 'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.03em;}
+  .dy-hero-row{display:flex; align-items:flex-end; gap:16px; margin-top:16px;}
+  .dy-big{font:700 44px/1 'Oswald',sans-serif; display:flex; align-items:baseline; gap:6px;}
+  .dy-big small{font:500 14px 'JetBrains Mono',monospace; color:var(--text-dim);}
+  .dy-big-l{font:700 10px 'JetBrains Mono',monospace; letter-spacing:.14em; color:var(--text-faint); margin-top:6px;}
+  .dy-tag{margin-left:auto; font:700 11px 'JetBrains Mono',monospace; letter-spacing:.08em; padding:6px 11px; border-radius:999px; border:1px solid rgba(var(--accent-rgb),.5); color:var(--accent); background:rgba(var(--accent-rgb),.1);}
+  .dy-tag.low{border-color:rgba(var(--accent-rgb),.3); color:var(--text-dim); background:transparent;}
+  .dy-tag.over{border-color:rgba(224,87,79,.55); color:var(--accent-2); background:rgba(224,87,79,.1);}
+  .dy-goalbar{height:6px; border-radius:3px; background:var(--panel-3); margin-top:14px; overflow:hidden;}
+  .dy-goalbar i{display:block; height:100%; border-radius:3px; background:var(--accent);}
+  .dy-goalbar.low i{background:rgba(var(--accent-rgb),.55);} .dy-goalbar.over i{background:var(--accent-2);}
+  .dy-macros{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:14px 14px 0;}
+  .dy-macro{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:12px 12px 11px;}
+  .dy-macro-v{font:700 24px/1 'Oswald',sans-serif;} .dy-macro-v small{font:500 11px 'Inter',sans-serif; color:var(--text-faint); margin-left:1px;}
+  .dy-macro-l{font:700 10px 'JetBrains Mono',monospace; letter-spacing:.12em; color:var(--text-faint); margin-top:6px;}
+  .dy-macro-bar{height:4px; border-radius:2px; background:var(--panel-3); margin-top:9px; overflow:hidden;}
+  .dy-macro-bar i{display:block; height:100%;}
+  .dy-cat{font:500 12px 'Oswald',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--text-faint); padding:18px 16px 8px;}
+  .dy-meal{margin:0 14px 10px; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:13px 12px 13px 14px; display:flex; align-items:center; gap:12px; cursor:pointer;}
+  .dy-dot{width:8px; height:8px; border-radius:50%; background:var(--accent); flex:0 0 8px;}
+  .dy-meal-main{flex:1; min-width:0;}
+  .dy-meal-name{font:500 15px 'Inter',sans-serif; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .dy-meal-macros{font:500 10px 'JetBrains Mono',monospace; letter-spacing:.06em; color:var(--text-faint); margin-top:3px;}
+  .dy-meal-kcal{font:700 18px 'Oswald',sans-serif;} .dy-meal-kcal small{font:500 10px 'JetBrains Mono',monospace; color:var(--text-faint); margin-left:2px;}
+  .dy-more{width:32px; height:32px; border-radius:10px; border:1px solid var(--line); background:transparent; color:var(--text-dim); font-size:18px; line-height:1; cursor:pointer; padding:0;}
+  .dy-bar{position:absolute; left:0; right:0; bottom:0; padding:12px 14px calc(16px + var(--safe-bottom)); background:linear-gradient(180deg,transparent,var(--bg) 40%);}
+  .dy-copy{width:100%; height:48px; border:0; border-radius:14px; background:var(--accent); color:#0b1a10; font:700 15px 'Oswald',sans-serif; letter-spacing:.08em; text-transform:uppercase; cursor:pointer;}
+  body[data-theme="light"] .dy-copy{color:#fff;}
+  .dy-copy:active{filter:brightness(.92);}
+  .dm-opt{display:block; width:100%; height:48px; margin-top:10px; border-radius:12px; border:1px solid var(--line); background:var(--panel); color:var(--text); font:600 15px 'Inter',sans-serif; cursor:pointer;}
+  .dm-opt.danger{color:var(--accent-2); border-color:rgba(224,87,79,.4);}
 </style>
 </head>
 <body>
@@ -2179,6 +2221,7 @@
   var state = { tab: 'log' };
   var ui = {
     historyOpenDay: null,
+    dayOpen: null,
     histShow: 21,
     histMonth: null,
     settingsOpen: null,
@@ -4583,26 +4626,113 @@
 
   function historyDayHtml(day, goal){
     var key = day.key;
-    var meals = day.meals.slice().sort(function(a,b){ return b.loggedAt - a.loggedAt; });
-    var isOpen = ui.historyOpenDay === key;
-    var label = formatDateLabel(key);
-    var body = '';
-    if (isOpen){
-      body = '<div class="hist-item-body"><div class="hist-day-tot">' + Math.round(day.calories) + ' kcal · P ' + Math.round(day.protein) + ' · C ' + Math.round(day.carbs) + ' · F ' + Math.round(day.fat) + '</div>' +
-        categorizedMealRowsHtml(meals) +
-        (key !== todayKey() ? '<button type="button" class="hist-copy" data-action="copy-day" data-day="' + key + '">Copy day to today</button>' : '') +
-      '</div>';
-    }
+    var n = day.meals.length;
     var st = dayStatus(day.calories, goal);
     var pct = Math.min(100, pctUncapped(day.calories, goal));
-    return '<div class="hist-item' + (isOpen ? ' open' : '') + (key === todayKey() ? ' is-today' : '') + '" id="hd-' + key + '">' +
-      '<div class="hist-item-head history-day-head" data-action="toggle-history-day" data-day="' + key + '">' +
-        '<div class="hist-item-main"><div class="hist-name">' + esc(label) + '</div>' +
-          '<div class="hist-sub">' + meals.length + ' meal' + (meals.length === 1 ? '' : 's') + '</div></div>' +
+    return '<div class="hist-item' + (key === todayKey() ? ' is-today' : '') + '" id="hd-' + key + '">' +
+      '<div class="hist-item-head history-day-head" data-action="open-day" data-day="' + key + '">' +
+        '<div class="hist-item-main"><div class="hist-name">' + esc(formatDateLabel(key)) + '</div>' +
+          '<div class="hist-sub">' + n + ' meal' + (n === 1 ? '' : 's') + '</div></div>' +
         '<div class="hist-item-side hist-kcal-col"><div class="hist-kcal">' + Math.round(day.calories).toLocaleString() + '<small>kcal</small></div>' +
           '<div class="hist-pb ' + st + '"><i style="width:' + pct + '%"></i></div></div>' +
-      '</div>' + body +
+      '</div>' +
     '</div>';
+  }
+
+  /* ---- Full-screen day (like SaviorFit Logger's workout detail) ----
+     Opens from a timeline row, a week-strip day or the calendar. A hero with
+     the day's calories vs goal, three macro cards, the meals by category and
+     a bar to copy the whole day to today. Re-drawn by renderApp() so edits,
+     deletes and copies show up straight away. */
+  function dayHeroName(key){
+    var t = formatDateLabel(key);
+    if (t === 'Today' || t === 'Yesterday') return t;
+    return new Date(key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'long' });
+  }
+  function dayMealCardHtml(m){
+    return '<div class="dy-meal" data-action="edit-meal" data-id="' + m.id + '">' +
+      '<i class="dy-dot"></i>' +
+      '<div class="dy-meal-main"><div class="dy-meal-name">' + esc(m.name) + '</div>' +
+        '<div class="dy-meal-macros">P' + (m.protein || 0) + ' · C' + (m.carbs || 0) + ' · F' + (m.fat || 0) + '</div></div>' +
+      '<div class="dy-meal-kcal">' + m.calories + '<small>kcal</small></div>' +
+      '<button type="button" class="dy-more" data-action="day-meal-menu" data-id="' + m.id + '" aria-label="Options for ' + esc(m.name) + '">&#8943;</button>' +
+    '</div>';
+  }
+  function dayOverlayInner(key){
+    var meals = mealsForDay(key).slice().sort(function(a, b){ return b.loggedAt - a.loggedAt; });
+    var goals = STORE.goals;
+    var t = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+    meals.forEach(function(m){ t.calories += m.calories || 0; t.protein += m.protein || 0; t.carbs += m.carbs || 0; t.fat += m.fat || 0; });
+    var st = dayStatus(t.calories, goals.calories);
+    var stLabel = st === 'on' ? 'ON GOAL' : st === 'over' ? 'OVER' : 'LOW';
+    var dateMono = new Date(key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }).replace(/,/g, '').toUpperCase();
+    function macro(label, v, g, col){
+      var w = g ? Math.min(100, Math.round(v / g * 100)) : 0;
+      return '<div class="dy-macro"><div class="dy-macro-v">' + Math.round(v) + '<small>g</small></div><div class="dy-macro-l">' + label + '</div>' +
+        '<div class="dy-macro-bar"><i style="width:' + w + '%;background:' + col + '"></i></div></div>';
+    }
+    var buckets = {}, other = [];
+    MEAL_CATEGORIES.forEach(function(c){ buckets[c.id] = []; });
+    meals.forEach(function(m){ if (m.category && buckets[m.category]) buckets[m.category].push(m); else other.push(m); });
+    var list = '';
+    MEAL_CATEGORIES.forEach(function(c){
+      if (buckets[c.id].length) list += '<div class="dy-cat">' + c.label + '</div>' + buckets[c.id].map(dayMealCardHtml).join('');
+    });
+    if (other.length) list += '<div class="dy-cat">Other</div>' + other.map(dayMealCardHtml).join('');
+    var pct = Math.min(100, pctUncapped(t.calories, goals.calories));
+    return '<div class="dy-scroll">' +
+      '<div class="dy-hero"><button type="button" class="dy-x" data-action="close-day" aria-label="Close">&times;</button>' +
+        '<div class="dy-date">' + esc(dateMono) + '</div><h2 class="dy-name">' + esc(dayHeroName(key)) + '</h2>' +
+        '<div class="dy-hero-row"><div><div class="dy-big">' + Math.round(t.calories).toLocaleString() + '<small>/ ' + Math.round(goals.calories).toLocaleString() + ' kcal</small></div>' +
+          '<div class="dy-big-l">CALORIES</div></div><span class="dy-tag ' + st + '">' + stLabel + '</span></div>' +
+        '<div class="dy-goalbar ' + st + '"><i style="width:' + pct + '%"></i></div></div>' +
+      '<div class="dy-macros">' + macro('PROTEIN', t.protein, goals.protein, 'var(--c-protein)') + macro('CARBS', t.carbs, goals.carbs, 'var(--c-carbs)') + macro('FAT', t.fat, goals.fat, 'var(--c-fat)') + '</div>' +
+      list + '</div>' +
+      (key !== todayKey() ? '<div class="dy-bar"><button type="button" class="dy-copy" data-action="copy-day" data-day="' + key + '">Copy day to today</button></div>' : '');
+  }
+  function openDayOverlay(key){
+    closeDayOverlay();
+    if (!mealsForDay(key).length) return;
+    ui.dayOpen = key;
+    var el = document.createElement('div');
+    el.id = 'dayOverlay'; el.className = 'day-overlay dy-in';
+    el.innerHTML = dayOverlayInner(key);
+    document.getElementById('app').appendChild(el);
+  }
+  function closeDayOverlay(){
+    ui.dayOpen = null;
+    var el = document.getElementById('dayOverlay');
+    if (el) el.remove();
+  }
+  function refreshDayOverlay(){
+    if (!ui.dayOpen) return;
+    var el = document.getElementById('dayOverlay');
+    if (!el) return;
+    if (!mealsForDay(ui.dayOpen).length){ closeDayOverlay(); return; }
+    var sc = el.querySelector('.dy-scroll'), top = sc ? sc.scrollTop : 0;
+    el.classList.remove('dy-in');
+    el.innerHTML = dayOverlayInner(ui.dayOpen);
+    var sc2 = el.querySelector('.dy-scroll'); if (sc2) sc2.scrollTop = top;
+  }
+
+  // The "..." on a meal card: edit / copy to today / delete.
+  function openMealMenu(id){
+    var m = mealById(id);
+    if (!m) return;
+    closeMealMenu();
+    var el = document.createElement('div');
+    el.className = 'stats-sheet'; el.id = 'mealMenu';
+    el.innerHTML = '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>' + esc(m.name) + '</h3>' +
+      '<button type="button" class="stats-sheet-x" data-action="close-meal-menu" aria-label="Close">&times;</button></div>' +
+      '<button type="button" class="dm-opt" data-action="menu-edit" data-id="' + id + '">Edit</button>' +
+      (dateKey(m.loggedAt) !== todayKey() ? '<button type="button" class="dm-opt" data-action="menu-copy" data-id="' + id + '">Copy to today</button>' : '') +
+      '<button type="button" class="dm-opt danger" data-action="menu-delete" data-id="' + id + '">Delete</button></div>';
+    el.addEventListener('click', function(e){ if (e.target === el) closeMealMenu(); });
+    document.body.appendChild(el);
+  }
+  function closeMealMenu(){
+    var el = document.getElementById('mealMenu');
+    if (el) el.remove();
   }
 
   // The days, newest first, under a green month label. Shows a page at a
@@ -5930,6 +6060,7 @@
       setSlider(insightsSubtabbarEl, ui.insightsView === 'trends' ? 1 : 0, slidersReady);
     }
     slidersReady = true;
+    refreshDayOverlay();
   }
 
   // Fades the current Insights sub-tab panel out, swaps to the new
@@ -6003,6 +6134,7 @@
     if (newTab === state.tab) return;
     var oldIndex = tabIndexOf(state.tab), newIndex = tabIndexOf(newTab);
     closeScanner(); // safety: release the camera if it was somehow left open
+    closeDayOverlay();
     closeFoodSearchOverlay();
     closeAddMealOverlay();
     endTabSlide(); // a tap mid-slide finishes the running one first
@@ -6136,10 +6268,24 @@
       confirmYes();
     } else if (action === 'cancel-confirm'){
       closeConfirmSheet();
-    } else if (action === 'toggle-history-day'){
-      var day = el.dataset.day;
-      ui.historyOpenDay = (ui.historyOpenDay === day) ? null : day;
-      renderApp();
+    } else if (action === 'open-day'){
+      openDayOverlay(el.dataset.day);
+    } else if (action === 'close-day'){
+      closeDayOverlay();
+    } else if (action === 'day-meal-menu'){
+      e.stopPropagation();
+      openMealMenu(el.dataset.id);
+    } else if (action === 'close-meal-menu'){
+      closeMealMenu();
+    } else if (action === 'menu-edit'){
+      closeMealMenu();
+      openEditMeal(el.dataset.id);
+    } else if (action === 'menu-copy'){
+      closeMealMenu();
+      copyMealToToday(el.dataset.id);
+    } else if (action === 'menu-delete'){
+      closeMealMenu();
+      requestDeleteMeal(el.dataset.id);
     } else if (action === 'toggle-settings-sec' || action === 'open-settings-sec'){
       var sec = el.dataset.sec;
       ui.settingsOpen = (action === 'toggle-settings-sec' && ui.settingsOpen === sec) ? null : sec;
@@ -6174,14 +6320,10 @@
       renderApp();
     } else if (action === 'history-pick-day'){
       closeCalendarSheet();
-      ui.historyOpenDay = el.dataset.day;
-      var hIdx = historyKeysSorted(dayStatsMap()).indexOf(el.dataset.day);
-      if (hIdx >= (ui.histShow || 21)) ui.histShow = hIdx + 7; // make sure the picked day is in the list
-      renderApp();
-      var hd = document.getElementById('hd-' + el.dataset.day);
-      if (hd) hd.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      openDayOverlay(el.dataset.day);
     } else if (action === 'copy-day'){
       copyDayToToday(el.dataset.day);
+      closeDayOverlay();
     } else if (action === 'clear-data'){
       if (window.confirm('Erase all logged meals and reset goals? This can\'t be undone.')){
         STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
