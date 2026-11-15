@@ -1575,17 +1575,29 @@
   .hero-ring canvas.ring3d{position:absolute; left:-8%; top:-8%; width:116%; height:116%; display:block; touch-action:pan-y; cursor:grab; -webkit-tap-highlight-color:transparent; animation:ring3dIn 400ms ease both;}
   .hero-ring canvas.ring3d:active{cursor:grabbing;}
   .hero-ring.is3d .hero-ring-svg{opacity:0;}
-  .hero-ring.is3d .hero-ring-center{transform:translateY(-7px);}
-  .hero-ring.is3d .hero-ring-sub{font-size:9px; letter-spacing:0.04em;}
   @keyframes ring3dIn{from{opacity:0}to{opacity:1}}
   /* a meal landing on the Log ring: floating +kcal, pulse and burst */
   .hero-plus{position:absolute; left:50%; top:22%; margin-left:-50px; width:100px; text-align:center; z-index:4; pointer-events:none; opacity:0; font-family:'Oswald',sans-serif; font-weight:700; font-size:24px; color:var(--accent);}
   .hero-pulse{position:absolute; inset:0; border-radius:50%; border:3px solid var(--accent); z-index:1; pointer-events:none; opacity:0;}
   .hero-dot{position:absolute; left:50%; top:50%; width:8px; height:8px; margin:-4px 0 0 -4px; border-radius:50%; z-index:4; pointer-events:none; opacity:0;}
-  .hero-ring-center{position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; pointer-events:none;}
   .hero-ring-num{font-family:'Oswald',sans-serif; font-weight:700; font-size:36px; line-height:1; color:var(--text);}
   .hero-ring-num.over{color:var(--accent-2);}
   .hero-ring-sub{margin-top:4px; font-size:10px; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-faint);}
+  .log-hero{display:flex; align-items:center; gap:16px; margin:12px 0 4px;}
+  .log-hero .hero-ring{width:150px; flex:none; margin:0;}
+  .log-hero-side{flex:1; min-width:0;}
+  .log-hero-side .hero-ring-num{font-size:34px;}
+  .log-hero-side .hero-ring-sub{margin-top:3px; font-size:11px;}
+  .log-macros{margin-top:12px; display:flex; flex-direction:column; gap:7px;}
+  .log-macro{display:flex; align-items:center; gap:8px; font-size:13px;}
+  .log-macro .dot{width:8px; height:8px; border-radius:50%; flex:none; background:var(--accent);}
+  .log-macro .dot.protein{background:var(--c-protein);}
+  .log-macro .dot.carbs{background:var(--c-carbs);}
+  .log-macro .dot.fat{background:var(--c-fat);}
+  .log-macro .lm-n{color:var(--text-faint); flex:1; min-width:0;}
+  .log-macro .lm-v{font-family:'Oswald',sans-serif; font-weight:600; color:var(--text); white-space:nowrap;}
+  .log-macro .lm-v small{font-size:11px; font-weight:500; color:var(--text-faint); margin-left:1px;}
+  .log-macro .lm-v.over{color:var(--accent-2);}
   .macro-tiles{display:flex; gap:8px; margin-top:6px;}
   .macro-tile{flex:1; min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-xl); padding:10px 12px;}
   .macro-tile-label{display:flex; align-items:center; gap:6px; font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint);}
@@ -1903,16 +1915,16 @@
   .fs-save{width:100%; height:46px; margin-top:18px; border-radius:12px; border:none; background:var(--accent); color:#0b1a10; font:700 15px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
   body[data-theme="light"] .fs-save{color:#fff;}
   .fs-delete{width:100%; height:40px; margin-top:8px; border:none; background:none; color:var(--accent-2); font:600 13px 'Inter',sans-serif; cursor:pointer;}
-  .water-row{display:flex; align-items:center; gap:10px; margin:12px 0 0; padding:10px 12px; border-radius:16px; background:var(--panel); border:1px solid var(--line);}
-  .water-ic{width:30px; height:30px; border-radius:10px; background:rgba(108,196,238,.16); color:var(--c-water); display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+  .water-row{display:flex; align-items:center; gap:10px; margin:10px 0 0; padding:7px 10px; border-radius:16px; background:var(--panel); border:1px solid var(--line);}
+  .water-ic{width:26px; height:26px; border-radius:9px; background:rgba(108,196,238,.16); color:var(--c-water); display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
   .water-ic svg{width:16px; height:16px;}
   .water-main{flex:1; min-width:0;}
   .water-top{display:flex; justify-content:space-between; align-items:baseline; font-size:12px; color:var(--text-faint);}
   .water-top b{font:600 13px 'Oswald',sans-serif; letter-spacing:.04em; text-transform:uppercase; color:var(--text);}
-  .water-bar{height:5px; border-radius:3px; background:var(--panel-3); margin-top:6px; overflow:hidden;}
+  .water-bar{height:4px; border-radius:3px; background:var(--panel-3); margin-top:4px; overflow:hidden;}
   .water-bar i{display:block; height:100%; border-radius:3px; background:var(--c-water);}
-  .water-btn{height:44px; min-width:64px; padding:0 14px; border-radius:10px; border:1px solid rgba(108,196,238,.5); background:transparent; color:var(--c-water); font:700 12px 'Oswald',sans-serif; cursor:pointer;}
-  .water-btn.minus{min-width:44px; padding:0; font-size:16px; border-color:var(--line); color:var(--text-faint);}
+  .water-btn{height:38px; min-width:64px; padding:0 12px; border-radius:10px; border:1px solid rgba(108,196,238,.5); background:transparent; color:var(--c-water); font:700 12px 'Oswald',sans-serif; cursor:pointer;}
+  .water-btn.minus{min-width:38px; padding:0; font-size:16px; border-color:var(--line); color:var(--text-faint);}
   .water-btn:disabled{opacity:.35;}
 
   /* ---- History (week strip + timeline, SaviorFit style) ---- */
@@ -2749,6 +2761,12 @@
     '</div>';
   }
 
+  function macroLineHtml(label, value, goal, cls){
+    var over = goal > 0 && value > goal;
+    return '<div class="log-macro"><i class="dot ' + cls + '"></i><span class="lm-n">' + label + '</span>' +
+      '<span class="lm-v' + (over ? ' over' : '') + '">' + Math.round(value) + '<small>/' + goal + 'g</small></span></div>';
+  }
+
   function weekStripHtml(viewKey){
     var today = todayKey();
     var start = weekStartKey(viewKey);
@@ -2788,17 +2806,17 @@
         '</div>' +
       '</div>' +
       weekStripHtml(viewKey) +
-      '<div class="hero-ring">' +
-        heroRingSvg(totals, g) +
-        '<div class="hero-ring-center">' +
+      '<div class="log-hero">' +
+        '<div class="hero-ring">' + heroRingSvg(totals, g) + '</div>' +
+        '<div class="log-hero-side">' +
           '<div class="hero-ring-num' + (overCal ? ' over' : '') + '">' + Math.round(totals.calories).toLocaleString() + '</div>' +
           '<div class="hero-ring-sub">' + (g.calories > 0 ? (overCal ? Math.round(-left).toLocaleString() + ' kcal over' : Math.round(left).toLocaleString() + ' kcal left') : 'kcal eaten') + '</div>' +
+          '<div class="log-macros">' +
+            macroLineHtml('Protein', totals.protein, g.protein, 'protein') +
+            macroLineHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
+            macroLineHtml('Fat', totals.fat, g.fat, 'fat') +
+          '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="macro-tiles">' +
-        macroTileHtml('Protein', totals.protein, g.protein, 'protein') +
-        macroTileHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
-        macroTileHtml('Fat', totals.fat, g.fat, 'fat') +
       '</div>' +
       waterRowHtml(viewKey) +
       '<button class="food-search-trigger" data-action="open-food-search-overlay">' +
@@ -6428,10 +6446,8 @@
       '<svg class="pf-account-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
     '</button>';
     html += '<div class="pf-stats">' +
-      statT((ps.streak > 0 ? '\uD83D\uDD25 ' : '') + ps.streak, 'Day streak', ps.streak === 1 ? 'day' : 'days') +
-      statT(ps.days, 'Days logged') +
-      statT(ps.meals, 'Meals logged') +
-      statT(ps.best, 'Best streak', ps.best === 1 ? 'day' : 'days', 'accent') +
+      statT((ps.streak > 0 ? '\uD83D\uDD25 ' : '') + ps.streak, 'Streak \u00B7 best ' + ps.best, ps.streak === 1 ? 'day' : 'days') +
+      statT(ps.days, 'Logged \u00B7 ' + ps.meals + (ps.meals === 1 ? ' meal' : ' meals'), ps.days === 1 ? 'day' : 'days', 'accent') +
     '</div>';
     html += '<div class="card pf-top"><div class="pf-top-h">TOP FOODS</div>';
     if (ps.top.length){
@@ -6688,7 +6704,8 @@
     var ring = document.querySelector('.hero-ring');
     if (!ring || !ring.animate) return;
     var token = ++heroAnimToken;
-    var numEl = ring.querySelector('.hero-ring-num'), subEl = ring.querySelector('.hero-ring-sub');
+    var hostEl = ring.closest('.log-hero') || ring;
+    var numEl = hostEl.querySelector('.hero-ring-num'), subEl = hostEl.querySelector('.hero-ring-sub');
     var goalsBy = { cal: g.calories, protein: g.protein, carbs: g.carbs, fat: g.fat };
     var valsPrev = { cal: prev.cal, protein: prev.protein, carbs: prev.carbs, fat: prev.fat };
     var valsNow = { cal: now.cal, protein: now.protein, carbs: now.carbs, fat: now.fat };
