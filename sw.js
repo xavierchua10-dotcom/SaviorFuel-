@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v89';
+var SHELL_CACHE = 'saviorfuel-shell-v90';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -25,6 +25,7 @@ var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 var SHELL_FILES = [
   './',
   './index.html',
+  './style.css',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -85,10 +86,10 @@ self.addEventListener('fetch', function(event){
   var url = new URL(event.request.url);
   if (NEVER_CACHE_HOSTS.indexOf(url.hostname) !== -1) return; // straight to network, untouched
 
-  // The app document itself: network-first, so an online visit
+  // The app document and its stylesheet: network-first, so an online visit
   // always gets the latest push, falling back to the cached shell
   // only when there's no connection at all.
-  if (event.request.mode === 'navigate' || url.pathname.endsWith('/index.html')){
+  if (event.request.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/style.css')){
     event.respondWith(
       // cache:'no-cache' makes the browser ask GitHub Pages "is this still
       // the latest?" every time, instead of reusing a copy it was told to
