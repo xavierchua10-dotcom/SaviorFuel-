@@ -1843,6 +1843,16 @@
   .pf-acts{display:flex; gap:10px; margin-top:16px;}
   .week-share-btn{display:block; width:100%; height:46px; margin:18px 0 6px; border-radius:12px; border:none; background:var(--accent); color:#0b1a10; font:700 14px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
   .week-share-btn:active{filter:brightness(.92);}
+  .week-share-btn{background:none !important; color:var(--text-dim) !important; height:auto !important; width:auto !important; margin:14px auto 6px !important; padding:8px 14px; font:600 12px 'Inter',sans-serif !important; letter-spacing:0 !important; text-transform:none !important;}
+  .pf-stats.three{grid-template-columns:repeat(3,1fr);}
+  .pf-stats.three .pf-stat{padding:12px 10px;}
+  .pf-stats.three .pf-stat-v{font-size:22px;}
+  .pf-stats.three .pf-stat-l{font-size:8.5px; letter-spacing:.08em;}
+  .wk-card{padding:16px; border-radius:22px; margin:12px 0 0;}
+  .wk-h{display:flex; justify-content:space-between; align-items:baseline; font:600 11px 'JetBrains Mono',monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px;}
+  .wk-h em{font-style:normal; color:var(--accent);}
+  .wk-div{height:1px; background:var(--line); margin:16px 0 12px;}
+  .overview-plain .pf-top{margin:12px 0 0;}
   .pf-share{flex:1; height:44px; border-radius:12px; border:none; background:var(--accent); color:#0b1a10; font:700 14px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
   .pf-share:active{transform:scale(.98);}
   .pf-edit{flex:0 0 44px; height:44px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.55); background:transparent; color:var(--accent); display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer;}
@@ -5521,9 +5531,10 @@
     }
     var avg = logged ? Math.round(sum / logged) : 0;
     var bestLabel = best ? new Date(best.key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }) : '—';
-    var statsHtml = '<div class="pf-stats">' +
-        statCardHtml(avg.toLocaleString(), 'kcal', 'Daily avg', 'accent') +
-        statCardHtml(String(onGoal), '/' + logged + ' on goal', 'Logged days · 7d', '') +
+    var statsHtml = '<div class="pf-stats three">' +
+        statCardHtml(avg.toLocaleString(), '', 'kcal daily avg', 'accent') +
+        statCardHtml(onGoal + ' / ' + logged, '', 'days on goal', '') +
+        statCardHtml(String(streak.current), '', 'day streak', '') +
       '</div>';
     return { stats: statsHtml };
   }
@@ -6071,6 +6082,20 @@
 
   // ---- Weekly Overview, plain: the bars, week numbers, average macros,
   // calorie split and consistency line.
+  // Top foods card (moved here from Profile).
+  function topFoodsCardHtml(){
+    var ps = profileStatsFuel();
+    var h = '<div class="card pf-top"><div class="pf-top-h">TOP FOODS</div>';
+    if (ps.top.length){
+      ps.top.forEach(function(f){
+        h += '<div class="pf-food"><div class="pf-food-n">' + esc(f.name) + '</div><div class="pf-food-v">' + f.n + '<small> \u00D7</small></div></div>';
+      });
+    } else {
+      h += '<div class="pf-empty">Log a few meals and the foods you eat most show up here.</div>';
+    }
+    return h + '</div>';
+  }
+
   function weeklyBodyHtml(){
     var wd = weekData();
     var g = wd.goals, days = wd.days, loggedDays = wd.loggedDays, avg = wd.avg, sum = wd.sum;
@@ -6078,7 +6103,7 @@
     var dayMax = Math.max(g.calories, Math.max.apply(null, days.map(function(x){ return x.total; })), 1);
     var goalPos = pct(g.calories, dayMax); // where the goal line sits along each bar
 
-    var html = '<div class="today-card-head"><h3 class="section-label">Last 7 days — daily calories</h3></div>';
+    var html = '<div class="card wk-card"><div class="wk-h"><span>This week</span>' + (g.calories > 0 ? '<em>Goal ' + g.calories.toLocaleString() + '</em>' : '') + '</div>';
     html += days.map(function(x){
       return '<div class="insight-bar-row">' +
         '<div class="insight-bar-day">' + x.label + '</div>' +
@@ -6089,10 +6114,8 @@
         '<div class="insight-bar-val">' + x.total + '</div>' +
       '</div>';
     }).join('');
-    if (g.calories > 0) html += '<div class="week-legend-note"><i></i>Goal ' + g.calories + ' kcal</div>';
-
     if (loggedDays.length === 0){
-      return html + '<div class="insight-caption">Log a meal to see your weekly averages and macro split.</div>';
+      return html + '<div class="insight-caption">Log a meal to see your weekly averages and macro split.</div></div>' + topFoodsCardHtml();
     }
 
     // ---- where the week's calories came from (4 kcal/g protein & carbs, 9 kcal/g fat)
@@ -6102,8 +6125,7 @@
       var pP = Math.round(pKcal / macroKcal * 100);
       var pC = Math.round(cKcal / macroKcal * 100);
       var pF = Math.max(0, 100 - pP - pC); // so the three always add to 100
-      html += '<div class="week-divider"></div><h3 class="section-label">7-day calorie split</h3>' +
-        '<div class="split-note">Share of the calories you ate, not % of your goal</div>' +
+      html += '<div class="wk-div"></div><div class="wk-h"><span>Where it came from</span></div>' +
         '<div class="split-bar"><i class="p" style="width:' + pP + '%"></i><i class="c" style="width:' + pC + '%"></i><i class="f" style="width:' + pF + '%"></i></div>' +
         '<div class="split-legend">' +
           '<span><i class="p"></i>Protein <b>' + pP + '%</b></span>' +
@@ -6112,12 +6134,7 @@
         '</div>';
     }
 
-    // ---- consistency: same "on goal" rule as History and the stat card (75%–110%)
-    if (g.calories > 0){
-      var onTarget = loggedDays.filter(function(x){ return dayStatus(x.total, g.calories) === 'on'; }).length;
-      html += '<div class="insight-caption' + (onTarget * 2 >= loggedDays.length ? ' balanced' : '') + '">' +
-        'On your calorie goal (75–110%) on <b>' + onTarget + ' of ' + loggedDays.length + '</b> logged day' + (loggedDays.length === 1 ? '' : 's') + '.</div>';
-    }
+    html += '</div>' + topFoodsCardHtml();
     html += '<button type="button" class="week-share-btn" data-action="share-week">Share my week</button>';
     return html;
   }
@@ -6476,20 +6493,6 @@
       '<span class="pf-account-tx"><b>Back up your log</b><small>Sign in to keep it safe and use it on any phone</small></span>' +
       '<svg class="pf-account-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
     '</button>';
-    html += '<div class="pf-stats">' +
-      statT((ps.streak > 0 ? '\uD83D\uDD25 ' : '') + ps.streak, 'Streak \u00B7 best ' + ps.best, ps.streak === 1 ? 'day' : 'days') +
-      statT(ps.days, 'Logged \u00B7 ' + ps.meals + (ps.meals === 1 ? ' meal' : ' meals'), ps.days === 1 ? 'day' : 'days', 'accent') +
-    '</div>';
-    html += '<div class="card pf-top"><div class="pf-top-h">TOP FOODS</div>';
-    if (ps.top.length){
-      ps.top.forEach(function(f){
-        html += '<div class="pf-food"><div class="pf-food-n">' + esc(f.name) + '</div><div class="pf-food-v">' + f.n + '<small> \u00D7</small></div></div>';
-      });
-    } else {
-      html += '<div class="pf-empty">Log a few meals and the foods you eat most show up here.</div>';
-    }
-    html += '</div>';
-
     html += '<h3 class="section-label">Settings</h3>';
 
     // ---- my plan: units, body details + calculator, and the daily goals
