@@ -1721,6 +1721,9 @@
   .signin-card{width:100%; max-width:480px; min-height:100%; display:flex; flex-direction:column; padding:calc(28px + var(--safe-top, 0px)) 22px calc(22px + var(--safe-bottom));}
   .signin-head{text-align:center; margin-top:14px;}
   .signin-logo{width:140px; height:140px; display:block; margin:0 auto 10px;}
+  /* Keep every logo at its true proportions even if its box ends up non-square. */
+  .signin-logo, .welcome-logo, .boot-loading-logo, .install-help-logo, .topbar-logo, .pf-av img{object-fit:contain; flex:none;}
+  .signin-logo{aspect-ratio:1/1; max-width:140px;}
   .signin-head h2{margin:0; font-family:'Oswald',sans-serif; font-size:28px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text);}
   .signin-head p{margin:6px 0 0; font-size:14px; color:var(--text-dim);}
   .signin-points{display:flex; flex-direction:column; gap:12px; margin:26px 4px 0;}
