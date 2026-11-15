@@ -496,6 +496,9 @@
   .meal-row-name{font-size:14px;color:var(--text);flex:1;min-width:0;}
   .meal-row-name-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .meal-row-macros{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);}
+  .meal-row-macros .mm-p{color:var(--c-protein);}
+  .meal-row-macros .mm-c{color:var(--c-carbs);}
+  .meal-row-macros .mm-f{color:var(--c-fat);}
   .meal-row-cal{font-family:'Oswald',sans-serif;font-weight:700;color:var(--accent);white-space:nowrap;}
   .meal-row-del{
     background:none;border:none;color:var(--text-faint);
@@ -2939,7 +2942,7 @@
       (photo ? '<img class="meal-thumb" src="' + photo + '" alt="">' : '<span class="meal-badge" aria-hidden="true">' + badge + '</span>') +
       '<div class="meal-row-name">' +
         '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(m.name) + '</div>' +
-        '<div class="meal-row-macros">P' + (m.protein||0) + ' · C' + (m.carbs||0) + ' · F' + (m.fat||0) + '</div>' +
+        '<div class="meal-row-macros"><span class="mm-p">P' + (m.protein||0) + '</span> · <span class="mm-c">C' + (m.carbs||0) + '</span> · <span class="mm-f">F' + (m.fat||0) + '</span></div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
       (dateKey(m.loggedAt) !== todayKey()
