@@ -1110,6 +1110,8 @@
   .acc > div{overflow:hidden; min-height:0;}
   .acc .category-picker{margin-bottom:8px;}
   .acc-fields{padding:2px 1px 0;}
+  .more-link{display:block; background:none; border:none; padding:8px 2px 4px; color:var(--text-dim); font:600 13px 'Inter',sans-serif; text-decoration:underline; text-underline-offset:3px; cursor:pointer;}
+  .more-link.hidden{display:none;}
   .day-quick{display:flex; gap:6px; margin-bottom:8px; overflow-x:auto; scrollbar-width:none;}
   .day-chip{
     flex-shrink:0; white-space:nowrap; cursor:pointer;
@@ -1162,12 +1164,15 @@
   .rc-cancel{display:block; width:100%; background:none; border:none; color:var(--text-dim); font-size:14px; padding:12px 0 2px; cursor:pointer;}
   .food-search-overlay.over-ai{z-index:97;}
   .ai-search-inst{
-    display:inline-flex; align-items:center; gap:6px; margin-top:10px; padding:7px 14px;
-    background:none; border:1px solid var(--accent); color:var(--accent); border-radius:var(--radius-pill);
+    display:inline-flex; align-items:center; gap:6px; margin-top:8px; padding:6px 0;
+    background:none; border:none; color:var(--text-dim); text-decoration:underline; text-underline-offset:3px;
     font-size:13px; font-weight:600; cursor:pointer;
   }
-  .ai-search-inst svg{width:15px; height:15px;}
-  .ai-search-inst:active{background:rgba(var(--accent-rgb),.12);}
+  .ai-search-inst svg{display:none;}
+  .ai-search-inst:active{color:var(--accent);}
+  .ai-item-macros{display:none;}
+  .ai-meal-row{margin:0 0 10px;}
+  .acc .ai-cats{flex-wrap:wrap; overflow:visible;}
   .ai-zoom{position:fixed; inset:0; z-index:400; background:rgba(0,0,0,0.94); display:flex; align-items:center; justify-content:center; padding:16px;}
   .ai-zoom.hidden{display:none;}
   .ai-zoom img{max-width:100%; max-height:100%; object-fit:contain; border-radius:12px;}
@@ -2190,7 +2195,8 @@
           <div class="field-labeled"><label>Carbs (g)</label><input type="number" inputmode="numeric" id="mealCarbs" placeholder="0"></div>
           <div class="field-labeled"><label>Fat (g)</label><input type="number" inputmode="numeric" id="mealFat" placeholder="0"></div>
         </div>
-        <div class="field-row">
+        <button type="button" class="more-link" id="moreNutriBtn" data-action="show-more-nutrition">+ More details (sugar, sodium)</button>
+        <div class="field-row hidden" id="moreNutriRow">
           <div class="field-labeled"><label>Sugar (g)</label><input type="number" inputmode="numeric" id="mealSugar" placeholder="0"></div>
           <div class="field-labeled"><label>Sodium (mg)</label><input type="number" inputmode="numeric" id="mealSodium" placeholder="0"></div>
         </div>
@@ -2219,7 +2225,12 @@
         <div class="ai-total-main" id="aiScanTotal"></div>
       </div>
       <div class="ai-scan-note" id="aiScanNote"></div>
-      <div class="category-picker ai-cats" id="aiCategoryPicker"></div>
+      <button type="button" class="sum-row ai-meal-row" id="aiMealRow" data-action="toggle-ai-category" aria-expanded="false">
+        <span class="sum-row-label">Meal</span>
+        <span class="sum-row-value" id="aiMealValue"></span>
+        <span class="sum-row-edit">Change</span><svg class="sum-row-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="acc" id="aiCategoryAcc"><div><div class="category-picker ai-cats" id="aiCategoryPicker"></div></div></div>
       <div id="aiScanItems"></div>
       <button type="button" class="ai-add-item" data-action="ai-add-item">+ Add another item</button>
       <div class="ai-foot">Estimates from a photo. Check portions before logging.</div>
@@ -3349,6 +3360,9 @@
     document.getElementById('mealFat').value = ui.prefillFat != null ? ui.prefillFat : '';
     document.getElementById('mealSugar').value = ui.prefillSugar != null ? ui.prefillSugar : '';
     document.getElementById('mealSodium').value = ui.prefillSodium != null ? ui.prefillSodium : '';
+    var hasMore = (parseFloat(ui.prefillSugar) > 0) || (parseFloat(ui.prefillSodium) > 0);
+    document.getElementById('moreNutriRow').classList.toggle('hidden', !hasMore);
+    document.getElementById('moreNutriBtn').classList.toggle('hidden', hasMore);
 
     // Compact by default: the numbers stay tucked away behind their
     // summary when a food was picked (they're already filled in); a
@@ -4743,9 +4757,9 @@
     document.getElementById('aiCategoryPicker').innerHTML = MEAL_CATEGORIES.map(function(c){
       return '<button type="button" class="category-pill' + (c.id === aiScan.category ? ' active' : '') + '" data-action="ai-select-category" data-category="' + c.id + '">' + c.label + '</button>';
     }).join('');
-    var box = document.getElementById('aiCategoryPicker');
-    var act = box.querySelector('.active');
-    if (act) box.scrollLeft = Math.max(0, act.offsetLeft - (box.clientWidth - act.offsetWidth) / 2);
+    var cur = MEAL_CATEGORIES.filter(function(c){ return c.id === aiScan.category; })[0];
+    var mv = document.getElementById('aiMealValue');
+    if (mv) mv.textContent = cur ? cur.label : '';
   }
 
   function renderAiScanTotal(){
@@ -4835,6 +4849,7 @@
     var th = document.getElementById('aiScanThumb');
     var hero = document.getElementById('aiScanHero');
     if (aiScan.photo){ th.src = aiScan.photo; hero.classList.remove('hidden'); } else hero.classList.add('hidden');
+    setAccordion('aiMealRow', 'aiCategoryAcc', false);
     renderAiCategoryPicker();
     renderAiScanItems();
     showSheetOverlay(document.getElementById('aiScanOverlay'));
@@ -7048,6 +7063,9 @@
         if (nowOpen) delete folded[el.dataset.category]; else folded[el.dataset.category] = true;
         saveStore();
       }
+    } else if (action === 'show-more-nutrition'){
+      document.getElementById('moreNutriRow').classList.remove('hidden');
+      el.classList.add('hidden');
     } else if (action === 'toggle-nutrition-fields'){
       toggleAccordion('nutriRow', 'nutriAcc');
     } else if (action === 'select-meal-category'){
@@ -7060,9 +7078,12 @@
       closeFoodPhoto();
     } else if (action === 'close-ai-scan'){
       closeAiScanSheet();
+    } else if (action === 'toggle-ai-category'){
+      toggleAccordion('aiMealRow', 'aiCategoryAcc');
     } else if (action === 'ai-select-category'){
       aiScan.category = el.dataset.category;
       renderAiCategoryPicker();
+      setAccordion('aiMealRow', 'aiCategoryAcc', false);
     } else if (action === 'ai-scale'){
       var sit = aiScan.items[parseInt(el.dataset.i, 10)];
       if (sit){
