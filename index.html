@@ -1867,7 +1867,7 @@
   .wk-h em{font-style:normal; color:var(--accent);}
   .wk-div{height:1px; background:var(--line); margin:16px 0 12px;}
   .overview-plain .pf-top{margin:12px 0 0;}
-  .pf-share{flex:1; height:44px; border-radius:12px; border:none; background:var(--accent); color:#0b1a10; font:700 14px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
+  .pf-share{flex:1; height:44px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.55); background:transparent; color:var(--accent); font:700 14px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
   .pf-share:active{transform:scale(.98);}
   .pf-edit{flex:0 0 44px; height:44px; border-radius:12px; border:1px solid rgba(var(--accent-rgb),.55); background:transparent; color:var(--accent); display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer;}
   .pf-edit svg{width:18px; height:18px;}
@@ -2981,13 +2981,20 @@
 
   var ROW_PLATE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/></svg>';
   var ROW_CHEV = '<svg class="mr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+  // Packaged-food names often arrive in ALL CAPS ("SPICY CHICKEN PIZZA"); show those in normal capitals.
+  function tidyName(name){
+    var n = String(name == null ? '' : name);
+    if (!/[A-Z]/.test(n) || n !== n.toUpperCase()) return n;
+    return n.toLowerCase().replace(/(^|[\s\-\/(])('?)([a-z])/g, function(_, a, b, c){ return a + b + c.toUpperCase(); }).replace(/\b(Mc)([a-z])/g, function(_, a, b){ return a + b.toUpperCase(); });
+  }
+
   function mealRowHtml(m){
     var photo = mealPhoto(m);
     return '<div class="mr-w"><div class="mr-del">Delete</div>' +
       '<div class="meal-row" data-action="edit-meal" data-id="' + m.id + '">' +
       (photo ? '<img class="meal-thumb" src="' + photo + '" alt="">' : '<span class="meal-badge" aria-hidden="true">' + ROW_PLATE + '</span>') +
       '<div class="meal-row-name">' +
-        '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(m.name) + '</div>' +
+        '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(tidyName(m.name)) + '</div>' +
         '<div class="meal-row-macros"><span class="mm-p">P' + (m.protein||0) + '</span> · <span class="mm-c">C' + (m.carbs||0) + '</span> · <span class="mm-f">F' + (m.fat||0) + '</span></div>' +
       '</div>' +
       '<div class="meal-row-cal">' + m.calories + '</div>' +
@@ -5061,7 +5068,7 @@
     document.getElementById('recentBody').innerHTML =
       '<div class="rc-card">' +
         (ph ? '<img class="rc-img" src="' + ph + '" alt="">' : '') +
-        '<div class="rc-tx"><div class="rc-name">' + esc(m.name) + '</div>' +
+        '<div class="rc-tx"><div class="rc-name">' + esc(tidyName(m.name)) + '</div>' +
           '<div class="rc-sub">P' + Math.round(m.protein) + ' &middot; C' + Math.round(m.carbs) + ' &middot; F' + Math.round(m.fat) + ' &middot; last logged ' + lastLoggedLabel(m.loggedAt) + '</div></div>' +
         '<div class="rc-kcal"><b>' + kc + '</b><span>kcal</span></div>' +
       '</div>' +
@@ -5270,7 +5277,7 @@
           '<div class="hist-pb ' + st + '"><i style="width:' + pct + '%"></i></div></div>' +
       '</div>' +
       (q ? '<div class="hist-hits">' + day.meals.filter(function(m){ return String(m.name || '').toLowerCase().indexOf(q) !== -1; }).slice(0, 3).map(function(m){
-        return '<span class="hist-hit">' + esc(m.name) + ' \u00B7 ' + Math.round(m.calories) + '</span>'; }).join('') + '</div>' : '') +
+        return '<span class="hist-hit">' + esc(tidyName(m.name)) + ' \u00B7 ' + Math.round(m.calories) + '</span>'; }).join('') + '</div>' : '') +
     '</div>';
   }
 
@@ -5287,7 +5294,7 @@
   function dayMealCardHtml(m){
     return '<div class="dy-meal" data-action="edit-meal" data-id="' + m.id + '">' +
       '<i class="dy-dot"></i>' +
-      '<div class="dy-meal-main"><div class="dy-meal-name">' + esc(m.name) + '</div>' +
+      '<div class="dy-meal-main"><div class="dy-meal-name">' + esc(tidyName(m.name)) + '</div>' +
         '<div class="dy-meal-macros">P' + (m.protein || 0) + ' · C' + (m.carbs || 0) + ' · F' + (m.fat || 0) + '</div></div>' +
       '<div class="dy-meal-kcal">' + m.calories + '<small>kcal</small></div>' +
       '<button type="button" class="dy-more" data-action="day-meal-menu" data-id="' + m.id + '" aria-label="Options for ' + esc(m.name) + '">&#8943;</button>' +
@@ -5400,7 +5407,7 @@
     closeMealMenu();
     var el = document.createElement('div');
     el.className = 'stats-sheet'; el.id = 'mealMenu';
-    el.innerHTML = '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>' + esc(m.name) + '</h3>' +
+    el.innerHTML = '<div class="stats-sheet-card"><div class="stats-sheet-head"><h3>' + esc(tidyName(m.name)) + '</h3>' +
       '<button type="button" class="stats-sheet-x" data-action="close-meal-menu" aria-label="Close">&times;</button></div>' +
       '<button type="button" class="dm-opt" data-action="menu-edit" data-id="' + id + '">Edit</button>' +
       (dateKey(m.loggedAt) !== todayKey() ? '<button type="button" class="dm-opt" data-action="menu-copy" data-id="' + id + '">Copy to today</button>' : '') +
@@ -6716,7 +6723,7 @@
     var recentHtml = recent.length ? (
       '<div class="scan-recent-label">Recent</div><div class="scan-recent">' +
         recent.map(function(m){
-          return '<button type="button" class="scan-chip" data-action="open-recent-sheet" data-id="' + m.id + '">' + esc(m.name) + '<span>' + Math.round(m.calories) + '</span></button>';
+          return '<button type="button" class="scan-chip" data-action="open-recent-sheet" data-id="' + m.id + '">' + esc(tidyName(m.name)) + '<span>' + Math.round(m.calories) + '</span></button>';
         }).join('') +
       '</div>') : '';
     document.getElementById('view').innerHTML =
