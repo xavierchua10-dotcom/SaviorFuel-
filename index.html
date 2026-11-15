@@ -1459,17 +1459,17 @@
     --header-line:#434a57;
   }
   body[data-theme="light"]{
-    --bg:#f3f0e8;
+    --bg:#f4f5f7;
     --panel:#ffffff;
-    --panel-2:#f1ede4;
-    --panel-3:#e9e4d9;
-    --line:#dcd6c8;
-    --text:#1c1e23;
-    --text-dim:#5b616a;
-    --text-faint:#6f747c;
-    --accent:#3f7a12;
-    --accent-dim:#dcefc8;
-    --accent-rgb:63,122,18;
+    --panel-2:#f0f2f5;
+    --panel-3:#e6e9ee;
+    --line:#e1e5ea;
+    --text:#16181d;
+    --text-dim:#566070;
+    --text-faint:#6b7685;
+    --accent:#2f8f1f;
+    --accent-dim:#d9f0d2;
+    --accent-rgb:47,143,31;
     --accent-2:#a5372f;
     --accent-2-dim:#f6dcda;
     --success:#31703e;
@@ -1481,12 +1481,13 @@
     --c-water:#1d79ad;
     --c-cal:var(--accent);
     --c-star:#b98100;
-    --header-bg:#ebe6da;
+    --header-bg:#f4f5f7;
     --header-text:#1c1e23;
-    --header-text-faint:#6f747c;
-    --header-accent:#3f7a12;
-    --header-line:#d6cfbf;
+    --header-text-faint:#6b7685;
+    --header-accent:#2f8f1f;
+    --header-line:#e1e5ea;
   }
+  body[data-theme="light"] .meal-row, body[data-theme="light"] .water-row, body[data-theme="light"] .balance-card, body[data-theme="light"] .card{box-shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05); border-color:transparent;}
   /* Light theme: logo with a black S so it reads on the light header */
   body[data-theme="light"] img[src$="logo-mark.png"]{content:url(images/logo-mark-light.png);}
   #app{background-image:none;}
@@ -1891,9 +1892,9 @@
   .theme-prev{display:flex; flex-direction:column; gap:4px; height:46px; border-radius:9px; padding:7px; background:#282d36;}
   .theme-prev i{display:block; height:6px; border-radius:3px; background:#383f4b;}
   .theme-prev i:first-child{width:60%; background:#a6e36b;} .theme-prev i:last-child{width:85%;}
-  .theme-opt.light{background:#f3f0e8;} .theme-opt.light .theme-prev{background:#fff;}
-  .theme-opt.light .theme-prev i{background:#e9e4d9;} .theme-opt.light .theme-prev i:first-child{background:#3f7a12;}
-  .theme-opt.light b{color:#5b616a;} .theme-opt.light.active b{color:#3f7a12;}
+  .theme-opt.light{background:#f4f5f7;} .theme-opt.light .theme-prev{background:#fff;}
+  .theme-opt.light .theme-prev i{background:#e6e9ee;} .theme-opt.light .theme-prev i:first-child{background:#2f8f1f;}
+  .theme-opt.light b{color:#5b616a;} .theme-opt.light.active b{color:#2f8f1f;}
 
   .stats-sheet{position:fixed; inset:0; z-index:310; background:rgba(0,0,0,.6); display:flex; align-items:flex-end; justify-content:center;}
   .stats-sheet-card{width:100%; max-width:480px; max-height:86vh; overflow-y:auto; background:var(--bg); border:1px solid var(--line); border-radius:26px 26px 0 0; padding:16px 16px calc(22px + var(--safe-bottom)); color:var(--text);}
@@ -6600,7 +6601,7 @@
     document.body.dataset.density = 'comfortable';
     document.body.dataset.corners = STORE.appSettings.corners || 'rounded';
     document.body.dataset.theme = STORE.appSettings.theme || 'dark';
-    try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? '#ebe6da' : '#1f232b'); }catch(e){}
+    try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? '#f4f5f7' : '#1f232b'); }catch(e){}
     document.body.dataset.bgArt = STORE.appSettings.bgArt === false ? 'off' : 'on';
   }
 
