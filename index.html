@@ -2851,8 +2851,8 @@
       '<div class="log-hero">' +
         '<div class="hero-ring">' + heroRingSvg(totals, g) + '</div>' +
         '<div class="log-hero-side">' +
-          '<div class="hero-ring-num' + (overCal ? ' over' : '') + '">' + Math.round(totals.calories).toLocaleString() + '</div>' +
-          '<div class="hero-ring-sub">' + (g.calories > 0 ? (overCal ? Math.round(-left).toLocaleString() + ' kcal over' : Math.round(left).toLocaleString() + ' kcal left') : 'kcal eaten') + '</div>' +
+          '<div class="hero-ring-num' + (overCal ? ' over' : '') + '">' + (g.calories > 0 ? Math.abs(Math.round(left)) : Math.round(totals.calories)).toLocaleString() + '</div>' +
+          '<div class="hero-ring-sub">' + (g.calories > 0 ? (overCal ? 'kcal over' : 'kcal left \u00B7 ' + Math.round(totals.calories).toLocaleString() + ' eaten') : 'kcal eaten') + '</div>' +
           '<div class="log-macros">' +
             macroLineHtml('Protein', totals.protein, g.protein, 'protein') +
             macroLineHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
@@ -2866,7 +2866,7 @@
     if (dayMeals.length === 0){
       html += '<div class="empty tab-empty-state"><div class="glyph">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-          '<path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path>' +
+          '<circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4.5"></circle>' +
         '</svg></div><p>' + (isToday ? 'Nothing logged yet today.' : 'Nothing logged this day.') + '<br>Tap the green button to add a meal.</p></div>';
     } else {
       html += groupedMealsHtml(dayMeals);
@@ -6747,9 +6747,9 @@
     function paintNum(v){
       if (!numEl || !numEl.isConnected) return;
       var left = g.calories - v, over = g.calories > 0 && v > g.calories;
-      numEl.textContent = Math.round(v).toLocaleString();
+      numEl.textContent = (g.calories > 0 ? Math.abs(Math.round(left)) : Math.round(v)).toLocaleString();
       numEl.classList.toggle('over', over);
-      if (subEl) subEl.textContent = g.calories > 0 ? (over ? Math.round(-left).toLocaleString() + ' kcal over' : Math.round(left).toLocaleString() + ' kcal left') : 'kcal eaten';
+      if (subEl) subEl.textContent = g.calories > 0 ? (over ? 'kcal over' : 'kcal left \u00B7 ' + Math.round(v).toLocaleString() + ' eaten') : 'kcal eaten';
     }
     // 1) draw the "before" picture right away
     paintNum(prev.cal);
