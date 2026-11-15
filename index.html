@@ -1932,6 +1932,15 @@
   .hist-title{margin:0; font:700 28px 'Oswald',sans-serif; letter-spacing:.03em; text-transform:uppercase;}
   .hist-cal-btn{display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 13px; border-radius:999px; border:1px solid rgba(var(--accent-rgb),.4); background:rgba(var(--accent-rgb),.1); color:var(--accent); font:600 12px 'JetBrains Mono',monospace; letter-spacing:.04em; cursor:pointer;}
   .hist-cal-btn svg{width:15px; height:15px;}
+  .hist-btns{display:flex; align-items:center; gap:8px;}
+  .hist-find-btn{width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--panel); color:var(--text-faint); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; padding:0;}
+  .hist-find-btn svg{width:16px; height:16px;}
+  .hist-find-btn.on{background:var(--accent); border-color:var(--accent); color:#0f2410;}
+  body[data-theme="light"] .hist-find-btn.on{color:#fff;}
+  .hist-search::-webkit-search-cancel-button{-webkit-appearance:none; display:none;}
+  .hist-find{position:relative; margin-top:12px;}
+  .hist-find .hist-search{padding-right:44px; margin:0;}
+  .hist-find .hist-find-x{display:flex; position:absolute; right:5px; top:50%; margin:0; transform:translateY(-50%);}
   .hist-sec{display:flex; align-items:center; justify-content:space-between; margin:16px 0 8px; font:500 12px 'Oswald',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--text-faint);}
   .hist-sec em{font:600 11px 'JetBrains Mono',monospace; font-style:normal; letter-spacing:.06em; color:var(--accent);}
   .hist-strip{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
@@ -2309,6 +2318,7 @@
   var STORE = loadStore();
   var state = { tab: 'log' };
   var ui = {
+    histFind: false,      // History filter bar is open
     dayOpen: null,
     histShow: 21,
     histMonth: null,
@@ -5423,12 +5433,16 @@
     }
     var goal = STORE.goals.calories;
     var map = dayStatsMap();
+    var findOpen = !!(ui.histFind || (ui.histQuery || '').trim());
+    var findIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>';
     var calIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="2.5" x2="8" y2="6.5"></line><line x1="16" y1="2.5" x2="16" y2="6.5"></line></svg>';
     document.getElementById('view').innerHTML =
       '<div class="hist-head"><h2 class="hist-title">History</h2>' +
-        '<button type="button" class="hist-cal-btn" data-action="open-calendar">' + calIcon + 'Calendar</button></div>' +
+        '<div class="hist-btns"><button type="button" class="hist-find-btn' + (findOpen ? ' on' : '') + '" data-action="toggle-hist-find" aria-label="Filter by food" aria-expanded="' + findOpen + '">' + findIcon + '</button>' +
+        '<button type="button" class="hist-cal-btn" data-action="open-calendar">' + calIcon + 'Calendar</button></div></div>' +
       historyStripHtml(map, goal) +
-      '<input type="search" class="hist-search" id="histSearch" placeholder="Filter by food, e.g. laksa" autocomplete="off" value="' + esc(ui.histQuery || '') + '">' +
+      (findOpen ? '<div class="hist-find"><input type="search" class="hist-search" id="histSearch" placeholder="Filter by food, e.g. laksa" autocomplete="off" value="' + esc(ui.histQuery || '') + '">' +
+        '<button type="button" class="food-search-clear hist-find-x" data-action="toggle-hist-find" aria-label="Close filter">&times;</button></div>' : '') +
       '<div id="histList">' + historyListHtml(map, goal) + '</div>';
   }
 
@@ -7038,6 +7052,12 @@
       fsi.focus();
     } else if (action === 'water-add'){
       addWater(parseInt(el.dataset.ml, 10) || 0);
+    } else if (action === 'toggle-hist-find'){
+      var wasOpen = !!(ui.histFind || (ui.histQuery || '').trim());
+      ui.histFind = !wasOpen;
+      if (wasOpen) ui.histQuery = '';
+      renderHistory();
+      if (!wasOpen){ var hs = document.getElementById('histSearch'); if (hs) hs.focus(); }
     } else if (action === 'open-calendar'){
       ui.histMonth = null;
       openCalendarSheet();
