@@ -102,7 +102,7 @@
      works fine with dark text, so these are light-theme-only
      overrides rather than changing the shared rules.  */
   body[data-theme="light"] .category-pill.active{color:#fff;}
-  body[data-theme="light"] .unit-toggle button.active{color:#fff;}
+  
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
@@ -212,17 +212,6 @@
   #view.flip-in-r{animation:flipInR 230ms cubic-bezier(0.15,0.4,0.3,1);}
   #view.flip-out-l, #view.flip-in-l, #view.flip-out-r, #view.flip-in-r{pointer-events:none; will-change:transform, opacity;}
 
-  #view.subtab-fade-out{
-    opacity:0;
-    transform:translateY(6px);
-    transition:opacity 140ms ease, transform 140ms ease;
-  }
-  #view.subtab-fade-in{
-    opacity:1;
-    transform:translateY(0);
-    transition:opacity 160ms ease, transform 160ms ease;
-  }
-
   /* Extra bottom room on Insights so the last row/card isn't hidden
      behind the sticky Today / Trends bar (mirrors SaviorFit Logger's
      body.has-progress-subtab rule). */
@@ -238,27 +227,6 @@
 
   /* ---------- Insights sub-tab bar (Today / Trends) — same pattern as
      SaviorFit Logger's Volume overview / Exercise progression bar ---------- */
-  .insights-subtabbar{
-    display:flex;
-    background:var(--panel-2);
-    border-top:1px solid var(--line);
-  }
-  .insights-subtabbar button{
-    flex:1;
-    background:none;
-    border:none;
-    color:var(--text-faint);
-    font-family:'Oswald',sans-serif;
-    font-size:12px;
-    letter-spacing:0.03em;
-    text-transform:uppercase;
-    font-weight:700;
-    padding:12px 6px;
-    cursor:pointer;
-  }
-  .insights-subtabbar button + button{border-left:1px solid var(--line);}
-  .insights-subtabbar button.active{color:var(--accent);}
-  .insights-subtabbar button:active{opacity:0.85;}
 
   /* ---------- Bottom tab bar (same classes as SaviorFit Logger) ---------- */
   .tabbar{
@@ -299,16 +267,7 @@
      tabs). Tabs are equal width, so the slider is 1/n wide and moves by
      whole multiples of its own width. The Daily / Weekly bar uses a
      sliding fill behind its active label instead. */
-  .insights-subtabbar{position:relative; isolation:isolate; --i:0; --n:2;}
-  .subtab-slider{
-    position:absolute; left:0; top:0; bottom:0; z-index:-1; pointer-events:none;
-    width:calc(100% / var(--n));
-    transform:translateX(calc(var(--i) * 100%));
-    transition:transform 360ms cubic-bezier(0.32,0.72,0,1);
-  }
-  .subtab-slider{background:var(--panel-3);}
-  .no-slide .subtab-slider{transition:none;}
-  @media (prefers-reduced-motion: reduce){ .subtab-slider{transition:none;} }
+
   .tab-glyph svg{width:22px;height:22px;}
 
   /* ---------- Scan tab ---------- */
@@ -418,44 +377,10 @@
      content like a normal card, now that it's styled like one
      (rounded corners, border, shadow). Pinning it while everything
      else scrolled underneath looked like it was floating oddly. */
-  .macro-cal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-  .macro-collapse-toggle{
-    background:var(--panel-3);border:none;border-radius:50%;
-    width:28px;height:28px;flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;
-    color:var(--text-dim);cursor:pointer;padding:0;
-  }
-  .macro-collapse-toggle svg{width:16px;height:16px;transition:transform 0.2s ease;}
-  .macro-summary-card.collapsed .macro-collapse-toggle svg{transform:rotate(180deg);}
 
   /* Minimize: the protein/carbs/fat bars slide shut (height animates
      0fr <-> 1fr), leaving the calorie number and a slim progress line. */
-  .macro-bars{display:grid; grid-template-rows:1fr; opacity:1; transition:grid-template-rows 260ms ease, opacity 200ms ease;}
-  .macro-bars > div{overflow:hidden; min-height:0;}
-  .macro-summary-card.collapsed .macro-bars{
-    grid-template-rows:0fr; opacity:0; visibility:hidden;
-    transition:grid-template-rows 260ms ease, opacity 160ms ease, visibility 0s linear 260ms;
-  }
-  .macro-mini-bar{height:4px; border-radius:2px; background:var(--panel-3); overflow:hidden; margin:2px 0 12px;}
-  .macro-mini-bar i{display:block; height:100%; border-radius:2px; background:var(--accent);}
-  .macro-mini-bar i.over{background:var(--accent-2);}
-  .macro-summary-card:not(.collapsed) .macro-mini-bar{display:none;}
-  @media (prefers-reduced-motion: reduce){
-    .macro-bars, .macro-summary-card.collapsed .macro-bars, .macro-collapse-toggle svg{transition:none;}
-  }
-  .macro-collapse-toggle:active{background:var(--panel-2);}
-  .macro-cal-row-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-  .reset-log-btn{
-    background:none; border:1px solid var(--accent-2-dim); color:var(--accent-2);
-    font-size:15px; line-height:1; padding:0;
-    width:28px; height:28px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer; flex-shrink:0; position:relative;
-  }
-  .reset-log-btn::after{content:''; position:absolute; inset:-8px;}
-  .reset-log-btn:active{background:var(--accent-2-dim);}
-  .macro-cal-row .num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);}
-  .macro-cal-row .num span{font-size:14px;font-weight:500;color:var(--text-faint);}
+
   .macro-bar-row{margin-bottom:5px;}
   .macro-bar-row:last-child{margin-bottom:0;}
 
@@ -612,20 +537,16 @@
   .meal-split-item{margin-bottom:11px;}
   .meal-split-row{display:flex; align-items:center; gap:10px; margin-bottom:3px;}
   .meal-split-macros{display:flex; gap:11px; margin-left:116px; font-size:11px; color:var(--text-faint);}
-  .meal-split-macros b, .dcm-macros b{font-family:'JetBrains Mono',monospace; font-weight:500;}
-  .meal-split-macros .p, .dcm-macros .p{color:var(--c-protein-text);}
-  .meal-split-macros .c, .dcm-macros .c{color:var(--c-carbs);}
-  .meal-split-macros .f, .dcm-macros .f{color:var(--c-fat);}
+  .meal-split-macros b {font-family:'JetBrains Mono',monospace; font-weight:500;}
+  .meal-split-macros .p {color:var(--c-protein-text);}
+  .meal-split-macros .c {color:var(--c-carbs);}
+  .meal-split-macros .f {color:var(--c-fat);}
   .meal-split-label{width:106px; flex-shrink:0; font-size:13px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .meal-split-track{flex:1; min-width:0; height:14px; background:var(--panel-3); border-radius:var(--radius-xs); overflow:hidden;}
   .meal-split-fill{height:100%; background:var(--accent); border-radius:var(--radius-xs);}
   .meal-split-val{width:74px; flex-shrink:0; text-align:right; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text);}
   .meal-split-val span{margin-left:6px; color:var(--text-faint);}
-  .day-card-meals{margin-top:8px; padding-top:6px; border-top:1px solid var(--line); font-size:11.5px; color:var(--text-faint);}
-  .dcm-row{display:flex; align-items:baseline; gap:8px; padding:3px 0;}
-  .dcm-name{flex:0 0 86px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-  .dcm-row > b{flex:0 0 34px; text-align:right; color:var(--text); font-family:'JetBrains Mono',monospace; font-weight:500;}
-  .dcm-macros{flex:1; display:flex; gap:9px; justify-content:flex-end;}
+
   .week-legend-note{display:flex;align-items:center;gap:8px;margin:-2px 0 0 62px;font-size:11px;color:var(--text-faint);}
   .week-legend-note i{display:inline-block;width:0;height:12px;border-left:2px dashed rgba(255,255,255,0.55);}
   .week-divider{height:1px;background:var(--line);margin:18px 0 16px;}
@@ -649,53 +570,6 @@
   .split-legend .f{background:var(--c-fat);}
 
   /* ---------- Insights "Today" macro rings ---------- */
-  .calorie-ring-row{display:flex;justify-content:center;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line);}
-  .calorie-ring-item{display:flex;flex-direction:column;align-items:center;}
-  .calorie-ring-wrap{position:relative;width:116px;height:116px;}
-  .calorie-ring-svg{width:116px;height:116px;transform:rotate(-90deg);}
-  .calorie-ring-track{fill:none;stroke:var(--panel-3);stroke-width:10;}
-  .calorie-ring-fill{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 500ms ease;}
-  .calorie-ring-fill.over{stroke:var(--accent-2);}
-  .calorie-ring-pct{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-family:'Oswald',sans-serif; font-size:22px; font-weight:700; color:var(--text);
-  }
-  .calorie-ring-pct.over{color:var(--accent-2);}
-  .calorie-ring-label{
-    margin-top:10px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
-    letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim);
-  }
-  .calorie-ring-sub{margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);}
-
-  .macro-ring-row{display:flex;justify-content:space-between;gap:8px;padding-top:2px;}
-  .macro-ring-item{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;}
-  .macro-ring-wrap{position:relative;width:76px;height:76px;}
-  .macro-ring-svg{width:76px;height:76px;transform:rotate(-90deg);}
-  .macro-ring-track{fill:none;stroke:var(--panel-3);stroke-width:7;}
-  .macro-ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 500ms ease;}
-  .macro-ring-fill.protein{stroke:var(--c-protein);}
-  .macro-ring-fill.carbs{stroke:var(--c-carbs);}
-  .macro-ring-fill.fat{stroke:var(--c-fat);}
-  .macro-ring-fill.over{stroke:var(--accent-2);}
-  .macro-ring-pct{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-family:'Oswald',sans-serif; font-size:15px; font-weight:700; color:var(--text);
-  }
-  .macro-ring-pct.over{color:var(--accent-2);}
-  .macro-ring-label{
-    margin-top:9px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
-    letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim);
-  }
-  .macro-ring-sub{margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-faint);}
-
-  .remaining-row{display:flex;justify-content:space-between;gap:6px;padding-top:14px;margin-top:14px;border-top:1px solid var(--line);}
-  .remaining-item{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;}
-  .remaining-item .num{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--text);white-space:nowrap;}
-  .remaining-item .num.over{color:var(--accent-2);}
-  .remaining-item .lbl{
-    margin-top:3px; font-family:'Oswald',sans-serif; font-size:10px; font-weight:700;
-    letter-spacing:0.03em; text-transform:uppercase; color:var(--text-faint); text-align:center;
-  }
 
   .insight-caption{
     font-family:'Inter',sans-serif; font-size:12.5px; line-height:1.4;
@@ -800,12 +674,6 @@
   /* Only shown when the picked food has a known serving size (OFF
      products with contributor-entered serving data) — grams-only
      otherwise, since guessing a serving size would just be wrong. */
-  .unit-toggle{display:flex;gap:2px;background:var(--panel-2);border-radius:var(--radius-sm);padding:3px;margin-top:8px;}
-  .unit-toggle button{
-    flex:1;background:none;border:none;color:var(--text-faint);
-    padding:6px 8px;border-radius:var(--radius-xs);font-size:11px;font-weight:600;cursor:pointer;
-  }
-  .unit-toggle button.active{background:var(--accent);color:#1c1500;}
 
   /* ---------- Barcode scanner overlay ---------- */
   .scan-overlay{
@@ -990,6 +858,9 @@
     letter-spacing:0.02em;
   }
   .food-search-overlay-input:focus{outline:none;border-color:var(--accent);}
+  .food-search-overlay-input{padding-right:44px;}
+  .food-search-clear{flex-shrink:0; width:32px; height:32px; margin-left:-44px; border-radius:50%; border:none; background:var(--panel-3); color:var(--text); font-size:20px; line-height:1; padding:0 0 2px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+  .food-search-overlay-input:placeholder-shown + .food-search-clear{display:none;}
   .food-suggest-list{
     flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
     padding:4px 16px calc(20px + var(--safe-bottom));
@@ -1431,47 +1302,10 @@
   body[data-density="compact"] #view > .overview-plain:first-child{padding:0 14px;}
   .overview-plain .today-card-head{min-height:34px; margin-bottom:8px;}
   .overview-plain .mode-toggle{position:absolute; top:0; right:0;}
-  .day-card-close{background:none; border:none; color:var(--text-faint); font-size:22px; line-height:1; padding:0 2px; cursor:pointer; align-self:center;}
 
   /* "Meals today" drawer on the pyramid view: a small tab tucked into the
      top-left corner (mirroring the 3D/Plain switch on the right) that
      slides a panel out from the left edge; × or the tab closes it again. */
-  .meal-drawer{
-    position:absolute; top:0; left:0; z-index:3; display:flex; align-items:flex-start;
-    transform:translateX(calc(-100% + 42px));   /* closed: only the tab shows */
-    transition:transform 320ms cubic-bezier(0.32,0.72,0,1);
-    will-change:transform;
-  }
-  .meal-drawer.open{transform:translateX(0);}
-  .meal-drawer-panel{
-    width:min(292px, calc(100vw - 60px)); padding:12px 14px 13px;
-    background:var(--panel); border:1px solid var(--line); border-left:none;
-    border-radius:0 var(--radius-lg) var(--radius-lg) 0; box-shadow:var(--card-shadow);
-    visibility:hidden; transition:visibility 0s linear 320ms;
-  }
-  .meal-drawer.open .meal-drawer-panel{visibility:visible; transition:visibility 0s;}
-  .meal-drawer-handle{
-    flex-shrink:0; width:42px; padding:9px 0 8px; cursor:pointer;
-    display:flex; flex-direction:column; align-items:center; gap:3px;
-    background:var(--panel-2); border:1px solid var(--line); border-left:none;
-    border-radius:0 var(--radius-md) var(--radius-md) 0; color:var(--accent);
-  }
-  .meal-drawer-handle svg{width:18px; height:18px;}
-  .meal-drawer-handle span{font-family:'Oswald',sans-serif; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);}
-  .meal-drawer.open .meal-drawer-handle{color:var(--text-faint);}
-  .meal-drawer-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
-  .meal-drawer-head b{font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text);}
-  .meal-drawer-item{margin-bottom:9px;}
-  .meal-drawer-line{display:flex; justify-content:space-between; align-items:baseline; font-size:13px; color:var(--text-dim);}
-  .meal-drawer-line b{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; color:var(--text);}
-  .meal-drawer-bar{height:4px; margin:4px 0 5px; border-radius:2px; background:var(--panel-3); overflow:hidden;}
-  .meal-drawer-bar i{display:block; height:100%; border-radius:2px; background:var(--accent);}
-  .meal-drawer .meal-split-macros{margin-left:0; gap:12px;}
-  .meal-drawer-total{display:flex; justify-content:space-between; align-items:baseline; margin-top:2px; padding-top:8px; border-top:1px solid var(--line); font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim);}
-  .meal-drawer-total b{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; letter-spacing:0; text-transform:none; color:var(--accent);}
-  .meal-drawer-total + .meal-split-macros{margin-top:3px;}
-  .meal-drawer-empty{font-size:12.5px; color:var(--text-faint); padding:2px 0 4px;}
-  @media (prefers-reduced-motion: reduce){ .meal-drawer, .meal-drawer-panel{transition:none;} }
 
   /* 3D view: pinned to the top-right corner of the full-bleed panel. */
   .mode-toggle.floating{position:absolute; top:0; right:0; z-index:2;}
@@ -1653,11 +1487,14 @@
   body[data-theme="light"] img[src$="logo-mark.png"]{content:url(images/logo-mark-light.png);}
   #app{background-image:none;}
   body[data-bg-art="off"] #app{background-image:none;}
-  body[data-theme="light"] .category-pill.active, body[data-theme="light"] .unit-toggle button.active{color:#fff;}
-  .macro-bar-fill.protein, .macro-ring-fill.protein{background:var(--c-protein);} .macro-ring-fill.protein{stroke:var(--c-protein);}
-  .macro-bar-fill.carbs{background:var(--c-carbs);} .macro-ring-fill.carbs{stroke:var(--c-carbs);}
-  .macro-bar-fill.fat{background:var(--c-fat);} .macro-ring-fill.fat{stroke:var(--c-fat);}
-  .macro-bar-fill.over{background:var(--accent-2);} .macro-ring-fill.over{stroke:var(--accent-2);}
+  body[data-theme="light"] .category-pill.active,
+  body[data-theme="light"] .scan-badge,
+  body[data-theme="light"] .ai-badge,
+  body[data-theme="light"] .ai-scale button.active {color:#fff;}
+  .macro-bar-fill.protein {background:var(--c-protein);} 
+  .macro-bar-fill.carbs{background:var(--c-carbs);} 
+  .macro-bar-fill.fat{background:var(--c-fat);} 
+  .macro-bar-fill.over{background:var(--accent-2);} 
 
   /* ---- Floating nav with raised Scan button ---- */
   /* (the bar's own shape lives with the base .tabbar rules above) */
@@ -1695,6 +1532,8 @@
   .log-head-title b{font-family:'Oswald',sans-serif; font-size:20px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text);}
   .log-head-title span{font-size:12px; color:var(--text-faint);}
   .log-head-actions{display:flex; align-items:center; gap:6px;}
+  .log-today-pill{height:30px; padding:0 14px; border-radius:var(--radius-pill); border:none; background:var(--accent); color:#14161a; font:700 12px 'Oswald',sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;}
+  body[data-theme="light"] .log-today-pill{color:#fff;}
   .week-nav{
     position:relative; width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:var(--panel);
     color:var(--text-dim); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
@@ -1778,12 +1617,9 @@
   /* Daily / Weekly switch: a slim pill under the header (not stacked on the nav) */
   /* The pill floats over the top of the page (zero-height anchor), so showing or
      hiding it never resizes #view — that resize was what made tab switches jump. */
-  .insights-subtab-anchor{position:relative; height:0; flex-shrink:0; z-index:6;}
-  .insights-subtabbar{position:absolute; top:10px; left:16px; right:16px; margin:0; border-radius:var(--radius-pill); overflow:hidden; border:1px solid var(--line); background:var(--panel);}
-  .insights-subtabbar:not(.hidden){animation:subtabIn 240ms ease both;}
+
   @keyframes subtabIn{from{opacity:0;} to{opacity:1;}}
-  .insights-subtabbar button{padding:9px 6px; font-size:12px;}
-  .insights-subtabbar.hidden{display:none;}
+
   /* room for the pill (kept on #view itself so the outgoing page keeps it while sliding) */
   main#view.has-subtab:not(.model-fullscreen) > *:first-child{margin-top:62px;}
   /* 3D panel: leave a gap under the pill so the corner tabs don't touch it */
@@ -2044,6 +1880,9 @@
   .hist-legend i.on,.hist-status.on{background:var(--accent);} .hist-legend i.low,.hist-status.low{background:rgba(var(--accent-rgb),.4);} .hist-legend i.over,.hist-status.over{background:var(--accent-2);}
   .hist-status{width:9px; height:9px; border-radius:50%; display:block; background:var(--panel-3);}
   .hist-search{width:100%; height:42px; border-radius:14px; border:1px solid var(--line); background:var(--panel); color:var(--text); padding:0 14px; font:400 14px 'Inter',sans-serif; margin:12px 0 0; outline:none;}
+  .hist-none, .hist-count{margin:14px 2px 4px; font-size:12px; color:var(--text-faint);}
+  .hist-hits{display:flex; flex-wrap:wrap; gap:6px; padding:0 14px 12px;}
+  .hist-hit{font:600 11px 'JetBrains Mono',monospace; padding:4px 10px; border-radius:var(--radius-pill); background:rgba(var(--accent-rgb),.14); color:var(--accent);}
   .hist-search:focus{border-color:rgba(var(--accent-rgb),.6);}
   #histList .hist-item{background:var(--panel);}
   #histList .section-label{margin-top:18px;}
@@ -2148,6 +1987,10 @@
   .dy-copy:active{filter:brightness(.92);}
   .dm-opt{display:block; width:100%; height:48px; margin-top:10px; border-radius:12px; border:1px solid var(--line); background:var(--panel); color:var(--text); font:600 15px 'Inter',sans-serif; cursor:pointer;}
   .dm-opt.danger{color:var(--accent-2); border-color:rgba(224,87,79,.4);}
+  @media (prefers-reduced-motion: reduce){
+    .add-meal-sheet.glow-once, .meal-row.glow-once, .boot-loading-logo{animation:none;}
+    .hero-ring-fill{transition:none;}
+  }
 </style>
 </head>
 <body>
@@ -2188,13 +2031,14 @@
   </div>
 </div>
 
-<div class="food-search-overlay hidden" id="foodSearchOverlay">
+<div class="food-search-overlay hidden" id="foodSearchOverlay" role="dialog" aria-modal="true">
   <div class="food-search-overlay-panel">
     <div class="food-search-overlay-head">
       <button class="food-search-back" data-action="close-food-search-overlay" aria-label="Close">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
       </button>
       <input type="text" class="food-search-overlay-input" id="foodSearchInput" placeholder="Search a food..." autocomplete="off">
+      <button type="button" class="food-search-clear" data-action="clear-food-search" aria-label="Clear search">&times;</button>
       <button class="food-search-scan-btn" data-action="open-scanner" aria-label="Scan barcode or food photo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 8h4M17 8h4M3 16h4M17 16h4"/></svg>
       </button>
@@ -2227,7 +2071,7 @@
   <input type="file" id="scanFile" accept="image/*" hidden>
 </div>
 
-<div class="add-meal-overlay hidden" id="addMealOverlay">
+<div class="add-meal-overlay hidden" id="addMealOverlay" role="dialog" aria-modal="true">
   <div class="add-meal-backdrop" data-action="close-add-meal-overlay"></div>
   <div class="add-meal-sheet" id="addMealSheet">
     <div class="sheet-grab" id="addMealGrab" aria-hidden="true"><i></i></div>
@@ -2293,7 +2137,7 @@
   </div>
 </div>
 
-<div class="add-meal-overlay hidden" id="aiScanOverlay">
+<div class="add-meal-overlay hidden" id="aiScanOverlay" role="dialog" aria-modal="true">
   <div class="add-meal-backdrop" data-action="close-ai-scan"></div>
   <div class="add-meal-sheet">
     <div class="sheet-grab" id="aiScanGrab" aria-hidden="true"><i></i></div>
@@ -2318,7 +2162,7 @@
   </div>
 </div>
 
-<div class="add-meal-overlay hidden" id="recentOverlay">
+<div class="add-meal-overlay hidden" id="recentOverlay" role="dialog" aria-modal="true">
   <div class="add-meal-backdrop" data-action="close-recent-sheet"></div>
   <div class="add-meal-sheet">
     <div class="sheet-grab" id="recentGrab" aria-hidden="true"><i></i></div>
@@ -2371,7 +2215,7 @@
   </div>
 </div>
 
-<div class="nutrient-info-overlay hidden" id="nutrientInfoOverlay">
+<div class="nutrient-info-overlay hidden" id="nutrientInfoOverlay" role="dialog" aria-modal="true">
   <div class="nutrient-info-backdrop" data-action="close-nutrient-info"></div>
   <div class="nutrient-info-card">
     <div class="nutrient-info-head">
@@ -2453,7 +2297,6 @@
   var STORE = loadStore();
   var state = { tab: 'log' };
   var ui = {
-    historyOpenDay: null,
     dayOpen: null,
     histShow: 21,
     histMonth: null,
@@ -2939,6 +2782,7 @@
         '<div class="log-head-title"><b>' + formatDateLabel(viewKey) + '</b>' +
           (isToday ? '<span>' + new Date(viewKey + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }) + '</span>' : '') + '</div>' +
         '<div class="log-head-actions">' +
+          (!isToday ? '<button type="button" class="log-today-pill" data-action="set-log-day" data-day="' + todayKey() + '">Today</button>' : '') +
           '<button class="week-nav" data-action="log-week" data-dir="-1" aria-label="Previous week">' + chevL + '</button>' +
           '<button class="week-nav" data-action="log-week" data-dir="1" aria-label="Next week"' + (weekNext ? '' : ' disabled') + '>' + chevR + '</button>' +
         '</div>' +
@@ -3037,29 +2881,13 @@
   // uncapped percentage — and switches to the "over" red once past
   // 100% — so exceeding a goal never just looks identical to hitting
   // it exactly.
-  var MACRO_RING_R = 32;
-  var MACRO_RING_CIRCUMFERENCE = 2 * Math.PI * MACRO_RING_R;
 
 
   // Bigger hero ring above the macro rings, same technique but its
   // own radius/stroke and the accent gold color rather than a macro
   // color, so calories reads as the headline stat.
-  var CALORIE_RING_R = 48;
-  var CALORIE_RING_CIRCUMFERENCE = 2 * Math.PI * CALORIE_RING_R;
 
 
-  // Budget framing to sit alongside the percentage rings above — how
-  // much of each goal is left to hit (or how far over), rather than
-  // how much has been consumed so far.
-  function remainingStatHtml(label, consumed, goal, unit){
-    var diff = goal - consumed;
-    var over = diff < 0;
-    var amount = Math.round(Math.abs(diff));
-    return '<div class="remaining-item">' +
-      '<div class="num' + (over ? ' over' : '') + '">' + amount + unit + '</div>' +
-      '<div class="lbl">' + label + (over ? ' over' : ' left') + '</div>' +
-    '</div>';
-  }
 
   // A one-line read on today's macros — calls out whichever macro is
   // furthest behind its own goal, or says so if all three are
@@ -3071,8 +2899,6 @@
   // zero, so the spread looks tiny and reads as "balanced" even
   // though nothing meaningful has been logged yet. Below the floor,
   // say so instead of drawing a conclusion from too little data.
-  var BALANCE_MIN_CALORIE_PCT = 15;
-  var BALANCE_SPREAD_THRESHOLD = 15;
 
 
   function mealRowHtml(m){
@@ -3860,7 +3686,8 @@
     var num = function(i){ var el = document.getElementById(i); var v = el ? parseFloat(el.value) : 0; return isFinite(v) ? Math.max(0, Math.round(v)) : 0; };
     var txt = function(i){ var el = document.getElementById(i); return el ? el.value.trim() : ''; };
     var cal = num('fsCal');
-    if (cal <= 0){ showToast('Add the calories first'); return; }
+    var calRaw = document.getElementById('fsCal');
+    if (!calRaw || calRaw.value.trim() === ''){ showToast('Add the calories first'); return; }   // 0 is allowed
     if (mode === 'quick'){
       var dayKey = logDayKey();
       var cat = suggestCategoryForNow();
@@ -3917,7 +3744,10 @@
     if (next === 0) delete STORE.water[key]; else STORE.water[key] = next;
     saveStore();
     maybeVibrate();
-    renderApp();
+    // Swap just the water row so the 3D ring isn't rebuilt and the page doesn't jump back to the top.
+    var row = document.querySelector('.water-row');
+    if (row && state.tab === 'log') row.outerHTML = waterRowHtml(key);
+    else renderApp();
   }
   function fmtWater(ml){ return ml >= 1000 ? (Math.round(ml / 10) / 100) + ' L' : ml + ' ml'; }
   function waterRowHtml(key){
@@ -3951,7 +3781,7 @@
       : p._source === 'saved'
       ? '<button type="button" class="food-fav' + (p._fav ? ' on' : '') + '" data-action="toggle-fav" data-name="' + esc(p.product_name) + '" aria-label="' + (p._fav ? 'Remove from favorites' : 'Add to favorites') + '" aria-pressed="' + (!!p._fav) + '">' + STAR_SVG + '</button>'
       : '';
-    return '<div class="food-suggest-item" data-action="pick-food" data-index="' + i + '">' +
+    return '<div class="food-suggest-item" role="button" tabindex="0" data-action="pick-food" data-index="' + i + '">' +
       foodThumbHtml(p) +
       '<div class="food-suggest-name">' +
         '<div class="food-suggest-title">' + esc(p.product_name) + '</div>' +
@@ -4722,7 +4552,7 @@
 
   function runAiScan(canvas){
     if (!STORE.appSettings.aiScanConsent){
-      var ok = window.confirm('AI food scan sends this photo to a server and on to Google\'s Gemini AI to estimate what\'s in it. SaviorFuel doesn\'t keep the photo. Continue?');
+      var ok = window.confirm('AI food scan sends this photo to Google\'s Gemini AI to estimate what\'s in it. The server doesn\'t store it; a small thumbnail stays on this phone with your meal. Continue?');
       if (!ok) return Promise.reject({ declined: true });
       STORE.appSettings.aiScanConsent = true;
       saveStore();
@@ -5034,7 +4864,8 @@
     var sugar = field('mealSugar');
     var sodium = field('mealSodium');
 
-    if (!name || cal <= 0) return; // require at least a name + calories
+    // A name and a calories entry are required. 0 is fine when typed on purpose (black coffee, plain tea, water).
+    if (!name || document.getElementById('mealCal').value.trim() === '') return;
 
     var dayKey = document.getElementById('mealDate').value;
     var editing = ui.editingMealId ? mealById(ui.editingMealId) : null;
@@ -5314,11 +5145,6 @@
 
   var CHEV_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
 
-  function goalRingHtml(calories, goal){
-    var p = pctUncapped(calories, goal);
-    var cls = dayStatus(calories, goal);
-    return '<div class="hist-ring ' + cls + '" style="--p:' + Math.min(p, 100) + '"><span>' + p + '%</span></div>';
-  }
 
   // ---- History: a month heat map up top, then the days of that month
   // (or every day matching the search). Rows stay slim; macros appear
@@ -5347,7 +5173,6 @@
       if (info) cls += ' ' + dayStatus(info.calories, goal);
       else if (key > today) cls += ' future';
       if (key === today) cls += ' now';
-      if (ui.historyOpenDay === key) cls += ' picked';
       html += info
         ? '<button type="button" class="' + cls + '" data-action="history-pick-day" data-day="' + key + '">' + d + '</button>'
         : '<div class="' + cls + '">' + d + '</div>';
@@ -5356,18 +5181,20 @@
     return html;
   }
 
-  function historyDayHtml(day, goal){
+  function historyDayHtml(day, goal, q){
     var key = day.key;
     var n = day.meals.length;
     var st = dayStatus(day.calories, goal);
     var pct = Math.min(100, pctUncapped(day.calories, goal));
     return '<div class="hist-item' + (key === todayKey() ? ' is-today' : '') + '" id="hd-' + key + '">' +
-      '<div class="hist-item-head history-day-head" data-action="open-day" data-day="' + key + '">' +
+      '<div class="hist-item-head history-day-head" role="button" tabindex="0" data-action="open-day" data-day="' + key + '">' +
         '<div class="hist-item-main"><div class="hist-name">' + esc(formatDateLabel(key)) + '</div>' +
           '<div class="hist-sub">' + n + ' meal' + (n === 1 ? '' : 's') + '</div></div>' +
         '<div class="hist-item-side hist-kcal-col"><div class="hist-kcal">' + Math.round(day.calories).toLocaleString() + '<small>kcal</small></div>' +
           '<div class="hist-pb ' + st + '"><i style="width:' + pct + '%"></i></div></div>' +
       '</div>' +
+      (q ? '<div class="hist-hits">' + day.meals.filter(function(m){ return String(m.name || '').toLowerCase().indexOf(q) !== -1; }).slice(0, 3).map(function(m){
+        return '<span class="hist-hit">' + esc(m.name) + ' \u00B7 ' + Math.round(m.calories) + '</span>'; }).join('') + '</div>' : '') +
     '</div>';
   }
 
@@ -5514,20 +5341,27 @@
   // time (ui.histShow); "Show earlier" adds more.
   function historyKeysSorted(map){ return Object.keys(map).sort().reverse(); }
   function historyListHtml(map, goal){
+    var q = (ui.histQuery || '').trim().toLowerCase();
     var keys = historyKeysSorted(map);
-    var shown = keys.slice(0, ui.histShow || 21);
-    var html = '', lastMonth = '';
+    if (q){
+      keys = keys.filter(function(k){
+        return map[k].meals.some(function(m){ return String(m.name || '').toLowerCase().indexOf(q) !== -1; });
+      });
+      if (!keys.length) return '<div class="hist-none">No days with \u201c' + esc(ui.histQuery.trim()) + '\u201d.</div>';
+    }
+    var shown = q ? keys.slice(0, 60) : keys.slice(0, ui.histShow || 21);
+    var html = q ? '<div class="hist-count">' + keys.length + ' day' + (keys.length === 1 ? '' : 's') + ' with \u201c' + esc(ui.histQuery.trim()) + '\u201d</div>' : '', lastMonth = '';
     shown.forEach(function(k){
       var mk = k.slice(0, 7);
-      if (mk !== lastMonth){
+      if (!q && mk !== lastMonth){
         lastMonth = mk;
         var d = new Date(mk + '-01T00:00:00');
         var lab = d.toLocaleDateString(undefined, { month: 'long', year: mk.slice(0, 4) === todayKey().slice(0, 4) ? undefined : 'numeric' });
         html += '<div class="hist-mlabel">' + esc(lab) + '</div>';
       }
-      html += historyDayHtml(map[k], goal);
+      html += historyDayHtml(map[k], goal, q);
     });
-    if (keys.length > shown.length) html += '<button type="button" class="hist-more" data-action="history-more">Show earlier</button>';
+    if (!q && keys.length > shown.length) html += '<button type="button" class="hist-more" data-action="history-more">Show earlier</button>';
     return html;
   }
 
@@ -5576,6 +5410,7 @@
       '<div class="hist-head"><h2 class="hist-title">History</h2>' +
         '<button type="button" class="hist-cal-btn" data-action="open-calendar">' + calIcon + 'Calendar</button></div>' +
       historyStripHtml(map, goal) +
+      '<input type="search" class="hist-search" id="histSearch" placeholder="Filter by food, e.g. laksa" autocomplete="off" value="' + esc(ui.histQuery || '') + '">' +
       '<div id="histList">' + historyListHtml(map, goal) + '</div>';
   }
 
@@ -5643,10 +5478,6 @@
       '</div>';
     return { stats: statsHtml };
   }
-  function insightsExtrasHtml(){
-    var p = insightsExtraParts();
-    return '<div class="insights-extras">' + p.stats + '</div>';
-  }
 
   // One stat card: big Oswald number, small unit, mono label (same
   // building block as SaviorFit Logger's profile stats).
@@ -5655,31 +5486,6 @@
       (unit ? '<small> ' + esc(unit) + '</small>' : '') + '</div><div class="pf-stat-l">' + esc(label) + '</div></div>';
   }
 
-  // Groups meals by category (Breakfast -> ... -> Dinner -> Other) and
-  // returns rows with a small inline label before each group — all as
-  // one continuous string meant to sit inside a single .card, unlike
-  // groupedMealsHtml()'s separate card-per-category treatment (that
-  // looked too broken-up for History specifically, per feedback).
-  function categorizedMealRowsHtml(meals){
-    var buckets = {};
-    MEAL_CATEGORIES.forEach(function(c){ buckets[c.id] = []; });
-    var other = [];
-    meals.forEach(function(m){
-      if (m.category && buckets[m.category]) buckets[m.category].push(m);
-      else other.push(m);
-    });
-
-    var html = '';
-    MEAL_CATEGORIES.forEach(function(c){
-      var group = buckets[c.id];
-      if (group.length === 0) return;
-      html += '<div class="inline-category-label">' + c.label + '</div>' + group.map(mealRowHtml).join('');
-    });
-    if (other.length > 0){
-      html += '<div class="inline-category-label">Other</div>' + other.map(mealRowHtml).join('');
-    }
-    return html;
-  }
 
   /* =========================================================
      3D VIEWERS — Insights > Daily Overview (food pyramid) and
@@ -6172,36 +5978,10 @@
     });
   }
 
-  // The four tracked nutrients, in the colours used across the app.
-  var MEAL_NUTRIENTS = [
-    { key: 'protein', short: 'P', cls: 'p' },
-    { key: 'carbs', short: 'C', cls: 'c' },
-    { key: 'fat', short: 'F', cls: 'f' }
-  ];
-
-  // "P 35 · C 78 · F 52 · Fib 4" for one meal time (grams, divided by
-  // `perDay` for a weekly average), each letter in its nutrient's colour.
-  function mealMacrosHtml(r, perDay){
-    return MEAL_NUTRIENTS.map(function(n){
-      return '<span class="' + n.cls + '">' + n.short + ' <b>' + Math.round((r[n.key] || 0) / (perDay || 1)) + '</b></span>';
-    }).join(' ');
-  }
 
 
 
-  // One entry per meal time: label, a bar sized by its share of the total,
-  // the kcal (divided by `perDay` for a weekly average) with its %, and a
-  // line underneath with that meal's protein / carbs / fat / fibre.
-  function mealSplitHtml(rows, total, perDay){
-    return rows.map(function(r){
-      var share = total > 0 ? Math.round(r.kcal / total * 100) : 0;
-      return '<div class="meal-split-item"><div class="meal-split-row">' +
-        '<div class="meal-split-label">' + esc(r.label) + '</div>' +
-        '<div class="meal-split-track"><div class="meal-split-fill" style="width:' + Math.max(share, 2) + '%"></div></div>' +
-        '<div class="meal-split-val">' + Math.round(r.kcal / (perDay || 1)) + '<span>' + share + '%</span></div>' +
-      '</div><div class="meal-split-macros">' + mealMacrosHtml(r, perDay) + '</div></div>';
-    }).join('');
-  }
+
 
 
 
@@ -6304,14 +6084,19 @@
   }
 
   function saveGoalsFromInputs(){
+    // A goal can be 0 (e.g. no sugar target); only blank or invalid falls back to the default.
+    var read = function(id, def, min){
+      var v = parseInt(document.getElementById(id).value, 10);
+      return (isFinite(v) && v >= (min || 0)) ? Math.min(v, 50000) : def;
+    };
     STORE.goals = {
-      calories: parseInt(document.getElementById('goalCalories').value, 10) || DEFAULT_GOALS.calories,
-      protein: parseInt(document.getElementById('goalProtein').value, 10) || DEFAULT_GOALS.protein,
-      carbs: parseInt(document.getElementById('goalCarbs').value, 10) || DEFAULT_GOALS.carbs,
-      fat: parseInt(document.getElementById('goalFat').value, 10) || DEFAULT_GOALS.fat,
-      sugar: parseInt(document.getElementById('goalSugar').value, 10) || DEFAULT_GOALS.sugar,
-      sodium: parseInt(document.getElementById('goalSodium').value, 10) || DEFAULT_GOALS.sodium,
-      water: parseInt(document.getElementById('goalWater').value, 10) || DEFAULT_GOALS.water
+      calories: read('goalCalories', DEFAULT_GOALS.calories, 1),
+      protein: read('goalProtein', DEFAULT_GOALS.protein),
+      carbs: read('goalCarbs', DEFAULT_GOALS.carbs),
+      fat: read('goalFat', DEFAULT_GOALS.fat),
+      sugar: read('goalSugar', DEFAULT_GOALS.sugar),
+      sodium: read('goalSodium', DEFAULT_GOALS.sodium),
+      water: read('goalWater', DEFAULT_GOALS.water)
     };
     saveStore();
   }
@@ -6408,7 +6193,7 @@
   function settingsCardHtml(id, iconSvg, title, desc, body){
     var open = ui.settingsOpen === id;
     return '<div class="setc-wrap' + (open ? ' open' : '') + '" id="setc-' + id + '">' +
-      '<div class="setc" data-action="toggle-settings-sec" data-sec="' + id + '">' +
+      '<div class="setc" role="button" tabindex="0" data-action="toggle-settings-sec" data-sec="' + id + '">' +
         '<span class="setc-ic">' + iconSvg + '</span>' +
         '<span class="setc-tx"><span class="setc-t">' + title + '</span><span class="setc-d">' + desc + '</span></span>' +
         '<span class="hist-chev">' + CHEV_SVG + '</span>' +
@@ -6700,7 +6485,7 @@
 
     // ---- install (only when the browser can install it)
     if (canOfferInstall()){
-      html += '<div class="setc-wrap install"><div class="setc" data-action="install-app">' +
+      html += '<div class="setc-wrap install"><div class="setc" role="button" tabindex="0" data-action="install-app">' +
         '<span class="setc-ic solid">' + SET_ICONS.install + '</span>' +
         '<span class="setc-tx"><span class="setc-t">Install app</span><span class="setc-d">' + (deferredInstall ? 'Add SaviorFuel to your home screen' : 'Add it to your home screen from Safari') + '</span></span>' +
         '<span class="hist-chev go">' + CHEV_SVG + '</span></div></div>';
@@ -6875,19 +6660,6 @@
       '</div>';
   }
 
-  // Moves the sliding highlight of a tab bar to tab number `index`.
-  // Without `animate` it jumps there instantly (first paint, or when the
-  // bar wasn't on screen), so nothing glides in from the first tab.
-  function setSlider(barEl, index, animate){
-    if (!barEl) return;
-    if (!animate) barEl.classList.add('no-slide');
-    barEl.style.setProperty('--i', String(index));
-    if (!animate){
-      void barEl.offsetWidth;
-      barEl.classList.remove('no-slide');
-    }
-  }
-  var slidersReady = false; // false until the first render has placed them
 
   function tabIndexOf(tab){
     var btns = document.querySelectorAll('.tabbar button');
@@ -7028,7 +6800,6 @@
     else if (state.tab === 'insights') renderInsights();
     else if (state.tab === 'settings') renderSettings();
 
-    slidersReady = true;
     refreshDayOverlay();
     mountHeroRing3d();
     heroLanded();
@@ -7243,6 +7014,11 @@
       deleteMyFood(el.dataset.id);
     } else if (action === 'close-food-sheet'){
       closeFoodSheet();
+    } else if (action === 'clear-food-search'){
+      var fsi = document.getElementById('foodSearchInput');
+      fsi.value = '';
+      searchFoodDebounced('');
+      fsi.focus();
     } else if (action === 'water-add'){
       addWater(parseInt(el.dataset.ml, 10) || 0);
     } else if (action === 'open-calendar'){
@@ -7302,17 +7078,6 @@
       openAddMealOverlay();
     } else if (action === 'close-food-search-overlay'){
       closeFoodSearchOverlay();
-    } else if (action === 'toggle-macro-card'){
-      var nowCollapsed = !(STORE.appSettings.macroCardCollapsed !== false);
-      STORE.appSettings.macroCardCollapsed = nowCollapsed;
-      saveStore();
-      // flip the class instead of re-rendering, so the panel can animate
-      var macroCard = document.querySelector('.macro-summary-card');
-      if (macroCard){
-        macroCard.classList.toggle('collapsed', nowCollapsed);
-        el.setAttribute('aria-label', nowCollapsed ? 'Show macros' : 'Hide macros');
-        el.setAttribute('aria-expanded', String(!nowCollapsed));
-      }
     } else if (action === 'install-app'){
       installApp();
     } else if (action === 'dismiss-install'){
@@ -7376,23 +7141,8 @@
       STORE.appSettings.haptic = (el.dataset.val === 'on');
       saveStore();
       renderApp();
-    } else if (action === 'set-density'){
-      STORE.appSettings.density = el.dataset.density;
-      saveStore();
-      applyAppearanceSettings();
-      renderApp();
-    } else if (action === 'set-corner-style'){
-      STORE.appSettings.corners = el.dataset.style;
-      saveStore();
-      applyAppearanceSettings();
-      renderApp();
     } else if (action === 'set-theme'){
       STORE.appSettings.theme = el.dataset.theme;
-      saveStore();
-      applyAppearanceSettings();
-      renderApp();
-    } else if (action === 'set-bg-art'){
-      STORE.appSettings.bgArt = (el.dataset.val === 'on');
       saveStore();
       applyAppearanceSettings();
       renderApp();
@@ -7410,6 +7160,18 @@
   document.addEventListener('input', function(e){
     if (e.target.id === 'foodSearchInput'){
       searchFoodDebounced(e.target.value);
+    } else if (e.target.id === 'histSearch'){
+      ui.histQuery = e.target.value;
+      var hl = document.getElementById('histList');
+      if (hl) hl.innerHTML = historyListHtml(dayStatsMap(), STORE.goals.calories);
+    }
+  });
+
+  // Rows that act as buttons also work from a keyboard / screen reader.
+  document.addEventListener('keydown', function(e){
+    if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.getAttribute && e.target.getAttribute('role') === 'button' && e.target.tagName !== 'BUTTON'){
+      e.preventDefault();
+      e.target.click();
     }
   });
 
@@ -7819,6 +7581,16 @@
   // once used) opportunistically. Deliberately doesn't cache USDA/
   // OFF/Kalori search calls — see sw.js.
   if ('serviceWorker' in navigator){
+    // Left open past midnight: when the app comes back, move Log onto the new day.
+    var lastSeenDay = todayKey();
+    document.addEventListener('visibilitychange', function(){
+      if (document.visibilityState !== 'visible') return;
+      var nowKey = todayKey();
+      if (nowKey === lastSeenDay) return;
+      if (ui.logDay === lastSeenDay) ui.logDay = null;
+      lastSeenDay = nowKey;
+      renderApp();
+    });
     window.addEventListener('load', function(){
       // A new version of the app: look for one every time the app comes back
       // to the screen, and when one takes over, offer a one-tap refresh.
