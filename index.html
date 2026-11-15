@@ -7482,7 +7482,14 @@
      a meal deleted on one phone is deleted everywhere. The Firebase SDK
      is only downloaded once someone signs in (or was signed in).
      ========================================================= */
-  var FIREBASE_CONFIG = null; // paste the web app config object from the Firebase console here (see firebase/SETUP.md)
+  var FIREBASE_CONFIG = { // public web config (safe to ship); the Firestore rules are what protect the data
+    apiKey: "AIzaSyAqmop4g7Satbh-QGl40GJK1AImrfKDGqo",
+    authDomain: "saviorfuel-64e86.firebaseapp.com",
+    projectId: "saviorfuel-64e86",
+    storageBucket: "saviorfuel-64e86.firebasestorage.app",
+    messagingSenderId: "151959590873",
+    appId: "1:151959590873:web:e1cfd56f55c524555c2bc8"
+  };
   var FB_BASE = 'https://www.gstatic.com/firebasejs/10.13.0/';
   var SYNC_META_KEY = 'saviorfuel_sync_v1';
   var sync = { fb: null, auth: null, db: null, user: null, loading: null, status: 'off', unsubs: [], pushTimer: 0, applying: false, pushing: false, again: false, renderTimer: 0, meta: null };
