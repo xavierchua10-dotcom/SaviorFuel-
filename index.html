@@ -1458,11 +1458,12 @@
     --header-line:#434a57;
   }
   body[data-theme="light"]{
-    --bg:#f3f0e8;
+    --bg:#eef6e6;
     --panel:#ffffff;
-    --panel-2:#f1ede4;
-    --panel-3:#e9e4d9;
-    --line:#dcd6c8;
+    --panel-2:#f2f7ec;
+    --panel-3:#e4ecd9;
+    --line:#e3ebd9;
+    --card-shadow:0 6px 22px rgba(70,110,50,.10);
     --text:#1c1e23;
     --text-dim:#5b616a;
     --text-faint:#6f747c;
@@ -1480,11 +1481,11 @@
     --c-water:#1d79ad;
     --c-cal:var(--accent);
     --c-star:#b98100;
-    --header-bg:#ebe6da;
+    --header-bg:transparent;
     --header-text:#1c1e23;
     --header-text-faint:#6f747c;
     --header-accent:#3f7a12;
-    --header-line:#d6cfbf;
+    --header-line:transparent;
   }
   /* Light theme: logo with a black S so it reads on the light header */
   body[data-theme="light"] img[src$="logo-mark.png"]{content:url(images/logo-mark-light.png);}
@@ -1668,6 +1669,37 @@
   .next-chip{display:inline-flex; align-items:center; margin-top:8px; padding:4px 10px; border-radius:12px; background:rgba(var(--accent-rgb),.14); color:var(--accent); font:600 11px 'Inter',sans-serif;}
   .meal-del-link{display:block; width:100%; height:40px; margin-top:6px; border:none; background:none; color:var(--accent-2); font:600 13px 'Inter',sans-serif; cursor:pointer;}
   .meal-del-link.hidden{display:none;}
+
+  /* ---- Soft light: mint background, white floating cards, pastel tints ---- */
+  body[data-theme="light"] #app{background:linear-gradient(180deg,#e3f3d3 0,#f2f8ea 420px,#f6f9f1 100%);}
+  body[data-theme="light"] .hero-ring-track{stroke:#e1ead6;}
+  body[data-theme="light"] .week-day .wd-num{background:#fff; box-shadow:0 2px 8px rgba(60,100,40,.08); color:#51604f;}
+  body[data-theme="light"] .week-day.active .wd-num{background:#8ed25a; color:#fff; box-shadow:0 4px 12px rgba(110,190,60,.4);}
+  body[data-theme="light"] .week-day.is-today .wd-num{box-shadow:inset 0 0 0 1.5px #8ed25a, 0 2px 8px rgba(60,100,40,.08);}
+  body[data-theme="light"] .week-nav{background:#fff; border:0; box-shadow:0 2px 8px rgba(60,100,40,.1);}
+  body[data-theme="light"] .water-row{background:#d9eefa; border:0; border-radius:22px;}
+  body[data-theme="light"] .water-ic{background:#fff; color:#3a9bd5;}
+  body[data-theme="light"] .water-top b{color:#1d5f86;}
+  body[data-theme="light"] .water-top span{color:#4b87aa;}
+  body[data-theme="light"] .water-bar{background:rgba(255,255,255,.75);}
+  body[data-theme="light"] .water-bar i{background:#4aa8de;}
+  body[data-theme="light"] .water-btn{background:#fff; border:0; color:#2b86bf;}
+  body[data-theme="light"] .water-btn.minus{background:rgba(255,255,255,.6); color:#4b87aa;}
+  body[data-theme="light"] .sl{border:0; border-radius:26px; box-shadow:var(--card-shadow);}
+  body[data-theme="light"] .sl-itw{border-top-color:#eef2e8;}
+  body[data-theme="light"] .sl-it .th-ph{background:#f1f5ec; color:#a9b8a0;}
+  body[data-theme="light"] .sl-it .kc{color:#4c9a22;}
+  body[data-theme="light"] .sl-add{background:#8ed25a; color:#fff; box-shadow:0 6px 14px rgba(110,190,60,.4);}
+  body[data-theme="light"] .sl-ic.t-b{background:#ffe8c2; color:#d98a00;}
+  body[data-theme="light"] .sl-ic.t-l{background:#dcf2cc; color:#4c9a22;}
+  body[data-theme="light"] .sl-ic.t-d{background:#e6e1fa; color:#7060c8;}
+  body[data-theme="light"] .sl-ic.t-s{background:#ffdbe0; color:#d4566a;}
+  body[data-theme="light"] .sl-empty{background:rgba(255,255,255,.55); border-color:#b9d9a0; border-radius:26px;}
+  body[data-theme="light"] .sl-empty .sl-add{background:#fff; color:#6fba3c; box-shadow:0 3px 10px rgba(70,110,50,.12);}
+  body[data-theme="light"] .sl-empty .sl-n b{color:#51604f;}
+  body[data-theme="light"] .next-chip{background:#fff; color:#3f8a1c; box-shadow:0 2px 8px rgba(70,110,50,.12);}
+  body[data-theme="light"] .tabbar{background:#fff; border:0; box-shadow:0 8px 28px rgba(70,110,50,.18);}
+  body[data-theme="light"] .tabbar button.active:not([data-tab="scan"]){background:#e3f3d3; color:#3f8a1c;}
 
   /* ---- Insights: segmented bar sits above the floating nav ---- */
   /* Daily / Weekly switch: a slim pill under the header (not stacked on the nav) */
@@ -2899,6 +2931,7 @@
   var SLOT_CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
   var SLOT_PLATE = '<span class="th-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/></svg></span>';
   function slotIconFor(id){ return SLOT_ICONS[id] || SLOT_ICONS.snack; }
+  function slotTint(id){ return id === 'breakfast' ? 'b' : id === 'lunch' ? 'l' : id === 'dinner' ? 'd' : 's'; }
 
   // Which main meal is next, and a rough calorie budget for it: what is
   // left today, spread over the main meals still to come plus one snack.
@@ -2940,7 +2973,7 @@
 
   function mealSlotHtml(id, label, group, addable){
     var t = totalsFor(group);
-    return '<div class="sl"><div class="sl-h"><div class="sl-ic">' + slotIconFor(id) + '</div>' +
+    return '<div class="sl"><div class="sl-h"><div class="sl-ic t-' + slotTint(id) + '">' + slotIconFor(id) + '</div>' +
       '<div class="sl-n"><b>' + label + '</b><span>' + group.length + (group.length === 1 ? ' item' : ' items') + '</span></div>' +
       '<div class="sl-k">' + Math.round(t.calories) + '<small>KCAL</small></div>' +
       (addable ? '<button type="button" class="sl-add" data-action="add-to-slot" data-category="' + id + '" aria-label="Add to ' + label + '">' + SLOT_PLUS + '</button>' : '') +
@@ -2948,7 +2981,7 @@
   }
 
   function emptySlotHtml(id, label, hint){
-    return '<div class="sl-empty"><div class="sl-ic">' + slotIconFor(id) + '</div>' +
+    return '<div class="sl-empty"><div class="sl-ic t-' + slotTint(id) + '">' + slotIconFor(id) + '</div>' +
       '<div class="sl-n"><b>Add ' + label.toLowerCase().replace(/s$/, '') + '</b><span class="hint">' + hint + '</span></div>' +
       '<button type="button" class="sl-add" data-action="add-to-slot" data-category="' + id + '" aria-label="Add ' + label + '">' + SLOT_PLUS + '</button></div>';
   }
