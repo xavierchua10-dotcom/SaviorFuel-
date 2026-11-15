@@ -1098,6 +1098,7 @@
     text-transform:uppercase; color:var(--text-faint); min-width:62px;
   }
   .sum-row-value{flex:1; min-width:0; font-size:13.5px; font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .sum-row-value .ns-p{color:var(--c-protein);} .sum-row-value .ns-c{color:var(--c-carbs);} .sum-row-value .ns-f{color:var(--c-fat);}
   .sum-row-edit{flex-shrink:0; font-size:11.5px; font-weight:600; color:var(--accent);}
   .sum-row-chev{flex-shrink:0; width:16px; height:16px; color:var(--text-faint); transition:transform 0.2s ease;}
   .sum-row[aria-expanded="true"] .sum-row-chev{transform:rotate(180deg);}
@@ -3133,7 +3134,7 @@
   function updateMealSummary(){
     var num = function(id){ return Math.round(parseFloat(document.getElementById(id).value) || 0); };
     var el = document.getElementById('nutriSummaryValue');
-    if (el) el.textContent = num('mealCal') + ' kcal · P' + num('mealProtein') + ' · C' + num('mealCarbs') + ' · F' + num('mealFat');
+    if (el) el.innerHTML = num('mealCal') + ' kcal · <span class="ns-p">P' + num('mealProtein') + '</span> · <span class="ns-c">C' + num('mealCarbs') + '</span> · <span class="ns-f">F' + num('mealFat') + '</span>';
   }
 
   function renderCategoryPicker(){
