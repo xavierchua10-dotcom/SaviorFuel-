@@ -1768,6 +1768,15 @@
   .signin-g{width:22px; height:22px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center;}
   .signin-g svg{width:14px; height:14px;}
   .signin-msg{min-height:18px; text-align:center; font-size:12px; color:var(--accent);}
+  .signin-form{display:flex; flex-direction:column; gap:10px;}
+  .signin-form h3{margin:0 0 4px; font-family:'Oswald',sans-serif; font-size:20px; letter-spacing:.06em; text-transform:uppercase; text-align:center;}
+  .signin-input{width:100%; box-sizing:border-box; padding:14px; border-radius:var(--radius-xl); border:1px solid var(--line); background:var(--panel-2); color:var(--text); font-size:16px;}
+  .signin-input:focus{outline:none; border-color:var(--accent);}
+  .signin-btn:disabled{opacity:.6;}
+  .signin-msg.bad{color:var(--accent-2);}
+  .signin-skip.dim{color:var(--text-dim); font-weight:500;}
+  .signin-skip.danger{color:var(--accent-2); font-weight:500; font-size:13px;}
+  .acct-status{text-align:center; font-size:13px; color:var(--text-dim);}
   .signin-skip{border:none; background:none; color:var(--accent); font-size:14px; font-weight:600; padding:8px; cursor:pointer;}
   .signin-note{text-align:center; font-size:11px; color:var(--text-faint); line-height:1.5;}
   .pf-account{display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-xl); padding:12px 14px; margin-bottom:12px; color:var(--text); cursor:pointer;}
@@ -2429,6 +2438,7 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(STORE));
       saveFailureShown = false;
+      syncSchedule();
     } catch (e){
       console.error('SaviorFuel: failed to save local store —', e);
       if (!saveFailureShown){
@@ -6533,9 +6543,12 @@
       '<div class="pf-acts"><button type="button" class="pf-share" data-action="share-profile">Share profile</button>' +
         '<button type="button" class="pf-edit" data-action="edit-profile-name" aria-label="Edit name">' + SET_ICONS.edit + '</button></div>' +
     '</div>';
-    html += '<button type="button" class="pf-account" data-action="open-sign-in">' +
+    var signedIn = !!sync.user;
+    html += '<button type="button" class="pf-account" data-action="' + (signedIn ? 'open-account' : 'open-sign-in') + '">' +
       '<span class="pf-account-ic">' + SI_ICONS.cloud + '</span>' +
-      '<span class="pf-account-tx"><b>Back up your log</b><small>Sign in to keep it safe and use it on any phone</small></span>' +
+      '<span class="pf-account-tx">' + (signedIn
+        ? '<b>' + esc(sync.user.email || sync.user.displayName || 'Signed in') + '</b><small id="accountStatus">' + esc(syncStatusText()) + '</small>'
+        : '<b>Back up your log</b><small>Sign in to keep it safe and use it on any phone</small>') + '</span>' +
       '<svg class="pf-account-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
     '</button>';
     html += '<h3 class="section-label">Settings</h3>';
@@ -7094,6 +7107,8 @@
       removeMealPhoto();
     } else if (action === 'open-sign-in'){
       openSignIn(false);
+    } else if (action === 'open-account'){
+      openAccount();
     } else if (action === 'ai-step'){
       var stit = aiScan.items[parseInt(el.dataset.i, 10)];
       if (stit){
@@ -7190,7 +7205,7 @@
       copyDayToToday(el.dataset.day);
       closeDayOverlay();
     } else if (action === 'clear-data'){
-      if (window.confirm('Erase all logged meals and reset goals? This can\'t be undone.')){
+      if (window.confirm(sync.user ? 'Erase all logged meals and reset goals? Because you\'re signed in, this also erases your online backup. This can\'t be undone.' : 'Erase all logged meals and reset goals? This can\'t be undone.')){
         STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
         saveStore();
         applyAppearanceSettings();
@@ -7452,8 +7467,378 @@
     openSignIn(true);
   }
 
-  /* Sign-in screen. The buttons aren't wired up yet (accounts come with
-     sync); Skip works and the app is fully usable without an account. */
+  /* =========================================================
+     ACCOUNT + SYNC (Firebase Auth + Firestore)
+
+     Optional. Off until FIREBASE_CONFIG is filled in; with it empty the
+     app is exactly the local-only app it always was. When on:
+       - sign in with Google or email + password
+       - users/{uid}            settings doc (goals, profile, settings,
+                                My Foods, water)
+       - users/{uid}/meals/{id} one doc per logged meal
+     Photos never leave the phone. Sync is a diff of STORE against what
+     the cloud last confirmed (sync.meta.map), so every existing save
+     path (add, edit, delete, import, clear) syncs without changes, and
+     a meal deleted on one phone is deleted everywhere. The Firebase SDK
+     is only downloaded once someone signs in (or was signed in).
+     ========================================================= */
+  var FIREBASE_CONFIG = null; // paste the web app config object from the Firebase console here (see firebase/SETUP.md)
+  var FB_BASE = 'https://www.gstatic.com/firebasejs/10.13.0/';
+  var SYNC_META_KEY = 'saviorfuel_sync_v1';
+  var sync = { fb: null, auth: null, db: null, user: null, loading: null, status: 'off', unsubs: [], pushTimer: 0, applying: false, pushing: false, again: false, renderTimer: 0, meta: null };
+
+  function syncEnabled(){ return !!(FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId); }
+
+  function syncFreshMeta(){ return { owner: null, map: {}, settingsHash: '', settingsAt: 0, lastAt: 0, wasSignedIn: false }; }
+  function syncLoadMeta(){
+    try {
+      var m = JSON.parse(localStorage.getItem(SYNC_META_KEY) || 'null');
+      if (m && typeof m === 'object') return Object.assign(syncFreshMeta(), m, { map: (m.map && typeof m.map === 'object') ? m.map : {} });
+    } catch (e){}
+    return syncFreshMeta();
+  }
+  sync.meta = syncLoadMeta();
+  function syncSaveMeta(){ try { localStorage.setItem(SYNC_META_KEY, JSON.stringify(sync.meta)); } catch (e){} }
+
+  function syncStable(v){
+    if (v === null || typeof v !== 'object') return JSON.stringify(v);
+    if (Array.isArray(v)) return '[' + v.map(syncStable).join(',') + ']';
+    return '{' + Object.keys(v).sort().map(function(k){ return JSON.stringify(k) + ':' + syncStable(v[k]); }).join(',') + '}';
+  }
+  function syncH(str){
+    var h = 5381;
+    for (var i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36) + '.' + str.length.toString(36);
+  }
+  function syncMealOut(m){ var c = JSON.parse(JSON.stringify(m)); delete c.photoId; return c; }   // photos stay on the phone
+  function syncMealHash(m){ return syncH(syncStable(syncMealOut(m))); }
+  function syncSettingsOut(){
+    var a = Object.assign({}, STORE.appSettings); delete a.aiScanConsent;
+    return JSON.parse(JSON.stringify({ goals: STORE.goals, profile: STORE.profile, appSettings: a, myFoods: STORE.myFoods || [], water: STORE.water || {}, lastPlanTdee: STORE.lastPlanTdee || null }));
+  }
+  function syncSettingsHash(){ return syncH(syncStable(syncSettingsOut())); }
+
+  function syncSetStatus(st){
+    if (sync.status === st) { syncUiRefresh(); return; }
+    sync.status = st;
+    syncUiRefresh();
+  }
+  function syncStatusText(){
+    if (sync.status === 'syncing') return 'Syncing…';
+    if (sync.status === 'offline') return 'Offline — will sync when you’re back online';
+    if (sync.status === 'error') return 'Couldn’t sync — tap to retry';
+    var t = sync.meta.lastAt;
+    if (!t) return 'Signed in';
+    var mins = Math.round((Date.now() - t) / 60000);
+    return 'Synced ' + (mins < 1 ? 'just now' : mins < 60 ? mins + ' min ago' : new Date(t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
+  }
+  function syncUiRefresh(){
+    var acc = document.getElementById('accountStatus');
+    if (acc) acc.textContent = syncStatusText();
+    if (state && state.tab === 'settings' && !document.getElementById('accountOverlay') && !document.getElementById('signInOverlay')){
+      clearTimeout(sync.renderTimer);
+      sync.renderTimer = setTimeout(function(){ if (state.tab === 'settings') renderApp(); }, 150);
+    }
+  }
+
+  function syncLoad(){
+    if (sync.loading) return sync.loading;
+    if (!syncEnabled()) return Promise.reject({ code: 'sync/not-configured' });
+    sync.loading = Promise.all([
+      import(FB_BASE + 'firebase-app.js'),
+      import(FB_BASE + 'firebase-auth.js'),
+      import(FB_BASE + 'firebase-firestore.js')
+    ]).then(function(m){
+      sync.fb = { A: m[0], Au: m[1], F: m[2] };
+      var app = sync.fb.A.initializeApp(FIREBASE_CONFIG);
+      sync.auth = sync.fb.Au.getAuth(app);
+      try { sync.db = sync.fb.F.initializeFirestore(app, { localCache: sync.fb.F.persistentLocalCache() }); }
+      catch (e){ sync.db = sync.fb.F.getFirestore(app); }
+      sync.fb.Au.onAuthStateChanged(sync.auth, syncOnAuth);
+      return sync;
+    }).catch(function(e){ sync.loading = null; throw e; });
+    return sync.loading;
+  }
+
+  function syncOnAuth(user){
+    sync.user = user || null;
+    if (user){
+      sync.meta.wasSignedIn = true; syncSaveMeta();
+      syncStart(user);
+    } else {
+      syncStop();
+      sync.meta.wasSignedIn = false; syncSaveMeta();
+      syncSetStatus('off');
+    }
+  }
+
+  function syncStop(){
+    sync.unsubs.forEach(function(u){ try { u(); } catch (e){} });
+    sync.unsubs = [];
+    clearTimeout(sync.pushTimer);
+  }
+
+  function syncApplyRemoteSettings(rs, keepLocalWater){
+    STORE.goals = Object.assign({}, DEFAULT_GOALS, rs.goals || {});
+    STORE.profile = Object.assign({}, DEFAULT_PROFILE, rs.profile || {});
+    var consent = STORE.appSettings && STORE.appSettings.aiScanConsent;
+    STORE.appSettings = Object.assign({}, DEFAULT_APP_SETTINGS, rs.appSettings || {});
+    STORE.appSettings.aiScanConsent = !!consent;
+    STORE.myFoods = Array.isArray(rs.myFoods) ? rs.myFoods : [];
+    var water = Object.assign({}, rs.water || {});
+    if (keepLocalWater && STORE.water) Object.keys(STORE.water).forEach(function(k){ water[k] = Math.max(water[k] || 0, STORE.water[k] || 0); });
+    STORE.water = water;
+    if (rs.lastPlanTdee) STORE.lastPlanTdee = rs.lastPlanTdee;
+  }
+
+  // The first sync after sign-in: three-way merge of this phone's log and
+  // the cloud's, using what was last confirmed (sync.meta.map) as the base.
+  function syncMerge(uid, remoteDoc, remote){
+    var foreign = !!(sync.meta.owner && sync.meta.owner !== uid); // this phone's data belongs to another account
+    var base = foreign ? {} : sync.meta.map;
+    var local = {}; if (!foreign) STORE.meals.forEach(function(m){ local[m.id] = m; });
+    var ids = {}; Object.keys(local).forEach(function(i){ ids[i] = 1; }); Object.keys(remote).forEach(function(i){ ids[i] = 1; });
+    var out = [], newMap = {};
+    Object.keys(ids).forEach(function(id){
+      var L = local[id], R = remote[id], b = base[id];
+      var hl = L ? syncMealHash(L) : null, hr = R ? syncMealHash(R) : null;
+      if (L && R){
+        if (hl === hr){ out.push(L); newMap[id] = hr; }
+        else if (hl === b){ var r2 = Object.assign({}, R); if (L.photoId) r2.photoId = L.photoId; out.push(r2); newMap[id] = hr; } // only the cloud changed
+        else { out.push(L); newMap[id] = hr; }                                                                  // this phone changed: it pushes
+      } else if (L){
+        if (b !== undefined && hl === b){ /* deleted elsewhere, unchanged here: drop */ }
+        else { out.push(L); }                                                                                  // new here (or edited after a delete): pushes
+      } else if (R){
+        if (b !== undefined && hr === b){ newMap[id] = hr; }                                                   // deleted here: the diff deletes it in the cloud
+        else { out.push(R); newMap[id] = hr; }
+      }
+    });
+    out.sort(function(x, y){ return x.loggedAt - y.loggedAt; });
+    STORE.meals = out;
+
+    var localHash = syncSettingsHash();
+    if (!remoteDoc){
+      if (foreign){ STORE.goals = Object.assign({}, DEFAULT_GOALS); STORE.profile = Object.assign({}, DEFAULT_PROFILE); STORE.myFoods = []; STORE.water = {}; }
+      sync.meta.settingsHash = ''; sync.meta.settingsAt = 0;                                                    // nothing in the cloud yet: push ours
+    } else if (foreign || !sync.meta.owner){
+      syncApplyRemoteSettings(remoteDoc, !foreign);                                                             // the account is the source of truth
+      sync.meta.settingsHash = syncSettingsHash(); sync.meta.settingsAt = remoteDoc.updatedAt || 0;
+    } else if (localHash !== sync.meta.settingsHash){
+      /* edited on this phone since last sync: it pushes */
+    } else if ((remoteDoc.updatedAt || 0) > (sync.meta.settingsAt || 0)){
+      syncApplyRemoteSettings(remoteDoc, false);
+      sync.meta.settingsHash = syncSettingsHash(); sync.meta.settingsAt = remoteDoc.updatedAt || 0;
+    }
+    sync.meta.owner = uid;
+    sync.meta.map = newMap;
+    syncSaveMeta();
+    syncSaveApplied();
+  }
+
+  function syncSaveApplied(){
+    sync.applying = true;
+    try { saveStore(); } finally { sync.applying = false; }
+    applyAppearanceSettings();
+    if (STORE.appSettings.welcomed) closeWelcome();
+    renderApp();
+  }
+
+  function syncStart(user){
+    syncStop();
+    sync.status = 'syncing'; syncUiRefresh();
+    var F = sync.fb.F, db = sync.db, uid = user.uid;
+    var userRef = F.doc(db, 'users', uid), mealsCol = F.collection(db, 'users', uid, 'meals');
+    return Promise.all([F.getDoc(userRef), F.getDocs(mealsCol)]).then(function(res){
+      if (!sync.user || sync.user.uid !== uid) return;
+      var remote = {};
+      res[1].forEach(function(d){ var m = sanitizeMeal(Object.assign({}, d.data(), { id: d.id })); if (m) remote[m.id] = m; });
+      syncMerge(uid, res[0].exists() ? res[0].data() : null, remote);
+      return syncFlush(true).then(function(){ syncListen(uid, userRef, mealsCol); });
+    }).catch(function(e){
+      console.error('SaviorFuel sync start failed', e);
+      sync.status = (navigator.onLine === false || (e && e.code === 'unavailable')) ? 'offline' : 'error';
+      syncUiRefresh();
+    });
+  }
+
+  function syncListen(uid, userRef, mealsCol){
+    var F = sync.fb.F;
+    sync.unsubs.push(F.onSnapshot(mealsCol, function(snap){
+      var changed = false;
+      snap.docChanges().forEach(function(ch){
+        if (ch.doc.metadata.hasPendingWrites) return; // our own write coming back
+        var id = ch.doc.id, i = -1;
+        for (var k = 0; k < STORE.meals.length; k++) if (STORE.meals[k].id === id){ i = k; break; }
+        if (ch.type === 'removed'){
+          if (i > -1){ STORE.meals.splice(i, 1); changed = true; }
+          delete sync.meta.map[id];
+        } else {
+          var m = sanitizeMeal(Object.assign({}, ch.doc.data(), { id: id }));
+          if (!m) return;
+          var h = syncMealHash(m);
+          if (i > -1){
+            if (syncMealHash(STORE.meals[i]) !== h){
+              if (sync.meta.map[id] === undefined || syncMealHash(STORE.meals[i]) === sync.meta.map[id]){
+                if (STORE.meals[i].photoId) m.photoId = STORE.meals[i].photoId;
+                STORE.meals[i] = m; changed = true; sync.meta.map[id] = h;
+              }
+            } else sync.meta.map[id] = h;
+          } else {
+            STORE.meals.push(m); changed = true; sync.meta.map[id] = h;
+          }
+        }
+      });
+      if (changed){ syncSaveMeta(); syncRemoteApplied(); }
+    }, function(e){ console.error('SaviorFuel meals listener', e); }));
+    sync.unsubs.push(F.onSnapshot(userRef, function(d){
+      if (d.metadata.hasPendingWrites || !d.exists()) return;
+      var rs = d.data();
+      if ((rs.updatedAt || 0) <= (sync.meta.settingsAt || 0)) return;
+      if (syncSettingsHash() !== sync.meta.settingsHash) return; // unsent local edits win
+      syncApplyRemoteSettings(rs, true);
+      sync.meta.settingsHash = syncSettingsHash(); sync.meta.settingsAt = rs.updatedAt || 0;
+      syncSaveMeta(); syncRemoteApplied();
+    }, function(e){ console.error('SaviorFuel settings listener', e); }));
+  }
+
+  function syncRemoteApplied(){
+    sync.applying = true;
+    try { saveStore(); } finally { sync.applying = false; }
+    applyAppearanceSettings();
+    clearTimeout(sync.renderTimer);
+    sync.renderTimer = setTimeout(function(){ renderApp(); }, 250);
+  }
+
+  function syncSchedule(){
+    if (!sync.user || sync.applying) return;
+    clearTimeout(sync.pushTimer);
+    sync.pushTimer = setTimeout(function(){ syncFlush(false); }, 1500);
+  }
+
+  // Push whatever differs from what the cloud last confirmed.
+  function syncFlush(){
+    if (!sync.user || !sync.db || !sync.fb || sync.applying) return Promise.resolve();
+    if (sync.pushing){ sync.again = true; return Promise.resolve(); }
+    var F = sync.fb.F, db = sync.db, uid = sync.user.uid;
+    var map = sync.meta.map, cur = {};
+    STORE.meals.forEach(function(m){ cur[m.id] = syncMealHash(m); });
+    var upserts = STORE.meals.filter(function(m){ return map[m.id] !== cur[m.id]; });
+    var removed = Object.keys(map).filter(function(id){ return !(id in cur); });
+    var sOut = syncSettingsOut(), sHash = syncH(syncStable(sOut));
+    var sChanged = sHash !== sync.meta.settingsHash;
+    if (!upserts.length && !removed.length && !sChanged){
+      sync.status = 'synced'; syncUiRefresh();
+      return Promise.resolve();
+    }
+    var now = Date.now(), ops = [];
+    if (sChanged) ops.push(function(b){ b.set(F.doc(db, 'users', uid), Object.assign({}, sOut, { updatedAt: now })); });
+    upserts.forEach(function(m){ ops.push(function(b){ b.set(F.doc(db, 'users', uid, 'meals', m.id), syncMealOut(m)); }); });
+    removed.forEach(function(id){ ops.push(function(b){ b.delete(F.doc(db, 'users', uid, 'meals', id)); }); });
+    sync.pushing = true;
+    sync.status = (navigator.onLine === false) ? 'offline' : 'syncing'; syncUiRefresh();
+    var p = Promise.resolve();
+    for (var i = 0; i < ops.length; i += 400){
+      (function(chunk){
+        p = p.then(function(){ var b = F.writeBatch(db); chunk.forEach(function(op){ op(b); }); return b.commit(); });
+      })(ops.slice(i, i + 400));
+    }
+    return p.then(function(){
+      upserts.forEach(function(m){ sync.meta.map[m.id] = cur[m.id]; });
+      removed.forEach(function(id){ delete sync.meta.map[id]; });
+      if (sChanged){ sync.meta.settingsHash = sHash; sync.meta.settingsAt = now; }
+      sync.meta.lastAt = Date.now();
+      syncSaveMeta();
+      sync.status = 'synced';
+    }).catch(function(e){
+      console.error('SaviorFuel sync push failed', e);
+      sync.status = (navigator.onLine === false || (e && e.code === 'unavailable')) ? 'offline' : 'error';
+    }).then(function(){
+      sync.pushing = false;
+      syncUiRefresh();
+      if (sync.again){ sync.again = false; syncSchedule(); }
+    });
+  }
+
+  window.addEventListener('online', function(){ if (sync.user) syncFlush(); });
+  window.addEventListener('offline', function(){ if (sync.user) syncSetStatus('offline'); });
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && sync.user) syncFlush(); });
+
+  function syncAuthMessage(err){
+    var code = err && err.code;
+    switch (code){
+      case 'sync/not-configured': return 'Sign-in isn’t switched on yet.';
+      case 'auth/email-already-in-use': return 'That email already has an account. Try signing in.';
+      case 'auth/invalid-email': return 'Enter a valid email address.';
+      case 'auth/missing-password': return 'Enter your password.';
+      case 'auth/weak-password': return 'Password must be at least 6 characters.';
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+      case 'auth/invalid-credential': return 'Incorrect email or password.';
+      case 'auth/too-many-requests': return 'Too many tries. Wait a bit and try again.';
+      case 'auth/network-request-failed': return 'No connection. Check your internet and try again.';
+      case 'auth/operation-not-allowed': return 'This sign-in method isn’t switched on in Firebase yet.';
+      case 'auth/popup-blocked': return 'Your browser blocked the Google window. Allow popups and try again.';
+      case 'auth/unauthorized-domain': return 'This website isn’t approved in Firebase yet.';
+      case 'auth/popup-closed-by-user':
+      case 'auth/cancelled-popup-request': return '';
+      default: return 'Something went wrong (' + (code || 'unknown') + '). Try again.';
+    }
+  }
+
+  function syncGoogle(){
+    return syncLoad().then(function(){
+      return sync.fb.Au.signInWithPopup(sync.auth, new sync.fb.Au.GoogleAuthProvider());
+    });
+  }
+  function syncEmail(mode, email, pw){
+    return syncLoad().then(function(){
+      return mode === 'up' ? sync.fb.Au.createUserWithEmailAndPassword(sync.auth, email, pw)
+                           : sync.fb.Au.signInWithEmailAndPassword(sync.auth, email, pw);
+    });
+  }
+  function syncReset(email){
+    return syncLoad().then(function(){ return sync.fb.Au.sendPasswordResetEmail(sync.auth, email); });
+  }
+  function syncSignOut(){
+    return (sync.fb ? sync.fb.Au.signOut(sync.auth) : Promise.resolve()).then(function(){
+      sync.user = null; syncStop(); sync.status = 'off';
+    });
+  }
+
+  // Deletes the cloud copy (every meal, the settings doc) and the account
+  // itself. The log on this phone stays.
+  function syncDeleteAccount(){
+    var user = sync.user, F = sync.fb.F, Au = sync.fb.Au, db = sync.db, uid = user.uid;
+    var google = (user.providerData || []).some(function(p){ return p.providerId === 'google.com'; });
+    var reauth;
+    if (google) reauth = Au.reauthenticateWithPopup(user, new Au.GoogleAuthProvider());
+    else {
+      var pw = window.prompt('Enter your password to delete your account:');
+      if (pw === null) return Promise.reject({ code: 'auth/cancelled-popup-request' });
+      reauth = Au.reauthenticateWithCredential(user, Au.EmailAuthProvider.credential(user.email, pw));
+    }
+    return reauth.then(function(){
+      syncStop();
+      return F.getDocs(F.collection(db, 'users', uid, 'meals'));
+    }).then(function(snap){
+      var docs = []; snap.forEach(function(d){ docs.push(d.ref); });
+      var p = Promise.resolve();
+      for (var i = 0; i < docs.length; i += 400){
+        (function(chunk){ p = p.then(function(){ var b = F.writeBatch(db); chunk.forEach(function(r){ b.delete(r); }); return b.commit(); }); })(docs.slice(i, i + 400));
+      }
+      return p;
+    }).then(function(){
+      return F.deleteDoc(F.doc(db, 'users', uid));
+    }).then(function(){
+      return Au.deleteUser(user);
+    }).then(function(){
+      sync.user = null; sync.meta = syncFreshMeta(); syncSaveMeta(); sync.status = 'off';
+    });
+  }
+
+  /* Sign-in screen: Google or email + password. With FIREBASE_CONFIG empty
+     the buttons just say it isn't switched on yet and the app stays local. */
   var SI_ICONS = {
     cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
     phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
@@ -7462,17 +7847,13 @@
     google: '<svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>'
   };
 
-  function openSignIn(first){
-    if (document.getElementById('signInOverlay')) return;
-    var el = document.createElement('div');
-    el.id = 'signInOverlay';
-    el.className = 'signin-overlay';
-    el.setAttribute('role', 'dialog');
-    el.setAttribute('aria-modal', 'true');
-    el.setAttribute('aria-label', 'Sign in');
-    el.innerHTML = '<div class="signin-card">' +
-      '<div class="signin-head"><img class="signin-logo" src="images/logo-mark.png" alt="SaviorFuel"><h2>SaviorFuel</h2><p>Track your food. Never lose your log.</p></div>' +
-      '<div class="signin-points">' +
+  var siState = { mode: 'in' };
+
+  function signInHeadHtml(){
+    return '<div class="signin-head"><img class="signin-logo" src="images/logo-mark.png" alt="SaviorFuel"><h2>SaviorFuel</h2><p>Track your food. Never lose your log.</p></div>';
+  }
+  function signInHomeHtml(first){
+    return '<div class="signin-points">' +
         '<div class="signin-pt"><i>' + SI_ICONS.cloud + '</i>Your log is backed up</div>' +
         '<div class="signin-pt"><i>' + SI_ICONS.phone + '</i>Same data on every phone</div>' +
         '<div class="signin-pt"><i>' + SI_ICONS.camera + '</i>Photos stay on this phone</div>' +
@@ -7484,20 +7865,138 @@
         '<div class="signin-msg" id="signInMsg" role="status" aria-live="polite"></div>' +
         '<button type="button" class="signin-skip" data-action="close-sign-in">' + (first ? 'Skip for now' : 'Not now') + '</button>' +
         '<div class="signin-note">' + (first ? 'Skipping keeps your log on this phone only. You can sign in later from Profile.' : 'Your log stays on this phone until you sign in.') + '</div>' +
-      '</div>' +
-    '</div>';
+      '</div>';
+  }
+  function signInEmailHtml(){
+    var up = siState.mode === 'up';
+    return '<div class="signin-spacer"></div>' +
+      '<form class="signin-form" id="siForm" novalidate>' +
+        '<h3>' + (up ? 'Create your account' : 'Welcome back') + '</h3>' +
+        '<input class="signin-input" type="email" id="siEmail" placeholder="Email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false">' +
+        '<input class="signin-input" type="password" id="siPass" placeholder="' + (up ? 'Password (6+ characters)' : 'Password') + '" autocomplete="' + (up ? 'new-password' : 'current-password') + '">' +
+        '<button type="submit" class="signin-btn primary" data-si="submit">' + (up ? 'Create account' : 'Sign in') + '</button>' +
+        '<div class="signin-msg" id="signInMsg" role="status" aria-live="polite"></div>' +
+        '<button type="button" class="signin-skip" data-si="toggle">' + (up ? 'Already have an account? Sign in' : 'New here? Create an account') + '</button>' +
+        (up ? '' : '<button type="button" class="signin-skip dim" data-si="forgot">Forgot password?</button>') +
+        '<button type="button" class="signin-skip dim" data-si="back">Back</button>' +
+      '</form>';
+  }
+  function renderSignIn(view, first){
+    var card = document.querySelector('#signInOverlay .signin-card');
+    if (!card) return;
+    card.innerHTML = signInHeadHtml() + (view === 'email' ? signInEmailHtml() : signInHomeHtml(first));
+    card.dataset.first = first ? '1' : '';
+    if (view === 'email'){ var e = document.getElementById('siEmail'); if (e) e.focus(); }
+  }
+
+  function openSignIn(first){
+    if (document.getElementById('signInOverlay')) return;
+    siState.mode = 'in';
+    var el = document.createElement('div');
+    el.id = 'signInOverlay';
+    el.className = 'signin-overlay';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Sign in');
+    el.innerHTML = '<div class="signin-card"></div>';
     document.getElementById('app').parentNode.appendChild(el);
+    renderSignIn('home', first);
   }
   function closeSignIn(){
     var el = document.getElementById('signInOverlay');
     if (el) el.remove();
   }
+  function signInMsg(t, bad){
+    var m = document.getElementById('signInMsg');
+    if (m){ m.textContent = t || ''; m.classList.toggle('bad', !!bad); }
+  }
+  function signInBusy(on){
+    document.querySelectorAll('#signInOverlay .signin-btn').forEach(function(b){ b.disabled = !!on; });
+  }
+  function signInDone(){
+    // Signed in: the sync merge runs on its own (see syncOnAuth); close the screen.
+    closeSignIn();
+    showToast('Signed in');
+  }
+  function signInSubmit(){
+    var email = (document.getElementById('siEmail').value || '').trim();
+    var pw = document.getElementById('siPass').value || '';
+    if (!email){ signInMsg('Enter your email.', true); return; }
+    if (!pw){ signInMsg('Enter your password.', true); return; }
+    signInBusy(true); signInMsg('One moment…');
+    syncEmail(siState.mode, email, pw).then(signInDone).catch(function(err){
+      signInBusy(false); signInMsg(syncAuthMessage(err), true);
+    });
+  }
   document.addEventListener('click', function(e){
     var b = e.target.closest('#signInOverlay [data-si], #signInOverlay [data-action="close-sign-in"]');
     if (!b) return;
     if (b.getAttribute('data-action') === 'close-sign-in'){ closeSignIn(); return; }
-    var m = document.getElementById('signInMsg');
-    if (m) m.textContent = 'Sign-in is coming soon. Your log is saved on this phone for now.';
+    var what = b.getAttribute('data-si');
+    var first = !!(document.querySelector('#signInOverlay .signin-card') || {}).dataset && document.querySelector('#signInOverlay .signin-card').dataset.first === '1';
+    if (what === 'google'){
+      if (!syncEnabled()){ signInMsg('Sign-in isn’t switched on yet. Your log is saved on this phone for now.'); return; }
+      signInBusy(true); signInMsg('Opening Google…');
+      syncGoogle().then(signInDone).catch(function(err){ signInBusy(false); signInMsg(syncAuthMessage(err), true); });
+    } else if (what === 'email'){
+      if (!syncEnabled()){ signInMsg('Sign-in isn’t switched on yet. Your log is saved on this phone for now.'); return; }
+      renderSignIn('email', first);
+    } else if (what === 'back'){ renderSignIn('home', first);
+    } else if (what === 'toggle'){ siState.mode = siState.mode === 'up' ? 'in' : 'up'; renderSignIn('email', first);
+    } else if (what === 'forgot'){
+      var em = (document.getElementById('siEmail').value || '').trim();
+      if (!em){ signInMsg('Type your email above first, then tap Forgot password.', true); return; }
+      signInBusy(true); signInMsg('One moment…');
+      syncReset(em).then(function(){ signInBusy(false); signInMsg('Check your email for a reset link.'); })
+        .catch(function(err){ signInBusy(false); signInMsg(syncAuthMessage(err), true); });
+    }
+  });
+  document.addEventListener('submit', function(e){
+    if (e.target && e.target.id === 'siForm'){ e.preventDefault(); signInSubmit(); }
+  });
+
+  /* Account screen (signed in): status, sync now, sign out, delete account. */
+  function openAccount(){
+    if (document.getElementById('accountOverlay') || !sync.user) return;
+    var u = sync.user;
+    var el = document.createElement('div');
+    el.id = 'accountOverlay';
+    el.className = 'signin-overlay';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Account');
+    el.innerHTML = '<div class="signin-card">' + signInHeadHtml().replace('<p>Track your food. Never lose your log.</p>', '<p>' + esc(u.email || u.displayName || 'Signed in') + '</p>') +
+      '<div class="signin-spacer"></div>' +
+      '<div class="signin-actions">' +
+        '<div class="acct-status" id="accountStatus">' + esc(syncStatusText()) + '</div>' +
+        '<button type="button" class="signin-btn primary" data-acct="sync">Sync now</button>' +
+        '<button type="button" class="signin-btn alt" data-acct="signout">Sign out</button>' +
+        '<div class="signin-msg" id="accountMsg" role="status" aria-live="polite"></div>' +
+        '<button type="button" class="signin-skip" data-acct="close">Close</button>' +
+        '<button type="button" class="signin-skip danger" data-acct="delete">Delete my account and cloud data</button>' +
+        '<div class="signin-note">Signing out keeps your log on this phone. Deleting removes your account and everything stored online; the log on this phone stays.</div>' +
+      '</div></div>';
+    document.getElementById('app').parentNode.appendChild(el);
+  }
+  function closeAccount(){ var el = document.getElementById('accountOverlay'); if (el) el.remove(); if (state.tab === 'settings') renderApp(); }
+  function acctMsg(t, bad){ var m = document.getElementById('accountMsg'); if (m){ m.textContent = t || ''; m.classList.toggle('bad', !!bad); } }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('#accountOverlay [data-acct]');
+    if (!b) return;
+    var what = b.getAttribute('data-acct');
+    if (what === 'close'){ closeAccount(); }
+    else if (what === 'sync'){
+      acctMsg('');
+      syncFlush().then(function(){ return sync.user ? syncStart(sync.user) : null; }).then(function(){ var s = document.getElementById('accountStatus'); if (s) s.textContent = syncStatusText(); });
+    } else if (what === 'signout'){
+      syncSignOut().then(function(){ closeAccount(); showToast('Signed out. Your log is still on this phone.'); })
+        .catch(function(err){ acctMsg(syncAuthMessage(err), true); });
+    } else if (what === 'delete'){
+      if (!window.confirm('Delete your account and all cloud data? This can’t be undone. The log on this phone stays.')) return;
+      acctMsg('Deleting…');
+      syncDeleteAccount().then(function(){ closeAccount(); showToast('Account deleted'); })
+        .catch(function(err){ acctMsg(syncAuthMessage(err) || '', true); });
+    }
   });
 
   function closeWelcome(){
@@ -7633,7 +8132,7 @@
      a "layer" with one history entry; back closes the top layer using its own
      close/cancel button. With nothing open, back on another tab returns to
      Log, and on Log the first press shows "Press back again to exit". */
-  var BACK_LAYER_IDS = ['aiZoom', 'recentOverlay', 'signInOverlay', 'foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
+  var BACK_LAYER_IDS = ['aiZoom', 'recentOverlay', 'accountOverlay', 'signInOverlay', 'foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
     'addMealOverlay', 'aiScanOverlay', 'confirmOverlay', 'foodSheet', 'mealMenu', 'calSheet', 'dayOverlay'];
   var BACK_NEEDS_OPEN = { addMealOverlay: 1, aiScanOverlay: 1, recentOverlay: 1, confirmOverlay: 1 };
   var backDepth = 0, backIgnorePops = 0, backSyncQueued = false, exitArmed = false, exitArmTimer = null;
@@ -7729,6 +8228,7 @@
   document.getElementById('app').classList.remove('hidden');
   renderApp();
   maybeShowWelcome();
+  if (syncEnabled() && sync.meta.wasSignedIn) setTimeout(function(){ syncLoad().catch(function(){}); }, 800);
 
   // Registered after boot so it never delays first paint — this is
   // what lets the app open at all with no connection, and caches

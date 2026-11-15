@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v86';
+var SHELL_CACHE = 'saviorfuel-shell-v87';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -42,7 +42,9 @@ var EXTRA_FILES = [
 var NEVER_CACHE_HOSTS = [
   'api.nal.usda.gov',
   'world.openfoodfacts.org',
-  'saviorfuel-ai.xavierchua10.workers.dev',   // food search and AI scan go through this Worker
+  'saviorfuel-ai.xavierchua10.workers.dev',
+  // Firebase accounts + sync must always go live to the network
+  'firestore.googleapis.com', 'identitytoolkit.googleapis.com', 'securetoken.googleapis.com', 'firebaseinstallations.googleapis.com', 'apis.google.com', 'accounts.google.com',   // food search and AI scan go through this Worker
   // Product thumbnails shown in food search. Left to the browser's own
   // HTTP cache instead of this file's cache-first store, which would
   // otherwise keep every thumbnail ever searched, forever.
