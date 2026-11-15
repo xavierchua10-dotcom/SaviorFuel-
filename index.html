@@ -1500,6 +1500,21 @@
   body[data-theme="light"] img[src$="logo-mark.png"]{content:url(images/logo-mark-light.png);}
   #app{background-image:none;}
   body[data-bg-art="off"] #app{background-image:none;}
+  /* Dark style "Glow": deeper green-black with a soft glow at the top, green-tinted outlines
+     and glowing accents. Colours and a few shadows only; nothing moves. */
+  body[data-theme="dark"][data-dark="glow"]{
+    --bg:#09100c; --panel:#101a14; --panel-2:#15221a; --panel-3:#1c2d22; --line:rgba(125,220,90,.22);
+    --text-dim:#a3b4a8; --text-faint:#97a99c; --accent-dim:#2f5a20;
+    --header-bg:rgba(10,20,14,.35); --header-line:rgba(125,220,90,.16); --header-text-faint:#97a99c;
+    --card-shadow:0 0 0 1px rgba(125,220,90,.05), 0 6px 18px rgba(0,0,0,.35);
+  }
+  body[data-theme="dark"][data-dark="glow"] #app{background-image:radial-gradient(120% 42% at 50% -6%,rgba(70,200,90,.30),rgba(70,200,90,.08) 45%,transparent 70%);}
+  body[data-theme="dark"][data-dark="glow"] .tabbar{background:rgba(16,26,20,.9); box-shadow:0 10px 28px rgba(0,0,0,.5), 0 0 0 1px rgba(125,220,90,.08);}
+  body[data-theme="dark"][data-dark="glow"] .tabbar button[data-tab="scan"]{box-shadow:0 0 26px rgba(125,220,90,.55), 0 0 0 4px var(--bg);}
+  body[data-theme="dark"][data-dark="glow"] .day-chip.active, body[data-theme="dark"][data-dark="glow"] .week-day.active .wd-num{box-shadow:0 0 16px rgba(125,220,90,.5);}
+  body[data-theme="dark"][data-dark="glow"] svg circle[stroke-linecap="round"], body[data-theme="dark"][data-dark="glow"] svg path[stroke-linecap="round"].ring-arc{filter:drop-shadow(0 0 5px currentColor);}
+  body[data-theme="dark"][data-dark="glow"] .meal-row, body[data-theme="dark"][data-dark="glow"] .water-row, body[data-theme="dark"][data-dark="glow"] .balance-card, body[data-theme="dark"][data-dark="glow"] .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02)),var(--panel);}
+  .dark-style .seg button{flex:1;}
   body[data-theme="light"] .category-pill.active,
   body[data-theme="light"] .scan-badge,
   body[data-theme="light"] .ai-badge,
@@ -6585,6 +6600,9 @@
       (s.theme === 'light' ? '<div class="settings-row light-style"><div><div class="sr-label">Light style</div></div><div class="seg">' +
         [['warm','Warm'],['clean','Clean'],['mint','Mint']].map(function(o){ return '<button data-action="set-light-style" data-val="' + o[0] + '" class="' + (document.body.dataset.light === o[0] ? 'active' : '') + '">' + o[1] + '</button>'; }).join('') +
       '</div></div>' : '') +
+      (s.theme !== 'light' ? '<div class="settings-row dark-style"><div><div class="sr-label">Dark style</div></div><div class="seg">' +
+        [['classic','Classic'],['glow','Glow']].map(function(o){ return '<button data-action="set-dark-style" data-val="' + o[0] + '" class="' + ((s.darkStyle === 'glow' ? 'glow' : 'classic') === o[0] ? 'active' : '') + '">' + o[1] + '</button>'; }).join('') +
+      '</div></div>' : '') +
       '<div class="settings-row"><div><div class="sr-label">Haptic feedback</div><div class="sr-sub">Short vibration when you log a meal</div></div>' +
         '<div class="seg">' +
           '<button data-action="toggle-haptic" data-val="on" class="' + (s.haptic !== false ? 'active' : '') + '">ON</button>' +
@@ -6592,7 +6610,7 @@
         '</div></div>' +
     '</div>';
     html += settingsCardHtml('look', SET_ICONS.look, 'Look &amp; feel',
-      (s.theme === 'light' ? 'Light' + (document.body.dataset.light && document.body.dataset.light !== 'warm' ? ' \u00B7 ' + document.body.dataset.light.charAt(0).toUpperCase() + document.body.dataset.light.slice(1) : '') : 'Dark') + ' \u00B7 Haptics ' + (s.haptic === false ? 'off' : 'on'), lookBody);
+      (s.theme === 'light' ? 'Light' + (document.body.dataset.light && document.body.dataset.light !== 'warm' ? ' \u00B7 ' + document.body.dataset.light.charAt(0).toUpperCase() + document.body.dataset.light.slice(1) : '') : 'Dark' + (s.darkStyle === 'glow' ? ' \u00B7 Glow' : '')) + ' \u00B7 Haptics ' + (s.haptic === false ? 'off' : 'on'), lookBody);
 
     // ---- install (only when the browser can install it)
     if (canOfferInstall()){
@@ -6661,7 +6679,8 @@
     document.body.dataset.theme = STORE.appSettings.theme || 'dark';
     var ls = STORE.appSettings.lightStyle;
     document.body.dataset.light = (ls === 'clean' || ls === 'mint') ? ls : 'warm';
-    try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? ({warm:'#ebe6da',clean:'#f4f5f7',mint:'#eaf4e6'})[document.body.dataset.light] : '#1f232b'); }catch(e){}
+    document.body.dataset.dark = STORE.appSettings.darkStyle === 'glow' ? 'glow' : 'classic';
+    try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? ({warm:'#ebe6da',clean:'#f4f5f7',mint:'#eaf4e6'})[document.body.dataset.light] : (document.body.dataset.dark==='glow' ? '#09100c' : '#1f232b')); }catch(e){}
     document.body.dataset.bgArt = STORE.appSettings.bgArt === false ? 'off' : 'on';
   }
 
@@ -7308,6 +7327,11 @@
       renderApp();
     } else if (action === 'set-theme'){
       STORE.appSettings.theme = el.dataset.theme;
+      saveStore();
+      applyAppearanceSettings();
+      renderApp();
+    } else if (action === 'set-dark-style'){
+      STORE.appSettings.darkStyle = el.dataset.val === 'glow' ? 'glow' : 'classic';
       saveStore();
       applyAppearanceSettings();
       renderApp();
