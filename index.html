@@ -1459,17 +1459,17 @@
     --header-line:#434a57;
   }
   body[data-theme="light"]{
-    --bg:#f4f5f7;
+    --bg:#f3f0e8;
     --panel:#ffffff;
-    --panel-2:#f0f2f5;
-    --panel-3:#e6e9ee;
-    --line:#e1e5ea;
-    --text:#16181d;
-    --text-dim:#566070;
-    --text-faint:#6b7685;
-    --accent:#2f8f1f;
-    --accent-dim:#d9f0d2;
-    --accent-rgb:47,143,31;
+    --panel-2:#f1ede4;
+    --panel-3:#e9e4d9;
+    --line:#dcd6c8;
+    --text:#1c1e23;
+    --text-dim:#5b616a;
+    --text-faint:#6f747c;
+    --accent:#3f7a12;
+    --accent-dim:#dcefc8;
+    --accent-rgb:63,122,18;
     --accent-2:#a5372f;
     --accent-2-dim:#f6dcda;
     --success:#31703e;
@@ -1481,13 +1481,16 @@
     --c-water:#1d79ad;
     --c-cal:var(--accent);
     --c-star:#b98100;
-    --header-bg:#f4f5f7;
+    --header-bg:#ebe6da;
     --header-text:#1c1e23;
-    --header-text-faint:#6b7685;
-    --header-accent:#2f8f1f;
-    --header-line:#e1e5ea;
+    --header-text-faint:#6f747c;
+    --header-accent:#3f7a12;
+    --header-line:#d6cfbf;
   }
-  body[data-theme="light"] .meal-row, body[data-theme="light"] .water-row, body[data-theme="light"] .balance-card, body[data-theme="light"] .card{box-shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05); border-color:transparent;}
+  /* Light styles (Profile > Look & feel > Light style). Warm is the default and lives in the base light tokens above. */
+  body[data-theme="light"][data-light="clean"]{--bg:#f4f5f7;--panel-2:#f0f2f5;--panel-3:#e6e9ee;--line:#e1e5ea;--text:#16181d;--text-dim:#566070;--text-faint:#6b7685;--accent:#2f8f1f;--accent-dim:#d9f0d2;--accent-rgb:47,143,31;--header-bg:#f4f5f7;--header-text-faint:#6b7685;--header-accent:#2f8f1f;--header-line:#e1e5ea;}
+  body[data-theme="light"][data-light="clean"] .meal-row, body[data-theme="light"][data-light="clean"] .water-row, body[data-theme="light"][data-light="clean"] .balance-card, body[data-theme="light"][data-light="clean"] .card{box-shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05); border-color:transparent;}
+  body[data-theme="light"][data-light="mint"]{--bg:#eaf4e6;--panel-2:#e0eedb;--panel-3:#d3e6cd;--line:#cfe2c9;--text:#14201a;--text-dim:#4d6256;--text-faint:#5f7566;--accent:#2d7d1c;--accent-dim:#cfe9c4;--accent-rgb:45,125,28;--header-bg:#eaf4e6;--header-text-faint:#5f7566;--header-accent:#2d7d1c;--header-line:#cfe2c9;}
   /* Light theme: logo with a black S so it reads on the light header */
   body[data-theme="light"] img[src$="logo-mark.png"]{content:url(images/logo-mark-light.png);}
   #app{background-image:none;}
@@ -1892,9 +1895,10 @@
   .theme-prev{display:flex; flex-direction:column; gap:4px; height:46px; border-radius:9px; padding:7px; background:#282d36;}
   .theme-prev i{display:block; height:6px; border-radius:3px; background:#383f4b;}
   .theme-prev i:first-child{width:60%; background:#a6e36b;} .theme-prev i:last-child{width:85%;}
-  .theme-opt.light{background:#f4f5f7;} .theme-opt.light .theme-prev{background:#fff;}
-  .theme-opt.light .theme-prev i{background:#e6e9ee;} .theme-opt.light .theme-prev i:first-child{background:#2f8f1f;}
-  .theme-opt.light b{color:#5b616a;} .theme-opt.light.active b{color:#2f8f1f;}
+  .light-style .seg button{flex:1;}
+  .theme-opt.light{background:#f3f0e8;} .theme-opt.light .theme-prev{background:#fff;}
+  .theme-opt.light .theme-prev i{background:#e9e4d9;} .theme-opt.light .theme-prev i:first-child{background:#3f7a12;}
+  .theme-opt.light b{color:#5b616a;} .theme-opt.light.active b{color:#3f7a12;}
 
   .stats-sheet{position:fixed; inset:0; z-index:310; background:rgba(0,0,0,.6); display:flex; align-items:flex-end; justify-content:center;}
   .stats-sheet-card{width:100%; max-width:480px; max-height:86vh; overflow-y:auto; background:var(--bg); border:1px solid var(--line); border-radius:26px 26px 0 0; padding:16px 16px calc(22px + var(--safe-bottom)); color:var(--text);}
@@ -6527,6 +6531,9 @@
         '<button type="button" data-action="set-theme" data-theme="dark" class="theme-opt dark' + (s.theme !== 'light' ? ' active' : '') + '"><span class="theme-prev"><i></i><i></i></span><b>Dark</b></button>' +
         '<button type="button" data-action="set-theme" data-theme="light" class="theme-opt light' + (s.theme === 'light' ? ' active' : '') + '"><span class="theme-prev"><i></i><i></i></span><b>Light</b></button>' +
       '</div>' +
+      (s.theme === 'light' ? '<div class="settings-row light-style"><div><div class="sr-label">Light style</div></div><div class="seg">' +
+        [['warm','Warm'],['clean','Clean'],['mint','Mint']].map(function(o){ return '<button data-action="set-light-style" data-val="' + o[0] + '" class="' + (document.body.dataset.light === o[0] ? 'active' : '') + '">' + o[1] + '</button>'; }).join('') +
+      '</div></div>' : '') +
       '<div class="settings-row"><div><div class="sr-label">Haptic feedback</div><div class="sr-sub">Short vibration when you log a meal</div></div>' +
         '<div class="seg">' +
           '<button data-action="toggle-haptic" data-val="on" class="' + (s.haptic !== false ? 'active' : '') + '">ON</button>' +
@@ -6534,7 +6541,7 @@
         '</div></div>' +
     '</div>';
     html += settingsCardHtml('look', SET_ICONS.look, 'Look &amp; feel',
-      (s.theme === 'light' ? 'Light' : 'Dark') + ' \u00B7 Haptics ' + (s.haptic === false ? 'off' : 'on'), lookBody);
+      (s.theme === 'light' ? 'Light' + (document.body.dataset.light && document.body.dataset.light !== 'warm' ? ' \u00B7 ' + document.body.dataset.light.charAt(0).toUpperCase() + document.body.dataset.light.slice(1) : '') : 'Dark') + ' \u00B7 Haptics ' + (s.haptic === false ? 'off' : 'on'), lookBody);
 
     // ---- install (only when the browser can install it)
     if (canOfferInstall()){
@@ -6601,7 +6608,9 @@
     document.body.dataset.density = 'comfortable';
     document.body.dataset.corners = STORE.appSettings.corners || 'rounded';
     document.body.dataset.theme = STORE.appSettings.theme || 'dark';
-    try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? '#f4f5f7' : '#1f232b'); }catch(e){}
+    var ls = STORE.appSettings.lightStyle;
+    document.body.dataset.light = (ls === 'clean' || ls === 'mint') ? ls : 'warm';
+    try{ var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', document.body.dataset.theme==='light' ? ({warm:'#ebe6da',clean:'#f4f5f7',mint:'#eaf4e6'})[document.body.dataset.light] : '#1f232b'); }catch(e){}
     document.body.dataset.bgArt = STORE.appSettings.bgArt === false ? 'off' : 'on';
   }
 
@@ -7240,6 +7249,11 @@
       renderApp();
     } else if (action === 'set-theme'){
       STORE.appSettings.theme = el.dataset.theme;
+      saveStore();
+      applyAppearanceSettings();
+      renderApp();
+    } else if (action === 'set-light-style'){
+      STORE.appSettings.lightStyle = el.dataset.val;
       saveStore();
       applyAppearanceSettings();
       renderApp();
