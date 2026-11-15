@@ -1598,6 +1598,9 @@
   .log-hero-side .hero-ring-sub{margin-top:3px; font-size:11px;}
   .log-macros{margin-top:12px; display:flex; flex-direction:column; gap:7px;}
   .log-macro{display:flex; align-items:center; gap:8px; font-size:13px;}
+  .mi{width:20px; height:20px; flex:none; display:inline-block;}
+  .mi-protein{color:var(--c-protein);} .mi-carbs{color:var(--c-carbs);} .mi-fat{color:var(--c-fat);}
+  .balance-chip .mi{width:16px; height:16px; margin-right:5px; vertical-align:-3px;}
   .log-macro .dot{width:8px; height:8px; border-radius:50%; flex:none; background:var(--accent);}
   .log-macro .dot.protein{background:var(--c-protein);}
   .log-macro .dot.carbs{background:var(--c-carbs);}
@@ -2810,9 +2813,19 @@
     '</div>';
   }
 
+  // Little line icons for protein / carbs / fat (drumstick, wheat, avocado), coloured like the macro.
+  var MACRO_ICON_PATHS = {
+    protein: '<path d="M16 4c3.3 0 5 2.6 5 5s-2 5-5 5.2c-1.2.1-2.2.6-3 1.4L11 17.5l-4.5-4.5 1.9-2c.8-.8 1.3-1.8 1.4-3C9 5.6 12.6 4 16 4z"/><path d="M8.5 15.5l-3 3"/><circle cx="4.5" cy="19.5" r="1.4"/><circle cx="6.4" cy="21.1" r="1.4"/>',
+    carbs: '<path d="M12 22V8"/><path d="M12 8c-2.5 0-3.5-2-3.5-4 2.5 0 3.5 2 3.5 4zM12 8c2.5 0 3.5-2 3.5-4-2.5 0-3.5 2-3.5 4z"/><path d="M12 14c-2.5 0-4-1.5-4-3.5 2.5 0 4 1.5 4 3.5zM12 14c2.5 0 4-1.5 4-3.5-2.5 0-4 1.5-4 3.5z"/><path d="M12 20c-2.5 0-4-1.5-4-3.5 2.5 0 4 1.5 4 3.5zM12 20c2.5 0 4-1.5 4-3.5-2.5 0-4 1.5-4 3.5z"/>',
+    fat: '<path d="M12 2.5c2.2 0 3.2 2.5 3.6 4.6.3 1.6 1.4 2.6 2.4 4.2 1.9 3 .6 9.7-6 9.7S4.1 14.3 6 11.3c1-1.6 2.1-2.6 2.4-4.2C8.8 5 9.8 2.5 12 2.5z"/><circle cx="12" cy="14.5" r="2.8"/>'
+  };
+  function macroIconHtml(cls){
+    return '<svg class="mi mi-' + cls + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (MACRO_ICON_PATHS[cls] || '') + '</svg>';
+  }
+
   function macroLineHtml(label, value, goal, cls){
     var over = goal > 0 && value > goal;
-    return '<div class="log-macro"><i class="dot ' + cls + '"></i><span class="lm-n">' + label + '</span>' +
+    return '<div class="log-macro">' + macroIconHtml(cls) + '<span class="lm-n">' + label + '</span>' +
       '<span class="lm-v' + (over ? ' over' : '') + '">' + Math.round(value) + '<small>/' + goal + 'g</small></span></div>';
   }
 
@@ -5946,7 +5959,7 @@
     var left = goals.calories - totals.calories;
     var tagsHtml = PYRAMID_FACES.map(function(f, k){ return faceTagHtml(k, totals, goals); }).join('');
     function chip(label, key, cls){
-      return '<div class="balance-chip"><i style="background:var(--c-' + cls + ')"></i>' + label + '<b>' + pctUncapped(totals[key], goals[key]) + '%<small> of goal</small></b></div>';
+      return '<div class="balance-chip">' + macroIconHtml(cls) + label + '<b>' + pctUncapped(totals[key], goals[key]) + '%<small> of goal</small></b></div>';
     }
     document.getElementById('view').innerHTML =
       '<div class="overview-plain">' +
