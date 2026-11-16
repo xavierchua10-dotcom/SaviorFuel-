@@ -855,13 +855,15 @@
       heroTip = overCal ? 'You are ' + Math.abs(Math.round(left)).toLocaleString() + ' kcal over. A lighter next meal evens it out.' : 'You hit your calories for today. Nice.';
     } else {
       var nextCat = suggestCategoryForNow();
-      var slots = { 'breakfast': 3, 'morning-snack': 3, 'lunch': 2, 'evening-snack': 2, 'dinner': 1 }[nextCat] || 1;
       heroLab = 'NEXT UP';
       heroTitle = CATEGORY_LABELS[nextCat] || 'Next meal';
-      var pLeft = Math.max(0, (g.protein || 0) - totals.protein);
-      heroTip = g.calories > 0
-        ? 'Aim for about ' + Math.round(left / slots / 10) * 10 + ' kcal' + (pLeft > 0 ? ' and ' + Math.round(pLeft / slots) + 'g protein' : '') + '.'
-        : 'Log what you eat to see how your day adds up.';
+      var tg = mealTarget(nextCat, 1);
+      var got = totalsFor(dayMeals.filter(function(m){ return m.category === nextCat; }));
+      var remK = tg.cal - got.calories, remP = tg.p - got.protein;
+      if (g.calories <= 0) heroTip = 'Log what you eat to see how your day adds up.';
+      else if (tg.cal <= 0) heroTip = 'No target set for this meal. Change it in My plan.';
+      else if (remK <= 0) heroTip = 'You\u2019ve covered your ' + heroTitle.toLowerCase() + ' target.';
+      else heroTip = 'Aim for about ' + Math.round(remK / 10) * 10 + ' kcal' + (remP > 0 ? ' and ' + Math.round(remP) + 'g protein' : '') + '.';
     }
     var mc = function(l, v, gl){ return '<span class="mc">' + l + ' <b>' + Math.round(v) + '/' + gl + '</b></span>'; };
 
@@ -4298,28 +4300,72 @@
     if (other.n) rows.push(other);
     return rows;
   }
+  // Each meal's share of the daily goals (percent). Editable in My plan.
+  var DEFAULT_MEAL_SPLIT = { 'breakfast': 25, 'morning-snack': 10, 'lunch': 30, 'evening-snack': 10, 'dinner': 25 };
+  function mealSplitPcts(){
+    var u = STORE.appSettings.mealSplit || {}, out = {};
+    MEAL_CATEGORIES.forEach(function(c){
+      out[c.id] = (typeof u[c.id] === 'number' && u[c.id] >= 0 && u[c.id] <= 100) ? u[c.id] : DEFAULT_MEAL_SPLIT[c.id];
+    });
+    return out;
+  }
+  function mealTarget(id, mult){
+    var g = STORE.goals, pc = (mealSplitPcts()[id] || 0) / 100, m = mult || 1;
+    return { cal: Math.round(g.calories * pc * m), p: Math.round(g.protein * pc * m), c: Math.round(g.carbs * pc * m), f: Math.round(g.fat * pc * m) };
+  }
+
   function mealSplitCardHtml(){
     var range = ui.mealSplit === 'week' ? 'week' : 'today';
+    var mult = range === 'week' ? 7 : 1;
     var rows = mealSplitData(range);
     var total = rows.reduce(function(a, r){ return a + r.cal; }, 0);
+    var goalCal = STORE.goals.calories * mult;
     var bar = rows.filter(function(r){ return r.cal > 0; }).map(function(r){
       return '<i style="width:' + (r.cal / total * 100).toFixed(1) + '%;background:' + MEAL_COLORS[r.id] + '"></i>';
     }).join('');
+    function mc(cls, l, v, t){
+      var over = t != null && t > 0 && Math.round(v) > t;
+      return '<span class="' + (over ? 'ov' : cls) + '">' + l + ' ' + Math.round(v) + (t != null ? '/' + t : '') + 'g</span>';
+    }
     var list = rows.map(function(r){
+      var t = r.id === 'other' ? null : mealTarget(r.id, mult);
+      var dot = '<i class="dot" style="background:' + MEAL_COLORS[r.id] + '"></i>';
       if (r.n === 0){
-        return '<div class="bm-row none"><i class="dot" style="background:' + MEAL_COLORS[r.id] + '"></i><div class="nm">' + r.label + '<small>nothing logged</small></div><div class="kc">—</div></div>';
+        return '<div class="bm-row2 none"><div class="bm-top">' + dot + '<div class="nm">' + r.label + '<small>nothing logged</small></div>' +
+          '<div class="kc">0<small> / ' + t.cal.toLocaleString() + ' kcal</small></div></div>' +
+          '<div class="bm-prog"><i style="width:0"></i></div>' +
+          '<div class="bm-mx2">' + mc('p', 'P', 0, t.p) + mc('c', 'C', 0, t.c) + mc('f', 'F', 0, t.f) + '</div></div>';
       }
-      return '<div class="bm-row"><i class="dot" style="background:' + MEAL_COLORS[r.id] + '"></i>' +
-        '<div class="nm">' + r.label + '<small>' + r.n + (r.n === 1 ? ' food' : ' foods') + '</small></div>' +
-        '<div class="kc">' + Math.round(r.cal).toLocaleString() + '<small>kcal</small></div>' +
-        '<div class="mx"><span class="p">P ' + Math.round(r.p) + 'g</span> · <span class="c">C ' + Math.round(r.c) + 'g</span> · <span class="f">F ' + Math.round(r.f) + 'g</span></div>' +
-        '<div class="pc">' + Math.round(r.cal / total * 100) + '% of ' + (range === 'week' ? 'week' : 'day') + '</div></div>';
+      var over = t && r.cal > t.cal;
+      return '<div class="bm-row2">' +
+        '<div class="bm-top">' + dot + '<div class="nm">' + r.label + '<small>' + r.n + (r.n === 1 ? ' food' : ' foods') + '</small></div>' +
+          '<div class="kc' + (over ? ' over' : '') + '">' + Math.round(r.cal).toLocaleString() + '<small>' + (t ? ' / ' + t.cal.toLocaleString() + ' kcal' : ' kcal') + '</small></div></div>' +
+        (t ? '<div class="bm-prog"><i style="width:' + Math.min(100, t.cal > 0 ? r.cal / t.cal * 100 : 0).toFixed(0) + '%;background:' + (over ? 'var(--accent-2)' : MEAL_COLORS[r.id]) + '"></i></div>' : '<div class="bm-gap2"></div>') +
+        '<div class="bm-mx2">' + mc('p', 'P', r.p, t && t.p) + mc('c', 'C', r.c, t && t.c) + mc('f', 'F', r.f, t && t.f) + '</div></div>';
     }).join('');
     return '<div class="card bm-card" id="mealSplitCard"><div class="bm-h"><span>By meal</span>' +
         '<div class="bm-seg"><button type="button" data-action="meal-split-range" data-range="today" class="' + (range === 'today' ? 'on' : '') + '">TODAY</button>' +
         '<button type="button" data-action="meal-split-range" data-range="week" class="' + (range === 'week' ? 'on' : '') + '">7 DAYS</button></div></div>' +
-      '<div class="bm-tot"><b>' + Math.round(total).toLocaleString() + ' kcal</b><small>' + (total > 0 ? 'split across meals' : (range === 'week' ? 'nothing logged this week' : 'nothing logged today')) + '</small></div>' +
+      '<div class="bm-tot"><b>' + Math.round(total).toLocaleString() + ' kcal</b><small>' + (goalCal > 0 ? 'of ' + goalCal.toLocaleString() + (range === 'week' ? ' weekly goal' : ' daily goal') : '') + '</small></div>' +
       '<div class="bm-stack">' + bar + '</div><div class="bm-gap"></div>' + list + '</div>';
+  }
+
+  // My plan > Meal split: how the daily goals are shared across meals.
+  function mealSplitBoxHtml(){
+    var pcts = mealSplitPcts(), sum = 0;
+    var rows = MEAL_CATEGORIES.map(function(c){
+      var pc = pcts[c.id]; sum += pc;
+      var t = mealTarget(c.id, 1);
+      return '<div class="ms-row"><i class="dot" style="background:' + MEAL_COLORS[c.id] + '"></i>' +
+        '<div class="nm">' + c.label + '<small>' + t.cal + ' kcal · P' + t.p + ' C' + t.c + ' F' + t.f + '</small></div>' +
+        '<div class="ms-step"><button type="button" data-action="meal-split-step" data-id="' + c.id + '" data-d="-5" aria-label="Less ' + c.label + '"' + (pc <= 0 ? ' disabled' : '') + '>−</button>' +
+        '<b>' + pc + '%</b>' +
+        '<button type="button" data-action="meal-split-step" data-id="' + c.id + '" data-d="5" aria-label="More ' + c.label + '"' + (pc >= 100 ? ' disabled' : '') + '>+</button></div></div>';
+    }).join('');
+    var ok = sum === 100;
+    return '<div class="ms-box" id="mealSplitBox"><div class="ms-h">Meal split</div><div class="ms-sub">How your daily goals are shared across meals.</div>' + rows +
+      '<div class="ms-tot' + (ok ? '' : ' bad') + '">Total<span>' + (ok ? '100% ✓' : sum + '% — should be 100%') + '</span></div>' +
+      '<button type="button" class="ms-reset" data-action="meal-split-reset">Reset to default</button></div>';
   }
 
   function weeklyBodyHtml(){
@@ -4744,6 +4790,7 @@
       settingsGoalRow('Sodium (mg)', 'goalSodium', g.sodium) +
       settingsGoalRow('Water (ml)', 'goalWater', g.water) +
     '</div></div>';
+    planBody += mealSplitBoxHtml();
     html += settingsCardHtml('plan', SET_ICONS.goals, 'My plan',
       Math.round(g.calories) + ' kcal \u00B7 P ' + g.protein + ' \u00B7 C ' + g.carbs + ' \u00B7 F ' + g.fat, planBody);
 
@@ -5612,6 +5659,17 @@
     } else if (action === 'toggle-danger-zone'){
       ui.dangerZoneOpen = !ui.dangerZoneOpen;
       renderApp();
+    } else if (action === 'meal-split-step' || action === 'meal-split-reset'){
+      if (action === 'meal-split-reset') delete STORE.appSettings.mealSplit;
+      else {
+        var cur = mealSplitPcts(), sid = el.dataset.id;
+        if (cur[sid] == null) return;
+        cur[sid] = Math.max(0, Math.min(100, cur[sid] + (parseInt(el.dataset.d, 10) || 0)));
+        STORE.appSettings.mealSplit = cur;
+      }
+      saveStore();
+      var msb = document.getElementById('mealSplitBox');
+      if (msb) msb.outerHTML = mealSplitBoxHtml();
     } else if (action === 'meal-split-range'){
       ui.mealSplit = el.dataset.range === 'week' ? 'week' : 'today';
       var msc = document.getElementById('mealSplitCard');
