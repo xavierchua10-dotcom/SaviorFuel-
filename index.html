@@ -4602,9 +4602,21 @@
         '<button class="sr-action" data-action="export-data">Export</button></div>' +
       '<div class="settings-row"><div><div class="sr-label">Import backup</div><div class="sr-sub">Restore from a JSON file</div></div>' +
         '<button class="sr-action" data-action="import-data">Import</button></div>' +
+      (function(){
+        var bl = readBackups();
+        var r = '<div class="settings-row"><div><div class="sr-label">Safety copies</div><div class="sr-sub">' +
+          (bl.length ? bl.length + ' saved on this phone \u00B7 latest ' + esc(backupWhen(bl[0].ts)) : 'None yet \u2014 one is saved each day') +
+          '</div></div>' +
+          (bl.length ? '<button class="sr-action" data-action="toggle-backups">' + (ui.backupsOpen ? 'Hide' : 'View') + '</button>' : '') + '</div>';
+        if (ui.backupsOpen) bl.forEach(function(b, i){
+          r += '<div class="settings-row bk-row"><div><div class="sr-label">' + esc(backupWhen(b.ts)) + '</div><div class="sr-sub">' + (b.meals || []).length + ' meal' + ((b.meals || []).length === 1 ? '' : 's') + ' \u00B7 ' + esc(b.reason === 'daily' ? 'daily copy' : b.reason) + '</div></div>' +
+            '<button class="sr-action" data-action="restore-backup" data-i="' + i + '">Restore</button></div>';
+        });
+        return r;
+      })() +
     '</div>';
     html += settingsCardHtml('data', SET_ICONS.data, 'Your data',
-      STORE.meals.length + ' meal' + (STORE.meals.length === 1 ? '' : 's') + ' · Export / Import', dataBody);
+      STORE.meals.length + ' meal' + (STORE.meals.length === 1 ? '' : 's') + ' · Export / Import / Safety copies', dataBody);
 
     // ---- about & support
     var aboutBody = '<div class="settings-group">' +
@@ -4612,6 +4624,8 @@
         '<div class="sr-sub">USDA FoodData Central · Open Food Facts (photos CC BY-SA) · ' + nFoods + ' food' + (nFoods === 1 ? '' : 's') + ' saved for offline search</div></div></div>' +
       '<div class="settings-row"><div><div class="sr-label">About SaviorFuel</div>' +
         '<div class="sr-sub">© 2026 Xavier Chua (Savior). All rights reserved. The app\'s code and design may not be copied or reused.</div></div></div>' +
+      '<div class="settings-row"><div><div class="sr-label">Share SaviorFuel</div><div class="sr-sub">Send the app to a friend</div></div>' +
+        '<button class="sr-action" data-action="share-app">Share</button></div>' +
       '<div class="settings-row"><div><div class="sr-label">Privacy policy</div><div class="sr-sub">What\'s stored, and what leaves your device</div></div>' +
         '<a class="sr-action" href="privacy.html" target="_blank" rel="noopener">Read</a></div>' +
       '<div class="settings-row"><div><div class="sr-label">Instagram</div><div class="sr-sub">@im.savior_</div></div>' +
@@ -4619,7 +4633,7 @@
       '<div class="settings-row"><div><div class="sr-label">Email</div><div class="sr-sub">xavierchua10@gmail.com</div></div>' +
         '<a class="sr-action" href="mailto:xavierchua10@gmail.com">Email</a></div>' +
     '</div>';
-    html += settingsCardHtml('about', SET_ICONS.info, 'Help &amp; about', 'Sources · Privacy · Instagram · Email', aboutBody);
+    html += settingsCardHtml('about', SET_ICONS.info, 'Help &amp; about', 'Sources \u00B7 Privacy \u00B7 Share \u00B7 Email', aboutBody);
 
     html += '<div class="settings-version">SaviorFuel v' + APP_VERSION + '</div>';
 
@@ -4685,6 +4699,7 @@
         var parsed = JSON.parse(reader.result);
         if (!parsed || !Array.isArray(parsed.meals)) throw new Error('Not a valid SaviorFuel backup file');
         if (!window.confirm('Replace everything currently on this device with this backup?')) return;
+        makeSafetyCopy('before import');
         STORE = {
           meals: parsed.meals.map(sanitizeMeal).filter(Boolean),
           goals: Object.assign({}, DEFAULT_GOALS, parsed.goals || {}),
@@ -4705,6 +4720,69 @@
       }
     };
     reader.readAsText(file);
+  }
+
+  /* ---- Safety copies: a few snapshots (no photos) kept on this phone.
+     One is made automatically once a day, and another right before an
+     import or an erase. Restoring only adds back what's missing — it
+     never deletes anything you have now. ---- */
+  var BACKUP_KEY = 'saviorfuel_backups_v1', BACKUP_MAX = 5;
+  function readBackups(){
+    try { var a = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]'); return Array.isArray(a) ? a : []; }
+    catch (e){ return []; }
+  }
+  function writeBackups(list){
+    list = list.slice(0, BACKUP_MAX);
+    while (list.length){
+      try { localStorage.setItem(BACKUP_KEY, JSON.stringify(list)); return true; }
+      catch (e){ list.pop(); }          // storage full: drop the oldest and try again
+    }
+    try { localStorage.removeItem(BACKUP_KEY); } catch (e2){}
+    return false;
+  }
+  function makeSafetyCopy(reason){
+    try {
+      if (!STORE.meals.length && !(STORE.savedFoods || []).length && !(STORE.myFoods || []).length) return;
+      var list = readBackups();
+      if (reason === 'daily' && list[0] && list[0].reason === 'daily' && dateKey(list[0].ts) === todayKey()) return;
+      list.unshift(JSON.parse(JSON.stringify({
+        ts: Date.now(), reason: reason, meals: STORE.meals, goals: STORE.goals, profile: STORE.profile,
+        savedFoods: STORE.savedFoods || [], myFoods: STORE.myFoods || [], water: STORE.water || {}
+      })));
+      writeBackups(list);
+    } catch (e){ console.error('SaviorFuel: safety copy failed —', e); }
+  }
+  function backupWhen(ts){
+    return formatDateLabel(dateKey(ts)) + ' · ' + new Date(ts).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  }
+  function restoreSafetyCopy(i){
+    var b = readBackups()[i];
+    if (!b) return;
+    if (!window.confirm('Add back anything missing from this copy (' + backupWhen(b.ts) + ')? Nothing you have now is deleted.')) return;
+    makeSafetyCopy('before restore');
+    var have = {}; STORE.meals.forEach(function(m){ have[m.id] = 1; });
+    var added = 0;
+    (b.meals || []).map(sanitizeMeal).filter(Boolean).forEach(function(m){ if (!have[m.id]){ STORE.meals.push(m); added++; } });
+    function fk(f){ return String((f && (f.code || f.id || f.name)) || JSON.stringify(f)).toLowerCase(); }
+    ['savedFoods', 'myFoods'].forEach(function(k){
+      var cur = STORE[k] = Array.isArray(STORE[k]) ? STORE[k] : [], seen = {};
+      cur.forEach(function(f){ seen[fk(f)] = 1; });
+      (b[k] || []).forEach(function(f){ if (!seen[fk(f)]){ cur.push(f); seen[fk(f)] = 1; } });
+    });
+    STORE.water = STORE.water || {};
+    Object.keys(b.water || {}).forEach(function(d){ if (STORE.water[d] == null) STORE.water[d] = b.water[d]; });
+    saveStore();
+    renderApp();
+    showToast(added ? 'Restored ' + added + ' meal' + (added === 1 ? '' : 's') : 'Nothing missing — all of it is already here');
+  }
+
+  function shareApp(){
+    var url = location.origin + location.pathname.replace(/index\.html$/, '');
+    var data = { title: 'SaviorFuel', text: 'SaviorFuel — a free food tracker by Savior.', url: url };
+    if (navigator.share){ navigator.share(data).catch(function(){}); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ showToast('Link copied'); }, function(){ showToast(url); });
+    } else showToast(url);
   }
 
   // Scan tab: a small panel asking how you want to add the food. The
@@ -5212,6 +5290,7 @@
       closeDayOverlay();
     } else if (action === 'clear-data'){
       if (window.confirm(sync.user ? 'Erase all logged meals and reset goals? Because you\'re signed in, this also erases your online backup. This can\'t be undone.' : 'Erase all logged meals and reset goals? This can\'t be undone.')){
+        makeSafetyCopy('before erase');
         STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
         saveStore();
         applyAppearanceSettings();
@@ -5335,6 +5414,13 @@
     } else if (action === 'toggle-danger-zone'){
       ui.dangerZoneOpen = !ui.dangerZoneOpen;
       renderApp();
+    } else if (action === 'toggle-backups'){
+      ui.backupsOpen = !ui.backupsOpen;
+      renderApp();
+    } else if (action === 'restore-backup'){
+      restoreSafetyCopy(parseInt(el.dataset.i, 10));
+    } else if (action === 'share-app'){
+      shareApp();
     } else if (action === 'export-data'){
       exportData();
     } else if (action === 'import-data'){
@@ -6251,6 +6337,7 @@
   document.getElementById('app').classList.remove('hidden');
   renderApp();
   maybeShowWelcome();
+  setTimeout(function(){ makeSafetyCopy('daily'); }, 4000);
   if (syncEnabled() && sync.meta.wasSignedIn) setTimeout(function(){ syncLoad().catch(function(){}); }, 800);
 
   // Registered after boot so it never delays first paint — this is
