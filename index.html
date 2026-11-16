@@ -1670,6 +1670,9 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+    [/\b(bubble tea|boba|bobba|pearl milk tea|brown sugar (pearl|boba)|milk tea with pearls|with pearl|pearl (medium|regular|large)|deerioca|tapioca)\b/i, 'bubble-tea'],
+    [/\b((iced|ice|cold) (latte|coffee|cappuccino|mocha|americano|cold brew)|latte ais|kopi (susu |o |c )?ais|iced white coffee|cold brew)\b/i, 'iced-latte'],
+    [/\b(lemon tea|teh limau|teh o ais limau|iced lemon|limau ais|(iced|ice) tea|teh ais limau|peach tea)\b/i, 'iced-lemon-tea'],
     [/\b(asam laksa|assam laksa|laksa asam|laksa penang)\b/i, 'asam-laksa'],
     [/\b(mee rebus|mi rebus|mie rebus)\b/i, 'mee-rebus'],
     [/\b(soto|sotong soup)\b/i, 'soto-ayam'],
@@ -1734,7 +1737,20 @@
     [/^(?!.*\b(rice|nasi|burger|sandwich|wrap|salad|noodles?|mee|pizza|bun|roll|pie|soup|sup|puff|pau|roti|laksa|sub|subway)\b).*\b(roast(ed)? chicken|ayam panggang|rotisserie|ayam golek|whole chicken)\b/i, 'roast-chicken'],
     [/^(?!.*\b(burger|sandwich|rice|nasi|biryani|briyani|satay|soup|sup|pie|pizza|bun|roti|mee|noodles?|murtabak|martabak|chapati|capati|keema|prata|canai|sub|subway)\b).*\b(gulai kambing|kari kambing|mutton curry|lamb curry|kambing masak|curry (mutton|lamb)|rogan josh|kambing|mutton)\b/i, 'gulai-kambing'],
     [/\b(steamed fish|ikan (stim|kukus)|(kukus|stim) ikan|teochew steamed fish)\b/i, 'steamed-fish'],
-    [/^(?!.*\b(rice|nasi|noodles?|mee|laksa)\b).*\b(asam pedas|assam pedas|ikan asam|asam rebus|ikan masak asam)\b/i, 'asam-pedas']
+    [/^(?!.*\b(rice|nasi|noodles?|mee|laksa)\b).*\b(asam pedas|assam pedas|ikan asam|asam rebus|ikan masak asam)\b/i, 'asam-pedas'],
+    [/^(?!.*\b(cereal|bar|cake|biscuits?|cookies?|ice cream|wafer)\b).*\bmilo\b/i, 'iced-milo'],
+    [/\b(sirap bandung|bandung|rose syrup|air sirap)\b/i, 'sirap-bandung'],
+    [/\b((air|fresh|young|green) (kelapa|coconut)|coconut water|kelapa muda|air kelapa|buko)\b/i, 'fresh-coconut'],
+    [/\b(sugar ?cane|air tebu|tebu)\b/i, 'sugarcane-juice'],
+    [/\b(soy ?(a )?milk|soya (bean )?(milk|drink)|susu soya|air soya|soybean milk)\b/i, 'soy-milk'],
+    [/\b(orange juice|jus oren|orange drink|air oren)\b/i, 'orange-juice'],
+    [/\b(watermelon (juice|jus)|jus tembikai|air tembikai|tembikai (juice|jus))\b/i, 'watermelon-juice'],
+    [/\b(mango (smoothie|lassi|shake|juice|jus)|smoothie|jus mangga|lassi)\b/i, 'mango-smoothie'],
+    [/^(?!.*\b(ice cream|cake|candy|biscuits?|cookies?|chicken|marinade|sauce)\b).*\b(cola|coke|pepsi|sprite|fanta|7 ?up|soft drink|soda|carbonated|root beer|ginger ale|sarsi|green spot)\b/i, 'cola'],
+    [/\b(isotonic|sports drink|100 ?plus|gatorade|pocari|energy drink|electrolyte|powerade|vitamin water|red ?bull|monster energy)\b/i, 'isotonic-drink'],
+    [/^(?!.*\b(melon|chestnut|spinach|coconut|cress|buffalo|biscuit|crackers?|tuna|sardines?|chunks|noodles?|pasta|jelly|canned)\b).*\b((mineral|drinking|plain|spring|bottled|sparkling) water|air mineral|air kosong)\b|^water$/i, 'mineral-water'],
+    [/\b(chrysanthemum|krisantemum|kek ?wa|herbal tea|chinese tea|green tea|jasmine tea|oolong|barley tea|ginger tea|teh halia|roselle)\b/i, 'chrysanthemum-tea'],
+    [/^(?!.*\b(chocolate|tea|bun|bread|cake|cookies?|biscuits?|pudding|powder|ice cream|candy|jelly|coffee|shake|rice|soup|cereal|cheese|yogh?urt|lassi|soy|soya|almond|oat|coconut|tart|flan|tofu|pau|roll|bar|custard|toffee|corn|fish|bee hoon|bihun|fudge|barfi|condensed|evaporated|creamer|pekat|sejat|steamed|butter|sweet)\b).*\b(milk|susu)\b/i, 'fresh-milk']
   ];
   function foodIcon(name){
     var n = String(name || '');
