@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v113';
+var SHELL_CACHE = 'saviorfuel-shell-v114';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -90,7 +90,23 @@ var SHELL_FILES = [
   './data/icons/pulut-hitam.webp',
   './data/icons/pulut-inti.webp',
   './data/icons/seri-muka.webp',
-  './data/icons/tau-fu-fah.webp'
+  './data/icons/tau-fu-fah.webp',
+  './data/icons/asam-laksa.webp',
+  './data/icons/bihun-goreng.webp',
+  './data/icons/curry-fish-head.webp',
+  './data/icons/hokkien-mee.webp',
+  './data/icons/mee-rebus.webp',
+  './data/icons/mee-siam.webp',
+  './data/icons/pan-mee.webp',
+  './data/icons/pho.webp',
+  './data/icons/prawn-mee.webp',
+  './data/icons/ramen.webp',
+  './data/icons/soto-ayam.webp',
+  './data/icons/sup-ayam.webp',
+  './data/icons/sup-tulang.webp',
+  './data/icons/tom-yum.webp',
+  './data/icons/wonton-soup.webp',
+  './data/icons/yong-tau-foo.webp'
 ];
 // Nice-to-have (big 3D models for the Insights tab): fetched after install,
 // one by one, and a failure here never blocks the install.

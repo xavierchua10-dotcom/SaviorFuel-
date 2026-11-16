@@ -1670,6 +1670,22 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+    [/\b(asam laksa|assam laksa|laksa asam|laksa penang)\b/i, 'asam-laksa'],
+    [/\b(mee rebus|mi rebus|mie rebus)\b/i, 'mee-rebus'],
+    [/\b(soto|sotong soup)\b/i, 'soto-ayam'],
+    [/\b(prawn mee|mee udang|mee hailam|har mee|hae mee|hokkien prawn)\b/i, 'prawn-mee'],
+    [/^(?!.*\b(prawn|soup|udang)\b).*\bhokkien (mee|noodles?)\b/i, 'hokkien-mee'],
+    [/\b(pan mee|ban mian)\b/i, 'pan-mee'],
+    [/\b((bihun|bee hoon|beehoon|mihun|meehoon|vermicelli) goreng|fried (bee hoon|beehoon|bihun|vermicelli))\b/i, 'bihun-goreng'],
+    [/\b(mee siam|mi siam|bee hoon siam)\b/i, 'mee-siam'],
+    [/\b(yong tau foo|yong tau fu|yong tofu|ytf)\b/i, 'yong-tau-foo'],
+    [/\b(sup tulang|bone soup|sup tulang merah)\b/i, 'sup-tulang'],
+    [/\b(sup ayam|chicken soup)\b/i, 'sup-ayam'],
+    [/\btom ?y[au]m\b/i, 'tom-yum'],
+    [/\bpho\b/i, 'pho'],
+    [/\bramen\b/i, 'ramen'],
+    [/\b((wonton|wanton|wantan) soup|dumpling soup|sui kow)\b/i, 'wonton-soup'],
+    [/\b(fish head curry|curry fish head|kepala ikan)\b/i, 'curry-fish-head'],
     [/\bnasi lemak\b/i, 'nasi-lemak'],
     [/\b(nasi goreng|fried rice)\b/i, 'nasi-goreng'],
     [/\b(mee goreng|mi goreng|mie goreng|fried noodles?|maggi goreng)\b/i, 'mee-goreng'],
