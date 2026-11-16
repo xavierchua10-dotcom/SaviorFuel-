@@ -833,41 +833,65 @@
     var left = g.calories - totals.calories;
     var overCal = g.calories > 0 && totals.calories > g.calories;
 
-    var weekNext = addDaysKey(weekStartKey(viewKey), 7) <= todayKey();
+    var dayNext = addDaysKey(viewKey, 1) <= todayKey();
     var chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>';
     var chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
 
-    var html = installBannerHtml() + '<div class="log-head">' +
-        '<div class="log-head-title"><b>' + formatDateLabel(viewKey) + '</b>' +
-          (isToday ? '<span>' + new Date(viewKey + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }) + '</span>' : '') + '</div>' +
-        '<div class="log-head-actions">' +
-          (!isToday ? '<button type="button" class="log-today-pill" data-action="set-log-day" data-day="' + todayKey() + '">Today</button>' : '') +
-          '<button class="week-nav" data-action="log-week" data-dir="-1" aria-label="Previous week">' + chevL + '</button>' +
-          '<button class="week-nav" data-action="log-week" data-dir="1" aria-label="Next week"' + (weekNext ? '' : ' disabled') + '>' + chevR + '</button>' +
-        '</div>' +
-      '</div>' +
-      weekStripHtml(viewKey) +
-      '<div class="log-hero">' +
-        '<div class="hero-ring">' + heroRingSvg(totals, g) + '</div>' +
-        '<div class="log-hero-side">' +
-          '<div class="hero-ring-num' + (overCal ? ' over' : '') + '">' + (g.calories > 0 ? Math.abs(Math.round(left)) : Math.round(totals.calories)).toLocaleString() + '</div>' +
-          '<div class="hero-ring-sub">' + (g.calories > 0 ? (overCal ? 'kcal over' : 'kcal left \u00B7 ' + Math.round(totals.calories).toLocaleString() + ' eaten') : 'kcal eaten') + '</div>' +
-          '<div class="log-macros">' +
-            macroLineHtml('Protein', totals.protein, g.protein, 'protein') +
-            macroLineHtml('Carbs', totals.carbs, g.carbs, 'carbs') +
-            macroLineHtml('Fat', totals.fat, g.fat, 'fat') +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-      waterRowHtml(viewKey) +
-      '';
+    // Headline: greeting + "N kcal to go" (accent word), SaviorFit-style.
+    var hr = new Date().getHours();
+    var greet = isToday ? (hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening') + ' 👋' : formatDateLabel(viewKey);
+    var bigNum = (g.calories > 0 ? Math.abs(Math.round(left)) : Math.round(totals.calories)).toLocaleString();
+    var headWord = g.calories > 0 ? (overCal ? 'over' : (isToday ? 'to go' : 'left')) : 'eaten';
 
-    if (dayMeals.length === 0){
-      html += '<div class="empty tab-empty-state"><div class="glyph">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-          '<circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4.5"></circle>' +
-        '</svg></div><p>' + (isToday ? 'Nothing logged yet today.' : 'Nothing logged this day.') + '<br>Tap the green button to add a meal.</p></div>';
+    // Hero card: what's next, a tip worked out from what's left, big Add button.
+    var heroLab, heroTitle, heroTip;
+    if (!isToday){
+      heroLab = formatDateLabel(viewKey).toUpperCase();
+      heroTitle = Math.round(totals.calories).toLocaleString() + ' kcal eaten';
+      heroTip = 'Editing this day. Add or fix meals here.';
+    } else if (g.calories > 0 && left <= 0){
+      heroLab = 'TODAY';
+      heroTitle = overCal ? 'Over goal' : 'Goal reached';
+      heroTip = overCal ? 'You are ' + Math.abs(Math.round(left)).toLocaleString() + ' kcal over. A lighter next meal evens it out.' : 'You hit your calories for today. Nice.';
     } else {
+      var nextCat = suggestCategoryForNow();
+      var slots = { 'breakfast': 3, 'morning-snack': 3, 'lunch': 2, 'evening-snack': 2, 'dinner': 1 }[nextCat] || 1;
+      heroLab = 'NEXT UP';
+      heroTitle = CATEGORY_LABELS[nextCat] || 'Next meal';
+      var pLeft = Math.max(0, (g.protein || 0) - totals.protein);
+      heroTip = g.calories > 0
+        ? 'Aim for about ' + Math.round(left / slots / 10) * 10 + ' kcal' + (pLeft > 0 ? ' and ' + Math.round(pLeft / slots) + 'g protein' : '') + '.'
+        : 'Log what you eat to see how your day adds up.';
+    }
+    var mc = function(l, v, gl){ return '<span class="mc">' + l + ' <b>' + Math.round(v) + '/' + gl + '</b></span>'; };
+
+    var html = installBannerHtml() +
+      '<div class="log-top">' +
+        '<div class="log-greet">' + greet + '</div>' +
+        '<h2 class="log-headline"><span class="hl-num' + (overCal ? ' over' : '') + '">' + bigNum + '</span> kcal <em class="' + (overCal ? 'over' : '') + '">' + headWord + '</em></h2>' +
+        '<div class="log-top-row">' +
+          '<span class="log-chip">' + ROW_PLATE + dayMeals.length + (dayMeals.length === 1 ? ' meal ' : ' meals ') + (isToday ? 'today' : 'logged') + '</span>' +
+          '<span class="log-top-nav">' +
+            (!isToday ? '<button type="button" class="log-today-pill" data-action="set-log-day" data-day="' + todayKey() + '">Today</button>' : '') +
+            '<button class="week-nav" data-action="log-day" data-dir="-1" aria-label="Previous day">' + chevL + '</button>' +
+            '<button class="week-nav" data-action="log-day" data-dir="1" aria-label="Next day"' + (dayNext ? '' : ' disabled') + '>' + chevR + '</button>' +
+          '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="log-hero-card">' +
+        '<div class="hero-ring">' + heroRingSvg(totals, g) + '</div>' +
+        '<div class="lab">' + heroLab + '</div>' +
+        '<h3>' + heroTitle + '</h3>' +
+        '<p>' + heroTip + '</p>' +
+        '<div class="hc-chips">' + mc('P', totals.protein, g.protein) + mc('C', totals.carbs, g.carbs) + mc('F', totals.fat, g.fat) + '</div>' +
+        '<div class="hc-cta"><button type="button" class="hc-btn" data-action="set-tab" data-tab="scan">+ ADD MEAL</button>' +
+          '<button type="button" class="hc-lnk" data-action="open-scanner" data-mode="photo">Scan food →</button></div>' +
+      '</div>' +
+      '<div class="log-tiles">' + waterTileHtml(viewKey) +
+        '<button type="button" class="log-tile dash" data-action="open-food-search-overlay"><span class="lt-ic">' + STAR_SVG + '</span><b>FAVOURITES</b><small>Re-log in one tap</small></button>' +
+      '</div>';
+
+    if (dayMeals.length > 0){
       html += groupedMealsHtml(dayMeals);
     }
 
@@ -1814,6 +1838,17 @@
     else renderApp();
   }
   function fmtWater(ml){ return ml >= 1000 ? (Math.round(ml / 10) / 100) + ' L' : ml + ' ml'; }
+  function waterTileHtml(key){
+    var goal = STORE.goals.water || DEFAULT_GOALS.water;
+    var ml = waterFor(key);
+    var p = goal > 0 ? Math.min(100, Math.round(ml / goal * 100)) : 0;
+    return '<div class="log-tile water"><span class="lt-ic wt"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c-3 4.2-6 7.3-6 11a6 6 0 0 0 12 0c0-3.7-3-6.8-6-11z"></path></svg></span>' +
+      '<b>WATER</b><small>' + fmtWater(ml) + ' / ' + fmtWater(goal) + '</small>' +
+      '<div class="water-bar"><i style="width:' + p + '%"></i></div>' +
+      '<div class="lt-btns">' + (ml > 0 ? '<button type="button" class="water-btn minus" data-action="water-add" data-ml="-250" aria-label="Remove 250 ml">−</button>' : '') +
+      '<button type="button" class="water-btn" data-action="water-add" data-ml="250" aria-label="Add 250 ml">+250 ml</button></div></div>';
+  }
+
   function waterRowHtml(key){
     var goal = STORE.goals.water || DEFAULT_GOALS.water;
     var ml = waterFor(key);
@@ -4760,7 +4795,7 @@
     var ring = document.querySelector('.hero-ring');
     if (!ring || !ring.animate) return;
     var token = ++heroAnimToken;
-    var hostEl = ring.closest('.log-hero') || ring;
+    var hostEl = ring.closest('.log-hero, .log-hero-card') || ring;
     var numEl = hostEl.querySelector('.hero-ring-num'), subEl = hostEl.querySelector('.hero-ring-sub');
     var goalsBy = { cal: g.calories, protein: g.protein, carbs: g.carbs, fat: g.fat };
     var valsPrev = { cal: prev.cal, protein: prev.protein, carbs: prev.carbs, fat: prev.fat };
@@ -5241,6 +5276,11 @@
       toggleFavorite(el.dataset.name);
     } else if (action === 'set-log-day'){
       ui.logDay = el.dataset.day;
+      renderApp();
+    } else if (action === 'log-day'){
+      var dirD = Number(el.dataset.dir) || 0;
+      var shiftedD = addDaysKey(logDayKey(), dirD);
+      ui.logDay = shiftedD > todayKey() ? todayKey() : shiftedD;
       renderApp();
     } else if (action === 'log-week'){
       var dirW = Number(el.dataset.dir) || 0;
