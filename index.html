@@ -1718,7 +1718,22 @@
     [/\bdodol\b/i, 'dodol'],
     [/\b(tau fu fah|tau foo fah|tau huey|tahu bunga|douhua|beancurd pudding)\b/i, 'tau-fu-fah'],
     [/\b(pulut hitam|black glutinous rice)\b/i, 'pulut-hitam'],
-    [/\b(mango sticky|pulut mangga|khao niao mamuang)\b/i, 'mango-sticky-rice']
+    [/\b(mango sticky|pulut mangga|khao niao mamuang)\b/i, 'mango-sticky-rice'],
+    [/^(?!.*\b(rice|nasi|burger|sandwich|wrap|salad|noodles?|mee|pizza|bun|roll|pie|soup|sup|puff|pau|roti|laksa|cheese)\b).*\b(ayam goreng|fried chicken|chicken fried)\b/i, 'ayam-goreng'],
+    [/\b(ayam masak merah|chicken masak merah)\b/i, 'ayam-masak-merah'],
+    [/^(?!.*\b(rice|nasi|burger|sandwich|wrap|salad|noodles?|mee|pizza|bun|roll|pie|soup|sup|puff|pau|roti|laksa)\b).*\b(ayam percik|percik|ayam bakar|grilled chicken|bbq chicken)\b/i, 'ayam-percik'],
+    [/^(?!.*\b(rice|nasi|burger|sandwich|wrap|salad|noodles?|mee|pizza|bun|roll|pie|soup|sup|puff|pau|roti|laksa)\b).*\b(chicken curry|kari ayam|curry chicken|gulai ayam)\b/i, 'chicken-curry'],
+    [/^(?!.*\b(rice|nasi|burger|sandwich|wrap|salad|noodles?|mee|pizza|bun|roll|pie|soup|sup|puff|pau|roti|laksa)\b).*\b(ikan bakar|grilled fish|bbq fish|ikan panggang|stingray)\b/i, 'ikan-bakar'],
+    [/\b(sambal sotong|sotong (sambal|goreng|masak)|squid sambal|calamari|fried squid)\b/i, 'sambal-sotong'],
+    [/^(?!.*\b(crackers?|keropok|chips?|snack|rice|nasi|noodles?|mee)\b).*\b(butter prawns?|udang (mentega|butter|goreng tepung)|prawn butter|salted egg prawns?|fried prawns?|tempura prawns?)\b/i, 'butter-prawns'],
+    [/\b((chil+i|black pepper|butter|salted egg|singapore) crab|crab (curry|masak)|ketam (masak|cili|lada hitam)|kari ketam)\b/i, 'chilli-crab'],
+    [/^(?!.*\b(kuih|kueh|kek|crepe|burger|sandwich|sub|subway)\b).*\b(telur dadar|dadar|omel+ette?)\b/i, 'telur-dadar'],
+    [/\b(kangkung|water spinach|morning glory)\b/i, 'kangkung-belacan'],
+    [/\b((tempeh|tempe|tauhu|tahu|tofu|beancurd|bean curd) (goreng|fried)|goreng (tempeh|tempe|tauhu|tahu)|fried (tempeh|tempe|tofu|beancurd))\b/i, 'tempeh-tauhu'],
+    [/^(?!.*\b(sandwich|burger|pie|noodles?|rice|nasi|mee|salad|wrap|pizza|bun|roll|sauce|seasoning|sub|subway|tuna|fish|salmon|tofu|cheese)\b).*\bsteak\b/i, 'beef-steak'],
+    [/^(?!.*\b(rice|nasi|burger|sandwich|wrap|salad|noodles?|mee|pizza|bun|roll|pie|soup|sup|puff|pau|roti|laksa|sub|subway)\b).*\b(roast(ed)? chicken|ayam panggang|rotisserie|ayam golek|whole chicken)\b/i, 'roast-chicken'],
+    [/^(?!.*\b(burger|sandwich|rice|nasi|biryani|briyani|satay|soup|sup|pie|pizza|bun|roti|mee|noodles?|murtabak|martabak|chapati|capati|keema|prata|canai|sub|subway)\b).*\b(gulai kambing|kari kambing|mutton curry|lamb curry|kambing masak|curry (mutton|lamb)|rogan josh|kambing|mutton)\b/i, 'gulai-kambing'],
+    [/\b(steamed fish|ikan (stim|kukus)|(kukus|stim) ikan|teochew steamed fish)\b/i, 'steamed-fish']
   ];
   function foodIcon(name){
     var n = String(name || '');
