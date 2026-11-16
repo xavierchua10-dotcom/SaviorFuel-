@@ -4329,7 +4329,7 @@
     var dayMax = Math.max(g.calories, Math.max.apply(null, days.map(function(x){ return x.total; })), 1);
     var goalPos = pct(g.calories, dayMax); // where the goal line sits along each bar
 
-    var html = '<div class="card wk-card"><div class="wk-h"><span>This week</span>' + (g.calories > 0 ? '<em>Goal ' + g.calories.toLocaleString() + '</em>' : '') + '</div>';
+    var html = (loggedDays.length ? mealSplitCardHtml() : '') + '<div class="card wk-card"><div class="wk-h"><span>This week</span>' + (g.calories > 0 ? '<em>Goal ' + g.calories.toLocaleString() + '</em>' : '') + '</div>';
     html += days.map(function(x){
       return '<div class="insight-bar-row">' +
         '<div class="insight-bar-day">' + x.label + '</div>' +
@@ -4360,7 +4360,7 @@
         '</div>';
     }
 
-    html += '</div>' + mealSplitCardHtml() + topFoodsCardHtml();
+    html += '</div>' + topFoodsCardHtml();
     html += '<button type="button" class="week-share-btn" data-action="share-week">Share my week</button>';
     return html;
   }

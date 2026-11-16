@@ -1932,6 +1932,7 @@
   .pf-stats.three .pf-stat-l{font-size:8.5px; letter-spacing:.08em;}
   .wk-card{padding:16px; border-radius:22px; margin:12px 0 0;}
   .bm-card{padding:16px; border-radius:22px; margin:12px 0 0;}
+  .bm-card + .wk-card{margin-top:12px;}
   .bm-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
   .bm-h > span{font:600 11px 'JetBrains Mono',monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--text-dim);}
   .bm-seg{display:inline-flex; background:var(--panel-3); border-radius:999px; padding:3px;}
