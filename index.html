@@ -1676,6 +1676,13 @@
     [/^(?!.*\b(keping|rangup|crispy|crackers?)\b).*\b(lekor|leikor)\b|\bfish sausages?\b/i, 'keropok-lekor'],
     [/^(?!.*\b(cream crackers?|wheat crackers?|sugar crackers?|golden crackers?|calcium|malkist|weetameal|biscuits?|seblak|gado|soto|nasi|mee|noodles?|rice crackers?|senbei|snack|egg roll)\b).*\b(keropok|kerupuk|krupuk|prawn (crackers?|chips?)|shrimp (chips?|crackers?)|fish crackers?|emping|rempeyek|kemplang|melinjo)\b/i, 'prawn-crackers'],
     [/^(?!.*\b(fries|french fries|fish|noodles?|mee|nachos?|guacamole|topped)\b).*\b(potato (chips|crisps)|crisps|kerepek|(banana|tapioca|cassava|sweet potato|bitter gourd|jackfruit|kale|vegetable|veggie|apple) chips|pringles|lay'?s|mister potato|chipster)\b/i, 'potato-chips'],
+    // sheet 7 (western): priority rules
+    [/\b(waffles?|croffle)\b/i, 'waffle'],
+    [/^(?!.*\b(prawns?|udang|bar|kuih|cookies?|baby|infant|energy)\b).*\b(corn ?flakes|cereal|froot loops|cheerios|frosties|coco pops|koko krunch|honey stars|nestum)\b/i, 'cereal'],
+    [/^(?!.*\b(burger|wrap|rice|nasi|egg tart|biscuit|coleslaw|wedges|mashed|whipped|potato|nuggets?|double down|bowl|jalapeno|bomber|honey butter|mee|noodles?|soup|curry|bun|raw|mentah)\b).*\b(kfc .*chicken|texas chicken .*(fried|chicken)|korean fried chicken|fried chicken wings?|chicken wings?|chicken tenders?|drumlets?|mcdonald'?s ayam goreng)\b/i, 'fried-chicken'],
+    [/^(?!.*\b(ramen|noodles?|buldak|samyang|soup|lasagn\w*|salad|sauce|pastitsio)\b).*\b(carbonara|alfredo|mac(aroni)? (and |& |n )?cheese|creamy (pasta|spaghetti))\b/i, 'carbonara'],
+    [/^(?!.*\b(sauce|kering|dry|squash|noodles?|ramen|soup|salad|parmigiana|sticks|lasagn\w*|layered)\b).*\b(spaghetti|bolognese|penne|fettuc\w+|linguine|pasta|aglio olio|arrabbiata)\b/i, 'spaghetti'],
+    [/^(?!.*\bgrilled\b).*\bfish ?(and|&|n'?) ?chips\b/i, 'fish-and-chips'],
     [/\b(bubble tea|boba|bobba|pearl milk tea|brown sugar (pearl|boba)|milk tea with pearls|with pearl|pearl (medium|regular|large)|deerioca|tapioca)\b/i, 'bubble-tea'],
     [/\b((iced|ice|cold) (latte|coffee|cappuccino|mocha|americano|cold brew)|latte ais|kopi (susu |o |c )?ais|iced white coffee|cold brew)\b/i, 'iced-latte'],
     [/\b(lemon tea|teh limau|teh o ais limau|iced lemon|limau ais|(iced|ice) tea|teh ais limau|peach tea)\b/i, 'iced-lemon-tea'],
@@ -1769,6 +1776,16 @@
     [/\b(egg tarts?|dan tat|pastel de nata|tart telur|custard tarts?)\b/i, 'egg-tarts'],
     [/\b(pineapple tarts?|tart nenas|tat nenas|nastar)\b/i, 'pineapple-tarts'],
     [/^(?!.*\b(soup|fritters?|cucur|bakwan|bun|pancake|cendol|bubur|drink|air jagung|nasi|dough|tamales?|aiskrim|ice cream)\b).*\b(corn on the cob|jagung (bakar|rebus|manis rebus|cup)|grilled (sweet )?corn|boiled (sweet )?(yellow )?corn|steamed (sweet )?corn|corn cobs?)\b/i, 'corn-on-the-cob'],
+    [/^(?!.*\b(patty|patties|steak|sundae|onion rings?|hash browns?|fries|float|pie|sauce|kebab|bread)\b).*\b(burger|cheeseburger|hamburger|whopper|mcdeluxe|big mac|filet-o-fish)\b/i, 'burger'],
+    [/^(?!.*\b(garlic bread|soup|lasagn\w*|spaghetti|drumlets|wings|salad|pasta|rice|dessert|cheesy bites|wedges|coleslaw|sauce)\b).*\bpizza\b/i, 'pizza'],
+    [/^(?!.*\b(biscuits?|cookies?|bread|loaf|dorayaki|banh mi|spread|oreo|puff|ice cream)\b).*\b(sandwich|sandwiches|subway|toastie|panini|blt)\b/i, 'sandwich'],
+    [/^(?!.*\b(kerabu|rojak|gado|pasembur|pasembor|yee sang|umai|hinava|latok|seybak|raita|thoke|som ?tam|papaya|fruit|nasi|mee|noodles?|pasta|potato salad|dressing|egg salad|tuna salad|larb|laab|lawar|nam tok|pleah|choila|gotukola|sambol|selat|kebab|doner|wrap|plate|sichuan|ulam|leaves|raw)\b).*\bsalads?\b/i, 'salad'],
+    [/^(?!.*\b(with fries|and fries|chop|steak|maryland|gyros|burger|peas|set|loaded|wedges)\b).*\b(french fries|fries|curly fries|frozen fries)\b/i, 'french-fries'],
+    [/^(?!.*\b(roll|soup)\b).*\b(hot ?dogs?|coney dog|chili cheese dog|corn dog)\b/i, 'hot-dog'],
+    [/^(?!.*\bmilo\b).*\b(nuggets?|mcnuggets?)\b/i, 'chicken-nuggets'],
+    [/^(?!.*\b(kuih|apam|martabak|crepe|dorayaki|pajeon|banh|surabi|kue|roti jala|durian|uttapam|appam|seafood|savory|savoury|fermented|rice|rolled|coconut|scallion|mussel|hopper|malpua|flatbread|sprout)\b).*\b(pancakes?|hotcakes?|hot cakes?)\b/i, 'pancakes'],
+    [/^(?!.*\b(bar|cookies?|krunch|crunch|biscuits?|cake|boat|milk|acai|balls?|tart|crumble)\b).*\b(oatmeal|oats?|overnight oats|muesli|granola)\b/i, 'oatmeal'],
+    [/^(?!.*\b(rice|nasi|burger|sandwich|banh|noodles?|mee|pad|bun|roti|congee|silog|tapsilog|egg tart|steamed|kerbau cake|avocado|galette|crepe)\b).*\b(sunny side up|telur mata kerbau|fried eggs?|bacon (and|&) eggs?|eggs? (and|&) bacon|english breakfast|full breakfast)\b/i, 'eggs-bacon'],
   ];
   function foodIcon(name){
     var n = String(name || '');
