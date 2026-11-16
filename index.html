@@ -1883,7 +1883,9 @@
   [/^(?!.*\b(milk|chicken|tart)\b)(cashews?|walnuts?|pistachios?|brazil nuts?|almonds?|macadamias?|hazelnuts?|pecans?|mixed nuts|trail mix|kacang pistachio)/i, 'mixed-nuts'],
   [/^(?!.*\b(french|brioche|ricotta|avocado|vegemite|fava|melt|sandwich)\b)(.*\btoast\b)/i, 'toast-egg'],
   [/^(?!.*\bsandwich\b)(scrambled eggs?|western omelet|egg foo yong|fu yong egg|telur dadar|telur hancur|.*\bomelet(te)?\b|.*\bfrittata\b)/i, 'scrambled-eggs'],
-  [/^(?!.*\b(kerabu|salad|per 100g|rojak|tea|omapodi|muruku)\b)(.*\bnoodles?\b|mee\b|kuey teow|bihun|kolo mee|lam mee|loh mee|lor mee|hokkien mee|sang nyuk|tuaran|beaufort|kon lau|bak chor mee)/i, 'noodle-soup'],
+  [/^(?!.*\b(sos|sauce|monster|double decker|oats|congee|coffee|cereal)\b)(maggi|mamee|nissin|mi sedaap|mie sedaap|indomie|cup noodles?|instant (noodles?|mee))/i, 'cup-noodles'],
+  [/^(?!.*\b(soup|sup|kerabu|salad|per 100g|rojak|tea|omapodi|muruku|rebus|laksa|curry|kari|kuah|boat|th'ng|pho|ramen|udon|dried|jalangkote|basah|pastry)\b)(?=.*\b(goreng|fried|stir-fried|wok|char|dry|kering|kampua|kolo|dan dan|chow mein|lo mein|yakisoba|japchae|pad see ew|basah)\b)(.*\bnoodles?\b|mee\b|kuey teow|kway teow|kwetiau|bihun|yakisoba|mie\b)/i, 'fried-noodles'],
+  [/^(?!.*\b(kerabu|salad|per 100g|rojak|tea|omapodi|muruku|jalangkote|pastry)\b)(.*\bnoodles?\b|mee\b|kuey teow|bihun|kolo mee|lam mee|loh mee|lor mee|hokkien mee|sang nyuk|tuaran|beaufort|kon lau|bak chor mee)/i, 'noodle-soup'],
   [/^(?!.*\b(noodles?|mee|bihun|macaroni|sweet|tong sui|tang yuan|nasi|maggi|stew|venison|boar|powder|base|ambuyat)\b)(sup\b|.*\bsoup\b|.*\bbroth\b|.*\bbak kut teh\b)/i, 'clear-soup'],
   [/^(?!.*\b(noodles?|mee|powder|paste|tea|teh|katsu|don|nasi|roti|puri|poori|twisties|cup|maggi|mamee|mie|indomie|balls|sauce|dates|bhatura|pongal)\b)(.*\b(curry|kari|gulai|masala|dal|dhal|korma|kurma|lodeh|opor|varuval)\b)/i, 'yellow-curry'],
   [/^(tandoori chicken|ayam tandoori|nando's (1\/4|1\/2|chicken)|ayam tikka|chicken tikka|secret recipe chicken cornish)/i, 'roast-chicken'],
@@ -1895,6 +1897,17 @@
   [/^(?!.*\b(salad|kerabu)\b)(squid|sotong)/i, 'squid'],
   [/^(?!.*\b(sambal|prawns?|udang|ikan|fish|salted|egg|juice|milk|cooked|canned|baked|tempura|pastry|puff|pickle|pickled|salad|kerabu|porridge|cracker|durian|side|kidney|black|mung|red|stink|raw|mentah)\b)(sayur|sawi|kailan|bendi goreng|terung goreng|okra|long beans|green beans|bean sprouts|chinese stir-fry|cabbage in coconut|mixed vegetables in|fried brinjal|fried okra|kacang buncis|mui choy|bayam|kangkung|petola|choy)/i, 'stir-fry-veg'],
   [/^(?!.*\b(per 100g|raw|balls?|porridge)\b)(.*\bfried rice\b|nasi goreng|chao fan)/i, 'fried-rice'],
+  // sheet 14 tail
+  [/^(beer|wine|whisky|vodka|tuak|cocktail \()/i, 'beer'],
+  [/^(mixed fruit salad|fruit cocktail|fruit salad|rojak buah)/i, 'fruit-salad'],
+  [/^(?!.*\b(yogh?urt|float|creamer|milk|chocolate|tea|coffee|juice|bcaa|thicken|huel|bird's nest|gong cha|chia|panas|hot|wedang|sekoteng|bandrek|jamu|herbal|yakult|boost|glucerna)\b)(.*\b(drink|soda|cola|pepsi|sprite|100 ?plus|fanta|7up|cordial|ribena)\b)/i, 'soft-drink-can'],
+  [/^(yakult(?! ace)|vitagen|yeo's soy|air kacang soya|soya cincau|susu badam|dutch lady (pure|chocolate)|farm fresh chocolate|ultra milk|marigold hl|almond milk)/i, 'milk-carton'],
+  [/^(?!.*\b(polo|bolo|pineapple bun|chang|sausage|chaat)\b)(gyoza|wonton|siew mai|siu mai|har gow|xiao long bao|potstickers?|jiaozi|fun gor|ham sui gok|dim sum|cp chicken gyoza|buff momo|veg momo|yomari|chai kueh|soon kueh)/i, 'dumplings'],
+  [/^(kuih|kueh|kue) (makmur|semperit|cornflakes|kapit|belanda|cincin)|^kue ape/i, 'cookies'],
+  [/^(?!.*\b(raw|mentah|beras)\b)(kuih|kueh|kue|wajik|ang ku|png kueh|teochew peng kueh|pulut panggang)/i, 'kuih-tray'],
+  [/^(?![^(]*\b(cake|bingka|drink|apple|chia|glutinous|sticky|rice|bread|roti|kelantanese|toffee)\b)([^(]*\b(pudding|puding|flan|panna cotta|creme brulee|agar-agar|custard|watalappan)\b)/i, 'pudding'],
+  [/^nasi .*\b(kosong|plain)\b/i, 'white-rice'],
+  [/^(?!.*\b(cake|pancake|balls|custard|pudding|dumpling|glutinous|per 100g|raw|porridge|paper|noodles?|vermicelli|wine|vinegar|flour|bran|pandan|palm sugar|rambai|fermented|blue pea)\b)(nasi\b|.*\brice\b)/i, 'nasi-campur'],
   ];
   function foodIcon(name){
     var n = String(name || '');
