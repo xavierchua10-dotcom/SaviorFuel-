@@ -939,9 +939,30 @@
         '<svg class="cat-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
         '<span class="cat-name">' + label + '</span>' +
         '<span class="cat-count">' + group.length + (group.length === 1 ? ' food' : ' foods') + '</span>' +
-        (group.length > 1 ? '<span class="category-section-total">' + subtotal + ' kcal</span>' : '') +
+        '<span class="category-section-total">' + Math.round(subtotal).toLocaleString() + ' kcal</span>' +
       '</button>' +
-      '<div class="acc meal-group' + (collapsed ? '' : ' open') + '"><div><div class="card flat">' + group.map(mealRowHtml).join('') + '</div></div></div>';
+      '<div class="acc meal-group' + (collapsed ? '' : ' open') + '"><div><div class="card flat">' + mealRowsHtml(group) + '</div></div></div>';
+  }
+
+  // Foods that came from one photo (an AI scan logs each food on the plate
+  // separately but with the same photo) show the picture once, as a small
+  // header with the plate's total, and the foods listed under it.
+  function mealRowsHtml(group){
+    var byPhoto = {};
+    group.forEach(function(m){ if (m.photoId && mealPhoto(m)) (byPhoto[m.photoId] = byPhoto[m.photoId] || []).push(m); });
+    var done = {};
+    return group.map(function(m){
+      var items = m.photoId ? byPhoto[m.photoId] : null;
+      if (!items || items.length < 2) return mealRowHtml(m);
+      if (done[m.photoId]) return '';
+      done[m.photoId] = true;
+      var kcal = Math.round(totalsFor(items).calories).toLocaleString();
+      return '<div class="photo-group">' +
+        '<div class="pg-head"><img class="pg-thumb" src="' + mealPhoto(m) + '" alt="">' +
+          '<div class="pg-meta"><b>Photo plate</b><span>' + items.length + ' foods \u00B7 ' + kcal + ' kcal</span></div></div>' +
+        items.map(function(x){ return mealRowHtml(x, true); }).join('') +
+      '</div>';
+    }).join('');
   }
 
   // A newly logged food shouldn't disappear into a folded group.
@@ -998,8 +1019,8 @@
     return n.toLowerCase().replace(/(^|[\s\-\/(])('?)([a-z])/g, function(_, a, b, c){ return a + b + c.toUpperCase(); }).replace(/\b(Mc)([a-z])/g, function(_, a, b){ return a + b.toUpperCase(); });
   }
 
-  function mealRowHtml(m){
-    var photo = mealPhoto(m);
+  function mealRowHtml(m, inPhotoGroup){
+    var photo = inPhotoGroup === true ? '' : mealPhoto(m);
     return '<div class="mr-w"><div class="mr-del">Delete</div>' +
       '<div class="meal-row" data-action="edit-meal" data-id="' + m.id + '">' +
       (photo ? '<img class="meal-thumb" src="' + photo + '" alt="">' : '<span class="meal-badge" aria-hidden="true">' + ROW_PLATE + '</span>') +
@@ -3531,7 +3552,7 @@
       '<div class="hist-item-head history-day-head" role="button" tabindex="0" data-action="open-day" data-day="' + key + '">' +
         '<div class="hist-item-main"><div class="hist-name">' + esc(formatDateLabel(key)) + '</div>' +
           '<div class="hist-sub">' + n + ' meal' + (n === 1 ? '' : 's') + '</div></div>' +
-        '<div class="hist-item-side hist-kcal-col"><div class="hist-kcal">' + Math.round(day.calories).toLocaleString() + '<small>kcal</small></div>' +
+        '<div class="hist-item-side hist-kcal-col"><div class="hist-kcal">' + Math.round(day.calories).toLocaleString() + '<small>' + (goal > 0 ? '/ ' + Math.round(goal).toLocaleString() + ' kcal' : 'kcal') + '</small></div>' +
           '<div class="hist-pb ' + st + '"><i style="width:' + pct + '%"></i></div></div>' +
       '</div>' +
       (q ? '<div class="hist-hits">' + day.meals.filter(function(m){ return String(m.name || '').toLowerCase().indexOf(q) !== -1; }).slice(0, 3).map(function(m){
@@ -3711,7 +3732,7 @@
     var today = todayKey();
     var dow = (new Date().getDay() + 6) % 7; // Monday = 0
     var letters = ['M','T','W','T','F','S','S'];
-    var cells = '', sum = 0, n = 0;
+    var cells = '', sum = 0, n = 0, under = 0;
     for (var i = 0; i < 7; i++){
       var key = dateKeyDaysAgo(dow - i);
       var info = map[key];
@@ -3723,16 +3744,21 @@
         var st = dayStatus(info.calories, goal);
         ring = '<i class="hs-ring ' + st + '" style="--p:' + Math.min(100, pctUncapped(info.calories, goal)) + '"></i>';
         sum += info.calories; n++;
+      } else if (key > today){
+        ring = '<i class="hs-ring none"></i>';
       } else {
         ring = '<i class="hs-ring empty"></i>';
       }
+      if (info && key <= today && dayStatus(info.calories, goal) !== 'over' && info.calories > 0 && goal > 0) under++;
       var inner = '<span class="hs-w">' + letters[i] + '</span><span class="hs-n">' + parseInt(key.slice(8, 10), 10) + '</span>' + ring;
       cells += info
         ? '<button type="button" class="' + cls + '" data-action="history-pick-day" data-day="' + key + '">' + inner + '</button>'
         : '<div class="' + cls + '">' + inner + '</div>';
     }
-    var avg = n ? Math.round(sum / n).toLocaleString() + ' avg' : 'nothing logged yet';
-    return '<div class="hist-sec"><span>This week</span><em>' + avg + '</em></div><div class="hist-strip">' + cells + '</div>';
+    var avg = n ? Math.round(sum / n).toLocaleString() + ' kcal/day' : 'nothing logged yet';
+    var line = n ? n + (n === 1 ? ' day' : ' days') + ' logged' + (goal > 0 ? ' \u00B7 ' + under + ' within goal' : '') : 'Log a meal to start your week.';
+    return '<div class="hist-sec"><span>This week</span><em>' + avg + '</em></div><div class="hist-strip">' + cells + '</div>' +
+      '<div class="hist-week-note">' + line + '</div>';
   }
 
   function renderHistory(){
@@ -5349,7 +5375,7 @@
     if (!el) return;
     var n = streakInfo(dayStatsMap()).current;
     el.classList.toggle('off', n === 0);
-    el.innerHTML = FLAME_SVG + '<span>' + n + '</span>';
+    el.innerHTML = FLAME_SVG + '<span>' + n + '</span><small>' + (n === 1 ? 'day' : 'days') + '</small>';
     el.setAttribute('aria-label', n === 0 ? 'No logging streak yet' : n + ' day logging streak');
   }
 

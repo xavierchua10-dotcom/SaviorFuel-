@@ -2180,3 +2180,17 @@
 /* easier tap targets */
 .bm-seg button{padding:8px 14px;}
 .week-share-btn{padding:12px 18px !important;}
+
+/* v109 UX: streak label, history goal text, future days, photo plates */
+.topbar-streak small{font:600 10.5px 'Oswald',sans-serif; letter-spacing:.08em; text-transform:uppercase; opacity:.85;}
+.hist-kcal small{margin-left:3px;}
+.hs-day.future{opacity:.3;}
+.hs-ring.none{background:transparent; border:1.5px dashed var(--line); opacity:.8;}
+.hs-ring.none::before{display:none;}
+.hist-week-note{margin:8px 2px 2px; font:500 12px 'JetBrains Mono',monospace; color:var(--text-dim);}
+.photo-group{border-radius:16px; background:rgba(var(--accent-rgb),.05); margin:2px 0 10px; padding-bottom:4px;}
+.photo-group .pg-head{display:flex; align-items:center; gap:10px; padding:8px 12px 2px;}
+.photo-group .pg-thumb{width:52px; height:52px; border-radius:14px; object-fit:cover; flex:none; background:var(--panel-2);}
+.photo-group .pg-meta{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.photo-group .pg-meta b{font:600 13px 'Oswald',sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--text);}
+.photo-group .pg-meta span{font:500 11.5px 'JetBrains Mono',monospace; color:var(--text-dim);}
