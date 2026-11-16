@@ -886,7 +886,7 @@
           '</span>' +
         '</div>' +
       '</div>' +
-      '<div class="log-hero-card">' +
+      '<div class="log-hero-card' + (g.calories > 0 && left <= 0 && !overCal ? ' goal' : '') + '">' +
         '<div class="hero-ring">' + heroRingSvg(totals, g) + '</div>' +
         '<div class="lab">' + heroLab + '</div>' +
         '<h3>' + heroTitle + '</h3>' +
@@ -901,6 +901,16 @@
 
     if (dayMeals.length > 0){
       html += groupedMealsHtml(dayMeals);
+    } else {
+      var prev = null;
+      STORE.meals.forEach(function(x){ if (dateKey(x.loggedAt) < viewKey && (!prev || x.loggedAt > prev.loggedAt)) prev = x; });
+      var pl = prev ? formatDateLabel(dateKey(prev.loggedAt)) : '';
+      html += '<div class="log-empty"><b>Nothing logged ' + (isToday ? 'yet' : 'this day') + '</b>' +
+        '<span>Snap your plate or search a food.' + (isToday && prev ? '<br>' + (pl === 'Yesterday' ? 'Yesterday' : 'On ' + esc(pl)) + ' you had ' + esc(shortFoodName(tidyName(prev.name))) + ', ' + Math.round(prev.calories) + ' kcal.' : '') + '</span>' +
+        (isToday && prev
+          ? '<button type="button" data-action="copy-meal" data-id="' + prev.id + '">LOG IT AGAIN</button>'
+          : '<button type="button" data-action="set-tab" data-tab="scan">ADD A MEAL</button>') +
+      '</div>';
     }
 
     document.getElementById('view').innerHTML = html;
@@ -1110,6 +1120,10 @@
       for (var i = 0; i < units.length; i++) if (units[i].id === 'g') u = units[i];
     }
     ui.serving = { unitId: u.id, qty: u.defaultQty };
+    var ls = lastServAll()[lastServKey(ui.selectedFood.name)];
+    if (ls && ls.q > 0 && isFinite(ls.q)){
+      for (var j = 0; j < units.length; j++) if (units[j].id === ls.u){ ui.serving = { unitId: ls.u, qty: ls.q }; break; }
+    }
   }
 
   function roundQty(n, unit){
@@ -1892,6 +1906,42 @@
   // One result row — shared by live search results and the empty-search
   // "Favorites / Recent" home. Saved foods get a star to pin them.
   var STAR_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><polygon points="12 2.5 14.9 8.6 21.5 9.4 16.6 14 17.9 20.6 12 17.3 6.1 20.6 7.4 14 2.5 9.4 9.1 8.6"></polygon></svg>';
+  /* ---- Search row polish: highlight what you typed, split "Name (detail)"
+     into a title and a quieter detail line, and remember the serving you
+     used last for each food (kept on this phone only). ---- */
+  var rowHl = '';
+  function reEsc(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function hlHtml(text, q){
+    var toks = String(q || '').toLowerCase().split(/\s+/).filter(function(t){ return t.length >= 2; });
+    if (!toks.length) return esc(text);
+    var re = new RegExp('(' + toks.map(reEsc).join('|') + ')', 'ig');
+    return String(text).split(re).map(function(part, i){ return i % 2 ? '<span class="hl">' + esc(part) + '</span>' : esc(part); }).join('');
+  }
+  function splitFoodName(name){
+    var m = /^(.+?)\s*\((.+)\)\s*$/.exec(String(name || ''));
+    return m ? { main: m[1], extra: m[2] } : { main: String(name || ''), extra: '' };
+  }
+  function shortFoodName(name){ return splitFoodName(name).main || String(name || ''); }
+  var LAST_SERV_KEY = 'saviorfuel_lastserv_v1', lastServCache = null;
+  function lastServAll(){
+    if (lastServCache) return lastServCache;
+    try { lastServCache = JSON.parse(localStorage.getItem(LAST_SERV_KEY) || '{}') || {}; } catch (e) { lastServCache = {}; }
+    return lastServCache;
+  }
+  function lastServKey(n){ return String(n || '').toLowerCase().trim().slice(0, 80); }
+  function rememberServing(){
+    var f = ui.selectedFood, u = f && ui.serving ? currentServingUnit() : null;
+    if (!f || !u || !(ui.serving.qty > 0)) return;
+    var q = roundQty(ui.serving.qty, u);
+    var unitTxt = u.id === 'serving' ? (q === 1 ? 'serving' : 'servings') : (u.id === 'g' || u.id === 'oz') ? u.id : String(u.label || '').split(' \u00B7 ')[0];
+    var all = lastServAll(), k = lastServKey(f.name);
+    delete all[k];
+    all[k] = { u: u.id, q: q, t: q + ' ' + unitTxt };
+    var keys = Object.keys(all);
+    if (keys.length > 200) keys.slice(0, keys.length - 200).forEach(function(x){ delete all[x]; });
+    try { localStorage.setItem(LAST_SERV_KEY, JSON.stringify(all)); } catch (e) {}
+  }
+
   function foodRowHtml(p, i){
     var cal = Math.round(p.nutriments['energy-kcal_100g'] || 0);
     // Right-hand tag is just the calories; the serving basis goes in
@@ -1905,6 +1955,9 @@
     else if (p._source === 'techapi'){ if (p._serving) meta.push(esc(p._serving)); }
     else meta.push('per 100 g');
     if (p._source === 'saved' ? p._note : foodDataNote(p.nutriments)) meta.push('<span class="row-warn">⚠ check data</span>');
+    var sn = splitFoodName(p.product_name);
+    var ls = lastServAll()[lastServKey(p.product_name)];
+    if (ls && ls.t && !(ls.u === 'serving' && ls.q === 1) && !(ls.u === 'g' && ls.q === 100)) meta.push('<span class="last-serv">last: ' + esc(ls.t) + '</span>');
     var star = p._mine
       ? '<button type="button" class="food-fav edit" data-action="edit-my-food" data-id="' + esc(p._myId) + '" aria-label="Edit ' + esc(p.product_name) + '">' + EDIT_SVG + '</button>'
       : p._builtin ? ''
@@ -1914,7 +1967,7 @@
     return '<div class="food-suggest-item" role="button" tabindex="0" data-action="pick-food" data-index="' + i + '">' +
       foodThumbHtml(p) +
       '<div class="food-suggest-name">' +
-        '<div class="food-suggest-title">' + esc(p.product_name) + '</div>' +
+        '<div class="food-suggest-title">' + hlHtml(sn.main, rowHl) + (sn.extra ? '<small>' + esc(sn.extra) + '</small>' : '') + '</div>' +
         (meta.length ? '<div class="brand">' + meta.join(' · ') + '</div>' : '') +
       '</div>' +
       star +
@@ -1982,7 +2035,9 @@
     var customBtn = exactMatch ? '' :
       '<button type="button" class="food-suggest-custom" data-action="use-custom-food-name" data-name="' + esc(trimmed) + '">Use \u201c' + esc(trimmed) + '\u201d</button>';
 
+    rowHl = trimmed;
     var rows = products.map(foodRowHtml).join('');
+    rowHl = '';
 
     var status = '';
     if (foodSearch.pending > 0) status = '<div class="food-suggest-status">' + (products.length ? 'Searching more...' : 'Searching...') + '</div>';
@@ -3245,6 +3300,7 @@
       if (dateKey(editing.loggedAt) !== oldKey) movedTo = dateKey(editing.loggedAt);
     } else {
       savedId = 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+      rememberServing();
       var stamp = stampForDay(dayKey, Date.now(), null);
       STORE.meals.push({
         id: savedId,
@@ -5184,7 +5240,7 @@
     var photoSub = aiScanEnabled() ? 'Point at your plate and the AI lists what\'s on it.' : 'Take a photo of your meal to get a starting guess';
     var left = aiScanEnabled() ? aiLeftGet() : null;
     var leftLine = !aiScanEnabled() ? '' :
-      '<span class="scan-left">' + (left == null ? 'Free daily scans included' : (left === 0 ? 'No free scans left today' : left + ' free scan' + (left === 1 ? '' : 's') + ' left today')) + '</span>';
+      '<span class="scan-pill"><b>AI</b>' + (left == null ? 'Free daily scans' : (left === 0 ? 'No free scans left today' : left + ' free scan' + (left === 1 ? '' : 's') + ' left')) + '</span>';
     function tile(action, mode, icon, title, sub, disabled){
       return '<button type="button" class="scan-option scan-tile" data-action="' + action + '"' + (mode ? ' data-mode="' + mode + '"' : '') + (disabled ? ' disabled' : '') + '>' +
         '<span class="scan-option-icon">' + icon + '</span>' +
@@ -5201,15 +5257,14 @@
     var recentHtml = recent.length ? (
       '<div class="scan-recent-label">Recent</div><div class="scan-recent">' +
         recent.map(function(m){
-          return '<button type="button" class="scan-chip" data-action="open-recent-sheet" data-id="' + m.id + '">' + esc(tidyName(m.name)) + '<span>' + Math.round(m.calories) + '</span></button>';
+          return '<button type="button" class="scan-chip" data-action="open-recent-sheet" data-id="' + m.id + '">' + esc(shortFoodName(tidyName(m.name))) + '<span>' + Math.round(m.calories) + ' kcal</span></button>';
         }).join('') +
       '</div>') : '';
     document.getElementById('view').innerHTML =
       '<div class="scan-page">' +
         '<h2 class="scan-page-title">Add food</h2>' +
-        '<p class="scan-page-sub">Pick the quickest way.</p>' +
+        '<div class="scan-ctx"><span class="ctx-pill"><i></i>Adding to ' + esc(CATEGORY_LABELS[suggestCategoryForNow()] || 'Meal') + '</span></div>' +
         '<button type="button" class="scan-option scan-hero" data-action="open-scanner" data-mode="photo">' +
-          (aiScanEnabled() ? '<span class="scan-badge">AI</span>' : '') +
           '<span class="scan-option-icon">' + icons.camera + '</span>' +
           '<span class="scan-option-text"><span class="scan-option-title">Snap your meal</span><span class="scan-option-sub">' + photoSub + '</span>' + leftLine + '</span>' +
         '</button>' +
@@ -5375,7 +5430,10 @@
     if (!el) return;
     var n = streakInfo(dayStatsMap()).current;
     el.classList.toggle('off', n === 0);
-    el.innerHTML = FLAME_SVG + '<span>' + n + '</span><small>' + (n === 1 ? 'day' : 'days') + '</small>';
+    var ms = n >= 7 && (n % 7 === 0 || n === 30 || n === 50 || n === 100 || n === 365);
+    var msTxt = !ms ? '' : n === 30 ? '1 month!' : n % 7 === 0 ? (n / 7 === 1 ? '1 week!' : (n / 7) + ' weeks!') : n + '!';
+    el.classList.toggle('ms', ms);
+    el.innerHTML = FLAME_SVG + '<span>' + n + '</span><small>' + (n === 1 ? 'day' : 'days') + '</small>' + (ms ? '<em class="streak-ms">' + msTxt + '</em>' : '');
     el.setAttribute('aria-label', n === 0 ? 'No logging streak yet' : n + ' day logging streak');
   }
 
