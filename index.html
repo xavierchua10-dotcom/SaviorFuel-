@@ -1670,6 +1670,21 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+    // sheet 8 (Indonesian & Thai): priority rules
+    [/\b(gado[- ]?gado|lotek|karedok)\b/i, 'gado-gado'],
+    [/^(?!.*\blele\b).*\b(nasi pecel|pecel|ketoprak|urap)\b/i, 'pecel'],
+    [/\b(nasi padang|padang rice)\b/i, 'nasi-padang'],
+    [/^(?!.*\bsauce\b).*\b(pad thai|phad thai|pad see ew|pad si ew|pad kee mao|drunken noodles)\b/i, 'pad-thai'],
+    [/^(?!.*\b(paste|sauce|noodles?|mee|laksa|fish cakes?|tod mun|instant)\b).*\b(green curry|kari hijau|gaeng keow wan|gaeng kiew wan|red curry|gaeng daeng|massaman|panang)\b/i, 'green-curry'],
+    [/^(?!.*\b(instant|cup noodles|pop mie|mie ayam)\b).*\b(bakso|baso)\b/i, 'bakso'],
+    [/^(?!.*\b(soto|maggi|indomie|supermi|sarimi|instant|pop mie|khao swe)\b).*\b(mie ayam|mi ayam|bakmi ayam)\b/i, 'mie-ayam'],
+    [/\b(nasi uduk|nasi timbel|nasi liwet|nasi kuning)\b/i, 'nasi-uduk'],
+    [/^(?!.*\b(maggi|noodles?|mee|mie|burger)\b).*\bayam (bakar|taliwang)\b/i, 'ayam-bakar'],
+    [/\b(som ?tam|som ?tum|tam mak hoong|papaya salad)\b/i, 'som-tam'],
+    [/\b(tom kha|tom kah|tom khlong)\b/i, 'tom-kha'],
+    [/^(?!.*\bsauce\b).*\b(khao pad|khao phat|thai fried rice|pineapple fried rice)\b/i, 'khao-pad'],
+    [/\b(pad kra ?pao|pad gra ?pao|krapow|kra pao)\b/i, 'pad-kra-pao'],
+    [/\b(larb|laab|larp|nam tok)\b/i, 'larb'],
     // sheet 6 (breads & snacks): priority rules that must beat older ones
     [/\bsamosas?\b(?!.*\b(thoke|chaat)\b)/i, 'samosa'],
     [/\b(roti john|omelette baguette)\b/i, 'roti-john'],
