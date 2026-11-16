@@ -1670,6 +1670,7 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+  [/^(?=.*\b(ais|iced|ice)\b)(?=.*\b(malt|chocolate|milo|neslo|ovaltine|horlicks)\b)(?!.*\b(cream|cake|tea|donut|doughnut|glazed|krispy|mocha|espresso|latte|zus)\b)/i, 'iced-milo'],
   // sheet 12 top rules (must beat older ones)
   [/^(?!.*\b(onigiri|bento|don|udon|chawanmushi|edamame|takoyaki|miso|tempura|bowl|salad|chirashi|poke)\b)(?=.*\b(sushi|nigiri|maki|sashimi|gunkan)\b)/i, 'sushi'],
   [/^(?!.*\b(kacang|bijan|keledek|keladi|barli|jagung|pulut hitam|cha cha|champorado|oat|polenta|upma|pongal|haleem|es pisang|tong sui|sweet potato|durian|tohu|sago)\b)(bubur|.*\bcongee\b|.*\bfish porridge\b|claypot frog porridge|arroz caldo|teochew porridge|.*\brice porridge\b)/i, 'congee'],
@@ -1832,7 +1833,7 @@
     [/^(?!.*\b(cake|kek|juice|jus|drink|smoothie|tart|tat|donut|doughnut|pie|goreng|fried|curry|kari|rice|nasi|pulut|pudding|sauce|chips|kerepek|fritters?|cucur|pakora|sorbet|yogh?urt|lassi|milk|susu|bun|polo|ice|ais|aiskrim|sago|sagu|salad|kerabu|pickle|pickled|acar|jam|muffin|bread|roti|cookies?|biscuits?|pizza|pork|prawn|udang|ikan|fish|chicken|ayam|soup|dessert|bowl|mochi|toffee|dodol|cendol|puff|pancake|porridge|bubur|tempoyak|stew|gulai|latte|tea|shake|powder|flavou?red|jelly|crumble|strudel|cider|vinegar|toast)\b)(buah )?(jackfruit|nangka|cempedak)\b/i, 'jackfruit'],
     [/^(?!.*\b(cake|kek|juice|jus|drink|smoothie|tart|tat|donut|doughnut|pie|goreng|fried|curry|kari|rice|nasi|pulut|pudding|sauce|chips|kerepek|fritters?|cucur|pakora|sorbet|yogh?urt|lassi|milk|susu|bun|polo|ice|ais|aiskrim|sago|sagu|salad|kerabu|pickle|pickled|acar|jam|muffin|bread|roti|cookies?|biscuits?|pizza|pork|prawn|udang|ikan|fish|chicken|ayam|soup|dessert|bowl|mochi|toffee|dodol|cendol|puff|pancake|porridge|bubur|tempoyak|stew|gulai|latte|tea|shake|powder|flavou?red|jelly|crumble|strudel|cider|vinegar|toast)\b)(avocado|avokado|alpukat)\b/i, 'avocado'],
     // sheet 10 (staples & veg): start-anchored ingredient names only
-    [/^(?!.*\b(cake|cakes|fried|goreng|kuih|balls?|roll|triangle|uncooked|puffed|peanut|chicken)\b)(nasi putih|nasi perang|(white|brown|steamed|cooked|jasmine|basmati|glutinous) rice)\b/i, 'white-rice'],
+    [/^(?!.*\b(cake|cakes|fried|goreng|kuih|balls?|roll|triangle|uncooked|puffed|peanut|chicken|noodles?|paper|porridge|crackers?|vermicelli|flour|wine|pudding|salad)\b)(nasi putih|nasi perang|((steamed|cooked|boiled|plain) )?((white|brown|jasmine|basmati|glutinous) )?rice)\b/i, 'white-rice'],
     [/^(?!.*\b(roll|cream|bun|sandwich|toast)\b)((gardenia|massimo)\b.*\b(bread|loaf)\b|(white|wholemeal) bread|bread \((white|wholemeal|brown)|roti (putih|wholemeal|sourdough))/i, 'bread'],
     [/^(?!.*\b(sauce|spread|omelette|quesadilla|sticks|cake|burger|pizza|sandwich|toast)\b)(cheese \(|.*\b(cheese slices?|processed cheddar|cheddar slices?)\b)/i, 'cheese'],
     [/^(?!.*\b(goreng|fried|crispy|mapo|stir|stew|soup|jjigae)\b)(tauhu|tofu)\b/i, 'tofu'],
@@ -1907,7 +1908,7 @@
   [/^(?!.*\b(raw|mentah|beras)\b)(kuih|kueh|kue|wajik|ang ku|png kueh|teochew peng kueh|pulut panggang)/i, 'kuih-tray'],
   [/^(?![^(]*\b(cake|bingka|drink|apple|chia|glutinous|sticky|rice|bread|roti|kelantanese|toffee)\b)([^(]*\b(pudding|puding|flan|panna cotta|creme brulee|agar-agar|custard|watalappan)\b)/i, 'pudding'],
   [/^nasi .*\b(kosong|plain)\b/i, 'white-rice'],
-  [/^(?!.*\b(cake|pancake|balls|custard|pudding|dumpling|glutinous|per 100g|raw|porridge|paper|noodles?|vermicelli|wine|vinegar|flour|bran|pandan|palm sugar|rambai|fermented|blue pea)\b)(nasi\b|.*\brice\b)/i, 'nasi-campur'],
+  [/^(?!.*\b(cake|pancake|balls|custard|pudding|dumpling|glutinous|per 100g|raw|porridge|paper|noodles?|vermicelli|wine|vinegar|flour|bran|pandan|palm sugar|rambai|fermented|blue pea|crackers?|cakes?)\b)(nasi\b|.*\brice\b)/i, 'nasi-campur'],
   // mapping pass: leftovers that clearly fit an existing icon (match the name part before the bracket)
   [/^(?![^(]*\b(sauce|rice|burger king|king)\b)[^(]*\b(cheeseburger|burger)\b/i, 'burger'],
   [/^(karaage|jollibee chickenjoy|wiener schnitzel|tonkatsu|chicken katsu)/i, 'fried-chicken'],
