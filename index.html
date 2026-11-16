@@ -1874,6 +1874,27 @@
   [/biryani|briyani|biriyani|khao mok/i, 'briyani'],
   [/^(?!.*\b(wrapped|leaf|banana|skewers?|plate|rice|bowl|burger|egg|pastry|lettuce|romaine|tortilla wrap|bacon|cheese slices)\b)(shawarma|.*\b(wrap|burrito|gyros)\b|kebab \(|kfc twister)/i, 'kebab-wrap'],
   [/^(mochi|daifuku)/i, 'mochi'],
+  // sheet 13 tail (generic fallbacks, only for foods nothing else matched)
+  [/^(?!.*\b(chicken|ayam|ikan|daging|beef|pomfret|liver|kailan|pancake|rice balls|ketupat|set|masak|crepe|noodles?|sambal|durian|paste)\b)(fish sauce|oyster sauce|(dark |light |sweet |salty )?soy sauce|kicap|tomato (sauce|ketchup)|chil+i sauce|bbq sauce|black pepper sauce|mushroom sauce|garlic sauce|cheese sauce|sweet chil+i sauce|hoisin|plum sauce|teriyaki sauce|pad thai sauce|peanut sauce|fermented|sweet soy|light salty|malaysian chili sauce)/i, 'soy-sauce'],
+  [/^(?!.*\b(telur|udang|prawns?|kerang|ikan|lala|terung|petai|tempoyak|tempe|eggs?|anchov\w*|bilis|sardin\w*|grilled|poached|stink|chicken|durian)\b)(sambal|chil+i paste|curry paste|tomato paste)/i, 'sambal-jar'],
+  [/^(?!.*\b(puff|bun|crepe|roti)\b)(kaya\b|jam \(|honey \(|maple syrup|sugar syrup|chocolate spread|nutella|coconut egg jam|gardenia auntie|yeo's kaya|gardenia quickbites kaya|buttercup|cheese spread)/i, 'jam-jar'],
+  [/^(peanut butter|lady's choice peanut|skippy)/i, 'peanut-butter'],
+  [/^(mr diy (tam tam|mi-mi|super ring)|twisties|mamee (monster|noodle snack)|super ring|seaweed snack)/i, 'snack-bag'],
+  [/^(?!.*\b(milk|chicken|tart)\b)(cashews?|walnuts?|pistachios?|brazil nuts?|almonds?|macadamias?|hazelnuts?|pecans?|mixed nuts|trail mix|kacang pistachio)/i, 'mixed-nuts'],
+  [/^(?!.*\b(french|brioche|ricotta|avocado|vegemite|fava|melt|sandwich)\b)(.*\btoast\b)/i, 'toast-egg'],
+  [/^(?!.*\bsandwich\b)(scrambled eggs?|western omelet|egg foo yong|fu yong egg|telur dadar|telur hancur|.*\bomelet(te)?\b|.*\bfrittata\b)/i, 'scrambled-eggs'],
+  [/^(?!.*\b(kerabu|salad|per 100g|rojak|tea|omapodi|muruku)\b)(.*\bnoodles?\b|mee\b|kuey teow|bihun|kolo mee|lam mee|loh mee|lor mee|hokkien mee|sang nyuk|tuaran|beaufort|kon lau|bak chor mee)/i, 'noodle-soup'],
+  [/^(?!.*\b(noodles?|mee|bihun|macaroni|sweet|tong sui|tang yuan|nasi|maggi|stew|venison|boar|powder|base|ambuyat)\b)(sup\b|.*\bsoup\b|.*\bbroth\b|.*\bbak kut teh\b)/i, 'clear-soup'],
+  [/^(?!.*\b(noodles?|mee|powder|paste|tea|teh|katsu|don|nasi|roti|puri|poori|twisties|cup|maggi|mamee|mie|indomie|balls|sauce|dates|bhatura|pongal)\b)(.*\b(curry|kari|gulai|masala|dal|dhal|korma|kurma|lodeh|opor|varuval)\b)/i, 'yellow-curry'],
+  [/^(tandoori chicken|ayam tandoori|nando's (1\/4|1\/2|chicken)|ayam tikka|chicken tikka|secret recipe chicken cornish)/i, 'roast-chicken'],
+  [/^(chicken katsu|domino's crazy chicken|texas chicken jalapeno|marrybrown lucky plate)/i, 'fried-chicken'],
+  [/^(?!.*\b(burger|cheeseburger|spaghetti|lasagna|kebab|salad|kerabu|floss|serunding|balls?|hotpot|skewer|sandwich|soup|sup|noodles?|raw|per 100g|rice|bolognese|tofu|tauhu|sambar|chap chye|jjigae|gudeg|sayur|cockles|jengkol|fish|ikan|molee|macher|shukto|souvlaki|bouillabaisse|moqueca|feijoada|pozole|curry|kukul|or lam|roast|rack|mince|tempoyak)\b)(.*\b(rendang|stew)\b|daging|beef|babi|pork|lamb|mutton|kambing|brongkos|semur|kare-kare|saksang|narcissus|tulang babi|claypot)/i, 'beef-stew'],
+  [/^(?!.*\b(burger|sandwich|rice|bubur|porridge|lasagna|biscuit|mashed|coleslaw|crackers?|floss|serunding|feet|salad|kerabu|soup|sup|noodles?|nasi|naan|set|slice|wing|canned|raw|brand|stock|banh|roti|sausage|frankfurter|gyoza|hor fun|kebab|chiki|karaage)\b)(ayam|.*\bchicken\b)/i, 'stir-fry-chicken'],
+  [/^(?!.*\b(sauce|salad|kerabu|floss|serunding|balls?|paste|fritters?|cucur|sprouts|beansprouts|kale|bean|roe|telur|cereal|nestum|cheong|squid|sotong|prawns?|udang|shrimp|crab|nasi|rice|powder|bee hoon|muruku|dahfa|hotpot|don|canh|pempek|cakes|raw|mentah|terung|otak|dried|kering|bosou|pinasakan|fermented|curry)\b)(ikan|fish|dory|salmon|.*\bfish\b)/i, 'grilled-fish'],
+  [/^(?!.*\b(salad|kerabu|fritters?|cucur|paste|mango|cheong|sambal petai|stink)\b)(prawns?|udang|cereal prawn)/i, 'prawns'],
+  [/^(?!.*\b(salad|kerabu)\b)(squid|sotong)/i, 'squid'],
+  [/^(?!.*\b(sambal|prawns?|udang|ikan|fish|salted|egg|juice|milk|cooked|canned|baked|tempura|pastry|puff|pickle|pickled|salad|kerabu|porridge|cracker|durian|side|kidney|black|mung|red|stink|raw|mentah)\b)(sayur|sawi|kailan|bendi goreng|terung goreng|okra|long beans|green beans|bean sprouts|chinese stir-fry|cabbage in coconut|mixed vegetables in|fried brinjal|fried okra|kacang buncis|mui choy|bayam|kangkung|petola|choy)/i, 'stir-fry-veg'],
+  [/^(?!.*\b(per 100g|raw|balls?|porridge)\b)(.*\bfried rice\b|nasi goreng|chao fan)/i, 'fried-rice'],
   ];
   function foodIcon(name){
     var n = String(name || '');
