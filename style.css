@@ -1477,6 +1477,8 @@
   body[data-theme="light"][data-light="mint"]{--bg:#eaf4e6;--panel-2:#e0eedb;--panel-3:#d3e6cd;--line:#cfe2c9;--text:#14201a;--text-dim:#4d6256;--text-faint:#5f7566;--accent:#2d7d1c;--accent-dim:#cfe9c4;--accent-rgb:45,125,28;--header-bg:#eaf4e6;--header-text-faint:#5f7566;--header-accent:#2d7d1c;--header-line:#cfe2c9;}
   /* Light theme: logo with a black S so it reads on the light header */
   body[data-theme="light"] img[src$="logo-mark.png"]{content:url(images/logo-mark-light.png);}
+  /* Profile avatar sits on a black disc, so it keeps the dark-style (white S) logo in light mode */
+  body[data-theme="light"] .pf-av img[src$="logo-mark.png"]{content:url(images/logo-mark.png);}
   #app{background-image:none;}
   body[data-bg-art="off"] #app{background-image:none;}
   /* Dark style "Glow": deeper green-black with a soft glow at the top, green-tinted outlines
