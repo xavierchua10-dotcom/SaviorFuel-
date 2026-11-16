@@ -1682,6 +1682,11 @@
   .topbar{padding:calc(6px + env(safe-area-inset-top, 0px) * 0.65) 18px 4px;} /* same as SaviorFit Logger */
   .topbar-brand{display:flex; align-items:center; margin:0; line-height:0;}
   .topbar-logo{height:46px; width:auto; display:block;}
+  .topbar-streak{display:flex; align-items:center; gap:5px; margin-left:auto; padding:7px 13px 7px 10px; border:1px solid rgba(255,138,61,.35); border-radius:var(--radius-pill); background:rgba(255,138,61,.14); color:#ff8a3d; font-family:'Oswald',sans-serif; font-weight:700; font-size:17px; line-height:1; cursor:pointer;}
+  .topbar-streak svg{width:18px; height:18px; display:block;}
+  .topbar-streak:active{transform:scale(.94);}
+  .topbar-streak.off{background:transparent; border-color:var(--line); color:var(--text-faint);}
+  body[data-theme="light"] .topbar-streak:not(.off){color:#d9570c; background:rgba(255,138,61,.16); border-color:rgba(217,87,12,.35);}
 
   .boot-loading-logo{width:150px; height:150px; display:block; animation:bootPulse 1.6s ease-in-out infinite;}
   @keyframes bootPulse{0%,100%{opacity:.75; transform:scale(.97);} 50%{opacity:1; transform:scale(1);}}
