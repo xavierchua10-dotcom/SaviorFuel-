@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v123';
+var SHELL_CACHE = 'saviorfuel-shell-v124';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -232,7 +232,23 @@ var SHELL_FILES = [
   './data/icons/crab.webp',
   './data/icons/clams.webp',
   './data/icons/canned-fish.webp',
-  './data/icons/fish-balls.webp'
+  './data/icons/fish-balls.webp',
+  './data/icons/briyani.webp',
+  './data/icons/cake-slice.webp',
+  './data/icons/chocolate-bar.webp',
+  './data/icons/congee.webp',
+  './data/icons/cookies.webp',
+  './data/icons/croissant.webp',
+  './data/icons/cupcake.webp',
+  './data/icons/donut.webp',
+  './data/icons/ice-cream.webp',
+  './data/icons/kebab-wrap.webp',
+  './data/icons/mochi.webp',
+  './data/icons/muffin.webp',
+  './data/icons/protein-bar.webp',
+  './data/icons/protein-shake.webp',
+  './data/icons/sushi.webp',
+  './data/icons/yoghurt.webp'
 ];
 // Nice-to-have (big 3D models for the Insights tab): fetched after install,
 // one by one, and a failure here never blocks the install.

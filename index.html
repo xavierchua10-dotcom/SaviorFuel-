@@ -1670,6 +1670,13 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+  // sheet 12 top rules (must beat older ones)
+  [/^(?!.*\b(onigiri|bento|don|udon|chawanmushi|edamame|takoyaki|miso|tempura|bowl|salad|chirashi|poke)\b)(?=.*\b(sushi|nigiri|maki|sashimi|gunkan)\b)/i, 'sushi'],
+  [/^(?!.*\b(kacang|bijan|keledek|keladi|barli|jagung|pulut hitam|cha cha|champorado|oat|polenta|upma|pongal|haleem|es pisang|tong sui|sweet potato|durian|tohu|sago)\b)(bubur|.*\bcongee\b|.*\bfish porridge\b|claypot frog porridge|arroz caldo|teochew porridge|.*\brice porridge\b)/i, 'congee'],
+  [/^(?!.*\b(waffle|shake|float|soda|ais kacang|abc|affogato|falooda|sundae|pie|spread)\b)(ice cream|aiskrim|gelato|soft serve|kulfi|matcha (ice cream|soft serve)|nestle (drumstick|la cremeria)|famil\w* sofuto|es podeng|frozen yogh?urt)/i, 'ice-cream'],
+  [/^(?!.*\bsponge\b.*\bkek\b)(.*\bcupcakes?\b|massimo chiffon|kek cawan|bolu kukus)/i, 'cupcake'],
+  [/^(kuih|kue) bangkit|^pocky/i, 'cookies'],
+  [/^matcha mille crepe cake/i, 'cake-slice'],
     // sheet 11 (meat & seafood): raw/plain ingredient names; these beat older rules
     [/^(?!.*\b(biryani|korma|curry|mandi|kebab|satay|varuval|perattal)\b)(lamb chops?|daging kambing mentah|kambing mentah|raw lamb)/i, 'lamb-chops'],
     [/^(?!.*\b(soup|curry|kari|masak|sambal|goreng|fried|head|bee hoon|noodles?|sauce|tempoyak|asam|canned|paste|balls?|cakes?|roe|teriyaki|sashimi|nigiri|sushi|crackers?|keropok|otak|tuna|sardin\w*)\b)(ikan (kembung|tenggiri|siakap|merah|tilapia|bawal|patin|kerapu|selar|keli|tongkol|cencaru|kerisi)|mackerel|snapper|tilapia|catfish|seabass|barramundi|pomfret|cod|grouper|sea bass)\b/i, 'whole-fish'],
@@ -1854,6 +1861,19 @@
     [/^(?!.*\b(chilli|chili|cili|masak|black pepper|stick|omelette|soup|noodles?|bee hoon|curry)\b)(crab|ketam)\b/i, 'crab'],
     [/^(?!.*\b(sauce|sambal|masak|soup|goreng|fried|noodles?|omelette|chowder|mushroom|rockefeller)\b)(clams?|lala|kerang|cockles?|mussels?|kupang|oysters?|scallops?|raw (blood )?cockles)\b/i, 'clams'],
     [/^(?!.*\b(noodles?|soup|mee|bee hoon|bihun|congee|bubur|yong tau foo|skewer)\b)(fish ?balls?|bebola ikan|hotpot fish ball|surimi|crab stick|fishcake)/i, 'fish-balls'],
+  // sheet 12 tail
+  [/\bprotein bar\b/i, 'protein-bar'],
+  [/^(?!.*\b(smoothie|pancakes?|oatmeal|oats|pudding|cake|balls|toast|waffles?|bar)\b)(protein shake|ready.to.drink protein|whey protein|.*\bwhey\b.*\b1 scoop|orgain|premier protein|casein|pea protein|amway nutrilite|optimum nutrition|myprotein|muscletech|dymatize|rule 1|bsn|allmax|soylent)/i, 'protein-shake'],
+  [/^(?!.*\b(sausage|egg|eggs|benedict|florentine|royale|bacon|cups?|mcmuffin|keto|english)\b)(.*\bmuffins?\b)/i, 'muffin'],
+  [/^(?!.*\b(sandwich|chicken|tuna|croffle|benedict)\b)(.*croissant|pain au chocolat)/i, 'croissant'],
+  [/^(?!.*\b(vada|vadai|kuih|keria|sweet potato|medu|balushahi)\b)(?=.*\b(doughnut|donut)s?\b)/i, 'donut'],
+  [/^(oreo|arnott|munchy's lexu|julie's (peanut|cheese|hershey)|tiger biskuat|lotte (koala|pepero)|good time|biskut (cip|oat|marie)|subway .*cookie|better sandwich|protein cookie|quaker oat cookies|putri salju|kue semprit|lidah kucing|tart nanas)/i, 'cookies'],
+  [/^(chocolate bar|coklat (gelap|putih)|snickers|mars bar|twix|kit ?kat|kitkat|nestle kitkat|toblerone|ferrero rocher|kinder bueno|beng-beng|chocolate wafer|cadbury (dairy|zip)|tango wafer)/i, 'chocolate-bar'],
+  [/^(?!.*\b(donut|doughnut|muffin|cupcake|pancakes?|waffles?|sundae|kuih|kue|apam|ma lai go)\b)(kek\b|cake\b|(secret recipe|mr diy|apollo|gardenia twiggies|london choco|lotte choco|domino's chocolate lava)(?=.*\bcake\b|.*choco pie)|.*\b(black forest|red velvet|victoria sponge|chocolate fudge|opera cake|carrot walnut|lava cake|cheesecake|lamington|tiramisu|pandan chiffon|sponge cake)\b)/i, 'cake-slice'],
+  [/^(?!.*\b(drink|lassi|smoothie|chicken|lamb|korma|kadhi|raita|tzatziki|oats|granola|frozen|eggs|salad|bliss)\b)(yogh?urt|greek yogh?urt|skyr|dutch lady low fat yogh?urt|farm fresh natural|marigold 0%|sunglo|mishti doi|juju dhau|shrikhand)/i, 'yoghurt'],
+  [/biryani|briyani|biriyani|khao mok/i, 'briyani'],
+  [/^(?!.*\b(wrapped|leaf|banana|skewers?|plate|rice|bowl|burger|egg|pastry|lettuce|romaine|tortilla wrap|bacon|cheese slices)\b)(shawarma|.*\b(wrap|burrito|gyros)\b|kebab \(|kfc twister)/i, 'kebab-wrap'],
+  [/^(mochi|daifuku)/i, 'mochi'],
   ];
   function foodIcon(name){
     var n = String(name || '');
