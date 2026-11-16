@@ -1029,11 +1029,19 @@
     return n.toLowerCase().replace(/(^|[\s\-\/(])('?)([a-z])/g, function(_, a, b, c){ return a + b + c.toUpperCase(); }).replace(/\b(Mc)([a-z])/g, function(_, a, b){ return a + b.toUpperCase(); });
   }
 
+  // The small picture on a Log row when there is no photo: the dish's own
+  // icon if it has one, otherwise the food's emoji.
+  function mealBadgeHtml(name){
+    var ico = foodIcon(name);
+    if (ico) return '<span class="meal-badge ico" aria-hidden="true"><img src="data/icons/' + ico + '.webp" alt="" loading="lazy" decoding="async"></span>';
+    return '<span class="meal-badge emo" aria-hidden="true">' + foodEmoji(name) + '</span>';
+  }
+
   function mealRowHtml(m, inPhotoGroup){
     var photo = inPhotoGroup === true ? '' : mealPhoto(m);
     return '<div class="mr-w"><div class="mr-del">Delete</div>' +
       '<div class="meal-row" data-action="edit-meal" data-id="' + m.id + '">' +
-      (photo ? '<img class="meal-thumb" src="' + photo + '" alt="">' : '<span class="meal-badge" aria-hidden="true">' + ROW_PLATE + '</span>') +
+      (photo ? '<img class="meal-thumb" src="' + photo + '" alt="">' : mealBadgeHtml(m.name)) +
       '<div class="meal-row-name">' +
         '<div class="meal-row-name-text" title="' + esc(m.name) + '">' + esc(tidyName(m.name)) + '</div>' +
         '<div class="meal-row-macros"><span class="mm-p">P' + (m.protein||0) + '</span> · <span class="mm-c">C' + (m.carbs||0) + '</span> · <span class="mm-f">F' + (m.fat||0) + '</span></div>' +
@@ -1677,7 +1685,24 @@
     [/\bcendol\b/i, 'cendol'],
     [/\b(teh tarik|teh c|teh o|teh ais|teh susu|milk tea)\b/i, 'teh-tarik'],
     [/\b(kopi|kopitiam coffee)\b/i, 'kopi-o'],
-    [/\b(kaya toast|roti bakar|half[- ]boiled|telur separuh masak)\b/i, 'kaya-toast']
+    [/^(?!.*\b(cake|ice cream|candy|biscuits?|cookies?|bread|bun|jelly|pudding|wafer|bar)\b).*\b(coffee|latte|cappuccino|espresso|mocha)\b/i, 'kopi-o'],
+    [/\b(kaya toast|roti bakar|half[- ]boiled|telur separuh masak)\b/i, 'kaya-toast'],
+    [/\b(kuih|kueh) lapis\b/i, 'kuih-lapis'],
+    [/\bonde[- ]?onde\b/i, 'onde-onde'],
+    [/\b(seri|sri) muka\b/i, 'seri-muka'],
+    [/\btalam\b/i, 'kuih-talam'],
+    [/\b(ang ku|angku)\b/i, 'ang-ku-kuih'],
+    [/\bkeria\b/i, 'kuih-keria'],
+    [/\bpulut inti\b/i, 'pulut-inti'],
+    [/\b(apam balik|ban chang kuih|martabak manis|terang bulan)\b/i, 'apam-balik'],
+    [/\bcha cha\b/i, 'bubur-cha-cha'],
+    [/\b(ais kacang|ice kacang|abc)\b/i, 'ais-kacang'],
+    [/\b(pisang goreng|goreng pisang|banana fritters?)\b/i, 'pisang-goreng'],
+    [/\bbahulu\b/i, 'kuih-bahulu'],
+    [/\bdodol\b/i, 'dodol'],
+    [/\b(tau fu fah|tau foo fah|tau huey|tahu bunga|douhua|beancurd pudding)\b/i, 'tau-fu-fah'],
+    [/\b(pulut hitam|black glutinous rice)\b/i, 'pulut-hitam'],
+    [/\b(mango sticky|pulut mangga|khao niao mamuang)\b/i, 'mango-sticky-rice']
   ];
   function foodIcon(name){
     var n = String(name || '');

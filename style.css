@@ -2228,3 +2228,7 @@ body[data-theme="light"] .log-empty button{color:#fff;}
 
 .food-thumb.has-ico{background:transparent;}
 .food-thumb.has-ico img{object-fit:contain;}
+
+.meal-badge.emo{font-size:22px; line-height:1;}
+#view .mr-w .meal-badge.ico{background:transparent;}
+.meal-badge.ico img{width:100%; height:100%; object-fit:contain; display:block;}
