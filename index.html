@@ -4281,6 +4281,47 @@
     return h + '</div>';
   }
 
+  // ---- By meal: the day's (or week's) calories split across Breakfast,
+  // Morning Snacks, Lunch, Evening Snacks and Dinner, with each meal's
+  // own protein / carbs / fat. A switch flips Today <-> last 7 days.
+  var MEAL_COLORS = { 'breakfast': '#f2a33a', 'morning-snack': '#8bc34a', 'lunch': '#26a69a', 'evening-snack': '#7e8ce0', 'dinner': '#c0568f', 'other': '#9aa3ad' };
+  function mealSplitData(range){
+    var keys = {};
+    for (var d = 0; d < (range === 'week' ? 7 : 1); d++) keys[dateKeyDaysAgo(d)] = 1;
+    var rows = MEAL_CATEGORIES.map(function(c){ return { id: c.id, label: c.label, n: 0, cal: 0, p: 0, c: 0, f: 0 }; });
+    var other = { id: 'other', label: 'Other', n: 0, cal: 0, p: 0, c: 0, f: 0 };
+    STORE.meals.forEach(function(m){
+      if (!keys[dateKey(m.loggedAt)]) return;
+      var r = rows.filter(function(x){ return x.id === m.category; })[0] || other;
+      r.n++; r.cal += m.calories || 0; r.p += m.protein || 0; r.c += m.carbs || 0; r.f += m.fat || 0;
+    });
+    if (other.n) rows.push(other);
+    return rows;
+  }
+  function mealSplitCardHtml(){
+    var range = ui.mealSplit === 'week' ? 'week' : 'today';
+    var rows = mealSplitData(range);
+    var total = rows.reduce(function(a, r){ return a + r.cal; }, 0);
+    var bar = rows.filter(function(r){ return r.cal > 0; }).map(function(r){
+      return '<i style="width:' + (r.cal / total * 100).toFixed(1) + '%;background:' + MEAL_COLORS[r.id] + '"></i>';
+    }).join('');
+    var list = rows.map(function(r){
+      if (r.n === 0){
+        return '<div class="bm-row none"><i class="dot" style="background:' + MEAL_COLORS[r.id] + '"></i><div class="nm">' + r.label + '<small>nothing logged</small></div><div class="kc">—</div></div>';
+      }
+      return '<div class="bm-row"><i class="dot" style="background:' + MEAL_COLORS[r.id] + '"></i>' +
+        '<div class="nm">' + r.label + '<small>' + r.n + (r.n === 1 ? ' food' : ' foods') + '</small></div>' +
+        '<div class="kc">' + Math.round(r.cal).toLocaleString() + '<small>kcal</small></div>' +
+        '<div class="mx"><span class="p">P ' + Math.round(r.p) + 'g</span> · <span class="c">C ' + Math.round(r.c) + 'g</span> · <span class="f">F ' + Math.round(r.f) + 'g</span></div>' +
+        '<div class="pc">' + Math.round(r.cal / total * 100) + '% of ' + (range === 'week' ? 'week' : 'day') + '</div></div>';
+    }).join('');
+    return '<div class="card bm-card" id="mealSplitCard"><div class="bm-h"><span>By meal</span>' +
+        '<div class="bm-seg"><button type="button" data-action="meal-split-range" data-range="today" class="' + (range === 'today' ? 'on' : '') + '">TODAY</button>' +
+        '<button type="button" data-action="meal-split-range" data-range="week" class="' + (range === 'week' ? 'on' : '') + '">7 DAYS</button></div></div>' +
+      '<div class="bm-tot"><b>' + Math.round(total).toLocaleString() + ' kcal</b><small>' + (total > 0 ? 'split across meals' : (range === 'week' ? 'nothing logged this week' : 'nothing logged today')) + '</small></div>' +
+      '<div class="bm-stack">' + bar + '</div><div class="bm-gap"></div>' + list + '</div>';
+  }
+
   function weeklyBodyHtml(){
     var wd = weekData();
     var g = wd.goals, days = wd.days, loggedDays = wd.loggedDays, avg = wd.avg, sum = wd.sum;
@@ -4319,7 +4360,7 @@
         '</div>';
     }
 
-    html += '</div>' + topFoodsCardHtml();
+    html += '</div>' + mealSplitCardHtml() + topFoodsCardHtml();
     html += '<button type="button" class="week-share-btn" data-action="share-week">Share my week</button>';
     return html;
   }
@@ -5571,6 +5612,10 @@
     } else if (action === 'toggle-danger-zone'){
       ui.dangerZoneOpen = !ui.dangerZoneOpen;
       renderApp();
+    } else if (action === 'meal-split-range'){
+      ui.mealSplit = el.dataset.range === 'week' ? 'week' : 'today';
+      var msc = document.getElementById('mealSplitCard');
+      if (msc) msc.outerHTML = mealSplitCardHtml();
     } else if (action === 'toggle-backups'){
       ui.backupsOpen = !ui.backupsOpen;
       renderApp();
