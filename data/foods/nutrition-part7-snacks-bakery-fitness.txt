@@ -1,0 +1,114 @@
+# Nutrition batch part 7. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Roti Ban Kaya (Malaysian Bakery Kaya Coconut Jam Bun)|1 bun|75|236|5.2|38.4|6.8|13.5|210
+Roti Ban Kelapa (Malaysian Bakery Sweet Grated Coconut Bun)|1 bun|80|259|5.4|40.2|8.5|14.2|220
+Roti Ban Kacang Merah (Malaysian Bakery Sweet Red Bean Bun)|1 bun|75|231|5.8|39.6|5.5|13.8|205
+Roti Ban Sosej (Malaysian Bakery Chicken Sausage Roll Bun)|1 bun|85|264|8.4|34|10.5|4.5|420
+Roti Ban Ayam Floss (Malaysian Bakery Chicken Floss Mayo Bun)|1 bun|85|290|9.2|35.5|12.4|7.5|390
+Roti Ban Mexican Coffee (Rotiboy Style Coffee Butter Bun)|1 bun|90|326|5.8|42.5|14.8|15.2|240
+Roti Ban Cheese Gula (Malaysian Bakery Sugar Butter Cheddar Bun)|1 bun|75|270|6.2|36|11.2|11.5|280
+Roti Ban Sambal Bilis (Malaysian Bakery Spicy Anchovy Sambal Bun)|1 bun|80|250|7.5|36.2|8.4|5.2|380
+Roti Croissant Mentega (Flaky French Butter Croissant)|1 piece|65|262|5|28|14.5|5.5|285
+Roti Pain au Chocolat (Flaky Chocolate Filled Pastry)|1 piece|75|306|5.5|34|16.5|12|260
+Roti Baguette Perancis (French Crusty White Baguette 2 slices)|2 slices|60|155|5.8|31.2|0.8|1.5|340
+Roti Sourdough (Artisanal Sourdough Bread 2 slices)|2 slices|70|166|6.4|33.5|0.7|1.2|320
+Roti Tortilla Wrap Putih (Soft White Flour Tortilla Wrap 10-inch)|1 wrap|65|189|5.2|32|4.5|1.8|390
+Roti Tortilla Wrap Wholemeal (Whole Wheat Tortilla Wrap 10-inch)|1 wrap|65|179|5.8|29.5|4.2|1.5|370
+Roti Pita Wholemeal (Whole Wheat Middle Eastern Pita Pocket)|1 piece|60|157|6|31|1|1.2|265
+Muffin Cip Coklat (Bakery Chocolate Chip Muffin)|1 piece|110|404|5.5|54|18.5|32|340
+Muffin Pisang Walnut (Bakery Banana Walnut Muffin)|1 piece|110|384|5.8|52|17|28|310
+Kek Pisang Kampung (Malaysian Moist Banana Cake 1 slice)|1 slice|65|244|3.2|32|11.5|18|185
+Kek Batik Coklat (Malaysian No-Bake Marie Biscuit Chocolate Cake 1 slice)|1 slice|70|284|3.5|36|14|22|145
+Kek Pandan Chiffon (Fluffy Pandan Sponge Chiffon Cake 1 slice)|1 slice|55|177|3.4|24|7.5|13.5|135
+Kek Mentega Klasik (Classic Dense Butter Pound Cake 1 slice)|1 slice|65|286|3.5|31|16.5|18.5|210
+Kek Keju Bakar Basque (Burnt Basque Cheesecake 1 slice)|1 slice|130|359|7.2|24|26|19.5|240
+Brownies Coklat Fudge (Rich Chocolate Fudge Brownie 1 square)|1 piece|75|316|4|38|16.5|26|165
+Cinnamon Roll Glazed (Sweet Cinnamon Swirl Roll with Icing)|1 piece|115|387|5.8|56|15.5|28|360
+Kuih Seri Muka 1pc (Steamed Glutinous Rice with Pandan Custard 1 piece)|1 piece|65|156|2.2|26|4.8|12|95
+Kuih Lapis Pelangi 1pc (Steamed Colorful Layered Rice Flour Cake 1 piece)|1 piece|60|134|1.2|25|3.2|13.5|65
+Kuih Ketayap 1pc (Pandan Crepe Roll with Sweet Coconut Palm Sugar 1 piece)|1 piece|60|152|1.8|26|4.5|14|85
+Kuih Koci Pulut Hitam 1pc (Black Glutinous Rice Dumpling with Coconut 1 piece)|1 piece|65|167|2|28|5.2|13|75
+Onde-Onde 3pcs (Pandan Glutinous Rice Balls with Palm Sugar 3 pieces)|3 pieces|60|132|1.2|24|3.5|12.5|45
+Kuih Talam Pandan 1pc (Steamed Two-Layer Pandan and Coconut Cake 1 piece)|1 piece|65|142|1.5|24|4.5|11.5|110
+Kuih Cara Berlauk 2pcs (Savory Spiced Minced Beef Mini Cupcakes 2 pieces)|2 pieces|70|150|4.8|18|6.5|2|260
+Kuih Cara Manis 2pcs (Sweet Pandan Custard Mini Cupcakes 2 pieces)|2 pieces|60|131|1.8|22|4|11.5|75
+Kuih Kosui 2pcs (Steamed Palm Sugar Rice Cakes with Grated Coconut 2 pieces)|2 pieces|70|136|1.2|26|3|14.5|65
+Kuih Keria Gula Melaka 2pcs (Sweet Potato Donuts Glazed with Palm Sugar 2pcs)|2 pieces|80|200|1.5|34|6.5|16|55
+Cucur Udang 2pcs (Crispy Prawn and Chive Fritters 2 pieces)|2 pieces|100|238|6.5|26|12|2|360
+Cekodok Pisang 4pcs (Deep-Fried Mashed Banana Balls 4 pieces)|4 pieces|80|210|1.5|32|8.5|16.5|85
+Apam Balik Nipis Crispy (Crispy Thin Peanut Corn Folded Pancake)|1 piece|85|272|4.5|42|9.5|18|195
+Apam Balik Tebal Fluffy (Thick Fluffy Peanut Butter Corn Pancake 1 slice)|1 slice|130|342|5.5|54|11.5|22|260
+Popia Basah 1 roll (Fresh Soft Spring Roll with Turnip and Sweet Chili)|1 roll|150|166|5.5|26|4.5|7.5|420
+Tau Fu Fa Gula Melaka (Warm Silken Tofu Pudding with Palm Sugar Syrup)|1 bowl|250|174|7.5|28|3.5|24|35
+Pengat Pisang (Sweet Banana and Sago Stewed in Coconut Milk)|1 bowl|250|286|2|46|10.5|28|60
+Kuih Bahulu 3pcs (Traditional Baked Mini Sponge Cakes 3 pieces)|3 pieces|45|136|2.4|26|2.5|14|55
+Kuih Bangkit 4pcs (Traditional Melt-in-Mouth Tapioca Coconut Cookies 4pcs)|4 pieces|32|124|0.5|22|3.8|9.5|30
+Kuih Kapit 3pcs (Crispy Folded Coconut Egg Wafer Love Letters 3 pieces)|3 pieces|30|124|1.5|20|4.2|10.5|40
+Tart Nanas 2pcs (Buttery Pineapple Jam Tart Cookies 2 pieces)|2 pieces|40|178|1.4|24|8.5|13|65
+Biskut Marie 4pcs (Classic Crisp Marie Tea Biscuits 4 pieces)|4 pieces|26|115|2|19.5|3.2|5.8|95
+Biskut Cip Coklat (Bakery Giant Chocolate Chip Cookie 1 piece)|1 piece|55|274|3|34|14|20|165
+Biskut Oat Kismis (Bakery Oatmeal Raisin Cookie 1 piece)|1 piece|55|257|3.5|36|11|18|155
+Kerepek Ubi Masin (Crispy Salted Tapioca Cassava Chips 30g)|1 pack|30|162|0.4|21|8.5|0.5|145
+Kerepek Ubi Pedas Basah (Sweet and Spicy Chili Glazed Tapioca Chips 30g)|1 pack|30|164|0.5|22.5|8|6.5|165
+Kerepek Pisang Tanduk (Crispy Salted Horn Banana Chips 30g)|1 pack|30|167|0.6|20.5|9.2|2.5|120
+Keropok Ikan Keping Goreng (Deep-Fried Crispy Fish Crackers 30g)|1 bowl|33|175|3.8|18.5|9.5|1.2|280
+Emping Belinjo Goreng (Crispy Slightly Bitter Melinjo Nut Crackers 30g)|1 bowl|30|166|2.8|19|8.8|0.8|190
+Kacang Putih Muruku Pagoda (Crunchy Spiced Chickpea Flour Muruku 30g)|1 pack|30|172|3.6|18.2|9.4|0.8|210
+Kacang Putih Mix (Assorted Fried Chickpeas Peanuts and Sev 30g)|1 pack|30|176|5.2|15.8|10.2|1.2|220
+Bertih Jagung Karamel (Caramel Coated Sweet Popcorn 30g)|1 cup|30|141|1.2|24|4.5|15.5|95
+Bertih Jagung Masin (Salted Cinema Buttered Popcorn 30g)|1 cup|30|156|2.4|17.5|8.5|0.3|240
+Coklat Gelap 70% (70% Dark Chocolate Bar 30g)|1 serving|30|179|2.4|13.5|12.8|8.5|6
+Coklat Susu Biasa (Creamy Milk Chocolate Bar 30g)|1 serving|30|164|2.2|17.5|9.5|16.2|24
+Coklat Putih (Sweet White Chocolate Bar 30g)|1 serving|30|167|1.8|17.8|9.8|17.5|28
+Snickers Chocolate Bar (Snickers Peanut Caramel Nougat Chocolate Bar 51g)|1 bar|51|251|4.4|31.2|12.1|25.8|125
+Mars Chocolate Bar (Mars Caramel Nougat Milk Chocolate Bar 51g)|1 bar|51|228|2.2|35.8|8.5|30.5|110
+KitKat 4-Finger Wafer (Nestle KitKat 4-Finger Milk Chocolate Wafer 41.5g)|1 bar|41.5|214|2.8|26.4|10.8|20.2|34
+Ferrero Rocher 2pcs (Hazelnut Milk Chocolate Wafer Balls 2 pieces)|2 pieces|25|148|2|11.2|10.6|9.8|14
+Toblerone Milk Chocolate (Toblerone Swiss Milk Chocolate with Honey Almond 35g)|1 bar|35|185|2|21.2|10.2|20.4|22
+M&M's Peanut Chocolate (M&M's Peanut Milk Chocolate Candies 37g)|1 pack|37|190|3.6|22.4|9.6|19.2|18
+Aiskrim Potong Kacang Merah (Traditional Red Bean Ice Cream Bar)|1 stick|65|114|2.2|18.5|3.5|14.5|35
+Aiskrim Potong Durian (Traditional Durian Flavoured Ice Cream Bar)|1 stick|65|122|1.6|19.5|4.2|15.5|30
+Aiskrim Potong Jagung (Traditional Sweet Corn Ice Cream Bar)|1 stick|65|117|1.8|19|3.8|15|35
+Aiskrim Vanila Scoop (Vanilla Dairy Ice Cream 1 scoop 70g)|1 scoop|70|146|2.5|16.5|7.8|14.8|56
+Aiskrim Coklat Scoop (Chocolate Dairy Ice Cream 1 scoop 70g)|1 scoop|70|158|2.8|19.5|7.6|17.2|52
+Aiskrim Strawberi Scoop (Strawberry Dairy Ice Cream 1 scoop 70g)|1 scoop|70|140|2.2|18.2|6.5|16|48
+Aiskrim Magnum Classic (Wall's Magnum Classic Vanilla Chocolate Bar 80ml)|1 stick|80|248|3.2|24|15.5|21.5|45
+Aiskrim Magnum Almond (Wall's Magnum Almond Milk Chocolate Bar 80ml)|1 stick|80|258|3.8|23.5|16.5|20.8|48
+Aiskrim Cornetto Royale Chocolate (Wall's Cornetto Chocolate Ice Cream Cone)|1 cone|85|230|3|28.5|11.5|20.5|75
+Sorbet Mangga Scoop (Fruit Mango Sorbet Dairy-Free 1 scoop 75g)|1 scoop|75|101|0.4|24.5|0.2|21.5|12
+Optimum Nutrition Gold Standard Whey (ON Gold Standard 100% Whey 1 scoop 31g)|1 scoop|31|122|24|3|1.5|1|130
+Myprotein Impact Whey Protein (Myprotein Impact Whey Isolate/Concentrate 1 scoop 25g)|1 scoop|25|102|20|1.5|1.8|1|50
+MuscleTech Nitro-Tech Whey Gold (MuscleTech Nitro-Tech Whey Protein 1 scoop 33g)|1 scoop|33|122|24|2|2|1.5|150
+Dymatize ISO100 Hydrolyzed Whey (Dymatize ISO100 Whey Isolate 1 scoop 30g)|1 scoop|30|108|25|1|0.5|0.5|110
+Rule 1 R1 Whey Blend (Rule One R1 Whey Protein Blend 1 scoop 33g)|1 scoop|33|130|24|4|2|1.5|140
+BSN Syntha-6 Protein Powder (BSN Syntha-6 Blended Protein 1 scoop 47g)|1 scoop|47|202|22|15|6|3|220
+Allmax Isoflex Whey Isolate (Allmax Isoflex Pure Whey Isolate 1 scoop 30g)|1 scoop|30|116|27|1|0.5|0.5|95
+Amway Nutrilite Soy Protein Drink (Nutrilite All Plant Protein Powder 2 scoops 20g)|2 scoops|20|75|16|0.6|1|0|180
+Pea Protein Isolate Unflavored (Plant-Based Pea Protein Powder 1 scoop 30g)|1 scoop|30|116|24|1.5|1.5|0|260
+Casein Micellar Protein Powder (Slow-Digesting Micellar Casein 1 scoop 33g)|1 scoop|33|117|24|3|1|1|160
+Optimum Nutrition Serious Mass (ON Serious Mass Weight Gainer 1 heaping scoop 167g)|1 scoop|167|626|25|126|2.5|10|260
+MuscleTech Mass-Tech Extreme 2000 (MuscleTech Mass-Tech Gainer 1 scoop 95g)|1 scoop|95|331|13|67|1.2|4|110
+Mutant Mass Weight Gainer (Mutant Mass High Calorie Gainer 2 scoops 140g)|2 scoops|140|550|28|96|6|9|290
+Creatine Monohydrate Unflavored (Pure Micronized Creatine Monohydrate 1 scoop 5g)|1 scoop|5|0|0|0|0|0|0
+Pre-Workout Powder C4 Original (Cellucor C4 Pre-Workout Energy Powder 1 scoop 6.5g)|1 scoop|6.5|4|0|1|0|0|15
+BCAA Amino Energy Powder (Optimum Nutrition Essential Amino Energy 2 scoops 9g)|2 scoops|9|4|0|1|0|0|10
+Quest Protein Bar Cookies & Cream (Quest Nutrition High Protein Bar 60g)|1 bar|60|240|21|21|8|1|280
+Quest Protein Bar Chocolate Chip Cookie Dough (Quest Protein Bar 60g)|1 bar|60|249|21|21|9|1|260
+Grenade Carb Killa Protein Bar (Grenade Oreo/Chocolate Protein Bar 60g)|1 bar|60|258|21|20|10.5|1.5|190
+Barebells Protein Bar Cookies & Cream (Barebells No Added Sugar Protein Bar 55g)|1 bar|55|220|20|18|7.5|1.5|160
+Nature Valley Crunchy Oats & Honey (Nature Valley Granola Bar 2 bars 42g)|1 pack|42|194|3.2|29|7.2|11.5|160
+Rolled Oats Raw (Old Fashioned Rolled Oats Uncooked 40g)|1 bowl|40|155|5.2|27.2|2.8|0.4|2
+Overnight Oats with Milk & Chia (Rolled Oats Low Fat Milk Chia Seeds 220g)|1 jar|220|255|12.5|36|6.8|9.5|95
+Protein Oatmeal Bowl (Cooked Oats with 1 Scoop Whey Protein and Banana)|1 bowl|320|374|29.5|54|4.5|14.5|135
+Protein Shake Water Based (1 Scoop Whey Protein Mixed with 300ml Water)|1 shaker|330|122|24|3|1.5|1|130
+Protein Shake Low Fat Milk (1 Scoop Whey Protein Mixed with 250ml Low Fat Milk)|1 shaker|280|232|32.5|15.5|4.5|13.5|250
+Protein Smoothie Banana Peanut Butter (Whey Banana Oats Peanut Butter Shake)|1 glass|400|440|34|48|12.5|16.5|220
+Fitness Meal Chicken Breast Brown Rice Broccoli (Grilled Chicken 150g Rice 150g Veg)|1 box|400|402|48.5|38|6.2|1.8|340
+Fitness Meal Teriyaki Chicken Breast Rice (Teriyaki Glazed Chicken Breast with Rice)|1 box|400|421|46|44|6.8|6.5|680
+Fitness Meal Black Pepper Beef Quinoa (Lean Stir-Fried Beef with Cooked Quinoa)|1 box|380|424|42|36|12.5|2.5|520
+Fitness Meal Baked Salmon Sweet Potato (Baked Salmon 150g with Roasted Sweet Potato)|1 box|380|446|38|32|18.5|8.5|290
+Fitness Meal Egg White Omelette Toast (4 Egg Whites 1 Whole Egg Omelette with Toast)|1 plate|250|292|28|28|7.5|2.5|460
+Fitness Meal Tuna Wholemeal Wrap (Water-Packed Tuna Salad Wholemeal Tortilla Wrap)|1 wrap|240|310|32|31|6.5|2.5|640
+Greek Yogurt Bowl Berries Honey (Plain Greek Yogurt 150g with Berries and Honey)|1 bowl|220|190|15.5|22|4.5|18.5|75
+Cottage Cheese Low Fat (Low Fat Cottage Cheese Curds 100g)|1 bowl|100|74|11.5|3.5|1.5|2.8|360
+Edamame Steamed Pods (Steamed Green Soybeans in Pods Shelled 100g)|1 bowl|100|130|11.8|8.9|5.2|2.2|6
+Rice Cakes Plain Puffed 2pcs (Quaker Plain Puffed Brown Rice Cakes 2 pieces)|2 pieces|18|68|1.4|14.6|0.5|0.1|35

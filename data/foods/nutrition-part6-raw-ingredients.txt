@@ -1,0 +1,151 @@
+# Nutrition batch part 6. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Dada Ayam Mentah (Raw Skinless Chicken Breast 100g)|1 portion|100|113|22.5|0|2.6|0|65
+Dada Ayam Panggang (Grilled Skinless Chicken Breast 100g)|1 portion|100|156|31|0|3.6|0|74
+Dada Ayam Rebus (Boiled Shredded Chicken Breast 100g)|1 portion|100|149|30|0|3.2|0|68
+Peha Ayam Tanpa Kulit Mentah (Raw Skinless Chicken Thigh 100g)|1 portion|100|118|19.5|0|4.5|0|84
+Peha Ayam Panggang (Grilled Skinless Chicken Thigh 100g)|1 portion|100|178|26|0|8.2|0|95
+Kepak Ayam Mentah (Raw Chicken Wing 1 piece 50g)|1 piece|50|99|9.5|0|6.8|0|42
+Kepak Ayam Panggang (Grilled Chicken Wing 1 piece 40g)|1 piece|40|116|11.5|0|7.8|0|48
+Drumstick Ayam Mentah (Raw Chicken Drumstick 1 piece 80g)|1 piece|80|100|15.2|0|4.4|0|68
+Drumstick Ayam Panggang (Grilled Chicken Drumstick 1 piece 65g)|1 piece|65|123|17.8|0|5.8|0|75
+Ayam Kisar Mentah (Raw Minced Chicken Breast 100g)|1 portion|100|120|21.5|0|3.8|0|70
+Hati Ayam Mentah (Raw Chicken Liver 100g)|1 portion|100|114|16.9|0.7|4.8|0|71
+Hempedal Ayam Mentah (Raw Chicken Gizzard 100g)|1 portion|100|90|17.7|0|2.1|0|69
+Daging Lembu Batang Pinang Mentah (Raw Beef Tenderloin 100g)|1 portion|100|146|21.8|0|6.5|0|55
+Daging Lembu Sirloin Mentah (Raw Beef Sirloin 100g)|1 portion|100|183|20.5|0|11.2|0|58
+Daging Lembu Kisar Kurang Lemak (Raw Lean Minced Beef 100g)|1 portion|100|170|20|0|10|0|66
+Daging Lembu Kisar Biasa (Raw Regular Minced Beef 100g)|1 portion|100|250|17.5|0|20|0|72
+Daging Kambing Mentah (Raw Lamb Leg Lean 100g)|1 portion|100|158|20.5|0|8.5|0|64
+Daging Babi Loin Mentah (Raw Pork Loin Lean 100g)|1 portion|100|142|21.5|0|6.2|0|52
+Perut Babi Mentah (Raw Pork Belly 100g)|1 portion|100|514|9.3|0|53|0|32
+Daging Itik Mentah (Raw Duck Breast Skinless 100g)|1 portion|100|117|19.8|0|4.2|0|62
+Ikan Salmon Mentah (Raw Atlantic Salmon Fillet 100g)|1 portion|100|202|20.4|0|13.4|0|44
+Ikan Salmon Panggang (Grilled Atlantic Salmon Fillet 100g)|1 portion|100|233|25.4|0|14.6|0|56
+Ikan Siakap Mentah (Raw Asian Seabass Barramundi Fillet 100g)|1 portion|100|96|19.2|0|2.1|0|68
+Ikan Siakap Stim (Steamed Asian Seabass Fillet 100g)|1 portion|100|117|23.5|0|2.6|0|78
+Ikan Kembung Mentah (Raw Indian Mackerel 1 whole 100g)|1 fish|100|126|19.8|0|5.2|0|85
+Ikan Kembung Goreng (Pan-Fried Indian Mackerel 1 whole 85g)|1 fish|85|193|22.5|0|11.4|0|110
+Ikan Tenggiri Mentah (Raw Spanish Mackerel Steak 100g)|1 portion|100|124|20.1|0|4.8|0|74
+Ikan Merah Mentah (Raw Red Snapper Fillet 100g)|1 portion|100|94|20.5|0|1.3|0|64
+Ikan Tilapia Mentah (Raw Tilapia Fillet 100g)|1 portion|100|96|20.1|0|1.7|0|52
+Ikan Bawal Putih Mentah (Raw White Pomfret 100g)|1 portion|100|110|19|0|3.8|0|65
+Ikan Patin Mentah (Raw Silver Catfish Pangasius 100g)|1 portion|100|126|16.8|0|6.5|0|58
+Ikan Tuna Mentah (Raw Yellowfin Tuna Steak 100g)|1 portion|100|103|23.4|0|1|0|45
+Ikan Kod Mentah (Raw Atlantic Cod Fillet 100g)|1 portion|100|78|17.8|0|0.7|0|54
+Ikan Bilis Kering (Dried Anchovies Ikan Bilis 20g)|1 handful|20|65|13.2|0|1.4|0|540
+Udang Harimau Mentah (Raw Tiger Prawns Peeled 100g)|1 portion|100|89|20.1|0.2|0.9|0|148
+Sotong Mentah (Raw Squid Rings 100g)|1 portion|100|87|15.6|3.1|1.4|0|44
+Sotong Rebus (Boiled Squid 100g)|1 portion|100|101|18.2|3.5|1.6|0|52
+Ketam Isi Mentah (Raw Crab Meat 100g)|1 portion|100|82|18.1|0|1.1|0|290
+Kerang Mentah (Raw Blood Cockles 100g)|1 portion|100|76|13.5|2.8|1.2|0|240
+Kupang Mentah (Raw Green Mussels 100g)|1 portion|100|91|14.2|3.7|2.2|0|286
+Telur Ayam Gred A Mentah (Raw Large Whole Chicken Egg 1 piece 60g)|1 egg|60|83|7.5|0.4|5.7|0.2|84
+Telur Ayam Rebus (Hard Boiled Whole Chicken Egg 1 piece 55g)|1 egg|55|77|6.8|0.6|5.3|0.2|68
+Telur Mata Kerbau (Sunny Side Up Fried Egg 1 piece 55g)|1 egg|55|107|6.5|0.5|8.8|0.2|115
+Telur Dadar Kosong (Plain Pan-Fried Omelette 2 eggs 110g)|1 omelette|110|205|13|1.2|16.5|0.5|240
+Putih Telur Mentah (Raw Egg White from 1 Large Egg 33g)|1 egg white|33|16|3.6|0.2|0.1|0.2|55
+Kuning Telur Mentah (Raw Egg Yolk from 1 Large Egg 17g)|1 egg yolk|17|54|2.7|0.6|4.5|0.1|8
+Telur Puyuh Rebus (Boiled Quail Eggs 4 pieces 36g)|4 eggs|36|56|4.7|0.2|4|0.1|50
+Telur Masin Rebus (Boiled Salted Duck Egg 1 whole 65g)|1 egg|65|120|8.4|0.9|9.2|0.3|980
+Tauhu Putih Lembut (Soft Silken White Tofu 100g)|1 block|100|52|5.2|1.8|2.7|0.5|8
+Tauhu Keras (Firm White Tofu 100g)|1 block|100|104|10.8|2.2|5.8|0.6|12
+Tauhu Pok Goreng (Deep-Fried Tofu Puffs 4 pieces 40g)|4 pieces|40|122|6.4|2.4|9.6|0.4|15
+Tempeh Mentah (Raw Fermented Soybean Cake Tempeh 100g)|1 block|100|211|19|9.4|10.8|0|9
+Tempeh Goreng (Pan-Fried Sliced Tempeh 80g)|1 portion|80|246|16.5|8.2|16.4|0|140
+Fucuk Kering (Dried Beancurd Skin Sheets 20g)|1 sheet|20|89|9.8|2.6|4.4|0.4|18
+Kangkung Mentah (Raw Water Spinach 100g)|1 bowl|100|25|2.6|3.1|0.2|0.5|113
+Bayam Hijau Mentah (Raw Green Spinach 100g)|1 bowl|100|30|2.9|3.6|0.4|0.4|79
+Sawi Hijau Mentah (Raw Choy Sum Mustard Greens 100g)|1 bowl|100|17|1.5|2.2|0.2|0.8|65
+Pak Choy Mentah (Raw Bok Choy Chinese Cabbage 100g)|1 bowl|100|17|1.5|2.2|0.2|1.2|65
+Kailan Mentah (Raw Chinese Broccoli Kai Lan 100g)|1 bowl|100|32|2.4|4.6|0.4|1.1|28
+Brokoli Mentah (Raw Broccoli Florets 100g)|1 bowl|100|41|2.8|6.6|0.4|1.7|33
+Brokoli Stim (Steamed Broccoli Florets 100g)|1 bowl|100|42|2.4|7.2|0.4|1.4|41
+Kobis Bunga Mentah (Raw Cauliflower Florets 100g)|1 bowl|100|30|1.9|5|0.3|1.9|30
+Kobis Bulat Mentah (Raw Green Cabbage Shredded 100g)|1 bowl|100|29|1.3|5.8|0.1|3.2|18
+Kacang Panjang Mentah (Raw Yardlong Beans 100g)|1 bowl|100|48|2.8|8.4|0.4|2.2|4
+Kacang Buncis Mentah (Raw French Green Beans 100g)|1 bowl|100|37|1.8|7|0.2|3.3|6
+Bendi Mentah (Raw Okra Lady's Fingers 100g)|1 bowl|100|39|1.9|7.5|0.2|1.5|7
+Terung Panjang Mentah (Raw Asian Purple Eggplant 100g)|1 piece|100|29|1|5.9|0.2|3.5|2
+Peria Katak Mentah (Raw Bitter Gourd 100g)|1 bowl|100|21|1|3.7|0.2|1|5
+Petola Mentah (Raw Angled Luffa Ridge Gourd 100g)|1 bowl|100|24|1.2|4.4|0.2|2|3
+Timun Jepun Mentah (Raw Japanese Cucumber 100g)|1 portion|100|18|0.7|3.6|0.1|1.7|2
+Tomato Merah Mentah (Raw Medium Red Tomato 1 piece 120g)|1 tomato|120|25|1.1|4.7|0.2|3.1|6
+Lobak Merah Mentah (Raw Carrot Peeled 100g)|1 carrot|100|44|0.9|9.6|0.2|4.7|69
+Lobak Putih Mentah (Raw Daikon White Radish 100g)|1 portion|100|20|0.6|4.1|0.1|2.5|21
+Ubi Kentang Mentah (Raw Russet Potato Peeled 150g)|1 potato|150|119|3|26.2|0.2|1.2|9
+Ubi Kentang Rebus (Boiled White Potato 150g)|1 potato|150|132|2.6|30|0.2|1.3|8
+Ubi Keledek Oren Mentah (Raw Orange Sweet Potato 150g)|1 potato|150|132|2.4|30.2|0.2|6.3|82
+Ubi Keledek Oren Rebus (Boiled Orange Sweet Potato 150g)|1 potato|150|117|2.1|26.6|0.2|8.6|41
+Labu Kuning Mentah (Raw Kabocha Pumpkin 100g)|1 portion|100|31|1|6.5|0.1|2.8|1
+Jagung Manis Rebus (Boiled Sweet Yellow Corn 1 cob 140g)|1 cob|140|152|4.6|29.4|1.8|6.3|21
+Taugeh Mentah (Raw Mung Bean Sprouts 100g)|1 bowl|100|37|3|5.9|0.2|4.1|6
+Cendawan Tiram Mentah (Raw Oyster Mushrooms 100g)|1 bowl|100|41|3.3|6.1|0.4|1.1|18
+Cendawan Shiitake Mentah (Raw Fresh Shiitake Mushrooms 100g)|1 bowl|100|40|2.2|6.8|0.5|2.4|9
+Cendawan Butang Mentah (Raw White Button Mushrooms 100g)|1 bowl|100|28|3.1|3.3|0.3|2|5
+Bawang Besar Merah (Raw Red Onion Chopped 50g)|1 onion|50|22|0.6|4.7|0.1|2.1|2
+Bawang Putih (Raw Garlic Cloves 3 cloves 10g)|3 cloves|10|16|0.6|3.3|0.1|0.1|2
+Halia Muda (Raw Fresh Ginger Root 10g)|1 piece|10|9|0.2|1.8|0.1|0.2|1
+Cili Padi Merah (Raw Bird's Eye Chili 5 pieces 10g)|5 pieces|10|5|0.2|0.9|0.1|0.5|1
+Pisang Emas (Fresh Pisang Emas Mini Banana 2 pieces 90g)|2 bananas|90|89|1|20.5|0.3|11|1
+Betik Masak (Fresh Ripe Papaya Cubes 150g)|1 bowl|150|71|0.7|16.2|0.4|11.7|12
+Tembikai Merah (Fresh Red Watermelon Cubes 200g)|1 bowl|200|68|1.2|15.2|0.3|12.4|2
+Nanas Madu (Fresh Honey Pineapple Chunks 150g)|1 bowl|150|83|0.8|19.6|0.2|14.8|2
+Jambu Batu Tanpa Biji (Fresh Seedless Guava Sliced 150g)|1 fruit|150|113|3.8|21.4|1.4|13.4|3
+Belimbing Besi (Fresh Starfruit Sliced 120g)|1 fruit|120|41|1.2|8.1|0.4|4.8|2
+Durian Musang King (Fresh Musang King Durian Pulp 3 seeds 100g)|3 seeds|100|162|1.5|27.1|5.3|18|2
+Manggis (Fresh Mangosteen Arils 4 fruits 100g)|4 fruits|100|79|0.4|17.9|0.6|14.5|7
+Langsat Duku (Fresh Langsat Fruit Peeled 100g)|1 bowl|100|62|0.8|14.2|0.2|11.5|2
+Mata Kucing Longan (Fresh Longan Peeled 100g)|1 bowl|100|66|1.3|15.1|0.1|12.5|0
+Epal Merah Fuji (Fresh Fuji Red Apple 1 medium 180g)|1 apple|180|104|0.5|24.8|0.3|18.7|2
+Epal Hijau Granny Smith (Fresh Green Apple 1 medium 160g)|1 apple|160|93|0.7|21.8|0.3|15.4|2
+Oren Valencia (Fresh Valencia Orange Peeled 1 medium 140g)|1 orange|140|73|1.3|16.5|0.2|13.1|0
+Anggur Merah Tanpa Biji (Fresh Red Seedless Grapes 100g)|1 bowl|100|77|0.7|18.1|0.2|15.5|2
+Avokado (Fresh Hass Avocado Flesh 100g)|1 half|100|174|2|8.5|14.7|0.7|7
+Kurma Mariami (Dried Mariami Dates 3 pieces 25g)|3 pieces|25|78|0.5|18.8|0.1|16.6|1
+Beras Putih Mentah (Raw White Jasmine Rice 100g)|1 portion|100|353|7.1|79.5|0.7|0.1|5
+Nasi Putih Masak (Cooked White Jasmine Rice 1 bowl 150g)|1 bowl|150|188|4|42.2|0.4|0.1|2
+Beras Perang Mentah (Raw Brown Rice 100g)|1 portion|100|367|7.9|77.2|2.9|0.8|7
+Nasi Perang Masak (Cooked Brown Rice 1 bowl 150g)|1 bowl|150|166|3.9|34.5|1.4|0.5|8
+Beras Basmati Mentah (Raw Basmati White Rice 100g)|1 portion|100|350|8.2|78|0.6|0.1|4
+Nasi Basmati Masak (Cooked Basmati White Rice 1 bowl 150g)|1 bowl|150|173|4.4|38|0.4|0.1|3
+Beras Pulut Mentah (Raw Glutinous Sticky Rice 100g)|1 portion|100|359|6.8|81.7|0.6|0.1|7
+Pulut Putih Masak (Cooked Glutinous Sticky Rice 150g)|1 bowl|150|141|3|31.6|0.3|0.1|8
+Mee Kuning Basah (Fresh Yellow Hokkien Egg Noodles 150g)|1 portion|150|236|7.2|46.5|2.4|0.8|420
+Kuey Teow Basah (Fresh Flat Rice Noodles 150g)|1 portion|150|208|3.2|44.8|1.8|0.5|180
+Bihun Kering (Dried Rice Vermicelli Noodles 80g)|1 portion|80|287|4.8|65.6|0.6|0.4|12
+Bihun Celur (Blanched Cooked Rice Vermicelli 150g)|1 bowl|150|158|2.7|36.2|0.3|0.2|8
+Suhun Kering (Dried Mung Bean Glass Noodles 60g)|1 portion|60|208|0.2|51.6|0.1|0|6
+Spaghetti Kering (Dry Durum Wheat Spaghetti Pasta 80g)|1 portion|80|292|10.4|59.8|1.2|2.1|5
+Spaghetti Rebus (Cooked Spaghetti Pasta 180g)|1 bowl|180|279|10.4|55.6|1.7|1|2
+Tepung Gandum Serbaguna (All-Purpose Wheat Flour 100g)|1 cup|100|355|10.3|76.3|1|0.3|2
+Tepung Beras (White Rice Flour 100g)|1 cup|100|357|6|80.1|1.4|0.1|0
+Tepung Jagung (Cornstarch Corn Flour 1 tbsp 10g)|1 tbsp|10|36|0|9.1|0|0|1
+Tepung Ubi Kayu (Tapioca Starch Flour 100g)|1 cup|100|356|0.2|88.7|0|3.4|1
+Minyak Masak Kelapa Sawit (Refined Palm Cooking Oil 1 tbsp 14g)|1 tbsp|14|126|0|0|14|0|0
+Minyak Zaitun Extra Virgin (Extra Virgin Olive Oil 1 tbsp 14g)|1 tbsp|14|126|0|0|14|0|0
+Minyak Bijan (Toasted Sesame Oil 1 tsp 5g)|1 tsp|5|45|0|0|5|0|0
+Minyak Sapi Ghee (Clarified Butter Ghee 1 tbsp 14g)|1 tbsp|14|126|0|0|14|0|0
+Santan Kelapa Segar (Fresh Thick Coconut Milk 100ml)|1 portion|100|245|2.3|5.5|23.8|3.3|15
+Kicap Cair (Light Soy Sauce 1 tbsp 15ml)|1 tbsp|15|8|1.2|0.8|0|0.4|890
+Kicap Pekat Manis (Thick Sweet Dark Soy Sauce 1 tbsp 15ml)|1 tbsp|15|37|0.8|8.4|0|7.8|540
+Sos Tiram (Oyster Flavoured Sauce 1 tbsp 15g)|1 tbsp|15|15|0.4|3.4|0|2.6|690
+Sos Ikan (Thai Fish Sauce Nam Pla 1 tbsp 15ml)|1 tbsp|15|8|1.5|0.6|0|0.5|1180
+Belacan Bakar (Toasted Shrimp Paste 1 tsp 5g)|1 tsp|5|11|1.6|0.4|0.3|0.1|640
+Asam Jawa Pes (Tamarind Paste Seedless 1 tbsp 15g)|1 tbsp|15|40|0.4|9.4|0.1|6.8|4
+Gula Pasir Putih (White Granulated Cane Sugar 1 tsp 5g)|1 tsp|5|20|0|5|0|5|0
+Madu Lebah Asli (Pure Natural Honey 1 tbsp 21g)|1 tbsp|21|70|0.1|17.3|0|17.2|1
+Garam Halus (Fine Table Salt 1 tsp 6g)|1 tsp|6|0|0|0|0|0|2325
+Lada Hitam Kisar (Ground Black Pepper 1 tsp 2g)|1 tsp|2|7|0.2|1.3|0.1|0|0
+Serbuk Kayu Manis (Ground Cinnamon Powder 1 tsp 3g)|1 tsp|3|10|0.1|2.4|0|0.1|0
+Keju Cheddar Parut (Shredded Cheddar Cheese 30g)|1 portion|30|121|7.5|0.4|9.9|0.1|186
+Keju Mozzarella Parut (Shredded Mozzarella Cheese 30g)|1 portion|30|90|6.6|0.7|6.7|0.3|188
+Keju Parmesan Parut (Grated Parmesan Cheese 1 tbsp 10g)|1 tbsp|10|43|3.8|0.4|2.9|0.1|153
+Keju Krim (Philadelphia Style Cream Cheese 2 tbsp 30g)|2 tbsp|30|104|1.8|1.2|10.2|1|96
+Badam Panggang (Roasted Almonds Unsalted 28g)|1 handful|28|174|6|6.1|14|1.2|0
+Kacang Gajus Panggang (Roasted Cashew Nuts Unsalted 28g)|1 handful|28|172|4.3|9.2|13.1|1.4|5
+Kacang Walnut (Raw Walnut Halves 28g)|1 handful|28|199|4.3|3.9|18.5|0.7|1
+Kacang Tanah Goreng (Fried Peanuts Skinless 28g)|1 handful|28|179|6.8|6|14.2|1.2|4
+Kacang Pistachio (Roasted Pistachio Kernels 28g)|1 handful|28|169|5.8|7.7|12.8|2.2|2
+Biji Chia (Raw Chia Seeds 1 tbsp 12g)|1 tbsp|12|62|2|5.1|3.7|0|2
+Biji Labu Panggang (Roasted Pumpkin Seeds 28g)|1 handful|28|171|8.5|3|13.9|0.4|5
+Biji Bunga Matahari (Roasted Sunflower Seeds 28g)|1 handful|28|175|5.8|5.6|14.4|0.7|3

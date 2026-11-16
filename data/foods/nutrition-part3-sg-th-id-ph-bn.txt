@@ -1,0 +1,160 @@
+# Nutrition batch part 3. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Hainanese Chicken Rice Steamed (Singapore Steamed Hainanese Chicken Rice)|1 plate|380|546|28|68|18|2.5|1180
+Hainanese Chicken Rice Roasted (Singapore Roasted Hainanese Chicken Rice)|1 plate|380|569|27|68|21|3|1240
+Hainanese Chicken Rice Extra Chicken (Singapore Hainanese Chicken Rice Double Meat)|1 plate|460|673|44|68|25|3|1380
+Singapore Laksa Lemak (Singapore Katong Curry Coconut Laksa)|1 bowl|550|596|22|64|28|6.5|1680
+Singapore Chili Crab (Singapore Chili Crab with Sauce 1 serving)|1 portion|350|394|34|24|18|14|1320
+Singapore Black Pepper Crab (Singapore Black Pepper Crab 1 serving)|1 portion|320|332|35|12|16|5|1240
+Fried Mantou 2pcs (Singapore Deep Fried Mantou Buns 2 pieces)|2 pieces|80|263|5|36|11|6|190
+Singapore Char Kway Teow (Singapore Fried Flat Rice Noodles with Cockles)|1 plate|420|588|18|66|28|7.5|1420
+Singapore Hokkien Prawn Mee (Singapore Fried Prawn and Pork Noodles)|1 plate|450|523|24|64|19|4.5|1560
+Singapore Bak Kut Teh (Singapore Peppery Pork Rib Soup)|1 bowl|480|368|32|6|24|1.5|1490
+Singapore Kaya Toast Set (Singapore Kaya Butter Toast 2 slices with 2 Soft Eggs)|1 set|195|423|16.5|42|21|15|410
+Singapore Carrot Cake White (Singapore White Fried Radish Cake with Egg)|1 plate|320|382|11|44|18|3|980
+Singapore Carrot Cake Black (Singapore Sweet Black Fried Radish Cake)|1 plate|340|423|11|52|19|12|1050
+Singapore Oyster Omelette Orh Luak (Singapore Fried Oyster Egg Omelette)|1 plate|280|374|18|26|22|3.5|890
+Singapore Rojak (Singapore Fruit and Dough Fritter Peanut Salad)|1 plate|260|312|7|44|12|24|640
+Singapore Lor Mee (Singapore Braised Thick Noodles in Gravy)|1 bowl|540|520|22|72|16|6.5|1650
+Singapore Mee Rebus (Singapore Yellow Noodles in Sweet Potato Gravy)|1 bowl|520|502|16|78|14|14|1480
+Singapore Mee Siam (Singapore Spicy Tangy Rice Vermicelli Soup)|1 bowl|480|458|15|68|14|11|1520
+Singapore Fish Head Bee Hoon (Singapore Milky Fish Head Vermicelli Soup)|1 bowl|580|538|28|66|18|4|1580
+Singapore Popiah 1 roll (Singapore Fresh Spring Roll with Turnip and Egg)|1 roll|180|192|7.5|26|6.5|5.5|480
+Singapore Satay Bee Hoon (Singapore Rice Vermicelli with Spicy Peanut Sauce)|1 plate|440|518|18|62|22|12|1280
+Singapore Prawn Noodle Soup (Singapore Hae Mee Prawn and Pork Noodle Soup)|1 bowl|520|452|24|62|12|3.5|1620
+Singapore Duck Rice Braised (Singapore Teochew Braised Duck Rice)|1 plate|410|555|28|68|19|4|1340
+Singapore Kway Chap (Singapore Flat Rice Sheets with Braised Pork Offal)|1 set|480|518|26|54|22|4.5|1590
+Singapore Bak Chor Mee Dry (Singapore Minced Pork Mushroom Noodles Dry)|1 bowl|380|482|22|58|18|5|1380
+Singapore Ice Kachang (Singapore Shaved Ice with Red Beans and Syrup)|1 bowl|320|292|3.5|64|2.5|52|65
+Singapore Chendol (Singapore Coconut Milk Palm Sugar Pandan Jelly Dessert)|1 bowl|280|312|3|48|12|38|55
+Singapore Tau Suan (Singapore Sweet Mung Bean Soup with Youtiao)|1 bowl|260|264|6.5|46|6|26|180
+Pad Thai Chicken (Thai Stir-Fried Rice Noodles with Chicken and Peanuts)|1 plate|380|464|22|58|16|12|1180
+Pad Thai Prawn (Thai Stir-Fried Rice Noodles with Prawns and Peanuts)|1 plate|380|451|21|58|15|12|1220
+Pad Kra Pao Gai with Rice & Egg (Thai Basil Minced Chicken Rice with Fried Egg)|1 plate|440|582|30|66|22|5|1280
+Pad Kra Pao Moo with Rice & Egg (Thai Basil Minced Pork Rice with Fried Egg)|1 plate|440|610|28|66|26|5|1320
+Tom Yum Goong Clear (Thai Clear Spicy Prawn Soup)|1 bowl|350|173|20|12|5|4.5|1480
+Tom Yum Goong Creamy (Thai Creamy Spicy Prawn Soup)|1 bowl|380|274|21|16|14|6|1560
+Thai Green Curry Chicken (Thai Gaeng Keow Wan Chicken Curry 1 bowl)|1 bowl|320|368|24|14|24|7|1120
+Thai Red Curry Chicken (Thai Gaeng Daeng Chicken Curry 1 bowl)|1 bowl|320|359|24|14|23|6.5|1140
+Thai Massaman Curry Beef (Thai Massaman Beef Curry with Potatoes 1 bowl)|1 bowl|350|434|26|24|26|8|1180
+Thai Panang Curry Chicken (Thai Thick Panang Chicken Curry 1 bowl)|1 bowl|300|346|25|12|22|6.5|1090
+Som Tum Thai (Thai Green Papaya Salad with Peanuts and Dried Shrimp)|1 plate|220|174|6|24|6|14|980
+Larb Moo (Thai Spicy Minced Pork Herb Salad)|1 plate|200|246|22|8|14|3.5|920
+Thai Pineapple Fried Rice (Thai Khao Pad Sapparot with Prawns and Cashews)|1 plate|400|488|18|68|16|11|1140
+Thai Crab Fried Rice (Thai Khao Pad Boo Crab Meat Fried Rice)|1 plate|360|462|20|64|14|3.5|1080
+Pad See Ew Chicken (Thai Stir-Fried Wide Rice Noodles with Sweet Soy Sauce)|1 plate|380|464|22|58|16|9|1260
+Pad Kee Mao Chicken (Thai Spicy Drunken Fried Noodles with Chicken)|1 plate|380|456|22|56|16|6.5|1290
+Thai Boat Noodles Beef (Thai Kuay Teow Reua Dark Beef Noodle Soup)|1 bowl|420|388|22|48|12|5.5|1460
+Thai Boat Noodles Pork (Thai Kuay Teow Reua Dark Pork Noodle Soup)|1 bowl|420|398|20|48|14|5.5|1480
+Khao Soi Gai (Northern Thai Curry Egg Noodles with Chicken Drumstick)|1 bowl|520|594|28|62|26|7.5|1520
+Gai Yang (Thai Grilled Marinated Chicken Half)|1 portion|250|370|46|6|18|4.5|840
+Moo Ping 3 sticks (Thai Grilled Sweet Pork Skewers 3 sticks)|3 sticks|135|258|21|12|14|9.5|680
+Crying Tiger Beef Sua Rong Hai (Thai Grilled Marinated Beef Steak)|1 portion|220|354|42|6|18|4|790
+Thai Fish Cakes Tod Mun Pla 4pcs (Thai Spicy Fried Fish Cakes 4 pieces)|4 pieces|140|220|18|10|12|3.5|640
+Thai Prawn Cakes Tod Mun Goong 3pcs (Thai Deep Fried Prawn Cakes 3 pieces)|3 pieces|150|284|19|16|16|2.5|620
+Thai Spring Rolls Poh Pia Tod 3pcs (Thai Crispy Vegetable Spring Rolls 3 pieces)|3 pieces|135|248|4.5|26|14|3.5|460
+Thai Red Ruby Water Chestnuts (Thai Tab Tim Krob Coconut Dessert)|1 bowl|240|273|2|46|9|34|45
+Thai Milk Tea Cha Yen Iced (Thai Iced Sweet Milk Tea)|1 glass|400|258|3.5|44|7.5|40|95
+Thai Green Milk Tea Iced (Thai Iced Green Milk Tea)|1 glass|400|258|3.5|44|7.5|40|95
+Nasi Goreng Kampung Indonesian (Indonesian Village Style Spicy Fried Rice)|1 plate|380|490|16|66|18|4.5|1240
+Nasi Goreng Spesial (Indonesian Fried Rice with Egg Satay and Crackers)|1 plate|480|626|26|72|26|7|1480
+Nasi Padang Rendang Daging (Indonesian Padang Rice with Beef Rendang)|1 plate|450|636|28|68|28|5|1320
+Nasi Padang Ayam Pop (Indonesian Padang Rice with Poached Fried Chicken)|1 plate|430|590|32|66|22|3.5|1180
+Nasi Padang Dendeng Balado (Indonesian Padang Rice with Crispy Chili Beef)|1 plate|420|592|28|66|24|5.5|1360
+Nasi Padang Gulai Tunjang (Indonesian Padang Rice with Beef Tendon Curry)|1 plate|460|610|26|68|26|4.5|1380
+Beef Rendang 1 serving (Indonesian Slow Cooked Coconut Beef Rendang)|1 portion|160|360|28|8|24|4|680
+Ayam Penyet with Rice & Sambal (Indonesian Smashed Fried Chicken Set)|1 plate|450|634|34|66|26|4.5|1260
+Ayam Geprek with Rice & Sambal (Indonesian Crushed Spicy Fried Chicken Set)|1 plate|460|673|33|70|29|4|1340
+Ayam Bakar Taliwang with Rice (Indonesian Lombok Spicy Grilled Chicken Set)|1 plate|440|584|35|66|20|6|1220
+Bebek Goreng with Rice & Sambal (Indonesian Crispy Fried Duck with Rice)|1 plate|460|680|32|66|32|4|1290
+Ikan Gurame Goreng with Rice (Indonesian Fried Gourami Fish with Rice)|1 plate|440|598|34|66|22|3.5|1160
+Pecel Lele with Rice (Indonesian Fried Catfish with Chili Paste and Rice)|1 plate|420|582|30|66|22|4|1140
+Soto Ayam Lamongan (Indonesian Turmeric Chicken Noodle Soup)|1 bowl|480|414|24|48|14|3|1420
+Rawon Surabaya (Indonesian East Java Black Keluak Beef Soup)|1 bowl|420|322|28|12|18|3.5|1390
+Bakso Sapi Noodle Soup (Indonesian Beef Meatball Noodle Soup)|1 bowl|500|438|24|54|14|3|1540
+Mie Ayam Bakso (Indonesian Chicken Mushroom Noodles with Meatballs)|1 bowl|440|488|24|62|16|5.5|1460
+Mie Goreng Jawa (Indonesian Javanese Sweet Soy Fried Noodles)|1 plate|380|452|15|62|16|9.5|1220
+Ketoprak Jakarta (Indonesian Rice Cake Vermicelli Tofu in Peanut Sauce)|1 plate|380|428|13|58|16|11|890
+Sate Ayam Madura 10 sticks (Indonesian Chicken Satay with Peanut Sauce 10 sticks)|10 sticks|250|370|34|18|18|11|920
+Sate Kambing 10 sticks (Indonesian Grilled Mutton Skewers 10 sticks)|10 sticks|240|382|36|10|22|6.5|880
+Sate Padang 10 sticks (Indonesian Beef Satay with Thick Spicy Gravy 10 sticks)|10 sticks|280|368|32|24|16|4.5|1120
+Martabak Telur Beef (Indonesian Pan-Fried Savory Egg Crepe with Beef 2pcs)|2 pieces|220|296|14|24|16|2|680
+Martabak Manis Chocolate Cheese (Indonesian Thick Sweet Pancake 2 slices)|2 slices|240|344|7.5|38|18|22|340
+Pempek Palembang Kapal Selam (Indonesian Fish Cake Stuffed with Egg)|1 piece|200|249|14|28|9|6|740
+Batagor Bandung (Indonesian Fried Fish Tofu Dumplings in Peanut Sauce)|1 plate|260|346|14|32|18|8.5|820
+Siomay Bandung (Indonesian Steamed Fish Dumplings and Vegetables in Peanut Sauce)|1 plate|280|326|16|34|14|8|860
+Tahu Sumedang 5pcs (Indonesian Crispy Hollow Fried Tofu 5 pieces)|5 pieces|125|194|11|6|14|0.5|280
+Tempe Mendoan 3pcs (Indonesian Lightly Fried Battered Tempeh 3 pieces)|3 pieces|150|243|13|14|15|1|340
+Perkedel Kentang 2pcs (Indonesian Fried Potato Patties 2 pieces)|2 pieces|120|175|3.5|20|9|1.5|320
+Sayur Asem (Indonesian Tamarind Vegetable Soup)|1 bowl|280|92|3.5|16|1.5|6.5|890
+Sayur Lodeh Indonesian (Indonesian Coconut Milk Vegetable Stew)|1 bowl|280|208|4.5|16|14|4.5|940
+Opor Ayam (Indonesian White Coconut Braised Chicken 1 piece)|1 piece|220|308|26|6|20|2.5|780
+Gudeg Jogja with Rice (Indonesian Sweet Jackfruit Stew with Chicken and Rice)|1 plate|450|546|22|74|18|18|1140
+Es Teler (Indonesian Avocado Jackfruit Coconut Shaved Ice Dessert)|1 bowl|320|348|3.5|52|14|42|45
+Es Cendol Dawet (Indonesian Palm Sugar Coconut Milk Pandan Jelly)|1 glass|300|309|2.5|50|11|40|50
+Chicken Adobo with Rice (Filipino Soy Vinegar Braised Chicken with Rice)|1 plate|420|564|32|64|20|4.5|1380
+Pork Adobo with Rice (Filipino Soy Vinegar Braised Pork Belly with Rice)|1 plate|420|656|28|64|32|4.5|1420
+Sinigang na Baboy (Filipino Tamarind Sour Pork and Vegetable Soup)|1 bowl|420|358|24|16|22|4|1480
+Sinigang na Hipon (Filipino Tamarind Sour Prawn Soup)|1 bowl|400|180|22|14|4|4|1420
+Kare-Kare Beef (Filipino Oxtail and Tripe Peanut Stew)|1 bowl|350|418|28|18|26|5.5|1180
+Lechon Kawali with Rice (Filipino Crispy Deep-Fried Pork Belly with Rice)|1 plate|420|702|28|62|38|1.5|1240
+Crispy Pata 1 serving (Filipino Deep-Fried Pork Knuckle 1 portion)|1 portion|250|530|34|4|42|0.5|1120
+Pork Sisig with Rice & Egg (Filipino Sizzling Chopped Pork with Egg and Rice)|1 plate|440|674|28|64|34|3|1360
+Chicken Inasal with Rice (Filipino Bacolod Lemongrass Grilled Chicken with Rice)|1 plate|430|544|36|64|16|4|1180
+Bistek Tagalog with Rice (Filipino Beef Steak with Soy Sauce and Onions)|1 plate|410|538|30|64|18|5|1320
+Beef Caldereta (Filipino Spicy Tomato Beef Stew with Potatoes)|1 bowl|320|364|26|20|20|6|1140
+Beef Mechado (Filipino Tomato Braised Beef Stew)|1 bowl|320|338|26|18|18|5.5|1080
+Chicken Tinola (Filipino Ginger Papaya Chicken Soup)|1 bowl|380|242|26|12|10|2.5|1160
+Bulalo (Filipino Beef Shank and Bone Marrow Soup)|1 bowl|480|428|32|12|28|2|1440
+Pancit Canton (Filipino Stir-Fried Egg Noodles with Meat and Vegetables)|1 plate|350|406|16|54|14|4.5|1220
+Pancit Bihon (Filipino Stir-Fried Rice Vermicelli Noodles)|1 plate|340|383|15|56|11|4|1160
+Pancit Palabok (Filipino Rice Noodles with Shrimp Gravy and Pork Cracklings)|1 plate|380|439|18|58|15|4.5|1340
+Lumpiang Shanghai 5pcs (Filipino Crispy Minced Pork Spring Rolls 5 pieces)|5 pieces|150|272|12|20|16|2|540
+Tapsilog (Filipino Cured Beef Tapa with Garlic Rice and Fried Egg)|1 plate|420|558|28|62|22|6|1380
+Longsilog (Filipino Sweet Pork Sausage with Garlic Rice and Fried Egg)|1 plate|430|604|22|66|28|12|1340
+Tocilog (Filipino Sweet Cured Pork Tocino with Garlic Rice and Egg)|1 plate|430|584|24|68|24|16|1290
+Bangsilog (Filipino Fried Milkfish with Garlic Rice and Fried Egg)|1 plate|440|584|32|60|24|2|1180
+Arroz Caldo (Filipino Ginger Chicken Rice Porridge)|1 bowl|380|352|18|52|8|1.5|1120
+Champorado (Filipino Sweet Chocolate Rice Porridge)|1 bowl|320|314|5.5|64|4|28|140
+Laing (Filipino Bicolano Taro Leaves in Coconut Milk and Chili)|1 bowl|220|278|6|14|22|4.5|840
+Pinakbet (Filipino Mixed Vegetables Stewed in Shrimp Paste)|1 bowl|260|198|9|18|10|5.5|980
+Dinuguan (Filipino Savory Pork Blood Stew)|1 bowl|280|316|24|10|20|2.5|1160
+Tortang Talong (Filipino Grilled Eggplant Omelette)|1 piece|200|218|11|12|14|3.5|460
+Halo-Halo Regular (Filipino Mixed Shaved Ice Dessert with Leche Flan and Ube)|1 glass|380|370|6.5|68|8|52|120
+Leche Flan 1 slice (Filipino Caramel Egg Custard Dessert 1 slice)|1 slice|110|202|5.5|28|7.5|26|65
+Turon 2pcs (Filipino Fried Caramelized Banana Spring Rolls 2 pieces)|2 pieces|160|275|2|42|11|22|85
+Bibingka (Filipino Baked Coconut Rice Cake with Salted Egg)|1 piece|160|237|5|34|9|14|290
+Puto 3pcs (Filipino Steamed Rice Cakes 3 pieces)|3 pieces|120|136|2.5|28|1.5|11|140
+Nasi Katok Original (Bruneian Plain Rice with Fried Chicken and Sambal)|1 pack|380|514|26|62|18|4.5|980
+Nasi Katok Sambal Tahai (Bruneian Rice with Fried Chicken and Smoked Fish Sambal)|1 pack|390|531|28|62|19|4.5|1060
+Nasi Katok Buttermilk Chicken (Bruneian Rice with Creamy Buttermilk Chicken)|1 pack|420|584|26|66|24|6.5|1090
+Soto Brunei Beef (Bruneian Spiced Beef Noodle Soup)|1 bowl|480|422|26|48|14|3|1380
+Soto Brunei Chicken (Bruneian Spiced Chicken Noodle Soup)|1 bowl|480|400|25|48|12|3|1340
+Kelupis 3pcs (Bruneian Steamed Glutinous Rice Rolls in Pandan Leaf 3 pieces)|3 pieces|150|218|3|38|6|2.5|180
+Hati Buyah (Bruneian Stir-Fried Spiced Beef Lungs 1 serving)|1 portion|140|228|24|6|12|2.5|680
+Daging Lalap with Rice (Bruneian Fried Marinated Beef with Sambal and Rice)|1 plate|430|556|32|62|20|4|1140
+Ayam Lalap with Rice (Bruneian Fried Spiced Chicken with Fresh Vegetables and Rice)|1 plate|440|582|34|62|22|4|1160
+Pais Daging (Bruneian Grilled Spiced Beef Wrapped in Banana Leaf)|1 piece|150|254|26|6|14|2.5|620
+Pais Ikan (Bruneian Grilled Spiced Fish Wrapped in Banana Leaf)|1 piece|150|210|24|6|10|2.5|590
+Belutak (Bruneian Fermented Spiced Beef Sausage 1 serving)|1 portion|120|248|22|4|16|1.5|890
+Kueh Penyaram 2pcs (Bruneian Traditional Palm Sugar Rice Flour Fritters 2pcs)|2 pieces|110|164|1.5|26|6|14|65
+Kueh Cincin 3pcs (Bruneian Crispy Ring-Shaped Palm Sugar Biscuits 3pcs)|3 pieces|75|116|1|18|4.5|9|45
+Kuih Jelurut 2pcs (Bruneian Steamed Pandan Coconut Rice Rolls 2 pieces)|2 pieces|120|165|2|28|5|13|55
+Pulut Panggang Brunei 2pcs (Bruneian Grilled Glutinous Rice with Beef Floss 2pcs)|2 pieces|160|220|6.5|34|6.5|4.5|260
+Nasi Lemak Pandan Sambal Sotong (Malaysian Pandan Nasi Lemak with Squid Sambal)|1 plate|420|558|22|68|22|11|1180
+Nasi Lemak Ayam Berempah (Malaysian Nasi Lemak with Spiced Fried Chicken)|1 plate|460|660|32|70|28|10|1260
+Kolo Mee Sarawak Original (Sarawak Dry Springy Noodles with Minced Pork and Char Siu)|1 bowl|360|448|20|56|16|4.5|1180
+Kolo Mee Sarawak Red Sauce (Sarawak Dry Noodles in Sweet Char Siu Sauce)|1 bowl|360|456|20|58|16|8|1220
+Mee Pok Dry (Singapore Dry Flat Egg Noodles with Minced Meat and Vinegar)|1 bowl|370|461|21|56|17|4.5|1320
+Ban Mian Soup (Handmade Flat Flour Noodles in Anchovy Broth)|1 bowl|520|434|22|64|10|2.5|1460
+Chili Pan Mee Dry (Dry Handmade Noodles with Minced Pork Poached Egg and Chili)|1 bowl|410|516|24|60|20|4.5|1380
+Fish Ball Noodle Soup (Teochew Fish Ball Rice Vermicelli Soup)|1 bowl|480|358|18|58|6|2|1420
+Yong Tau Foo Soup 7pcs with Noodles (Assorted Stuffed Tofu and Vegetables in Soup)|1 bowl|540|478|26|62|14|4|1560
+Yong Tau Foo Dry 7pcs with Sweet Sauce (Assorted Stuffed Tofu with Hoisin and Chili)|1 bowl|460|522|26|64|18|12|1480
+Curry Puff Kentang 2pcs (Malaysian Spiced Potato Curry Puffs 2 pieces)|2 pieces|140|296|4|34|16|3|380
+Curry Puff Sardin 2pcs (Malaysian Spicy Sardine Curry Puffs 2 pieces)|2 pieces|140|294|7.5|30|16|2.5|420
+Pisang Goreng 3pcs (Crispy Fried Banana Fritters 3 pieces)|3 pieces|180|318|2|46|14|18|95
+Cempedak Goreng 3pcs (Crispy Fried Jackfruit Fritters 3 pieces)|3 pieces|165|295|2.5|42|13|19|85
+Keropok Lekor Fried 6pcs (Terengganu Fried Fish Sausages 6 pieces)|6 pieces|150|276|14|28|12|2|640
+Satay Ayam 10 sticks with Kuah Kacang (Malaysian Chicken Satay with Peanut Sauce)|10 sticks|260|386|34|22|18|12|890
+Satay Daging 10 sticks with Kuah Kacang (Malaysian Beef Satay with Peanut Sauce)|10 sticks|260|412|36|22|20|12|920
+Nasi Impit 1 portion (Compressed Rice Cubes for Satay and Lontong)|1 portion|120|142|2.5|32|0.5|0.5|15

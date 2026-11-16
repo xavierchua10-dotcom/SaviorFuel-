@@ -1,0 +1,114 @@
+# Nutrition batch part 5. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Classic Beef Burger (Grilled Beef Burger with Lettuce Tomato and Cheese)|1 burger|240|464|26|36|24|6.5|890
+Double Beef Cheeseburger (Double Beef Patty Cheeseburger with Brioche Bun)|1 burger|330|662|42|38|38|7.5|1280
+Crispy Chicken Burger (Deep-Fried Crispy Chicken Thigh Burger with Mayo)|1 burger|230|462|24|42|22|6|920
+Grilled Chicken Burger (Marinated Grilled Chicken Breast Burger)|1 burger|220|372|28|38|12|5.5|780
+Chicken Chop Fried with Black Pepper Sauce (Malaysian Western Crispy Chicken Chop)|1 plate|440|556|34|42|28|5.5|1220
+Chicken Chop Grilled with Mushroom Sauce (Malaysian Western Grilled Chicken Chop)|1 plate|420|460|36|34|20|4.5|1080
+Chicken Maryland (Breaded Fried Chicken with Fried Banana Fritter and Fries)|1 plate|480|682|32|62|34|14|1180
+Ribeye Steak Grilled 200g (Grilled Beef Ribeye Steak 200g)|1 steak|200|490|46|0|34|0|480
+Sirloin Steak Grilled 200g (Grilled Beef Sirloin Steak 200g)|1 steak|200|390|48|0|22|0|460
+Tenderloin Steak Grilled 200g (Grilled Beef Tenderloin Filet Mignon 200g)|1 steak|200|344|50|0|16|0|440
+Lamb Chop Grilled 2pcs (Grilled Marinated Lamb Shoulder Chops with Mint Sauce)|1 plate|260|472|38|8|32|4|790
+Spaghetti Bolognese Beef (Spaghetti with Minced Beef Tomato Sauce)|1 plate|380|446|22|58|14|8.5|940
+Spaghetti Aglio Olio Chicken (Garlic Olive Oil Chili Spaghetti with Grilled Chicken)|1 plate|360|464|26|54|16|2|820
+Spaghetti Aglio Olio Seafood (Garlic Olive Oil Chili Spaghetti with Prawns and Squid)|1 plate|360|438|24|54|14|2|860
+Fettuccine Alfredo Chicken (Creamy Parmesan Fettuccine Pasta with Chicken)|1 plate|400|562|26|56|26|4|1120
+Penne Arrabbiata (Penne Pasta in Spicy Garlic Tomato Sauce)|1 plate|340|373|11|62|9|7.5|840
+Macaroni and Cheese Baked (Baked Cheddar Macaroni and Cheese Casserole)|1 bowl|320|430|16|42|22|4.5|960
+Beef Lasagna Baked (Layered Pasta Sheets with Beef Ragu and Bechamel)|1 portion|340|438|24|36|22|6.5|1080
+Margherita Pizza 1 slice (Thin Crust Tomato Mozzarella Basil Pizza 1 slice)|1 slice|105|214|9.5|26|8|2.5|420
+Pepperoni Pizza 1 slice (Thin Crust Beef Pepperoni Mozzarella Pizza 1 slice)|1 slice|115|252|11|26|11.5|2.5|510
+Hawaiian Chicken Pizza 1 slice (Thin Crust Chicken and Pineapple Pizza 1 slice)|1 slice|115|230|10.5|28|8.5|4.5|460
+Four Cheese Pizza 1 slice (Quattro Formaggi Melted Cheese Pizza 1 slice)|1 slice|110|260|12|25|12.5|2|520
+Club Sandwich Chicken (Triple-Decker Toasted Chicken Egg and Cheese Sandwich)|1 sandwich|260|410|24|38|18|5|880
+Tuna Mayo Sandwich (Wholemeal Bread Sandwich with Tuna Mayonnaise)|1 sandwich|180|284|16|28|12|3.5|540
+Egg Mayo Sandwich (White Bread Sandwich with Creamy Mashed Egg Mayo)|1 sandwich|170|273|11|28|13|3.5|490
+Grilled Cheese Sandwich (Buttered Toasted Bread with Melted Cheddar Cheese)|1 sandwich|140|304|12|28|16|3|640
+BLT Sandwich (Beef Bacon Lettuce and Tomato Toasted Sandwich)|1 sandwich|190|320|14|30|16|4.5|780
+Caesar Salad with Grilled Chicken (Romaine Lettuce Croutons Parmesan and Chicken)|1 bowl|280|330|28|14|18|3|760
+Caesar Salad Plain (Romaine Lettuce Croutons Parmesan and Caesar Dressing)|1 bowl|200|232|8|14|16|3|580
+Garden Green Salad with Vinaigrette (Mixed Greens Tomato Cucumber Salad)|1 bowl|180|113|2.5|10|7|4.5|280
+Big Breakfast Platter Western (Scrambled Eggs Sausages Hash Brown and Toast)|1 plate|380|560|24|44|32|5|1340
+Eggs Benedict (Poached Eggs on English Muffin with Hollandaise Sauce)|1 plate|260|366|16|26|22|3|780
+Pancakes with Maple Syrup 3pcs (Fluffy Buttermilk Pancakes with Butter and Syrup)|3 pieces|240|399|7|68|11|28|540
+French Toast 2 slices (Egg-Dipped Pan-Fried Brioche Toast with Syrup)|2 slices|210|320|9|44|12|16|420
+Cream of Mushroom Soup (Creamy Button Mushroom Soup with Croutons)|1 bowl|250|189|4.5|18|11|3|740
+Cream of Chicken Soup (Creamy Shredded Chicken Soup)|1 bowl|250|188|8.5|16|10|2.5|760
+Roasted Pumpkin Soup (Creamy Pureed Roasted Pumpkin Soup)|1 bowl|250|170|3.5|22|7.5|8.5|620
+Shawarma Chicken Wrap Regular (Middle Eastern Roasted Chicken Garlic Sauce Wrap)|1 wrap|280|408|24|42|16|3.5|860
+Shawarma Chicken Wrap Large (Middle Eastern Large Chicken Shawarma Roll)|1 wrap|380|550|34|54|22|4.5|1140
+Shawarma Beef Wrap Regular (Middle Eastern Spiced Beef Tahini Wrap)|1 wrap|280|422|23|42|18|3.5|890
+Shawarma Lamb Wrap Regular (Middle Eastern Spiced Lamb Garlic Wrap)|1 wrap|280|436|22|42|20|3.5|880
+Chicken Kebab Skewer 2pcs (Grilled Marinated Shish Tawook Chicken Skewers 2pcs)|2 skewers|200|241|36|4|9|1.5|640
+Beef Kofta Kebab 2pcs (Grilled Spiced Minced Beef Skewers 2 pieces)|2 skewers|200|298|28|6|18|2|680
+Lamb Adana Kebab 2pcs (Grilled Spicy Minced Lamb Skewers 2 pieces)|2 skewers|200|326|26|6|22|2|710
+Doner Kebab Plate with Rice (Sliced Rotisserie Kebab Meat with Rice and Salad)|1 plate|450|574|32|62|22|4.5|1180
+Hummus Dip 100g (Chickpea Tahini Olive Oil Dip 100g)|1 bowl|100|176|7.5|14|10|1|380
+Baba Ganoush 100g (Roasted Eggplant Tahini Olive Oil Dip 100g)|1 bowl|100|131|2.5|10|9|3.5|340
+Falafel 4pcs (Deep-Fried Spiced Chickpea Patties 4 pieces)|4 pieces|120|244|7.5|22|14|2|460
+Tabbouleh Salad (Parsley Bulgur Wheat Tomato Mint Olive Oil Salad)|1 bowl|160|154|3.5|18|7.5|2.5|320
+Fattoush Salad (Mixed Vegetable Salad with Crispy Pita and Sumac Dressing)|1 bowl|180|170|3.5|20|8.5|4|410
+Mandi Chicken with Rice (Yemeni Spiced Roasted Chicken with Mandi Basmati Rice)|1 plate|520|628|36|76|20|3|1180
+Mandi Lamb with Rice (Yemeni Slow-Cooked Tender Lamb Shank with Mandi Rice)|1 plate|540|690|38|76|26|3|1240
+Kabsa Chicken with Rice (Arabian Spiced Tomato Chicken and Basmati Rice)|1 plate|520|623|35|78|19|4.5|1220
+Maqluba Chicken with Rice (Levantine Upside-Down Fried Eggplant Chicken Rice)|1 plate|500|622|32|74|22|5|1190
+Pita Bread 1pc (Middle Eastern Flatbread Pocket 1 piece)|1 piece|60|161|5.5|33|0.8|1|280
+Baklava 2pcs (Middle Eastern Pistachio Honey Layered Filo Pastry 2 pieces)|2 pieces|80|332|4.5|38|18|24|95
+Kunafa Cheese 1 piece (Middle Eastern Sweet Cheese Pastry in Sugar Syrup)|1 piece|140|376|7.5|46|18|30|240
+Shakshuka (Poached Eggs in Spiced Tomato and Bell Pepper Sauce)|1 pan|280|246|14|16|14|8.5|740
+Spanish Paella Seafood (Spanish Saffron Rice with Prawns Mussels and Squid)|1 plate|420|460|24|64|12|3.5|1160
+Chicken Biryani Regular (Spiced Basmati Rice with Chicken Curry and Egg)|1 plate|480|588|28|74|20|4.5|1240
+Chicken Biryani Large (Large Portion Chicken Biryani with Raita and Gravy)|1 plate|640|778|38|98|26|6|1620
+Mutton Biryani Regular (Spiced Basmati Rice with Tender Mutton Curry)|1 plate|480|620|29|72|24|4.5|1280
+Lamb Shank Biryani (Spiced Basmati Rice with Braised Whole Lamb Shank)|1 plate|580|724|42|76|28|5|1380
+Fish Biryani (Spiced Basmati Rice with Fried Kingfish Masala)|1 plate|460|562|28|72|18|4|1180
+Prawn Biryani (Spiced Basmati Rice with Spiced Masala Prawns)|1 plate|460|536|26|72|16|4.5|1220
+Vegetable Dum Biryani (Spiced Basmati Rice with Mixed Vegetables and Paneer)|1 plate|440|478|12|76|14|5.5|1080
+Hyderabadi Chicken Dum Biryani (Slow-Cooked Aromatic Hyderabadi Chicken Biryani)|1 plate|500|614|30|74|22|4.5|1290
+Thosai Plain (South Indian Crispy Fermented Rice and Lentil Crepe)|1 piece|110|153|3.5|28|3|1|240
+Thosai Masala (South Indian Crepe Stuffed with Spiced Potato Masala)|1 piece|220|274|5.5|46|7.5|2.5|480
+Thosai Egg (South Indian Fermented Crepe Topped with Egg)|1 piece|160|222|9.5|28|8|1.5|320
+Thosai Ghee Roast (South Indian Crispy Crepe Roasted with Clarified Butter)|1 piece|125|212|3.5|28|9.5|1|260
+Thosai Paper (South Indian Extra Thin and Large Crispy Thosai)|1 piece|130|192|4|34|4.5|1|280
+Thosai Rava (South Indian Crispy Semolina and Onion Crepe)|1 piece|140|198|4|32|6|1.5|310
+Idli 2pcs with Sambar & Chutney (South Indian Steamed Rice Lentil Cakes 2pcs)|2 pieces|140|172|5.5|34|1.5|2|380
+Medu Vada 2pcs (South Indian Crispy Savory Lentil Donuts 2 pieces)|2 pieces|110|200|5|18|12|1|320
+Uttapam Onion Tomato (South Indian Thick Savory Rice Pancake with Onions)|1 piece|160|190|4.5|34|4|2.5|340
+Appam Plain 2pcs (South Indian Fermented Rice Hopper Pancakes 2 pieces)|2 pieces|120|144|2.5|28|2.5|3|180
+Appam Egg 1pc (South Indian Rice Hopper Pancake with Egg Center)|1 piece|110|148|7.5|15|6.5|2|190
+Idiyappam Putu Mayam 3pcs (Steamed String Hoppers with Coconut and Palm Sugar)|3 pieces|150|186|3|38|2.5|12|85
+Pongal Ven (South Indian Savory Rice and Mung Dal Ghee Porridge)|1 bowl|240|263|7.5|38|9|1.5|520
+Sambar Vegetable 1 bowl (South Indian Lentil and Tamarind Vegetable Stew)|1 bowl|200|150|6.5|22|4|4.5|640
+Rasam 1 bowl (South Indian Tangy Pepper Tamarind Tomato Soup)|1 bowl|200|52|1.5|8|1.5|2.5|580
+Coconut Chutney 2 tbsp (South Indian Fresh Coconut and Green Chili Chutney)|2 tbsp|40|76|1|3.5|6.5|1.5|140
+Butter Chicken Murgh Makhani (North Indian Creamy Tomato Butter Chicken Curry)|1 bowl|260|368|26|12|24|6.5|890
+Chicken Tikka Masala (North Indian Spiced Roasted Chicken in Creamy Masala Gravy)|1 bowl|260|354|27|12|22|6|920
+Tandoori Chicken Quarter (Yogurt and Spice Marinated Clay-Oven Roasted Chicken)|1 piece|200|241|36|4|9|1.5|680
+Chicken Tikka 5pcs (Boneless Clay-Oven Grilled Spiced Chicken Chunks 5pcs)|5 pieces|160|212|32|4|7.5|1.5|590
+Paneer Tikka 5pcs (Grilled Marinated Cottage Cheese and Bell Peppers 5pcs)|5 pieces|170|231|16|8|15|3|560
+Dal Tadka Yellow (North Indian Tempered Yellow Split Lentil Curry)|1 bowl|240|232|11|30|7.5|2.5|680
+Malai Kofta (North Indian Fried Potato Paneer Balls in Creamy Gravy)|1 bowl|250|330|9|24|22|6.5|790
+Rogan Josh Mutton (Kashmiri Aromatic Braised Lamb and Mutton Curry)|1 bowl|250|342|28|8|22|3|860
+Lamb Korma (North Indian Mild Creamy Cashew and Yogurt Lamb Curry)|1 bowl|250|368|26|12|24|5|820
+Chicken Vindaloo (Goan Fiery Vinegar and Garlic Spiced Chicken Curry)|1 bowl|240|270|26|10|14|3.5|880
+Fish Tikka Masala (North Indian Grilled Fish Chunks in Spiced Tomato Gravy)|1 bowl|240|270|26|10|14|4.5|840
+Naan Plain (North Indian Clay-Oven Baked Leavened Flatbread)|1 piece|90|246|7.5|46|3.5|3|360
+Naan Butter (North Indian Clay-Oven Baked Flatbread Brushed with Butter)|1 piece|95|290|7.5|46|8.5|3|410
+Naan Garlic (North Indian Clay-Oven Baked Flatbread with Garlic and Butter)|1 piece|100|296|7.8|47|8.5|3.2|440
+Naan Cheese (North Indian Flatbread Stuffed with Melted Cheese)|1 piece|135|366|14|46|14|3.5|580
+Naan Cheese Garlic (North Indian Cheese Stuffed Flatbread with Garlic Butter)|1 piece|140|380|14.2|47|15|3.5|620
+Tandoori Roti (North Indian Clay-Oven Whole Wheat Flatbread)|1 piece|70|174|6|34|1.5|1|240
+Chapati 1pc (North Indian Unleavened Whole Wheat Griddle Flatbread 1 piece)|1 piece|50|128|4.5|24|1.5|0.8|160
+Aloo Paratha (North Indian Pan-Fried Whole Wheat Flatbread Stuffed with Potato)|1 piece|140|307|6|46|11|2|440
+Puri 2pcs (North Indian Deep-Fried Puffed Whole Wheat Bread 2 pieces)|2 pieces|80|256|5|32|12|1|220
+Bhatura 1pc (North Indian Deep-Fried Fluffy Leavened Bread 1 piece)|1 piece|95|320|6.5|42|14|2.5|320
+Samosa Vegetable 2pcs (Crispy Fried Pastry Stuffed with Spiced Potatoes and Peas)|2 pieces|120|270|4|32|14|2|380
+Samosa Chicken 2pcs (Crispy Fried Pastry Stuffed with Spiced Minced Chicken)|2 pieces|120|274|9|28|14|1.5|420
+Onion Bhaji Pakora 4pcs (Crispy Spiced Chickpea Flour Onion Fritters 4pcs)|4 pieces|120|222|4.5|24|12|3.5|360
+Papadam 2pcs (Crispy Roasted or Fried Lentil Wafers 2 pieces)|2 pieces|25|88|3|11|3.5|0.5|280
+Raita Cucumber Yogurt (Chilled Spiced Yogurt Dip with Grated Cucumber)|1 bowl|100|63|3.5|5.5|3|4|140
+Gulab Jamun 2pcs (Deep-Fried Milk Solid Dumplings in Rose Cardamom Syrup 2pcs)|2 pieces|100|286|3|46|10|38|65
+Jalebi 2pcs (Crispy Deep-Fried Fermented Batter Spirals in Saffron Syrup 2pcs)|2 pieces|80|279|1.5|48|9|38|35
+Rasmalai 2pcs (Soft Cottage Cheese Patties in Sweet Saffron Milk 2 pieces)|2 pieces|120|197|7.5|26|7|22|75
+Masala Chai Hot (Indian Spiced Milk Tea with Cardamom and Ginger)|1 cup|200|118|3.5|18|3.5|16|65

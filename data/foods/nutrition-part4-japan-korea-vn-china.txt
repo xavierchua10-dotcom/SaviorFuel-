@@ -1,0 +1,134 @@
+# Nutrition batch part 4. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Tonkotsu Ramen (Japanese Pork Bone Broth Ramen with Chashu and Egg)|1 bowl|620|676|32|74|28|4.5|1890
+Shoyu Ramen (Japanese Soy Sauce Broth Ramen with Chashu)|1 bowl|580|544|28|72|16|4|1780
+Miso Ramen (Japanese Fermented Soybean Broth Ramen)|1 bowl|600|604|30|76|20|5.5|1850
+Spicy Tan Tan Ramen (Japanese Spicy Sesame Minced Pork Ramen)|1 bowl|620|694|32|74|30|6|1820
+Chicken Katsu Don (Japanese Crispy Chicken Cutlet Egg Rice Bowl)|1 bowl|520|646|34|78|22|7.5|1280
+Gyudon Beef Bowl (Japanese Simmered Beef and Onion Rice Bowl)|1 bowl|480|562|26|74|18|8|1240
+Unagi Don (Japanese Grilled Freshwater Eel Rice Bowl)|1 bowl|450|560|28|76|16|12|1120
+Salmon Teriyaki Don (Japanese Teriyaki Glazed Salmon Rice Bowl)|1 bowl|460|552|30|72|16|10.5|1080
+Saba Shioyaki Bento (Japanese Salt-Grilled Mackerel Bento Set)|1 set|500|598|32|68|22|4|1160
+Chicken Karaage 5pcs (Japanese Deep-Fried Marinated Chicken 5 pieces)|5 pieces|160|306|22|14|18|1.5|640
+Ebi Tempura 3pcs (Japanese Battered Fried Prawns 3 pieces)|3 pieces|120|236|14|18|12|1|380
+Vegetable Tempura Assorted (Japanese Assorted Fried Vegetables 1 portion)|1 portion|140|236|3.5|24|14|2.5|320
+Gyoza Pan-Fried 5pcs (Japanese Pork and Cabbage Dumplings 5 pieces)|5 pieces|140|222|11|22|10|2|520
+Yakisoba (Japanese Stir-Fried Wheat Noodles with Pork and Vegetables)|1 plate|380|455|18|62|15|8|1240
+Kitsune Udon (Japanese Udon Noodles in Dashi Broth with Sweet Fried Tofu)|1 bowl|520|440|16|76|8|6.5|1480
+Zaru Soba (Japanese Chilled Buckwheat Noodles with Dipping Sauce)|1 set|320|330|14|64|2|4.5|890
+Salmon Nigiri 2pcs (Japanese Fresh Salmon Sushi 2 pieces)|2 pieces|70|144|10|18|3.5|3|210
+Tuna Maguro Nigiri 2pcs (Japanese Lean Red Tuna Sushi 2 pieces)|2 pieces|68|123|11|18|0.8|3|205
+Salmon Mentai Sushi 2pcs (Japanese Torched Cod Roe Mayo Salmon Sushi 2pcs)|2 pieces|80|192|10.5|18.5|8.5|3.5|290
+Spicy Tuna Roll 6pcs (Japanese Spicy Tuna Maki Roll 6 pieces)|6 pieces|180|246|14|34|6|4.5|540
+Salmon Avocado Roll 6pcs (Japanese Salmon and Avocado Maki Roll 6 pieces)|6 pieces|210|282|13|36|9.5|5|520
+Dragon Roll 8pcs (Japanese Prawn Tempura and Avocado Roll 8 pieces)|8 pieces|290|382|16|48|14|7.5|780
+Salmon Sashimi 5pcs (Japanese Fresh Raw Salmon Slices 5 pieces)|5 slices|100|192|20|0|12.5|0|55
+Tuna Sashimi 5pcs (Japanese Fresh Raw Tuna Slices 5 pieces)|5 slices|100|101|23|0|1|0|45
+Onigiri Salmon Mayo (Japanese Triangle Rice Ball with Salmon Mayo)|1 piece|115|202|6.5|34|4.5|1.5|380
+Onigiri Tuna Mayo (Japanese Triangle Rice Ball with Tuna Mayo)|1 piece|115|205|6|34|5|1.5|390
+Tamagoyaki 2pcs (Japanese Sweet Rolled Omelette 2 slices)|2 pieces|80|106|7.5|6.5|5.5|5|260
+Matcha Soft Serve Ice Cream (Japanese Green Tea Soft Serve Cone)|1 cone|130|189|3.5|28|7|21|75
+Dorayaki Red Bean (Japanese Sweet Pancake Sandwich with Azuki Paste)|1 piece|95|216|4.5|44|2.5|22|120
+Mochi Daifuku Strawberry (Japanese Sweet Rice Cake with Red Bean and Berry)|1 piece|85|169|2|38|1|18|35
+Bibimbap Beef (Korean Mixed Rice Bowl with Beef Vegetables and Gochujang)|1 bowl|520|560|26|78|16|9.5|1280
+Dolsot Bibimbap Chicken (Korean Hot Stone Pot Mixed Rice with Chicken)|1 bowl|540|585|28|80|17|9.5|1320
+Doenjang Jjigae (Korean Fermented Soybean Paste Stew with Tofu)|1 bowl|380|252|18|18|12|4|1540
+Samgyetang (Korean Whole Ginseng Chicken Soup with Glutinous Rice)|1 bowl|750|574|48|46|22|2|1380
+Bulgogi Beef with Rice (Korean Marinated Sweet Savory Grilled Beef with Rice)|1 plate|440|554|30|68|18|12|1240
+Dakgalbi Spicy Chicken (Korean Stir-Fried Spicy Gochujang Chicken 1 portion)|1 portion|260|326|32|18|14|9.5|1140
+Samgyeopsal Grilled Pork Belly (Korean Grilled Thick Pork Belly 150g)|1 portion|150|442|24|1|38|0.5|420
+Korean Fried Chicken Yangnyeom 4pcs (Korean Sweet Spicy Glazed Wings 4pcs)|4 pieces|200|346|22|24|18|14|840
+Korean Fried Chicken Soy Garlic 4pcs (Korean Soy Garlic Crispy Wings 4pcs)|4 pieces|190|313|22|18|17|8.5|880
+Kimbap Tuna (Korean Seaweed Rice Roll with Tuna and Pickled Radish)|1 roll|260|300|12|46|7.5|4.5|780
+Kimbap Beef Bulgogi (Korean Seaweed Rice Roll with Marinated Beef)|1 roll|270|316|14|46|8.5|5.5|820
+Haemul Pajeon (Korean Crispy Seafood and Scallion Pancake 2 slices)|2 slices|220|280|11|32|12|3|680
+Kimchi Bokkeumbap (Korean Kimchi Fried Rice with Fried Egg)|1 plate|400|468|15|66|16|6|1280
+Jjamppong (Korean Spicy Seafood Noodle Soup)|1 bowl|580|510|24|72|14|5.5|1680
+Naengmyeon Mul (Korean Chilled Buckwheat Noodles in Tangy Beef Broth)|1 bowl|480|404|16|76|4|8|1380
+Mandu Steamed 5pcs (Korean Steamed Beef and Vegetable Dumplings 5pcs)|5 pieces|150|207|12|24|7|2|490
+Bingsu Injeolmi (Korean Shaved Milk Ice with Soybean Powder and Rice Cake)|1 bowl|380|418|9.5|68|12|38|140
+Pho Bo (Vietnamese Traditional Beef Rice Noodle Soup)|1 bowl|580|466|28|66|10|4|1540
+Pho Ga (Vietnamese Shredded Chicken Rice Noodle Soup)|1 bowl|560|440|26|66|8|3.5|1480
+Banh Mi Thit Nuong (Vietnamese Grilled Pork Baguette Sandwich)|1 sandwich|260|398|20|48|14|6.5|890
+Banh Mi Ga (Vietnamese Lemongrass Chicken Baguette Sandwich)|1 sandwich|250|379|22|48|11|6|840
+Banh Mi Cha Lua (Vietnamese Pork Roll and Pate Baguette Sandwich)|1 sandwich|250|403|19|48|15|5|960
+Bun Cha Hanoi (Vietnamese Grilled Pork Meatballs with Vermicelli and Herbs)|1 set|460|530|28|64|18|12|1240
+Goi Cuon 2 rolls (Vietnamese Fresh Prawn and Pork Rice Paper Rolls 2pcs)|2 rolls|160|184|12|26|3.5|4.5|460
+Cha Gio 3pcs (Vietnamese Crispy Fried Spring Rolls 3 pieces)|3 pieces|140|244|7.5|22|14|2.5|440
+Com Tam Suon Nuong (Vietnamese Broken Rice with Grilled Pork Chop and Egg)|1 plate|460|598|32|68|22|8|1180
+Banh Xeo (Vietnamese Crispy Turmeric Coconut Crepe with Prawns and Pork)|1 piece|280|336|14|34|16|4|760
+Bo Luc Lac with Rice (Vietnamese Shaking Cubed Beef Steak with Rice)|1 plate|420|530|30|62|18|6.5|1120
+Canh Chua Ca (Vietnamese Sweet and Sour Tamarind Fish Soup)|1 bowl|320|197|22|16|5|8|1180
+Ca Phe Sua Da (Vietnamese Iced Coffee with Sweetened Condensed Milk)|1 glass|250|166|3.5|28|4.5|26|65
+Cantonese Roast Duck with Rice (Cantonese Crispy Skin Roast Duck Rice)|1 plate|420|610|28|66|26|5|1260
+Cantonese Char Siu Rice (Cantonese BBQ Honey Glazed Pork Rice)|1 plate|400|546|26|70|18|12|1220
+Cantonese Siu Yuk Rice (Cantonese Crispy Roast Pork Belly Rice)|1 plate|410|616|25|66|28|2.5|1280
+Cantonese Beef Hor Fun Wat Tan (Cantonese Flat Rice Noodles in Egg Gravy)|1 plate|540|530|24|68|18|4|1480
+Cantonese Yee Mee Braised (Cantonese Crispy Egg Noodles in Gravy)|1 plate|520|542|20|66|22|4.5|1420
+Cantonese Sweet and Sour Pork (Cantonese Gu Lou Yuk with Pineapple 1 portion)|1 portion|240|346|18|28|18|16|780
+Cantonese Steamed Fish Soy Sauce (Cantonese Steamed Seabass with Ginger Soy)|1 portion|220|224|34|4|8|2|740
+Cantonese Century Egg Pork Congee (Cantonese Pi Dan Shou Rou Rice Porridge)|1 bowl|420|360|18|54|8|1.5|1180
+Cantonese Claypot Chicken Rice (Cantonese Claypot Rice with Chicken and Lap Cheong)|1 pot|480|580|28|72|20|5.5|1380
+Cantonese Wantan Mee Soup (Cantonese Shrimp Wanton Egg Noodle Soup)|1 bowl|460|410|22|58|10|3|1440
+Cantonese Beef Brisket Noodles (Cantonese Braised Beef Brisket Noodle Soup)|1 bowl|520|522|30|60|18|4|1520
+Cantonese Kai Lan Oyster Sauce (Cantonese Blanched Chinese Kale in Oyster Sauce)|1 plate|180|109|4|12|5|3.5|680
+Sichuan Mapo Tofu (Sichuan Spicy Minced Pork and Silken Tofu 1 portion)|1 portion|260|292|16|12|20|3.5|1140
+Sichuan Kung Pao Chicken (Sichuan Stir-Fried Chili Peanut Chicken 1 portion)|1 portion|240|330|26|16|18|7.5|980
+Sichuan Dan Dan Noodles (Sichuan Spicy Sesame Chili Oil Noodles)|1 bowl|380|486|16|56|22|5|1380
+Sichuan Mala Xiang Guo Mixed Bowl (Sichuan Spicy Stir-Fried Pot Meat and Veg)|1 bowl|450|504|28|26|32|4.5|1780
+Sichuan Boiled Beef Shui Zhu Niu (Sichuan Poached Spicy Chili Oil Beef)|1 portion|320|412|30|10|28|3|1480
+Sichuan Laziji Chongqing Chicken (Sichuan Crispy Dry Chili Fried Chicken)|1 portion|220|358|26|14|22|3|1040
+Sichuan Twice Cooked Pork (Sichuan Hui Guo Rou Pork Belly with Leeks)|1 portion|240|380|20|12|28|4.5|980
+Sichuan Hot and Sour Soup (Sichuan Suan La Tang Tofu and Mushroom Soup)|1 bowl|300|200|10|22|8|4.5|1280
+Sichuan Smashed Cucumber Salad (Sichuan Pai Huang Gua Garlic Chili Cucumber)|1 plate|160|102|2|10|6|4|580
+Hokkien Char Mee KL Style (Kuala Lumpur Dark Soy Braised Thick Hokkien Noodles)|1 plate|460|542|20|66|22|6.5|1480
+Hokkien Bak Kut Teh Herbal (Klang Herbal Dark Soy Pork Rib Soup)|1 bowl|480|358|32|8|22|2.5|1460
+Hokkien Kong Bak Pau 1pc (Hokkien Braised Pork Belly Steamed Bun 1 piece)|1 piece|140|274|11|26|14|5.5|460
+Hokkien Lor Bak 1 roll (Hokkien Five-Spice Pork Roll Wrapped in Beancurd Skin)|1 roll|130|230|12|14|14|3|480
+Hokkien Popiah Fried 2pcs (Hokkien Crispy Deep-Fried Spring Rolls 2 pieces)|2 pieces|150|262|6|28|14|4.5|440
+Hokkien Mee Suah Soup (Hokkien Longevity Vermicelli Soup with Chicken and Egg)|1 bowl|460|402|20|58|10|2.5|1340
+Hokkien Oyster Mee Sua (Taiwanese-Hokkien Thick Oyster Vermicelli Soup)|1 bowl|380|344|14|54|8|3.5|1380
+Hakka Yong Tau Foo Mixed 6pcs (Hakka Stuffed Tofu Eggplant and Bittergourd)|6 pieces|260|304|22|18|16|3.5|890
+Hakka Lui Cha Thunder Tea Rice (Hakka Herb Tea Soup with Vegetable and Nut Rice)|1 bowl|460|480|16|68|16|3|940
+Hakka Abacus Seeds Suan Pan Zi (Hakka Yam Dough Balls with Minced Pork)|1 plate|280|344|11|48|12|3|880
+Hakka Salt Baked Chicken 1 portion (Hakka Traditional Salt Baked Chicken)|1 portion|220|304|38|2|16|1|860
+Hakka Mei Cai Kou Rou (Hakka Steamed Pork Belly with Preserved Mustard Greens)|1 portion|220|380|20|12|28|5|1080
+Teochew Porridge Set (Teochew Plain Rice Porridge with Braised Duck and Egg)|1 set|480|478|24|64|14|3|1260
+Teochew Steamed Pomfret (Teochew Steamed Fish with Salted Plum and Tomatoes)|1 portion|220|215|32|6|7|3|780
+Teochew Braised Pork Trotter (Teochew Soy Braised Pork Knuckle 1 portion)|1 portion|220|352|26|8|24|4|940
+Teochew Chye Poh Omelette (Teochew Preserved Radish Egg Omelette)|1 plate|160|206|12|8|14|3.5|680
+Teochew Orh Nee (Teochew Sweet Yam Paste Dessert with Ginkgo Nuts)|1 bowl|180|245|3|38|9|20|65
+Teochew Peng Kueh 2pcs (Teochew Steamed Pink Glutinous Rice Dumplings 2pcs)|2 pieces|160|212|4.5|36|5.5|3.5|380
+Dim Sum Siu Mai 3pcs (Steamed Pork and Shrimp Open Dumplings 3 pieces)|3 pieces|105|177|12|12|9|1.5|460
+Dim Sum Har Gow 3pcs (Steamed Crystal Shrimp Dumplings 3 pieces)|3 pieces|90|130|10.5|14|3.5|1|380
+Dim Sum Char Siu Bao 2pcs (Steamed BBQ Pork Buns 2 pieces)|2 pieces|150|270|10|44|6|14|480
+Dim Sum Liu Sha Bao 2pcs (Steamed Salted Egg Yolk Custard Buns 2 pieces)|2 pieces|140|290|7.5|38|12|13|360
+Dim Sum Chee Cheong Fun Prawn (Steamed Rice Noodle Rolls with Prawns)|1 plate|180|217|11|32|5|4.5|640
+Dim Sum Lo Mai Gai (Steamed Glutinous Rice with Chicken in Lotus Leaf)|1 piece|220|310|14|42|9.5|4|680
+Dim Sum Xiao Long Bao 4pcs (Steamed Shanghai Soup Pork Dumplings 4 pieces)|4 pieces|120|184|11|18|7.5|2|490
+Dim Sum Phoenix Claws (Steamed Braised Chicken Feet in Black Bean Sauce)|1 plate|130|196|14|8|12|3.5|620
+Dim Sum Wu Gok 2pcs (Deep-Fried Crispy Taro Puff Dumplings 2 pieces)|2 pieces|120|236|5.5|22|14|2.5|340
+Dim Sum Radish Cake Lo Bak Gou 2pcs (Pan-Fried Turnip Cake 2 slices)|2 pieces|130|162|4|22|6.5|2|420
+Dim Sum Egg Tart 2pcs (Chinese Flaky Pastry Egg Custard Tarts 2 pieces)|2 pieces|130|306|6.5|34|16|16|180
+Dim Sum Sesame Ball Jin Deui 2pcs (Fried Glutinous Rice Balls with Red Bean 2pcs)|2 pieces|110|210|3|28|9.5|12|65
+Hotpot Mala Soup Base 1 bowl (Sichuan Spicy Chili Tallow Hotpot Broth 250ml)|1 bowl|250|248|2|6|24|2.5|1420
+Hotpot Clear Chicken Soup Base 1 bowl (Steamboat Clear Chicken Broth 250ml)|1 bowl|250|52|3|2|3.5|1|980
+Hotpot Tom Yum Soup Base 1 bowl (Steamboat Spicy Sour Tom Yum Broth 250ml)|1 bowl|250|78|2.5|8|4|3.5|1280
+Hotpot Sliced Beef Shabu 100g (Steamboat Thinly Sliced Beef Chuck 100g)|1 plate|100|206|20|0|14|0|65
+Hotpot Sliced Lamb Roll 100g (Steamboat Thinly Sliced Lamb Roll 100g)|1 plate|100|252|18|0|20|0|70
+Hotpot Sliced Pork Belly 100g (Steamboat Thinly Sliced Pork Belly 100g)|1 plate|100|316|16|0|28|0|60
+Hotpot Fish Ball 4pcs (Steamboat White Fish Balls 4 pieces)|4 pieces|60|66|7|6|1.5|1|380
+Hotpot Cheese Tofu 4pcs (Steamboat Fish Tofu Stuffed with Cheese 4 pieces)|4 pieces|80|124|8.5|8|6.5|1.5|460
+Hotpot Crabstick 4pcs (Steamboat Imitation Crab Sticks 4 pieces)|4 pieces|60|56|5|8|0.5|2|340
+Hotpot Fried Beancurd Roll 2pcs (Steamboat Ring Roll Fried Tofu Skin 2pcs)|2 pieces|30|146|6.5|3|12|0.5|85
+Hotpot Fuzhou Fish Ball 3pcs (Steamboat Minced Meat Stuffed Fish Balls 3pcs)|3 pieces|75|111|8.5|8|5|1.5|440
+Hotpot Quail Eggs 4pcs (Steamboat Boiled Quail Eggs 4 pieces)|4 pieces|40|62|5.2|0.4|4.4|0.2|56
+Hotpot Enoki Mushroom 1 bunch (Steamboat Fresh Enoki Mushrooms 80g)|1 portion|80|35|2.1|6.2|0.2|0.5|5
+Hotpot Napa Cabbage 1 portion (Steamboat Chinese White Cabbage 100g)|1 portion|100|19|1.2|3.2|0.2|1.4|12
+Bubble Tea Classic Milk Tea with Pearls (Generic Boba Milk Tea Regular 500ml)|1 cup|500|336|3|62|8.5|45|115
+Bubble Tea Brown Sugar Boba Milk (Generic Brown Sugar Fresh Milk Boba 500ml)|1 cup|500|372|7.5|64|9.5|50|135
+Bubble Tea Taro Milk Tea with Pearls (Generic Sweet Taro Bubble Tea 500ml)|1 cup|500|367|3.5|68|9|48|130
+Bubble Tea Matcha Milk Tea with Pearls (Generic Matcha Boba Milk Tea 500ml)|1 cup|500|334|4.5|60|8.5|44|120
+Bubble Tea Thai Milk Tea with Pearls (Generic Thai Boba Milk Tea 500ml)|1 cup|500|354|3.5|66|8.5|52|110
+Bubble Tea Cheese Foam Oolong Tea (Generic Salted Cheese Foam Oolong 500ml)|1 cup|500|257|3.5|36|11|32|245
+Bubble Tea Passion Fruit Green Tea with Coconut Jelly (Fruit Boba Tea 500ml)|1 cup|500|210|0.5|52|0|46|30
+Bubble Tea Honeydew Milk Tea with Pearls (Generic Honeydew Boba Tea 500ml)|1 cup|500|344|3|64|8.5|48|125

@@ -1,0 +1,254 @@
+# Nutrition batch part 2. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Milo 3in1 (Nestle Milo 3-in-1 Activ-Go sachet)|1 sachet|33|134|3.1|23.8|2.9|14.5|48
+Milo Kosong (Nestle Milo Gao Kosong sachet)|1 sachet|30|128|4.2|19.2|3.8|10.5|62
+Milo Less Sugar (Nestle Milo Less Sugar sachet)|1 sachet|27|111|3.4|18.1|2.8|9.2|50
+Milo UHT Packet (Nestle Milo UHT Chocolate Malt Drink 200ml)|1 packet|200|164|6.2|24|4.8|18.4|90
+Milo Tin (Nestle Milo Ready-to-Drink Original Can 240ml)|1 can|240|179|6.5|26.4|5.3|20.2|105
+Milo Nuggets (Nestle Milo Nuggets Chocolate Malt Snack 25g)|1 pack|25|124|2.1|16.8|5.4|11.5|35
+Milo Breakfast Cereal (Nestle Milo Chocolate Malt Cereal 30g)|1 bowl|30|114|2.5|23.4|1.1|7.8|85
+Maggi Ayam (Maggi 2-Minute Chicken Instant Noodles 1 pack)|1 pack|77|348|7.5|49.2|13.5|1.8|1490
+Maggi Tom Yam (Maggi 2-Minute Tom Yam Instant Noodles 1 pack)|1 pack|80|354|7.6|49.8|13.8|2.5|1620
+Maggi Asam Laksa (Maggi 2-Minute Asam Laksa Instant Noodles 1 pack)|1 pack|78|345|7.4|50.1|12.8|3.1|1580
+Maggi Goreng Original (Maggi Mi Goreng Original Instant Noodles 1 pack)|1 pack|80|379|8.2|51.4|15.6|5.4|1120
+Maggi Goreng Cili Ala Kampung (Maggi Mi Goreng Cili Ala Kampung 1 pack)|1 pack|82|386|8|52|16.2|5.8|1180
+Maggi Pedas Giler Ayam Bakar (Maggi Pedas Giler Roasted Chicken Noodles)|1 pack|76|358|7.9|48.2|14.8|4.9|1240
+Maggi Cup Kari (Maggi Hot Cup Curry Instant Noodles 59g)|1 cup|59|264|5.8|36.4|10.6|1.6|1150
+Maggi Cup Ayam (Maggi Hot Cup Chicken Instant Noodles 57g)|1 cup|57|260|5.5|36.8|10.1|1.4|1110
+Maggi Cukup Rasa (Maggi Cukup Rasa All-in-One Seasoning 1 tsp)|1 tsp|5|11|0.4|1.8|0.2|0.8|980
+Maggi Sos Tomato (Maggi Tomato Ketchup 1 tbsp)|1 tbsp|15|16|0.2|3.8|0|3.2|165
+Maggi Sos Cili (Maggi Chili Sauce 1 tbsp)|1 tbsp|15|19|0.2|4.5|0|3.9|195
+Mamee Monster BBQ (Mamee Monster BBQ Flavoured Noodle Snack 25g)|1 pack|25|117|2.1|15.4|5.2|1.1|240
+Mamee Monster Chicken (Mamee Monster Chicken Flavoured Noodle Snack 25g)|1 pack|25|116|2.1|15.5|5.1|1|235
+Mamee Monster Spicy (Mamee Monster Spicy Flavoured Noodle Snack 25g)|1 pack|25|117|2|15.2|5.4|1.2|250
+Mamee Chef Kari Lontong (Mamee Chef Curry Laksa Instant Cup Noodles)|1 cup|68|312|6.4|41.2|13.5|2.8|1320
+Mamee Chef Tom Yam Thai (Mamee Chef Creamy Tom Yam Cup Noodles)|1 cup|66|303|6.1|40.8|12.8|3.1|1380
+Mamee Express Cup Kari (Mamee Express Curry Cup Noodles 65g)|1 cup|65|302|6|41.5|12.4|2|1290
+Mamee Double Decker Cheese (Mamee Double Decker Cheese Rings 15g)|1 pack|15|79|0.9|9.6|4.1|1.1|125
+Mamee Sllrrrp Kari Berapi (Mamee Sllrrrp Fiery Curry Instant Noodles)|1 pack|78|357|7.6|49|14.5|2.4|1490
+Munchy's Cream Crackers (Munchy's Original Cream Crackers 4pcs)|4 pieces|28|136|2.6|19.2|5.4|1.2|185
+Munchy's Sugar Crackers (Munchy's Topmix Sugar Crackers 4pcs)|4 pieces|30|142|2.4|21.4|5.2|4.8|160
+Munchy's Wheat Crackers (Munchy's Wholemeal Wheat Crackers 4pcs)|4 pieces|28|132|2.8|18.6|5.1|1.5|175
+Munchy's Lexus Cheese (Munchy's Lexus Cheese Cream Sandwich Biscuits 1 pack)|1 pack|19|96|1.4|11.8|4.8|3.2|95
+Munchy's Lexis Chocolate (Munchy's Lexus Chocolate Cream Sandwich Biscuits 1 pack)|1 pack|19|95|1.3|12.2|4.6|4.5|75
+Munchy's Lexus Peanut Butter (Munchy's Lexus Peanut Butter Sandwich Biscuits)|1 pack|19|99|1.8|11.2|5.2|3.4|90
+Munchy's Oat Krunch Dark Chocolate (Munchy's Oat Krunch Dark Chocolate 1 pack)|1 pack|26|128|2.1|16.8|5.8|5.2|85
+Munchy's Oat Krunch Strawberry & Blackcurrant (Munchy's Oat Krunch Berry 1 pack)|1 pack|26|124|1.9|17.4|5.2|6.1|80
+Munchy's Muzic Wafer Chocolate (Munchy's Muzic Chocolate Wafer Roll 20g)|1 pack|20|98|1.2|13.2|4.5|6.8|40
+Julie's Peanut Butter Sandwich (Julie's Peanut Butter Sandwich Biscuits 3pcs)|3 pieces|27|141|2.8|15.8|7.4|4.6|125
+Julie's Cheese Sandwich (Julie's Cheese Cream Sandwich Biscuits 3pcs)|3 pieces|27|137|2.1|16.8|6.8|3.8|140
+Julie's Le-mond Cheddar Cheese (Julie's Le-mond Puff Sandwich Cheddar 1 pack)|1 pack|17|88|1.2|10.4|4.6|2.4|115
+Julie's Le-mond Lemon (Julie's Le-mond Puff Sandwich Lemon Cream 1 pack)|1 pack|17|87|1|11.2|4.2|4.5|85
+Julie's Love Letters Chocolate (Julie's Chocolate Cream Wafer Rolls 3pcs)|3 pieces|24|117|1.4|16.2|5.2|8.4|45
+Julie's Golden Crackers (Julie's Crispy Golden Crackers 4pcs)|4 pieces|26|125|2.2|17.8|5|2.1|170
+Julie's Hersheys Chocolate Chip (Julie's Hershey's Chocolate Chip Cookies 25g)|1 pack|25|125|1.6|15.8|6.2|7.4|75
+Gardenia Original Classic White Bread (Gardenia White Bread 2 slices)|2 slices|60|150|5.2|28.8|1.6|2.8|240
+Gardenia Original Classic Jumbo (Gardenia Classic White Bread Jumbo 2 slices)|2 slices|68|170|5.9|32.6|1.8|3.2|272
+Gardenia Canadian Purple Wheat (Gardenia Breakthru Purple Wheat Bread 2 slices)|2 slices|64|152|6.5|27.2|1.9|2.5|225
+Gardenia Bran & WheatGerm (Gardenia Breakthru Bran & WheatGerm Bread 2 slices)|2 slices|64|152|6.6|26.8|2|2.4|220
+Gardenia Twiggies Chocolate (Gardenia Twiggies Cream Filled Sponge Cake Chocolate)|1 pack|76|320|4.2|42.5|14.8|24|210
+Gardenia Twiggies Vanilla (Gardenia Twiggies Cream Filled Sponge Cake Vanilla)|1 pack|76|319|4|43.2|14.5|24.8|205
+Gardenia Squiggles Choco Malto (Gardenia Squiggles Chocolate Cream Bun)|1 bun|50|182|3.8|26.4|6.8|10.5|145
+Gardenia Squiggles Strawberry (Gardenia Squiggles Strawberry Cream Bun)|1 bun|50|182|3.6|27.2|6.5|11.2|140
+Gardenia Delicia Butterscotch (Gardenia Delicia Butterscotch Loaf 2 slices)|2 slices|66|195|5.1|34.2|4.2|8.8|235
+Gardenia Delicia Chocolate Raisin (Gardenia Delicia Chocolate Raisin Loaf 2 slices)|2 slices|66|196|4.9|35.6|3.8|10.2|220
+Gardenia QuickBites Jagung (Gardenia QuickBites Sweet Corn Cream Bun)|1 bun|55|184|4.1|29.8|5.4|9.6|165
+Gardenia QuickBites Kaya Pandan (Gardenia QuickBites Pandan Kaya Cream Bun)|1 bun|55|184|4|30.2|5.2|10.4|160
+Gardenia QuickBites Bilis (Gardenia QuickBites Sambal Anchovy Bun)|1 bun|60|191|5.4|28.5|6.2|4.5|295
+Massimo White Sandwich Loaf (Massimo White Sandwich Bread 2 slices)|2 slices|60|151|5.4|28.2|1.8|2.6|235
+Massimo Wheat Germ Bread (Massimo Wheat Germ Sandwich Loaf 2 slices)|2 slices|64|153|6.4|27|2.2|2.4|225
+Massimo 100% Whole Wheat (Massimo 100% Whole Wheat Loaf 2 slices)|2 slices|64|150|6.9|26|2|2.1|220
+Massimo Chiffon in a Cup Classic (Massimo Classic Chiffon Cupcake)|1 piece|40|145|2.4|19.8|6.2|10.5|115
+Massimo Chiffon in a Cup Mocha (Massimo Mocha Chiffon Cupcake)|1 piece|40|146|2.5|19.6|6.4|10.2|120
+Massimo Duetto Cream Roll Chocolate (Massimo Duetto Chocolate Cream Bun)|1 bun|55|192|4|28.6|6.8|11|155
+Massimo Duetto Cream Roll Blueberry (Massimo Duetto Blueberry Cream Bun)|1 bun|55|190|3.8|29.4|6.4|11.8|150
+Yeo's Soy Bean Milk Packet (Yeo's Soy Bean Milk UHT 250ml)|1 packet|250|123|5|19.5|2.8|17.5|65
+Yeo's Soy Bean Milk Can (Yeo's Soy Bean Milk Can 300ml)|1 can|300|147|6|23.4|3.3|21|78
+Yeo's Chrysanthemum Tea Packet (Yeo's Chrysanthemum Tea UHT 250ml)|1 packet|250|80|0|20|0|19.5|15
+Yeo's Chrysanthemum Tea Less Sugar (Yeo's Chrysanthemum Tea Less Sugar 250ml)|1 packet|250|50|0|12.5|0|12|15
+Yeo's Winter Melon Tea Packet (Yeo's Winter Melon Tea UHT 250ml)|1 packet|250|86|0|21.5|0|21|20
+Yeo's Lychee Drink Packet (Yeo's Lychee Flavoured Drink UHT 250ml)|1 packet|250|92|0|23|0|22.5|25
+Yeo's Cincau Grass Jelly Can (Yeo's Grass Jelly Drink Can 300ml)|1 can|300|98|0.5|24|0|22.5|45
+Yeo's Chicken Curry with Potatoes (Yeo's Canned Chicken Curry 280g)|1 can|280|372|24.5|18.2|22.4|3.5|1280
+Yeo's Sardines in Tomato Sauce (Yeo's Canned Sardines in Tomato Sauce 155g)|1 can|155|206|21|5.4|11.2|3.2|640
+Yeo's Sambal Ikan Bilis (Yeo's Canned Anchovies in Chili Sauce 160g)|1 can|160|307|18.4|14.2|19.6|9.8|1120
+100Plus Original Can (100Plus Original Isotonic Drink Can 325ml)|1 can|325|81|0|20.2|0|19.5|145
+100Plus Original Bottle (100Plus Original Isotonic Drink Bottle 500ml)|1 bottle|500|124|0|31|0|30|225
+100Plus Active Bottle (100Plus Active Non-Carbonated Isotonic 500ml)|1 bottle|500|118|0|29.5|0|28.5|235
+100Plus Zero Sugar Can (100Plus Zero Sugar Isotonic Drink Can 325ml)|1 can|325|0|0|0|0|0|140
+100Plus Berry Can (100Plus Berry Isotonic Drink Can 325ml)|1 can|325|83|0|20.8|0|20|145
+100Plus Lemon Lime Can (100Plus Lemon Lime Isotonic Drink Can 325ml)|1 can|325|82|0|20.5|0|19.8|145
+F&N Teh Tarik Ori Can (F&N Seasons Teh Tarik Ori Milk Tea Can 240ml)|1 can|240|122|2.4|21.6|2.9|19.2|110
+F&N Seasons Ice Lemon Tea Can (F&N Seasons Ice Lemon Tea Can 300ml)|1 can|300|98|0|24.6|0|24|35
+F&N Seasons Soya Bean Milk Can (F&N Seasons Soya Bean Milk Can 300ml)|1 can|300|143|6.3|22.8|3|20.4|75
+F&N Orange Carbonated Can (F&N Fun Flavours Orange Soda Can 325ml)|1 can|325|138|0|34.5|0|34|45
+F&N Sarsi Carbonated Can (F&N Fun Flavours Sarsi Soda Can 325ml)|1 can|325|141|0|35.2|0|34.8|50
+F&N Ice Cream Soda Can (F&N Fun Flavours Ice Cream Soda Can 325ml)|1 can|325|143|0|35.8|0|35.2|48
+F&N Teapot Sweetened Creamer (F&N Teapot Sweetened Condensed Creamer 1 tbsp)|1 tbsp|20|63|0.4|11.2|1.8|10.8|25
+F&N Evaporated Creamer (F&N Evaporated Filled Milk 2 tbsp)|2 tbsp|30|41|1.8|3.1|2.4|3|38
+Nestle Nescafe Original Can (Nescafe Original Ready-to-Drink Coffee Can 240ml)|1 can|240|111|2.6|19.8|2.4|17.5|95
+Nestle Nescafe Latte Can (Nescafe Latte Ready-to-Drink Coffee Can 240ml)|1 can|240|122|3.1|21.2|2.8|18.8|105
+Nestle Nescafe Tarik Can (Nescafe Tarik Pulled Coffee Can 240ml)|1 can|240|124|2.8|22.4|2.6|19.6|100
+Nestle Nescafe 3in1 Original (Nescafe 3-in-1 Original Instant Coffee sachet)|1 sachet|18|75|0.8|13.2|2.1|9.8|45
+Nestle Nescafe Classic (Nescafe Classic Instant Black Coffee 1 tsp)|1 tsp|2|4|0.2|0.8|0|0|2
+Nestle Koko Krunch (Nestle Koko Krunch Chocolate Wheat Cereal 30g)|1 bowl|30|116|2.1|24.2|1.2|8.6|90
+Nestle Honey Stars (Nestle Honey Stars Corn & Wheat Cereal 30g)|1 bowl|30|116|1.8|25.1|0.9|9.4|85
+Nestle Corn Flakes (Nestle Corn Flakes Breakfast Cereal 30g)|1 bowl|30|113|2.2|25.4|0.3|2.6|185
+Nestle Fitnesse Original (Nestle Fitnesse Whole Grain Flakes 30g)|1 bowl|30|111|2.6|23.8|0.6|3.8|135
+Nestle Nespray Full Cream Milk Powder (Nestle Nespray Milk Powder 3 tbsp)|3 tbsp|33|166|8.2|12.6|9.2|12.6|115
+Nestle Omega Plus Milk Powder (Nestle Omega Plus Acticol Milk Powder 3 tbsp)|3 tbsp|32|122|8.5|14.8|3.2|14.2|130
+Nestle Drumstick Vanilla Cone (Nestle Drumstick Classic Vanilla Ice Cream Cone)|1 cone|75|197|2.8|24.5|9.8|16.5|75
+Nestle Mat Kool Butterfly (Nestle Mat Kool Butterfly Split Ice Confection)|1 stick|58|70|0.5|14.2|1.2|12.8|20
+Nestle La Cremeria Vanilla Cashew (Nestle La Cremeria Vanilla Cashew Ice Cream Bar)|1 bar|65|194|2.6|18.4|12.2|14.8|55
+Dutch Lady Pure Farm Full Cream Milk (Dutch Lady Full Cream UHT Milk 200ml)|1 packet|200|126|6.6|9.6|6.8|9.6|95
+Dutch Lady Pure Farm Low Fat Milk (Dutch Lady Low Fat UHT Milk 200ml)|1 packet|200|90|6.8|10.2|2.4|10.2|100
+Dutch Lady Pure Farm Chocolate Milk (Dutch Lady Chocolate Flavoured UHT Milk 200ml)|1 packet|200|159|6.2|21.4|5.4|19.8|115
+Dutch Lady Pure Farm Strawberry Milk (Dutch Lady Strawberry Flavoured UHT Milk 200ml)|1 packet|200|158|6|21.8|5.2|20.4|110
+Dutch Lady Full Cream Milk 1 Glass (Dutch Lady Fresh Full Cream Milk 250ml)|1 glass|250|158|8.3|12|8.5|12|118
+Dutch Lady Low Fat Yoghurt Natural (Dutch Lady Low Fat Natural Yoghurt 135g)|1 cup|135|89|5.8|11.4|2.2|9.8|85
+Dutch Lady Low Fat Yoghurt Strawberry (Dutch Lady Low Fat Strawberry Yoghurt 135g)|1 cup|135|112|5.1|18.6|1.9|16.2|78
+Dutch Lady Low Fat Yoghurt Mixed Berries (Dutch Lady Mixed Berries Yoghurt 135g)|1 cup|135|113|5.1|18.8|1.9|16.4|78
+Farm Fresh Pure Fresh Milk (Farm Fresh Pasteurized Full Cream Milk 250ml)|1 glass|250|164|8.5|11.8|9.2|11.8|115
+Farm Fresh Skinny Low Fat Milk (Farm Fresh Pasteurized Low Fat Milk 250ml)|1 glass|250|106|8.8|12.2|2.5|12.2|120
+Farm Fresh Kurma Milk (Farm Fresh Dates Flavoured Fresh Milk 200ml)|1 bottle|200|171|6.8|21.6|6.4|19.8|98
+Farm Fresh Cafe Latte Tongkat Ali (Farm Fresh Cafe Latte Ready-to-Drink 200ml)|1 packet|200|151|6.2|18.4|5.8|16.5|105
+Farm Fresh Chocolate Milk UHT (Farm Fresh Belgian Chocolate Milk 200ml)|1 packet|200|165|6.6|20.8|6.2|18.6|110
+Farm Fresh Natural Yogurt (Farm Fresh Natural Greek Style Yogurt 120g)|1 cup|120|95|6.4|7.8|4.2|6.8|65
+Farm Fresh Mango Tango Yogurt Drink (Farm Fresh Mango Yogurt Drink 200ml)|1 bottle|200|128|3.8|24.6|1.6|22.4|75
+Ayam Brand Sardines in Tomato Sauce (Ayam Brand Sardines in Tomato Sauce 155g)|1 can|155|208|23.2|4.6|10.8|2.8|620
+Ayam Brand Mackerel in Tomato Sauce (Ayam Brand Mackerel in Tomato Sauce 155g)|1 can|155|220|21.8|5.2|12.4|3.1|640
+Ayam Brand Tuna Chunks in Water (Ayam Brand Tuna Chunks in Mineral Water 150g)|1 can|150|127|28.5|0.5|1.2|0|480
+Ayam Brand Tuna Flakes in Olive Oil (Ayam Brand Tuna Flakes in Olive Oil 150g)|1 can|150|241|26.4|0.5|14.8|0|460
+Ayam Brand Tuna Mayonnaise Mild (Ayam Brand Tuna Mayo Spread 160g)|1 can|160|300|18.2|6.4|22.4|3.8|590
+Ayam Brand Tuna Chili (Ayam Brand Spicy Chili Tuna 160g)|1 can|160|250|22.4|7.2|14.6|4.5|680
+Ayam Brand Baked Beans in Tomato Sauce (Ayam Brand Baked Beans 230g)|1 can|230|227|11.5|42.6|1.2|16.8|890
+Ayam Brand Coconut Milk Santan (Ayam Brand Trim Coconut Milk 200ml)|1 packet|200|341|3.2|5.6|34|3.4|30
+Ayam Brand Sweet Corn Kernel (Ayam Brand Whole Kernel Sweet Corn 100g)|1 serving|100|94|2.6|18.4|1.1|5.2|240
+Baba's Meat Curry Powder (Baba's Serbuk Kari Daging 1 tbsp)|1 tbsp|8|32|1.1|4.2|1.2|0.3|18
+Baba's Fish Curry Powder (Baba's Serbuk Kari Ikan 1 tbsp)|1 tbsp|8|32|1|4.4|1.1|0.3|22
+Baba's Turmeric Powder (Baba's Serbuk Kunyit 1 tsp)|1 tsp|3|11|0.2|1.9|0.3|0.1|2
+Baba's Chili Powder (Baba's Serbuk Cili 1 tsp)|1 tsp|3|12|0.4|1.5|0.5|0.2|4
+Brahim's Chicken Rendang Sauce (Brahim's Kuah Rendang Ayam 180g pack)|1 pack|180|310|5.4|16.2|24.8|6.8|1140
+Brahim's Beef Curry Sauce (Brahim's Kuah Kari Daging 180g pack)|1 pack|180|271|4.8|14.4|21.6|5.2|1180
+Brahim's Sambal Tumis Sauce (Brahim's Sos Sambal Tumis 180g pack)|1 pack|180|313|3.6|24.2|22.4|14.8|1320
+Brahim's Nasi Goreng Kampung Meal (Brahim's Ready-to-Eat Kampung Fried Rice 250g)|1 pack|250|412|9.5|68.4|11.2|3.4|1190
+Brahim's Nasi Briyani Ayam Meal (Brahim's Ready-to-Eat Chicken Biryani 250g)|1 pack|250|429|14.2|64.8|12.6|4.2|1150
+Tiger Biskuat Original (Tiger Biskuat Original Milk Biscuits 1 pack)|1 pack|24|109|1.8|16.8|3.8|5.4|85
+Tiger Biskuat Chocolate (Tiger Biskuat Chocolate Biscuits 1 pack)|1 pack|24|110|1.9|16.6|4|5.8|80
+Cadbury Dairy Milk Chocolate (Cadbury Dairy Milk Chocolate Bar 37g)|1 bar|37|199|2.8|21.2|11.4|20.6|35
+Cadbury Dairy Milk Roast Almond (Cadbury Dairy Milk Roast Almond Bar 37g)|1 bar|37|204|3.4|19.2|12.6|18.2|32
+Cadbury Dairy Milk Black Forest (Cadbury Dairy Milk Black Forest Bar 37g)|1 bar|37|191|2.5|22.4|10.2|21.4|38
+Cadbury Zip Chocolate Wafer (Cadbury Zip Milk Chocolate Wafer 25g)|1 bar|25|128|1.5|15.2|6.8|10.4|42
+Cadbury Choclairs (Cadbury Choclairs Caramel Chocolate Candy 3pcs)|3 pieces|18|78|0.5|14.2|2.1|11.5|28
+Lotte Choco Pie (Lotte Choco Pie Marshmallow Chocolate Cake 1 piece)|1 piece|28|122|1.2|18.5|4.8|11.2|65
+Lotte Pepero Original (Lotte Pepero Chocolate Biscuit Sticks 1 box)|1 box|47|230|4.2|31.8|9.6|14.5|145
+Lotte Pepero Almond (Lotte Pepero Almond Chocolate Biscuit Sticks 1 box)|1 box|37|199|4.1|21.4|10.8|10.2|110
+Lotte Koala's March Chocolate (Lotte Koala's March Chocolate Biscuits 37g)|1 box|37|192|2.2|23.8|9.8|12.4|95
+Lotte Xylitol Gum (Lotte Xylitol Sugarfree Chewing Gum 2 pellets)|2 pellets|3|8|0|2.1|0|0|0
+Oreo Original Sandwich Cookies (Oreo Original Vanilla Creme Cookies 3pcs)|3 pieces|29|141|1.4|20.8|5.8|11.2|115
+Oreo Chocolate Creme Cookies (Oreo Chocolate Creme Sandwich Cookies 3pcs)|3 pieces|29|142|1.5|20.6|5.9|11|110
+Oreo Double Stuf Cookies (Oreo Double Stuf Vanilla Creme Cookies 2pcs)|2 pieces|29|147|1.1|20.4|6.8|12.8|95
+Oreo Wafer Roll Chocolate (Oreo Crispy Chocolate Wafer Roll 1 pack)|1 pack|18|91|1.1|12.2|4.2|6.8|38
+Pocky Chocolate (Glico Pocky Chocolate Cream Covered Biscuit Sticks 1 box)|1 box|40|193|3.2|27.6|7.8|12.4|95
+Pocky Strawberry (Glico Pocky Strawberry Cream Covered Biscuit Sticks 1 box)|1 box|38|185|2.8|26.8|7.4|13.2|88
+Pocky Cookies & Cream (Glico Pocky Cookies & Cream Biscuit Sticks 1 box)|1 box|40|195|3|27.2|8.2|12.8|105
+Pocky Matcha Green Tea (Glico Pocky Matcha Green Tea Biscuit Sticks 1 box)|1 box|35|171|2.8|23.8|7.2|11.2|82
+Kinder Bueno (Kinder Bueno Milk Chocolate & Hazelnut Wafer 2 bars)|1 pack|43|244|3.7|21.3|16|17.7|48
+Kinder Joy (Kinder Joy Crispy Cocoa Wafer & Milky Cream Egg 20g)|1 piece|20|109|1.6|11.3|6.4|10.2|22
+Kinder Chocolate (Kinder Milk Chocolate Mini Bar 1 piece)|1 bar|12.5|71|1.1|6.7|4.4|6.6|16
+Arnott's Tim Tam Original (Tim Tam Original Chocolate Biscuits 2pcs)|2 pieces|36.5|190|1.8|23.6|9.8|16.2|72
+Arnott's Tim Tam Dark Chocolate (Tim Tam Dark Chocolate Biscuits 2pcs)|2 pieces|36.5|192|1.9|22.8|10.4|14.8|65
+Arnott's Tim Tam Double Coat (Tim Tam Double Coat Chocolate Biscuits 2pcs)|2 pieces|42|220|2.1|26.4|11.8|18.4|78
+Twisties BBQ Curry (Twisties Kaboom BBQ Curry Corn Snacks 15g)|1 pack|15|83|1|9.4|4.6|0.9|135
+Twisties Cheddar Cheese (TwistiesYo! Cheddar Cheese Corn Snacks 15g)|1 pack|15|84|1.1|9.2|4.8|1|145
+Twisties Yo! Roasted Chicken (Twisties Roasted Chicken Corn Snacks 15g)|1 pack|15|82|1|9.5|4.5|0.8|130
+Twisties Chipster Original (Twisties Chipster Original Potato Chips 25g)|1 pack|25|135|1.6|13.8|8.2|0.4|140
+Twisties Chipster Sour Cream & Onion (Twisties Chipster Sour Cream Potato Chips 25g)|1 pack|25|137|1.7|13.6|8.4|0.9|155
+Mister Potato Crisps Original (Mister Potato Original Potato Crisps 25g)|1 serving|25|133|1.5|14.2|7.8|0.5|135
+Mister Potato Crisps BBQ (Mister Potato BBQ Flavoured Potato Crisps 25g)|1 serving|25|132|1.6|14.4|7.6|1.4|150
+Mister Potato Crisps Hot & Spicy (Mister Potato Hot & Spicy Potato Crisps 25g)|1 serving|25|134|1.6|14.1|7.9|1.1|160
+Mister Potato Crisps Sour Cream & Onion (Mister Potato Sour Cream Crisps 25g)|1 serving|25|134|1.7|13.9|8|1.2|155
+Mister Potato Sweet Potato Crisps (Mister Potato Purple Sweet Potato Crisps 25g)|1 serving|25|131|1.4|14.8|7.4|2.8|115
+Lay's Classic Potato Chips (Lay's Classic Salted Potato Chips 28g)|1 serving|28|156|1.8|15.2|9.8|0.3|165
+Lay's Sour Cream & Onion (Lay's Sour Cream & Onion Potato Chips 28g)|1 serving|28|156|1.9|15.4|9.6|1.4|175
+Lay's Nori Seaweed (Lay's Nori Seaweed Flavoured Potato Chips 28g)|1 serving|28|155|2|15.6|9.4|1.2|180
+Lay's Stax Original (Lay's Stax Original Potato Crisps 28g)|1 serving|28|149|1.7|16.2|8.6|0.6|145
+Pringles Original (Pringles Original Potato Crisps 28g)|1 serving|28|152|1.4|15.8|9.2|0.4|150
+Pringles Sour Cream & Onion (Pringles Sour Cream & Onion Crisps 28g)|1 serving|28|153|1.6|15.6|9.4|1.1|165
+Pringles Cheesy Cheese (Pringles Cheesy Cheese Potato Crisps 28g)|1 serving|28|154|1.7|15.4|9.5|1|175
+Pringles Hot & Spicy (Pringles Hot & Spicy Potato Crisps 28g)|1 serving|28|152|1.5|15.7|9.3|1.2|180
+Indomie Mi Goreng Original (Indomie Mi Goreng Instant Fried Noodles 1 pack)|1 pack|85|402|8.4|54.2|16.8|6.2|1080
+Indomie Mi Goreng Pedas (Indomie Mi Goreng Hot & Spicy Instant Noodles 1 pack)|1 pack|80|383|8|51.4|16.2|5.8|1120
+Indomie Mi Goreng Rendang (Indomie Mi Goreng Beef Rendang Flavour 1 pack)|1 pack|91|428|8.8|56.8|18.4|6.4|1180
+Indomie Soto Mie (Indomie Soto Mie Instant Soup Noodles 1 pack)|1 pack|75|334|7.2|47.6|12.8|2.4|1420
+Nissin Cup Noodles Seafood (Nissin Cup Noodles Seafood Flavour 75g)|1 cup|75|336|7.4|46.8|13.2|2.8|1480
+Nissin Cup Noodles Tom Yam (Nissin Cup Noodles Tom Yam Seafood 75g)|1 cup|75|335|7.2|47.2|13|3.1|1520
+Nissin Cup Noodles Black Pepper Crab (Nissin Cup Noodles Black Pepper Crab 75g)|1 cup|75|338|7.5|46.4|13.6|3.4|1460
+Nissin Ramen Hokkaido Miso (Nissin Japanese Ramen Hokkaido Miso 106g)|1 pack|106|449|10.2|66.4|15.8|4.2|1780
+Samyang Buldak Hot Chicken Original (Samyang Buldak Spicy Chicken Ramen 140g)|1 pack|140|532|12|85|16|7|1280
+Samyang Buldak Carbonara (Samyang Buldak Carbo Spicy Chicken Ramen 130g)|1 pack|130|529|10|84|17|8|1330
+Samyang Buldak Cheese (Samyang Buldak Cheese Spicy Chicken Ramen 140g)|1 pack|140|546|13|83|18|7.5|1440
+Samyang Buldak 2x Spicy (Samyang Buldak 2x Spicy Hot Chicken Ramen 140g)|1 pack|140|541|12|85|17|7|1350
+Mi Sedaap Goreng Original (Mi Sedaap Instant Fried Noodles Original 91g)|1 pack|91|428|8.6|57.4|18.2|6.8|1140
+Mi Sedaap Kari Spesial (Mi Sedaap Special Curry Instant Noodles 75g)|1 pack|75|343|7.4|47.2|13.8|2.6|1490
+Mi Sedaap Soto (Mi Sedaap Soto Instant Soup Noodles 75g)|1 pack|75|339|7.2|47.8|13.2|2.5|1450
+Kellogg's Corn Flakes (Kellogg's Original Corn Flakes Cereal 30g)|1 bowl|30|113|2.1|25.8|0.2|2.4|195
+Kellogg's Frosties (Kellogg's Sugar Frosted Corn Flakes 30g)|1 bowl|30|115|1.5|26.8|0.2|11.2|140
+Kellogg's Coco Pops (Kellogg's Chocolate Flavoured Rice Cereal 30g)|1 bowl|30|117|1.8|25.6|0.8|9.8|115
+Quaker Instant Oatmeal (Quaker Instant Oatmeal Plain 35g)|1 bowl|35|137|4.4|23.6|2.8|0.4|5
+Quaker Oat Cookies Honey Nuts (Quaker Oat Cookies Honey & Nuts 27g)|1 pack|27|129|2.4|17.2|5.6|5.8|85
+Rex Sardines in Tomato Sauce (Rex Canned Sardines in Tomato Sauce 155g)|1 can|155|208|22.4|4.8|11|2.9|630
+Rex Chicken Luncheon Meat (Rex Canned Chicken Luncheon Meat 100g)|1 serving|100|231|12.8|8.4|16.2|1.8|890
+Narcissus Spiced Pork Cubes (Narcissus Canned Stewed Pork Cubes 100g)|1 serving|100|288|14.2|9.6|21.4|6.4|940
+Ma Ling Chicken Luncheon Meat (Ma Ling Canned Chicken Luncheon Meat 100g)|1 serving|100|226|13.2|7.8|15.8|1.6|860
+Kimball Chili Sauce (Kimball Thai & Local Chili Sauce 1 tbsp)|1 tbsp|15|19|0.2|4.6|0|4|185
+Kimball Tomato Ketchup (Kimball Tomato Ketchup 1 tbsp)|1 tbsp|15|16|0.2|3.9|0|3.4|160
+Kimball Oyster Sauce (Kimball Flavoured Oyster Sauce 1 tbsp)|1 tbsp|15|14|0.4|3.2|0|2.4|680
+Kimball Spaghetti Bolognese Sauce (Kimball Traditional Pasta Sauce 100g)|1 serving|100|72|1.6|11.4|2.2|7.8|540
+Life Chili Sauce (Life Jumbo Chili Sauce 1 tbsp)|1 tbsp|15|20|0.2|4.8|0|4.2|190
+Kewpie Roasted Sesame Dressing (Kewpie Deep Roasted Sesame Dressing 1 tbsp)|1 tbsp|15|59|0.4|1.8|5.6|1.5|195
+Kewpie Mayonnaise Japanese Style (Kewpie Japanese Mayonnaise 1 tbsp)|1 tbsp|15|103|0.3|0.2|11.2|0.1|95
+Lady's Choice Real Mayonnaise (Lady's Choice Real Mayonnaise 1 tbsp)|1 tbsp|15|101|0.2|0.8|10.8|0.6|105
+Lady's Choice Peanut Butter Creamy (Lady's Choice Creamy Peanut Butter 1 tbsp)|1 tbsp|16|104|4.1|3.4|8.2|1.8|75
+Lady's Choice Peanut Butter Chunky (Lady's Choice Chunky Peanut Butter 1 tbsp)|1 tbsp|16|105|4.2|3.3|8.3|1.7|75
+Skippy Peanut Butter Creamy (Skippy Creamy Peanut Butter 1 tbsp)|1 tbsp|16|105|3.8|3.5|8.4|1.9|78
+Skippy Peanut Butter Super Chunk (Skippy Super Chunk Peanut Butter 1 tbsp)|1 tbsp|16|106|3.9|3.4|8.5|1.8|76
+Nutella Hazelnut Spread (Ferrero Nutella Hazelnut Cocoa Spread 1 tbsp)|1 tbsp|15|79|0.9|8.6|4.6|8.4|6
+Gardenia Auntie Rosie's Kaya Original (Auntie Rosie's Original Egg Jam Kaya 1 tbsp)|1 tbsp|20|62|0.6|11.8|1.4|10.8|25
+Gardenia Auntie Rosie's Kaya Pandan (Auntie Rosie's Pandan Kaya Spread 1 tbsp)|1 tbsp|20|62|0.6|11.8|1.4|10.8|25
+Yeo's Kaya Original (Yeo's Traditional Egg Kaya Jam 1 tbsp)|1 tbsp|20|62|0.5|12.2|1.2|11.2|28
+Planta Margarine (Planta Fortified Table Margarine 1 tbsp)|1 tbsp|14|101|0|0|11.2|0|95
+Buttercup Luxury Spread (Buttercup Salted Butter Blend Spread 1 tbsp)|1 tbsp|14|103|0.1|0.1|11.4|0.1|105
+Anchor Pure New Zealand Butter Salted (Anchor Salted Pure Butter 1 tbsp)|1 tbsp|14|104|0.1|0.1|11.5|0.1|92
+Bega Super Slim Cheese Slices (Bega Low Fat Processed Cheddar Slice 1 slice)|1 slice|21|38|4.6|1.8|1.4|1.2|260
+Chesdale Cheddar Cheese Slices (Chesdale Original Processed Cheddar 1 slice)|1 slice|21|65|3.8|1.6|4.8|1.1|285
+Marigold HL Milk Plain (Marigold HL High Calcium Low Fat Milk 200ml)|1 glass|200|98|8.4|11.2|2.2|10.8|115
+Marigold HL Milk Chocolate (Marigold HL Chocolate Low Fat Milk 200ml)|1 glass|200|127|8|18.4|2.4|17.2|125
+Marigold HL Milk Strawberry (Marigold HL Strawberry Low Fat Milk 200ml)|1 glass|200|126|8|18.6|2.2|17.4|120
+Marigold Peel Fresh Orange Juice (Marigold Peel Fresh Orange Juice 250ml)|1 glass|250|103|1.2|24.5|0|22.8|15
+Marigold Peel Fresh Apple Juice (Marigold Peel Fresh Apple Juice 250ml)|1 glass|250|109|0.4|26.8|0|25.4|18
+Marigold 0% Fat Yogurt Natural (Marigold Fat Free Natural Yogurt 130g)|1 cup|130|76|6.2|12.4|0.2|10.8|82
+Marigold 0% Fat Yogurt Strawberry (Marigold Fat Free Strawberry Yogurt 130g)|1 cup|130|96|5.4|18.2|0.2|16.4|76
+Yakult Cultured Milk Original (Yakult Probiotic Cultured Milk Drink 1 bottle)|1 bottle|80|56|1|12.8|0.1|12.4|15
+Yakult Ace Light (Yakult Ace Light Less Sugar Probiotic Drink 1 bottle)|1 bottle|80|30|1|6.4|0.1|6|15
+Vitagen Less Sugar Assorted (Vitagen Less Sugar Cultured Milk Drink 1 bottle)|1 bottle|125|50|1.4|10.8|0.1|10.2|25
+NutriSoy Fresh Soya Milk Original (Marigold NutriSoy Fresh Soya Milk 250ml)|1 glass|250|130|8.2|14.8|4.2|12.6|75
+NutriSoy Fresh Soya Milk No Sugar Added (NutriSoy Unsweetened Soya Milk 250ml)|1 glass|250|94|8.8|4.6|4.5|1.2|70
+V-Soy Original Soy Milk (V-Soy Original UHT Soy Milk 200ml)|1 packet|200|127|6.4|16.8|3.8|14.2|85
+V-Soy Multi-Grain Soy Milk (V-Soy Multi-Grain UHT Soy Milk 200ml)|1 packet|200|139|6.8|18.4|4.2|14.8|90
+Drinho Soya Bean Milk (Drinho Soya Bean Drink UHT 250ml)|1 packet|250|123|4.8|20.2|2.6|18.4|68
+Red Bull Gold Can (Red Bull Energy Drink Gold Can 250ml)|1 can|250|112|0.5|27.5|0|27|125
+Red Bull Less Sugar Bottle (Red Bull Less Sugar Energy Drink 250ml)|1 bottle|250|61|0.5|14.8|0|14.2|120
+Livita Honey Energy Drink (Livita Honey Vitamin Energy Drink 150ml)|1 bottle|150|86|0.2|21.4|0|20.8|65
+Monster Energy Green Can (Monster Energy Original Carbonated Drink 355ml)|1 can|355|156|0|39|0|37|260
+Monster Ultra White Zero Sugar (Monster Energy Ultra Zero Sugar Can 355ml)|1 can|355|8|0|2|0|0|250
+Lipton Ice Lemon Tea Bottle (Lipton Ice Lemon Tea Bottle 450ml)|1 bottle|450|117|0|29.2|0|28.5|55
+Heaven and Earth Ice Lemon Tea (Heaven and Earth Ice Lemon Tea Can 300ml)|1 can|300|91|0|22.8|0|22.2|38
+Heaven and Earth Jasmine Green Tea (Heaven and Earth Jasmine Green Tea 300ml)|1 can|300|74|0|18.6|0|18|32
+Pokka Green Tea Jasmine (Pokka Jasmine Green Tea Bottle 500ml)|1 bottle|500|96|0|24|0|23.5|45
+Pokka Green Tea No Sugar (Pokka Unsweetened Japanese Green Tea 500ml)|1 bottle|500|0|0|0|0|0|35
+Pokka Milk Coffee Can (Pokka Premium Milk Coffee Can 240ml)|1 can|240|108|2.8|18.4|2.6|16.8|95
+Wonda Coffee Original Can (Wonda Original Premium Milk Coffee Can 240ml)|1 can|240|114|2.9|19.2|2.8|17.4|105
+Wonda Coffee Extra Presso Can (Wonda Extra Presso Strong Coffee Can 240ml)|1 can|240|106|3.1|16.8|2.9|14.8|110
+Wonda Kopi Tarik Can (Wonda Kopi Tarik Malaysian Pulled Coffee Can 240ml)|1 can|240|122|2.8|21.6|2.7|19.2|100
+Boss Coffee Black No Sugar (Suntory Boss Black Unsweetened Coffee Can 250ml)|1 can|250|7|0.5|1.2|0|0|45
+Boss Coffee Latte Can (Suntory Boss Cafe Latte Milk Coffee Can 250ml)|1 can|250|91|2.6|14.8|2.4|13.2|115
