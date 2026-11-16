@@ -1,0 +1,274 @@
+# SaviorFuel built-in foods. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg  (all values are per serving, estimates)
+Ayam goreng (fried chicken, thigh)|1 piece|110|270|22|5|18|0|450
+Ayam goreng (fried chicken, drumstick)|1 piece|80|188|16|4|12|0|330
+Ayam goreng berempah (spiced fried chicken)|1 piece|120|282|24|6|18|1|520
+Ayam goreng kunyit|1 piece|110|248|22|4|16|0|450
+Ayam goreng mamak|1 piece|120|282|24|6|18|1|550
+Ayam masak merah|1 serving|150|250|22|9|14|5|620
+Ayam masak lemak cili api|1 serving|180|288|22|5|20|2|700
+Ayam masak kicap|1 serving|150|223|22|9|11|7|800
+Ayam masak halia (ginger)|1 serving|150|202|22|6|10|3|650
+Ayam masak paprik|1 serving|180|228|22|8|12|5|750
+Ayam percik|1 piece|150|254|26|6|14|4|600
+Ayam golek (roast chicken)|1 piece|200|370|40|3|22|1|700
+Ayam panggang (grilled chicken, thigh)|1 piece|120|221|24|2|13|0|420
+Ayam kicap (soy chicken)|1 serving|150|218|24|8|10|6|750
+Ayam rendang|1 serving|150|278|23|6|18|3|700
+Ayam penyet (smashed fried chicken)|1 piece|200|384|34|8|24|1|800
+Ayam bakar|1 piece|150|227|26|6|11|3|600
+Ayam goreng (fast food style, 1 piece)|1 piece|130|290|22|10|18|0|700
+Chicken chop (black pepper, with fries)|1 plate|450|590|38|42|30|6|1300
+Chicken chop (Hainanese style)|1 plate|500|588|36|48|28|10|1400
+Chicken satay (5 sticks)|5 sticks|100|168|16|8|8|5|420
+Chicken satay (10 sticks with peanut sauce)|10 sticks|220|362|32|18|18|10|900
+Sate daging (beef satay, 5 sticks)|5 sticks|100|168|16|8|8|5|430
+Sate kambing (mutton satay, 5 sticks)|5 sticks|100|177|16|8|9|5|440
+Peanut satay sauce|3 tbsp|50|94|3|7|6|5|150
+Ketupat and peanut sauce set|1 set|200|250|6|34|10|8|300
+Sate lilit|2 sticks|60|80|8|3|4|2|300
+Sate ayam kajang|1 stick|30|46|5|2|2|1|110
+Rendang daging (beef rendang)|1 serving|100|282|22|8|18|3|700
+Rendang ayam (chicken rendang)|1 serving|120|248|20|6|16|3|650
+Rendang tok (Perak)|1 serving|100|266|20|6|18|2|650
+Rendang kambing|1 serving|100|266|20|6|18|3|650
+Daging masak hitam|1 serving|120|246|22|8|14|6|700
+Daging masak kicap|1 serving|120|232|22|9|12|7|800
+Daging goreng|1 serving|100|225|24|3|13|0|400
+Daging bakar|1 serving|100|198|24|3|10|1|380
+Daging salai masak lemak cili api|1 serving|150|306|22|5|22|2|800
+Gulai kawah|1 bowl|300|290|18|14|18|3|900
+Gulai daging|1 bowl|300|308|22|10|20|4|900
+Gulai ayam|1 bowl|300|286|22|9|18|4|850
+Gulai kambing|1 bowl|300|318|22|8|22|4|900
+Gulai tempoyak|1 serving|150|223|14|8|15|3|750
+Soto ayam|1 bowl|350|281|18|32|9|2|1200
+Soto daging|1 bowl|350|298|20|32|10|2|1250
+Soto tulang|1 bowl|380|318|18|30|14|2|1350
+Sup tulang (bone soup, Malay)|1 bowl|450|342|24|12|22|2|1300
+Sup ekor (oxtail soup)|1 bowl|450|358|26|14|22|2|1300
+Sup kambing|1 bowl|400|324|24|12|20|2|1250
+Sup ayam (chicken soup, Malay)|1 bowl|300|218|20|12|10|2|1000
+Sup daging|1 bowl|350|278|26|12|14|2|1100
+Sup bebola|1 bowl|300|236|18|14|12|2|1100
+Sup sayur (vegetable soup)|1 bowl|200|152|6|14|8|3|900
+Sup tomyam kosong|1 bowl|200|117|10|8|5|3|1300
+Sup tomyam seafood|1 bowl|250|175|18|10|7|4|1500
+Sup tomyam ayam|1 bowl|250|184|18|10|8|4|1400
+Sambal tumis|1 tbsp|20|41|0.5|3|3|2|230
+Sambal belacan|1 tbsp|15|12|0.5|1.5|0.5|0.5|300
+Sambal udang|1 serving|120|186|18|6|10|3|750
+Sambal sotong|1 serving|120|173|16|7|9|3|700
+Sambal petai udang|1 serving|150|194|16|10|10|3|750
+Sambal ikan bilis|1 serving|50|98|8|3|6|2|650
+Sambal kerang|1 serving|120|151|14|8|7|3|700
+Sambal hijau|1 tbsp|20|28|0.5|2|2|0.5|150
+Sambal terung|1 serving|100|111|2|10|7|4|500
+Sambal telur|1 egg|100|137|6|8|9|4|450
+Sambal tempoyak|1 serving|60|64|2|5|4|2|300
+Ikan goreng (fried fish, kembung)|1 fish|120|186|22|2|10|0|340
+Ikan goreng kunyit|1 fish|130|198|24|3|10|0|350
+Ikan bakar (grilled fish)|1 fish|180|204|30|3|8|0|400
+Ikan bakar sambal|1 fish|200|242|30|8|10|4|750
+Ikan masak asam pedas|1 bowl|250|224|28|10|8|5|900
+Ikan masak lemak cili api|1 bowl|250|272|26|6|16|3|850
+Ikan masak tiga rasa|1 serving|200|258|24|18|10|12|900
+Ikan masak kicap|1 serving|180|200|24|8|8|5|800
+Ikan stim (steamed fish, Chinese style)|1 plate|300|268|36|4|12|2|1000
+Ikan siakap steam lemon|1 plate|300|276|36|6|12|3|900
+Ikan siakap tiga rasa|1 plate|350|358|38|20|14|14|1100
+Ikan patin tempoyak|1 serving|250|280|28|6|16|2|800
+Ikan keli goreng (fried catfish)|1 fish|120|178|20|2|10|0|330
+Ikan talapia goreng|1 fish|200|278|34|4|14|0|420
+Ikan pari bakar (stingray)|1 serving|200|229|34|3|9|3|600
+Ikan bawal hitam (black pomfret, fried)|1 fish|200|265|34|3|13|0|400
+Ikan tenggiri masak kari|1 serving|200|234|30|6|10|3|700
+Ikan kerisi goreng|1 fish|100|126|16|2|6|0|300
+Ikan bilis goreng (fried anchovies)|1 serving|30|186|12|3|14|0|700
+Ikan bilis (plain, dried)|1 tbsp|10|29|5|0|1|0|250
+Ikan masin (salted fish, fried)|1 piece|40|110|14|0|6|0|1500
+Ikan selar kuning|1 fish|100|125|18|2|5|0|350
+Ikan sardin masak sambal|1 serving|120|168|18|6|8|3|700
+Sardin in tomato sauce (canned)|1 can|155|232|24|7|12|4|700
+Sardines in oil (canned)|1 can|100|214|22|0|14|0|500
+Tuna in water (canned)|1 can|140|130|28|0|2|0|480
+Tuna in oil (canned)|1 can|140|202|28|0|10|0|480
+Tuna mayo (home-made)|1 serving|100|176|14|3|12|1|350
+Udang goreng tepung (fried prawns)|1 serving|150|278|18|20|14|1|800
+Udang masak lemak|1 serving|180|234|22|5|14|2|850
+Udang masak sambal|1 serving|150|202|20|8|10|3|800
+Udang galah bakar (river prawn)|1 piece|150|165|28|2|5|0|500
+Udang rebus (boiled prawns)|1 serving|100|89|20|0|1|0|300
+Udang goreng garam|1 serving|120|186|20|4|10|0|700
+Butter prawn|1 plate|250|332|24|14|20|4|900
+Cereal prawn|1 plate|250|348|24|18|20|5|900
+Sotong goreng tepung (fried calamari)|1 serving|150|248|15|20|12|1|700
+Sotong masak lemak|1 serving|180|226|20|5|14|2|800
+Sotong bakar (grilled squid)|1 piece|150|157|24|4|5|2|600
+Sambal sotong bakar|1 serving|180|205|24|7|9|3|750
+Kerang rebus (boiled cockles)|1 serving|100|90|14|4|2|0|450
+Kupang (mussels)|1 serving|100|94|12|7|2|0|400
+Ketam masak lemak|1 crab|250|262|28|6|14|2|900
+Ketam chilli crab|1 crab|350|370|30|22|18|10|1300
+Ketam black pepper crab|1 crab|350|356|30|14|20|4|1200
+Siput sedut|1 serving|100|104|12|5|4|1|450
+Lala (clams) in soup|1 serving|200|107|14|6|3|1|900
+Lala masak sambal|1 serving|200|172|15|10|8|3|950
+Telur ikan|1 serving|50|71|10|1|3|0|250
+Otak-otak (grilled fish paste)|1 piece|60|76|6|4|4|1|300
+Keropok lekor (fried)|5 pieces|100|180|8|28|4|1|450
+Keropok lekor (boiled)|1 serving|100|159|8|25|3|1|450
+Keropok ikan (fish crackers)|1 handful|30|151|4|18|7|1|450
+Fish ball (boiled)|3 balls|60|70|7|6|2|1|300
+Fishcake (fried)|1 piece|50|97|7|6|5|1|300
+Crab stick|3 pieces|45|44|5|5|0.5|3|300
+Surimi sticks|4 pieces|60|60|6|8|0.5|4|400
+Kangkung belacan|1 plate|150|130|4|6|10|2|650
+Kangkung goreng belacan|1 plate|150|130|4|6|10|2|650
+Sayur campur|1 serving|150|111|4|8|7|3|550
+Sayur lodeh|1 bowl|200|158|5|12|10|4|700
+Sayur kobis goreng (stir-fried cabbage)|1 plate|150|107|3|8|7|3|450
+Sayur taugeh goreng (bean sprouts)|1 plate|150|98|4|7|6|2|450
+Sayur sawi goreng (stir-fried choy sum)|1 plate|150|95|3|5|7|2|400
+Sawi (stir-fried with garlic)|1 plate|150|95|3|5|7|2|420
+Brokoli goreng (broccoli with garlic)|1 plate|150|124|5|8|8|2|400
+Cauliflower goreng|1 plate|150|120|4|8|8|3|420
+Sayur kailan (stir-fried)|1 plate|150|99|3|6|7|2|420
+Kailan with oyster sauce|1 plate|150|98|3|8|6|3|650
+Sayur campur Cina (mixed stir-fry)|1 plate|180|132|5|10|8|4|550
+Bendi goreng (stir-fried okra)|1 plate|150|107|3|8|7|2|420
+Terung goreng sambal|1 serving|120|129|2|10|9|4|450
+Terung bakar (grilled eggplant)|1 serving|120|93|2|10|5|4|200
+Pucuk ubi masak lemak|1 serving|120|124|5|8|8|2|450
+Pucuk paku goreng|1 serving|120|111|4|8|7|2|420
+Cangkuk manis goreng|1 serving|120|107|5|6|7|2|420
+Kacang panjang goreng (long beans)|1 serving|120|102|3|9|6|2|400
+Kacang botol (winged beans)|1 serving|100|72|3|6|4|1|250
+Petai (stinky beans, raw)|1 serving|40|35|2|6|0.3|1|5
+Jering|1 serving|40|58|4|10|0.2|0|5
+Kerabu mangga|1 serving|100|103|1|18|3|12|450
+Kerabu timun|1 serving|100|55|1|6|3|3|400
+Kerabu mangga with prawns|1 serving|120|140|8|18|4|12|550
+Kerabu pucuk paku|1 serving|100|89|3|8|5|3|350
+Kerabu perut|1 serving|100|154|10|6|10|2|500
+Acar timun|1 serving|50|35|0.5|6|1|4|300
+Acar buah (fruit pickle)|1 serving|50|54|0.5|12|0.5|9|350
+Acar awak|1 serving|60|52|0.5|8|2|5|400
+Ulam raja|1 serving|30|15|1|2|0.3|0.5|5
+Ulam (mixed raw herbs and veg)|1 plate|100|40|3|6|0.5|2|20
+Timun (cucumber)|1 cup|100|18|0.7|3.6|0.1|1.7|2
+Cucur udang|1 piece|60|106|4|9|6|1|220
+Cucur ikan bilis|1 piece|40|76|2|8|4|1|180
+Tempe goreng (fried tempeh)|2 pieces|60|136|10|6|8|0|8
+Tauhu goreng (fried tofu)|2 pieces|70|112|7|3|8|0.5|250
+Tauhu sumbat|1 piece|90|131|8|9|7|2|350
+Tauhu bakar|1 piece|100|102|9|3|6|0.5|300
+Taugeh (bean sprouts, raw)|1 cup|100|38|3|6|0.2|0|6
+Telur masak sambal tomato|1 egg|100|132|7|8|8|4|450
+Bak kut teh (pork rib herbal soup)|1 bowl|400|324|28|8|20|1|1500
+Bak kut teh (dry style)|1 plate|300|350|28|10|22|4|1300
+Pork ribs braised|1 serving|150|326|24|8|22|6|900
+Char siu (roast BBQ pork)|1 serving|100|218|20|12|10|10|700
+Char siu rice|1 plate|450|524|24|80|12|10|1300
+Siu yoke (roast pork belly)|1 serving|100|424|16|0|40|0|700
+Roasted duck (leg)|1 piece|200|406|30|4|30|3|700
+Roast duck rice|1 plate|420|628|34|78|20|4|1400
+Roasted pork rice (siu yoke fan)|1 plate|440|658|26|80|26|4|1400
+Siu mei set (rice, char siu, roast pork)|1 plate|440|656|30|80|24|8|1500
+Pork knuckle (pig trotter, braised)|1 serving|200|398|28|4|30|4|900
+Braised pork belly (tau yew bak)|1 serving|150|410|18|8|34|6|1000
+Braised egg|1 egg|55|79|6.5|2|5|2|400
+Braised duck rice|1 plate|420|628|32|80|20|7|1500
+Lor bak (pork roll)|1 piece|80|153|10|8|9|2|450
+Ngo hiang|1 piece|60|119|6|8|7|1|420
+Steamed minced pork with salted egg|1 serving|150|238|16|3|18|1|900
+Steamed chicken with ginger|1 serving|150|202|26|2|10|0|700
+Sweet and sour chicken|1 serving|200|342|20|34|14|22|900
+Sweet and sour pork|1 serving|200|359|20|36|15|24|900
+Sweet and sour fish|1 serving|200|300|20|28|12|20|900
+Kung pao chicken|1 serving|200|296|26|12|16|6|950
+Cashew chicken|1 serving|200|314|24|14|18|4|900
+Lemon chicken|1 serving|200|334|24|28|14|18|800
+Black pepper beef|1 serving|180|288|26|10|16|4|1000
+Black pepper chicken|1 serving|180|263|24|8|15|3|950
+Mongolian beef|1 serving|180|304|24|16|16|10|1000
+Beef with broccoli|1 serving|200|262|24|10|14|4|950
+Ginger beef|1 serving|180|254|24|8|14|4|900
+Sizzling tofu|1 plate|250|264|16|14|16|4|950
+Tofu with minced pork|1 plate|250|256|18|10|16|3|950
+Mapo tofu|1 plate|250|266|16|10|18|3|1100
+Egg tofu (stir-fried)|1 plate|200|222|12|12|14|3|700
+Stir-fried tofu with vegetables|1 plate|250|220|14|14|12|4|750
+Hakka abacus seeds|1 plate|350|360|10|62|8|2|950
+Hakka lei cha (thunder tea rice)|1 bowl|300|452|16|70|12|3|800
+Chinese stir-fry vegetables (mixed)|1 plate|200|149|5|12|9|5|650
+Stir-fried beansprouts with salted fish|1 plate|150|133|8|5|9|1|800
+Fried salted fish rice|1 plate|310|470|16|70|14|1|1500
+Steamed egg (chawanmushi, Chinese)|1 bowl|150|102|9|3|6|1|400
+Egg foo yong|1 piece|150|206|12|8|14|2|600
+Chinese chilli omelette|1 serving|120|178|9|4|14|1|450
+Fu yong egg|1 piece|120|151|9|4|11|1|400
+Prawn omelette|1 serving|150|203|14|3|15|1|550
+Oyster omelette (orh luak)|1 plate|300|356|14|30|20|2|1000
+Oyster omelette (small)|1 plate|200|254|10|22|14|2|700
+Hokkien-style fried oyster|1 plate|300|372|14|34|20|2|1000
+Claypot tofu|1 pot|350|294|20|22|14|5|1200
+Claypot frog porridge|1 pot|500|456|28|68|8|2|1200
+Claypot beef brisket|1 pot|450|416|30|20|24|6|1300
+Hot plate tofu|1 plate|300|272|16|16|16|4|1000
+Steamed pomfret (Teochew)|1 plate|300|268|36|4|12|1|700
+Teochew steamed fish|1 plate|300|254|36|5|10|2|750
+Steamed fish with tau cheo|1 plate|300|276|36|6|12|2|900
+Steamed grouper|1 plate|300|228|36|3|8|1|650
+Steamed tilapia|1 plate|300|220|34|3|8|1|650
+Steamed cod|1 plate|200|182|30|2|6|1|500
+Fish fillet with sweet and sour|1 plate|250|306|24|30|10|18|850
+Fish fillet in sesame oil|1 plate|250|250|26|5|14|1|800
+Loh bak|1 piece|80|153|10|8|9|2|450
+Wonton (fried, 4 pieces)|4 pieces|80|194|8|18|10|1|350
+Wonton (boiled, 5 pieces)|5 pieces|100|140|8|18|4|1|400
+Wonton soup (6 pieces)|1 bowl|350|248|14|30|8|2|1100
+Dumplings (pan-fried, 5 pieces)|5 pieces|150|276|12|30|12|2|600
+Dumplings (boiled, 8 pieces)|8 pieces|200|263|16|34|7|2|700
+Siew mai (4 pieces)|4 pieces|100|147|10|11|7|1|450
+Har gow (shrimp dumpling, 3 pieces)|3 pieces|90|128|9|14|4|1|350
+Xiao long bao (4 pieces)|4 pieces|100|175|10|18|7|2|550
+Char siu pau|1 piece|80|189|6|30|5|8|360
+Lo mai gai|1 piece|200|263|10|40|7|2|550
+Chee cheong fun (plain)|1 plate|150|144|3|32|0.5|2|300
+Fried carrot cake (chai tow kway)|1 plate|300|394|10|48|18|4|1100
+Carrot cake (steamed, chai tow kway)|1 piece|200|218|5|45|2|2|550
+Fried carrot cake (white)|1 plate|300|394|10|48|18|3|1000
+Fried carrot cake (black)|1 plate|300|410|10|52|18|8|1200
+Fried yam cake|1 piece|100|158|2|24|6|2|350
+Steamed yam cake|1 piece|100|123|2|22|3|2|300
+Taro cake|1 piece|100|132|2|22|4|1|350
+Turnip cake (fried)|1 piece|120|179|3|26|7|1|450
+Spring roll (fried, vegetable)|1 piece|60|102|2|10|6|1|250
+Spring roll (fried, meat)|1 piece|70|119|4|10|7|1|280
+Popiah (fresh spring roll)|1 piece|150|165|6|24|5|6|550
+Popiah goreng (fried)|1 piece|90|144|4|14|8|2|350
+Kuey pie tee|4 pieces|60|105|3|12|5|2|250
+Wanton noodle (soup) with dumplings|1 bowl|490|364|20|44|12|3|1600
+Prawn paste chicken|1 piece|70|110|10|4|6|1|450
+Har cheong gai|1 piece|70|110|10|4|6|1|450
+Crispy skin fried chicken (Chinese)|1 piece|200|324|28|8|20|1|650
+Hakka stuffed tofu|1 piece|80|80|7|4|4|1|250
+Yong tau foo (single, fried tofu)|1 piece|50|68|5|3|4|0|180
+Yong tau foo (single, bitter gourd)|1 piece|60|63|5|4|3|0|220
+Yong tau foo (single, fish ball)|1 piece|25|33|3|3|1|0|130
+Yong tau foo (single, brinjal)|1 piece|60|63|5|4|3|0|220
+Yong tau foo (single, chilli)|1 piece|60|63|5|4|3|0|220
+Yong tau foo (single, taufu pok)|1 piece|20|43|2|2|3|0|50
+Chicken herbal soup|1 bowl|300|168|18|6|8|1|950
+Old cucumber soup|1 bowl|300|117|10|8|5|2|700
+Lotus root soup|1 bowl|300|149|10|16|5|2|750
+Pork rib soup with carrot and corn|1 bowl|300|176|12|14|8|3|700
+Watercress soup|1 bowl|300|109|10|6|5|1|750
+Winter melon soup|1 bowl|300|100|8|8|4|2|650
+Black chicken soup|1 bowl|300|184|20|8|8|1|900
+Fish head soup (milk)|1 bowl|400|226|28|6|10|2|1100
+Seaweed soup|1 bowl|250|75|4|8|3|1|900
+Egg drop soup|1 bowl|250|92|6|8|4|1|1000
+Sweet corn soup (chicken)|1 bowl|250|127|5|20|3|6|1000
+Hot and sour soup|1 bowl|250|117|8|10|5|2|1100
+Miso soup|1 bowl|240|50|3|5|2|1|900

@@ -1107,7 +1107,7 @@
     var f = ui.selectedFood;
     var units = servingUnitsFor(f);
     var cur = currentServingUnit();
-    var from = f.from === 'Kalori' ? 'From Kalori' : (f.from === 'mine' ? 'From My Foods' : (f.from === 'saved' ? 'From your saved foods' : 'From search'));
+    var from = f.from === 'Kalori' ? 'From Kalori' : (f.from === 'mine' ? 'From My Foods' : (f.from === 'saved' ? 'From your saved foods' : (f.from === 'builtin' ? 'Built-in food (estimate)' : 'From search')));
     var chips = units.length > 1
       ? '<div class="serving-label">Serving size</div><div class="serving-chips" role="group" aria-label="Serving size">' +
           units.map(function(u){
@@ -1879,12 +1879,14 @@
     var brand = p.brands ? p.brands.split(',')[0].trim() : '';
     if (brand) meta.push(esc(brand));
     if (p._mine) meta.push(esc(p._servingLabel || '1 serving'), 'My food');
+    else if (p._builtin) meta.push(esc(p._servingLabel || '1 serving'), 'Built-in \u00B7 estimate');
     else if (p._source === 'saved') meta.push(esc(p._servingLabel || '100g'), 'Saved');
     else if (p._source === 'techapi'){ if (p._serving) meta.push(esc(p._serving)); }
     else meta.push('per 100 g');
     if (p._source === 'saved' ? p._note : foodDataNote(p.nutriments)) meta.push('<span class="row-warn">⚠ check data</span>');
     var star = p._mine
       ? '<button type="button" class="food-fav edit" data-action="edit-my-food" data-id="' + esc(p._myId) + '" aria-label="Edit ' + esc(p.product_name) + '">' + EDIT_SVG + '</button>'
+      : p._builtin ? ''
       : p._source === 'saved'
       ? '<button type="button" class="food-fav' + (p._fav ? ' on' : '') + '" data-action="toggle-fav" data-name="' + esc(p.product_name) + '" aria-label="' + (p._fav ? 'Remove from favorites' : 'Add to favorites') + '" aria-pressed="' + (!!p._fav) + '">' + STAR_SVG + '</button>'
       : '';
@@ -1980,10 +1982,24 @@
 
     // Saved foods (your own cache, works offline) are local, so they
     // show immediately, listed first.
-    var saved = searchSavedFoods(trimmed);
+    var localSaved = searchSavedFoods(trimmed);
+    var saved = localSaved.concat(searchBuiltinFoods(trimmed));
     var hadResults = !!resultsEl.querySelector('.food-suggest-item');
     foodSearch = { id: thisRequest, query: trimmed, products: saved, pending: 2, stale: hadResults && saved.length === 0 };
     renderFoodSearchResults();
+
+    // First search of the session: the built-in list may still be loading;
+    // when it arrives, slip its matches in right after your own foods.
+    if (!builtinFoods && trimmed.length >= 2){
+      loadBuiltinFoods().then(function(){
+        if (thisRequest !== searchRequestId) return;
+        var extra = searchBuiltinFoods(trimmed);
+        if (!extra.length) return;
+        foodSearch.products.splice.apply(foodSearch.products, [localSaved.length, 0].concat(extra));
+        foodSearch.stale = false;
+        renderFoodSearchResults();
+      });
+    }
 
     // Then the two online sources, each landing as soon as it answers.
     // Each can fail independently without taking the others down.
@@ -2052,6 +2068,79 @@
     return mine.concat(saved);
   }
 
+  /* ---- Built-in foods ----
+     About 1,600 common foods (Malaysian dishes, kuih, drinks, staples, fruit,
+     fast food) live in data/foods/*.txt, one food per line, values per
+     serving. They are loaded in the background, searched on the phone (so
+     they work offline) and shown after your own/saved foods, before the
+     online sources. They are estimates, and are labelled that way. */
+  var BUILTIN_FILES = ['rice-noodles-breakfast', 'malaysian-dishes', 'kuih-desserts-drinks', 'western-staples', 'fruit-veg-asian-more']; // file order = tie-break order in results
+  var builtinFoods = null, builtinLoading = null;
+
+  function parseBuiltin(text){
+    var out = [];
+    String(text || '').split('\n').forEach(function(line){
+      if (!line || line.charAt(0) === '#') return;
+      var p = line.split('|');
+      if (p.length < 9 || !p[0]) return;
+      var n = function(i){ var v = parseFloat(p[i]); return isFinite(v) && v > 0 ? v : 0; };
+      var g = n(2);
+      // "1 plate" -> "1 plate (300 g)" so the serving also works in grams / ounces
+      var label = p[1] + ((g > 0 && !/(^|\s)(g|ml)$/i.test(p[1])) ? ' (' + g + ' g)' : '');
+      out.push({
+        product_name: p[0], brands: '', _image: '', _note: '', _source: 'saved', _builtin: true,
+        _servingLabel: label, _k: p[0].toLowerCase(),
+        nutriments: { 'energy-kcal_100g': n(3), 'proteins_100g': n(4), 'carbohydrates_100g': n(5), 'fat_100g': n(6),
+                      'fiber_100g': 0, 'sugars_100g': n(7), 'sodium_100g_mg': n(8) }
+      });
+    });
+    return out;
+  }
+
+  function loadBuiltinFoods(){
+    if (builtinFoods) return Promise.resolve(builtinFoods);
+    if (!builtinLoading){
+      builtinLoading = Promise.all(BUILTIN_FILES.map(function(f){
+        return fetch('data/foods/' + f + '.txt')
+          .then(function(r){ return r.ok ? r.text() : ''; })
+          .catch(function(){ return ''; });
+      })).then(function(texts){
+        var all = [];
+        texts.forEach(function(t){ all = all.concat(parseBuiltin(t)); });
+        if (all.length) builtinFoods = all;
+        else builtinLoading = null; // nothing came back (offline on first run): try again next time
+        return all;
+      });
+    }
+    return builtinLoading;
+  }
+
+  // Every word you typed must appear in the name; names that start with
+  // what you typed (or match at the start of a word) come first.
+  function searchBuiltinFoods(query){
+    var q = query.trim().toLowerCase();
+    if (!builtinFoods || q.length < 2) return [];
+    var toks = q.split(/\s+/).filter(Boolean);
+    var have = {};
+    myFoodProducts().concat(STORE.savedFoods || []).forEach(function(f){ have[String(f.product_name || '').trim().toLowerCase()] = 1; });
+    var scored = [];
+    builtinFoods.forEach(function(f, idx){
+      var k = f._k;
+      if (have[k]) return;
+      var score = 0;
+      for (var i = 0; i < toks.length; i++){
+        var at = k.indexOf(toks[i]);
+        if (at === -1) return;
+        var prev = at ? k.charAt(at - 1) : ' ';
+        score += (prev === ' ' || prev === '(' || prev === '/') ? 0 : 2;
+      }
+      if (toks.length === 1 && k.indexOf(q) === 0) score -= 1; // a one-word search prefers names that start with it
+      scored.push({ f: f, s: score + idx / 100000 }); // earlier in the files (the plain, common version) first
+    });
+    scored.sort(function(a, b){ return a.s - b.s; });
+    return scored.slice(0, 12).map(function(x){ return x.f; });
+  }
+
   function pickFoodResult(index){
     var p = ui.lastSearchProducts && ui.lastSearchProducts[index];
     if (!p) return;
@@ -2073,7 +2162,7 @@
         sodium: nut['sodium_100g_mg'] || 0
       };
       var label = p._serving || p._servingLabel || '1 serving';
-      var from = p._source === 'techapi' ? 'Kalori' : (p._mine ? 'mine' : 'saved');
+      var from = p._source === 'techapi' ? 'Kalori' : (p._mine ? 'mine' : (p._builtin ? 'builtin' : 'saved'));
       var dataNote = p._source === 'saved' ? (p._note || '') : foodDataNote(nut);
       if (p._source === 'saved' && /^\s*100\s*g\s*$/i.test(p._servingLabel || '')){
         // saved per-100 g food: comes back with its serving / measures
@@ -6649,6 +6738,7 @@
   // OFF/Kalori search calls — see sw.js.
   if ('serviceWorker' in navigator){
     // Left open past midnight: when the app comes back, move Log onto the new day.
+    setTimeout(function(){ loadBuiltinFoods(); }, 2500); // warm the built-in food list in the background
     var lastSeenDay = todayKey();
     document.addEventListener('visibilitychange', function(){
       if (document.visibilityState !== 'visible') return;

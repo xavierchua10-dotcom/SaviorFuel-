@@ -1,0 +1,395 @@
+# SaviorFuel built-in foods. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg  (all values are per serving, estimates)
+Salmon (grilled)|1 fillet|150|298|34|0|18|0|90
+Salmon (raw sashimi, 5 slices)|5 slices|75|145|16|0|9|0|40
+Salmon (smoked)|50 g|50|63|9|0|3|0|1000
+Salmon (canned)|1 can|140|210|30|0|10|0|450
+Tuna (grilled steak)|1 piece|150|179|38|0|3|0|70
+Tuna (sashimi, 5 slices)|5 slices|75|81|18|0|1|0|30
+Mackerel (kembung, grilled)|1 fish|100|188|20|0|12|0|90
+Mackerel (canned in tomato)|1 can|155|232|24|7|12|4|700
+Pomfret (steamed)|1 fish|200|208|34|0|8|0|120
+Pomfret (fried)|1 fish|200|270|34|2|14|0|400
+Snapper (steamed)|1 fillet|150|155|32|0|3|0|90
+Sea bass (barramundi, grilled)|1 fillet|150|182|32|0|6|0|90
+Grouper (steamed)|1 fillet|150|147|30|0|3|0|90
+Tilapia (grilled)|1 fillet|120|131|26|0|3|0|60
+Cod (grilled)|1 fillet|150|146|32|0|2|0|90
+Dory fish (fried, breaded)|1 piece|100|220|14|14|12|0|450
+Dory fish (steamed)|1 fillet|120|81|18|0|1|0|90
+Catfish (fried)|1 fish|120|178|20|2|10|0|330
+Sardine (grilled)|1 fish|60|101|14|0|5|0|70
+Anchovies (fresh, fried)|1 serving|50|128|11|3|8|0|300
+Herring (smoked)|1 fillet|50|112|10|0|8|0|600
+Eel (grilled, unagi)|1 piece|100|231|18|6|15|3|700
+Eel (kabayaki rice bowl)|1 bowl|350|532|22|75|16|10|1100
+Prawns (boiled)|100 g|100|105|24|0|1|0|220
+Prawns (raw)|100 g|100|89|20|0|1|0|120
+Prawns (fried, no coating)|100 g|100|142|22|0|6|0|200
+Squid (boiled)|100 g|100|98|18|3|1.5|0|40
+Cuttlefish (grilled)|100 g|100|102|20|1|2|0|90
+Octopus (boiled)|100 g|100|154|30|4|2|0|230
+Crab meat (cooked)|100 g|100|94|20|0|1.5|0|350
+Lobster (steamed)|100 g|100|93|20|1|1|0|450
+Scallops (steamed)|3 pieces|70|56|11|2|0.5|0|200
+Oysters (raw, 6)|6 pieces|90|74|9|5|2|0|180
+Mussels (steamed)|100 g|100|160|24|7|4|0|370
+Clams (steamed)|100 g|100|77|13|4|1|0|600
+Cockles (blood cockles, boiled)|100 g|100|82|14|3|1.5|0|400
+Abalone (canned)|1 piece|40|42|8|2|0.2|0|120
+Sea cucumber|100 g|100|32|6|1|0.4|0|60
+Jellyfish (marinated)|100 g|100|23|4|1|0.3|0|600
+Fish roe|1 tbsp|15|36|4|0.5|2|0|100
+Dried shrimp|1 tbsp|10|25|5|0.5|0.3|0|130
+Fish sauce|1 tbsp|18|12|2|1|0|1|1400
+Oyster sauce|1 tbsp|18|18|0.4|4|0|3|490
+Belacan (shrimp paste, 1 tsp)|1 tsp|5|6|0.6|0.4|0.2|0|100
+Apple (medium)|1 piece|180|105|0.5|25|0.3|19|2
+Banana (medium)|1 piece|120|117|1.3|27|0.4|14|1
+Banana (Pisang Berangan)|1 piece|100|104|1.2|24|0.3|13|1
+Banana (Pisang Mas)|1 piece|60|69|0.8|16|0.2|9|1
+Banana (Pisang Awak)|1 piece|120|122|1.5|28|0.4|14|1
+Banana (Pisang Raja)|1 piece|130|138|1.5|32|0.4|16|1
+Orange (medium)|1 piece|150|79|1.4|18|0.2|14|0
+Mandarin orange|1 piece|80|44|0.6|10|0.2|8|1
+Orange (Sunkist)|1 piece|150|79|1.4|18|0.2|14|0
+Grapes (green, 1 cup)|1 cup|150|114|1|27|0.2|23|3
+Grapes (red, 1 cup)|1 cup|150|114|1|27|0.2|23|3
+Strawberries (1 cup)|1 cup|150|56|1|12|0.5|7|2
+Blueberries (1 cup)|1 cup|150|92|1|21|0.5|15|2
+Raspberries (1 cup)|1 cup|125|73|1.5|15|0.8|5|1
+Blackberries (1 cup)|1 cup|140|70|2|14|0.7|7|1
+Watermelon (1 cup)|1 cup|150|50|1|11|0.2|9|2
+Watermelon (1 slice)|1 slice|300|104|2|23|0.5|18|3
+Rock melon (1 cup)|1 cup|170|64|1.4|14|0.3|13|25
+Honeydew (1 cup)|1 cup|170|66|1|15|0.2|14|30
+Papaya (1 cup)|1 cup|150|70|0.7|16|0.4|11|10
+Papaya (1 slice)|1 slice|150|70|0.7|16|0.4|11|10
+Pineapple (1 cup)|1 cup|165|94|1|22|0.2|16|2
+Pineapple (1 slice)|1 slice|80|47|0.5|11|0.1|8|1
+Mango (1 cup)|1 cup|165|111|1.4|25|0.6|23|2
+Mango (Harum Manis, 1 piece)|1 piece|250|169|2|38|1|34|3
+Mango (small, ripe)|1 piece|200|134|1.6|30|0.8|27|2
+Mango (green, unripe)|1 piece|150|88|1|20|0.4|9|2
+Mangosteen (3 pieces)|3 pieces|90|69|0.5|16|0.3|13|5
+Rambutan (5 pieces)|5 pieces|90|69|0.7|16|0.2|14|5
+Longan (10 pieces)|10 pieces|80|65|1|15|0.1|12|0
+Lychee (5 pieces)|5 pieces|50|35|0.4|8|0.2|7|0
+Durian (2 seeds)|2 seeds|100|161|2|27|5|20|2
+Durian (D24, 1 seed)|1 seed|50|78|1|13|2.5|9|1
+Durian (Musang King, 1 seed)|1 seed|60|97|1.5|16|3|11|1
+Jackfruit (cempedak, 3 pieces)|3 pieces|60|71|1|16|0.3|10|2
+Jackfruit (nangka, 3 pieces)|3 pieces|60|71|1|16|0.3|10|2
+Cempedak goreng|1 piece|60|129|1|20|5|10|5
+Dragon fruit (1 cup)|1 cup|150|92|2|20|0.5|14|5
+Dragon fruit (1 piece)|1 piece|300|181|3|40|1|28|10
+Guava (1 piece)|1 piece|120|85|3|16|1|10|5
+Guava (jambu batu)|1 piece|150|101|3|20|1|12|5
+Jambu air (water apple)|1 piece|80|28|0.5|6|0.2|5|2
+Starfruit (1 piece)|1 piece|120|39|1|8|0.3|4|2
+Soursop (1 cup)|1 cup|200|117|2|26|0.6|20|20
+Sapodilla (chiku, 1 piece)|1 piece|100|91|0.4|20|1|14|12
+Salak (snake fruit, 3 pieces)|3 pieces|100|95|0.8|22|0.4|15|3
+Langsat|5 pieces|50|43|0.5|10|0.1|8|1
+Duku|5 pieces|50|43|0.5|10|0.1|8|1
+Pomelo (1 cup)|1 cup|190|93|1|22|0.1|17|2
+Pomelo (limau bali, 3 segments)|3 segments|100|44|0.8|10|0.1|7|1
+Passion fruit|1 piece|20|15|0.5|3|0.1|2|2
+Pear (medium)|1 piece|180|113|0.7|27|0.2|17|2
+Peach (medium)|1 piece|150|65|1.4|14|0.4|13|0
+Plum (medium)|1 piece|70|36|0.5|8|0.2|7|0
+Kiwi (medium)|1 piece|70|47|0.8|10|0.4|6|2
+Pomegranate (1/2)|1/2|150|115|1.5|25|1|19|5
+Cherries (10)|10 pieces|70|50|1|11|0.2|8|0
+Apricot (3 pieces)|3 pieces|105|58|1.5|12|0.4|10|0
+Dates (kurma, 3 pieces)|3 pieces|30|90|0.5|22|0|20|1
+Dates (Medjool, 1 piece)|1 piece|24|74|0.4|18|0|16|0
+Figs (fresh, 2 pieces)|2 pieces|100|82|0.8|19|0.3|16|1
+Figs (dried, 2 pieces)|2 pieces|30|83|1|19|0.3|14|3
+Raisins (1 small box)|1 box|14|46|0.4|11|0|8|1
+Raisins (1 handful)|1 handful|30|97|1|23|0.1|17|3
+Prunes (3 pieces)|3 pieces|30|76|0.7|18|0.1|11|1
+Cranberries (dried, handful)|1 handful|30|93|0|23|0.1|20|2
+Coconut (fresh flesh, 1 piece)|1 piece|45|169|1.5|7|15|2|10
+Coconut (grated, 1 tbsp)|1 tbsp|8|28|0.3|1|2.5|0.5|3
+Coconut (young flesh)|100 g|100|37|1|6|1|3|15
+Avocado (1/2)|1/2|100|179|2|9|15|1|7
+Lemon (1 piece)|1 piece|60|24|0.6|5|0.2|2|1
+Lime (1 piece)|1 piece|40|18|0.3|4|0.1|1|1
+Calamansi (limau kasturi, 3 pieces)|3 pieces|30|12|0.3|2.5|0.1|1|1
+Fruit cocktail (canned, 1/2 cup)|1/2 cup|120|70|0.5|17|0|15|5
+Mixed fruit salad|1 bowl|200|98|1.5|22|0.5|18|5
+Pineapple (canned, 2 slices)|2 slices|110|90|0.5|22|0|20|3
+Peach (canned, 2 halves)|2 halves|120|75|0.6|18|0.1|17|5
+Lychee (canned, 5 pieces)|5 pieces|100|70|0.4|17|0|16|3
+Fruit puree (baby, pouch)|1 pouch|90|63|1|14|0.3|11|5
+Applesauce|1/2 cup|120|58|0.3|14|0.1|12|3
+Broccoli (steamed)|1 cup|90|40|3|6|0.5|1.5|30
+Cauliflower (steamed)|1 cup|100|31|2|5|0.3|2|20
+Cabbage (raw)|1 cup|70|21|1|4|0.1|2|13
+Cabbage (steamed)|1 cup|100|29|1|6|0.1|3|20
+Choy sum (steamed)|1 cup|100|23|2|3|0.3|1|25
+Bok choy (steamed)|1 cup|100|18|2|2|0.2|1|60
+Kai lan (steamed)|1 cup|100|24|2|3|0.4|1|20
+Spinach (raw)|1 cup|30|8|0.9|1|0.1|0.1|24
+Spinach (cooked)|1 cup|180|52|5|7|0.5|1|130
+Kangkung (water spinach, boiled)|1 cup|90|26|3|3|0.2|1|60
+Lettuce (iceberg, 1 cup)|1 cup|70|11|0.6|2|0.1|1.5|7
+Lettuce (romaine, 1 cup)|1 cup|50|9|0.6|1.5|0.1|0.5|4
+Cucumber (1/2)|1/2|100|18|0.7|3.6|0.1|1.7|2
+Tomato (medium)|1 piece|120|22|1|4|0.2|3|6
+Tomato (cherry, 10)|10 pieces|150|32|1.3|6|0.3|4|7
+Carrot (medium)|1 piece|60|27|0.6|6|0.1|3|40
+Carrot (cooked, 1 cup)|1 cup|150|60|1.6|13|0.2|6|90
+Capsicum (green, 1 cup)|1 cup|120|27|1|5|0.3|3|5
+Capsicum (red, 1 cup)|1 cup|120|42|1.5|8|0.4|6|5
+Onion (1 medium, raw)|1 piece|110|45|1|10|0.1|5|4
+Onion (cooked)|1 cup|210|96|3|20|0.5|9|10
+Spring onion|2 stalks|30|11|0.6|2|0.1|1|8
+Garlic (1 clove)|1 clove|3|5|0.2|1|0|0|1
+Ginger (1 tbsp)|1 tbsp|6|4|0.1|1|0|0|1
+Chilli (1 piece)|1 piece|10|5|0.2|1|0|0.5|1
+Eggplant (cooked)|1 cup|100|42|1|9|0.2|3|2
+Okra (steamed)|1 cup|100|38|2|7|0.2|1.5|7
+Pumpkin (steamed)|1 cup|115|45|1|10|0.1|3|2
+Zucchini (cooked)|1 cup|180|40|2|7|0.4|3|10
+Cabbage (Chinese, napa, raw)|1 cup|70|13|1|2|0.1|1|10
+Radish (white, daikon)|100 g|100|19|0.6|4|0.1|2|20
+Beetroot (cooked)|1 cup|170|79|2|17|0.3|13|130
+Celery (stalk)|1 stalk|40|6|0.3|1|0.1|0.5|32
+Corn (baby corn, 5)|5 pieces|50|22|1|4|0.2|2|2
+Green peas (cooked, 1/2 cup)|1/2 cup|80|63|4|11|0.3|4|2
+Long beans (steamed)|1 cup|100|46|3|8|0.2|2|5
+Green beans (steamed)|1 cup|125|42|2|8|0.2|3|5
+Bean sprouts (taugeh, blanched)|1 cup|100|38|3|6|0.2|0|6
+Mushroom (button, cooked)|1 cup|150|36|3|5|0.5|2|5
+Shiitake mushroom (cooked)|1 cup|145|95|2|21|0.3|5|5
+Enoki mushroom|100 g|100|46|2.7|8|0.3|0.2|3
+Oyster mushroom|100 g|100|40|3|6|0.4|1|18
+Wood ear fungus|1 cup|100|29|1|6|0.1|0|10
+Seaweed (nori sheet)|1 sheet|3|8|1|1|0|0|8
+Seaweed (kombu, wakame, 1 serving)|1 serving|20|13|1|2|0.1|0|200
+Seaweed snack (1 pack)|1 pack|5|22|1|1|1.5|0|60
+Pickled vegetables (kimchi, 1 serving)|1 serving|50|19|1|3|0.3|1|400
+Pickled mustard greens|1 serving|50|19|1|3|0.3|1|700
+Sauerkraut|1 serving|50|11|0.5|2|0.1|1|470
+Olives (5)|5 pieces|20|32|0.2|1|3|0|200
+Tomato (canned, 1/2 cup)|1/2 cup|120|26|1|5|0.2|4|180
+Tomato sauce (1 tbsp)|1 tbsp|17|17|0.2|4|0|3|180
+Tomato paste (1 tbsp)|1 tbsp|16|16|0.7|3|0.1|2|20
+Tomato puree (1/4 cup)|1/4 cup|60|30|1|6|0.2|4|20
+Lentils (cooked, 1 cup)|1 cup|200|239|18|40|0.8|3|4
+Chickpeas (cooked, 1 cup)|1 cup|165|276|15|45|4|8|10
+Kidney beans (cooked, 1 cup)|1 cup|175|229|15|40|1|2|5
+Black beans (cooked, 1 cup)|1 cup|170|233|15|41|1|0.5|2
+Mung beans (cooked, 1 cup)|1 cup|200|215|14|38|0.8|4|2
+Red beans (cooked, adzuki)|1 cup|230|298|17|57|0.2|0|18
+Green peas (canned)|1/2 cup|120|64|4|11|0.5|3|200
+Soybeans (edamame, 1 cup)|1 cup|155|200|18|14|8|3|10
+Baked beans (canned, 1/2 cup)|1/2 cup|130|136|6|27|0.5|10|550
+Hummus (2 tbsp)|2 tbsp|30|56|2|3|4|0|120
+Falafel (3 pieces)|3 pieces|50|114|5|10|6|0.5|200
+Peanuts (roasted, 1 handful)|1 handful|30|187|8|5|15|1|5
+Peanuts (boiled)|1 handful|60|207|9|9|15|2|5
+Peanut butter (1 tbsp)|1 tbsp|16|100|4|3|8|1.5|60
+Peanut butter (2 tbsp)|2 tbsp|32|196|7|6|16|3|120
+Almonds (1 handful, 23 pieces)|23 pieces|28|174|6|6|14|1|0
+Cashews (1 handful)|1 handful|28|169|5|8|13|1|5
+Walnuts (1 handful)|1 handful|28|194|4|4|18|1|1
+Pistachios (1 handful)|1 handful|28|173|6|8|13|2|0
+Hazelnuts (1 handful)|1 handful|28|185|4|4|17|1|0
+Macadamia (1 handful)|1 handful|28|213|2|4|21|1|1
+Brazil nuts (3 pieces)|3 pieces|12|85|1.7|1.5|8|0.2|0
+Mixed nuts (1 handful)|1 handful|30|192|6|6|16|1|5
+Chia seeds (1 tbsp)|1 tbsp|12|64|2|5|4|0|2
+Flaxseed (1 tbsp)|1 tbsp|10|56|2|3|4|0|3
+Sunflower seeds (1 tbsp)|1 tbsp|9|61|2|2|5|0|2
+Pumpkin seeds (1 tbsp)|1 tbsp|9|52|3|1|4|0|2
+Sesame seeds (1 tbsp)|1 tbsp|9|55|1.6|2|4.5|0|3
+Tahini (1 tbsp)|1 tbsp|15|94|2.5|3|8|0|5
+Nutella (1 tbsp)|1 tbsp|20|102|1|11|6|11|10
+Chocolate spread (1 tbsp)|1 tbsp|20|102|1|11|6|11|10
+Peanut butter chocolate|1 tbsp|20|98|3|8|6|7|45
+Kaya (coconut jam, 1 tbsp)|1 tbsp|20|72|0.4|13|2|12|8
+Jam (strawberry, 1 tbsp)|1 tbsp|20|52|0|13|0|10|5
+Maple syrup (1 tbsp)|1 tbsp|20|52|0|13|0|12|2
+Gula melaka (1 tbsp)|1 tbsp|15|56|0|14|0|13|5
+White sugar (1 tsp)|1 tsp|4|16|0|4|0|4|0
+White sugar (1 tbsp)|1 tbsp|12|48|0|12|0|12|0
+Brown sugar (1 tbsp)|1 tbsp|12|48|0|12|0|12|1
+Sweetener (1 sachet)|1 sachet|1|4|0|0.9|0|0|0
+Stevia|1 sachet|1|0|0|0|0|0|0
+Cooking oil (1 tbsp)|1 tbsp|14|126|0|0|14|0|0
+Olive oil (1 tbsp)|1 tbsp|14|126|0|0|14|0|0
+Coconut oil (1 tbsp)|1 tbsp|14|126|0|0|14|0|0
+Sesame oil (1 tsp)|1 tsp|5|45|0|0|5|0|0
+Palm oil (1 tbsp)|1 tbsp|14|126|0|0|14|0|0
+Soy sauce (1 tbsp)|1 tbsp|16|9|1.3|1|0|0.4|900
+Dark soy sauce (1 tbsp)|1 tbsp|16|15|0.8|3|0|2|650
+Kicap manis (sweet soy sauce, 1 tbsp)|1 tbsp|18|38|0.4|9|0|7|450
+Chilli sauce (1 tbsp)|1 tbsp|15|13|0.2|3|0|2|200
+Sriracha (1 tsp)|1 tsp|5|4|0.1|1|0|1|80
+Tomato ketchup (1 tbsp)|1 tbsp|17|19|0.2|4.5|0|3.5|170
+Tomato ketchup (1 sachet)|1 sachet|10|10|0.1|2.5|0|2.3|100
+Mayo (1 sachet)|1 sachet|10|64|0|0.3|7|0|65
+BBQ sauce (1 tbsp)|1 tbsp|17|17|0.2|4|0|3.5|150
+Mustard (1 tsp)|1 tsp|5|6|0.3|0.4|0.3|0|60
+Black pepper sauce (1 tbsp)|1 tbsp|17|17|0.2|3|0.5|2|250
+Mushroom sauce (2 tbsp)|2 tbsp|30|32|0.6|3|2|1|250
+Garlic sauce (1 tbsp)|1 tbsp|15|41|0.2|1|4|0.5|100
+Cheese sauce (2 tbsp)|2 tbsp|30|50|1.5|2|4|1|180
+Sambal sauce (1 tbsp)|1 tbsp|15|18|0.3|2|1|1|180
+Peanut sauce (2 tbsp)|2 tbsp|30|73|3|4|5|3|120
+Hoisin sauce (1 tbsp)|1 tbsp|16|34|0.4|7|0.5|5|260
+Plum sauce (1 tbsp)|1 tbsp|20|40|0|10|0|8|80
+Sweet chilli sauce (1 tbsp)|1 tbsp|18|32|0|8|0|7|90
+Pad Thai sauce|2 tbsp|30|42|0.5|10|0|8|400
+Teriyaki sauce (1 tbsp)|1 tbsp|18|17|0.8|3.5|0|3|600
+Curry paste (1 tbsp)|1 tbsp|15|37|0.4|2|3|0.5|420
+Curry powder (1 tsp)|1 tsp|2|3|0.1|0.4|0.1|0|1
+Rempah (spice paste, 1 tbsp)|1 tbsp|15|45|0.3|2|4|0.5|200
+Santan masak lemak gravy (1/4 cup)|1/4 cup|60|106|1|3|10|1|220
+Salt (1 tsp)|1 tsp|6|0|0|0|0|0|2300
+MSG (1 tsp)|1 tsp|5|0|0|0|0|0|600
+Vinegar (1 tbsp)|1 tbsp|15|0|0|0|0|0|2
+Lime juice (1 tbsp)|1 tbsp|15|4|0|1|0|0|1
+Stock (chicken, 1 cup)|1 cup|240|21|2|1|1|0|800
+Stock (beef, 1 cup)|1 cup|240|20|3|1|0.5|0|900
+Stock cube (1 piece)|1 piece|10|15|0.5|1|1|0|1800
+Gravy (brown, 1/4 cup)|1/4 cup|60|29|1|4|1|1|300
+Tom yum goong|1 bowl|300|176|18|8|8|4|1500
+Tom kha gai|1 bowl|300|258|16|8|18|3|1300
+Green curry (chicken)|1 bowl|300|336|20|10|24|4|1100
+Red curry (chicken)|1 bowl|300|318|20|10|22|4|1100
+Massaman curry|1 bowl|300|368|20|18|24|6|1000
+Panang curry|1 bowl|300|336|20|10|24|4|1050
+Thai fried rice|1 plate|450|488|18|68|16|4|1300
+Pineapple fried rice|1 plate|450|520|14|80|16|12|1000
+Khao man gai|1 plate|450|538|28|75|14|3|1100
+Som tam (green papaya salad)|1 plate|200|132|4|20|4|12|1100
+Larb gai|1 plate|200|194|20|6|10|2|1000
+Mango sticky rice|1 plate|250|346|4|60|10|30|50
+Thai milk tea|1 glass|300|194|3|32|6|28|70
+Satay Thai (4 sticks)|4 sticks|100|186|18|6|10|4|500
+Nasi padang (rice, rendang, veg)|1 plate|600|674|34|85|22|6|1400
+Gado-gado|1 plate|350|362|14|36|18|12|900
+Soto Betawi|1 bowl|510|386|18|20|26|2|1300
+Bakso (meatball soup)|1 bowl|570|430|18|58|14|3|1500
+Mie ayam|1 bowl|600|448|20|65|12|5|1400
+Mie goreng (Indonesian)|1 plate|310|472|14|68|16|8|1300
+Nasi uduk|1 plate|300|456|10|68|16|2|700
+Tempe mendoan|3 pieces|90|174|9|12|10|0|250
+Pisang goreng (Indonesian)|1 piece|60|121|1|18|5|7|30
+Es cendol|1 glass|300|271|2|50|7|34|40
+Sushi (salmon nigiri, 2 pieces)|2 pieces|60|90|6|12|2|3|200
+Sushi (tuna nigiri, 2 pieces)|2 pieces|60|80|7|12|0.5|3|200
+Sushi roll (California, 6 pieces)|6 pieces|180|222|6|36|6|6|600
+Sushi roll (salmon, 6 pieces)|6 pieces|180|234|9|36|6|5|550
+Sashimi (assorted, 8 pieces)|8 pieces|120|150|24|0|6|0|100
+Maki roll (cucumber, 6 pieces)|6 pieces|150|152|3|34|0.5|4|300
+Onigiri (salmon)|1 piece|110|169|4|36|1|1|400
+Tempura (prawn, 2 pieces)|2 pieces|80|186|8|16|10|1|350
+Tempura (vegetable, 3 pieces)|3 pieces|80|192|3|18|12|2|300
+Tonkatsu (pork cutlet)|1 piece|150|390|28|20|22|2|600
+Chicken katsu|1 piece|150|346|26|20|18|2|550
+Katsu curry|1 plate|600|672|26|88|24|8|1400
+Chicken teriyaki (rice bowl)|1 bowl|320|482|26|72|10|14|1300
+Gyudon (beef bowl)|1 bowl|700|526|22|78|14|12|1300
+Oyakodon|1 bowl|340|506|24|80|10|10|1250
+Unadon|1 bowl|450|518|22|76|14|10|1200
+Salmon teriyaki|1 serving|150|234|28|8|10|6|600
+Karaage (4 pieces)|4 pieces|120|246|18|12|14|1|600
+Gyoza (6 pieces)|6 pieces|150|242|12|26|10|2|700
+Edamame (1 bowl)|1 bowl|120|133|12|10|5|2|10
+Miso soup (1 bowl)|1 bowl|240|50|3|5|2|1|900
+Chawanmushi (Japanese)|1 cup|150|89|8|3|5|1|400
+Takoyaki|6 pieces|150|225|8|28|9|4|700
+Dorayaki|1 piece|70|175|3|34|3|20|100
+Mochi (1 piece)|1 piece|40|78|1|18|0.2|10|2
+Daifuku (red bean mochi)|1 piece|60|124|2|28|0.5|16|5
+Matcha latte|1 cup|300|204|7|26|8|24|100
+Matcha ice cream (1 scoop)|1 scoop|60|122|2|15|6|14|45
+Bibimbap|1 bowl|370|548|22|88|12|10|1200
+Bulgogi (beef)|1 serving|150|270|26|10|14|8|800
+Bulgogi with rice|1 plate|450|518|28|70|14|10|1100
+Kimchi jjigae|1 bowl|350|262|20|14|14|4|1700
+Kimchi (1 serving)|1 serving|50|19|1|3|0.3|1|400
+Tteokbokki|1 plate|300|340|8|68|4|14|1200
+Korean fried chicken (4 pieces)|4 pieces|200|364|26|20|20|10|900
+Samgyeopsal (pork belly, grilled)|1 serving|150|450|18|0|42|0|600
+Korean BBQ (assorted, 1 set)|1 set|300|528|34|8|40|6|1000
+Kimbap (6 pieces)|6 pieces|180|250|7|42|6|3|700
+Sundubu jjigae|1 bowl|400|282|20|10|18|3|1500
+Japchae (1 plate)|1 plate|160|247|6|40|7|6|500
+Hotteok|1 piece|100|244|3|40|8|20|90
+Bingsu (small)|1 bowl|300|344|6|62|8|38|120
+Banh mi (pork)|1 piece|250|398|18|50|14|6|1000
+Banh mi (chicken)|1 piece|250|370|20|50|10|6|950
+Pho (chicken)|1 bowl|450|391|24|58|7|4|1500
+Bun bo Hue|1 bowl|630|476|28|64|12|4|1600
+Goi cuon (fresh spring roll, 2 pieces)|2 pieces|120|130|8|20|2|3|450
+Vietnamese rice paper roll with shrimp|2 pieces|120|130|8|20|2|3|400
+Com tam (broken rice, pork chop)|1 plate|380|576|28|80|16|6|1200
+Biryani (vegetable)|1 plate|310|460|10|78|12|4|900
+Butter chicken|1 serving|250|386|24|14|26|8|1000
+Butter chicken with naan|1 set|450|620|32|60|28|9|1500
+Tandoori chicken (1 piece)|1 piece|150|214|28|3|10|2|700
+Chicken tikka (4 pieces)|4 pieces|120|176|22|4|8|2|600
+Palak paneer|1 serving|200|268|12|10|20|3|700
+Paneer butter masala|1 serving|200|312|12|12|24|6|800
+Chana masala|1 serving|200|224|10|28|8|5|650
+Aloo gobi|1 serving|200|177|4|20|9|3|550
+Dal makhani|1 serving|200|202|8|20|10|3|700
+Samosa (potato, 1 piece)|1 piece|60|131|3|14|7|1|220
+Pakora (4 pieces)|4 pieces|80|162|4|14|10|1|350
+Idli sambar|1 set|200|195|7|35|3|4|550
+Masala dosa|1 piece|250|285|6|45|9|3|520
+Upma|1 bowl|200|219|5|34|7|2|500
+Poha|1 bowl|200|218|5|36|6|3|420
+Paratha (plain, 1 piece)|1 piece|80|192|4|26|8|1|260
+Paratha (aloo, 1 piece)|1 piece|130|246|5|34|10|2|420
+Thosai set with chutney and sambar|1 set|250|268|7|42|8|4|550
+Hummus with pita|1 serving|120|200|8|24|8|1|450
+Falafel wrap|1 piece|250|350|12|44|14|6|900
+Shawarma plate|1 plate|450|516|34|50|20|6|1100
+Kebab rice|1 plate|500|544|30|70|16|5|1100
+Tabbouleh|1 serving|100|102|2|10|6|2|250
+Baba ganoush|2 tbsp|30|37|0.5|2|3|0.5|100
+Baklava (1 piece)|1 piece|40|186|2|22|10|12|100
+Turkish delight (2 pieces)|2 pieces|30|104|0|26|0|22|2
+Kunafa (1 piece)|1 piece|100|346|6|40|18|25|180
+Lamb mandi (rice with lamb)|1 plate|440|656|34|85|20|4|1000
+Nasi arab (Arabic rice)|1 plate|330|500|20|78|12|4|900
+Nasi mandy ayam|1 plate|430|638|34|85|18|4|1000
+Protein bar (20 g protein)|1 bar|60|240|20|22|8|4|150
+Protein bar (10 g protein)|1 bar|45|192|10|20|8|10|120
+Protein cookie|1 piece|60|226|12|22|10|8|180
+Energy bar (cereal bar)|1 bar|30|124|2|20|4|10|60
+Nature Valley granola bar (2 bars)|2 bars|42|179|3|26|7|10|90
+Fruit bar|1 bar|30|101|1|22|1|18|10
+Rice cake (plain, 2 pieces)|2 pieces|18|66|1.5|14|0.5|0|10
+Popcorn (microwave, 1 bag)|1 bag|80|370|7|45|18|1|700
+Instant oats (flavoured, 1 sachet)|1 sachet|40|155|4|28|3|10|120
+Ready-to-drink protein shake|1 bottle|330|185|25|10|5|5|300
+Meal replacement shake (powder, 1 serving)|1 serving|50|216|20|25|4|10|200
+Canned tuna sandwich spread|2 tbsp|30|78|3|3|6|1|180
+Chicken breast slices (deli, 3 slices)|3 slices|45|47|9|0.5|1|0|420
+Canned chicken (1 can)|1 can|100|129|20|1|5|0|450
+Canned mushroom (1/2 cup)|1/2 cup|100|23|2|3|0.3|1|350
+Canned sweet corn (1/2 cup)|1/2 cup|100|89|2|18|1|4|240
+Canned baked beans (1 can)|1 can|220|229|11|44|1|18|900
+Canned sardine (1 can, 155 g)|1 can|155|232|24|7|12|4|700
+Canned curry chicken (1 can)|1 can|200|266|16|10|18|4|900
+Instant congee (1 sachet)|1 sachet|40|137|2|30|1|0.5|600
+Instant coffee (3 in 1)|1 sachet|20|82|1|15|2|10|30
+Instant oat cereal|1 sachet|30|110|3|20|2|1|20
+Sushi (supermarket pack)|1 pack|250|303|10|50|7|6|800
+Sandwich (convenience store, egg)|1 piece|130|200|8|24|8|3|400
+Onigiri (tuna mayo)|1 piece|110|188|4|34|4|1|380
+Ready meal (chicken rice, microwave)|1 pack|350|382|18|55|10|4|1000
+Cup rice (instant)|1 cup|180|185|4|40|1|0|10
+Frozen pizza (1/3)|1/3|120|246|9|30|10|3|700
+Frozen paratha|1 piece|80|192|4|26|8|1|280
+Frozen dumplings (5 pieces)|5 pieces|120|190|8|26|6|1|500
+Frozen fries (1 serving)|1 serving|100|177|2|22|9|0.5|180
+Frozen chicken nuggets (4 pieces)|4 pieces|80|170|10|10|10|0|400
+Frozen meatballs (5)|5 pieces|100|180|10|8|12|1|450

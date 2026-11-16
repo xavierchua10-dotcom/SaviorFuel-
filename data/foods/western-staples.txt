@@ -1,0 +1,376 @@
+# SaviorFuel built-in foods. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg  (all values are per serving, estimates)
+Cheeseburger|1 burger|120|297|15|30|13|6|600
+Hamburger|1 burger|100|245|13|28|9|6|480
+Double cheeseburger|1 burger|180|430|26|32|22|7|900
+Chicken burger (crispy)|1 burger|180|412|20|38|20|6|900
+Chicken burger (grilled)|1 burger|180|329|26|36|9|7|850
+Fish burger|1 burger|140|338|15|38|14|6|640
+Beef burger (home-style with fries)|1 plate|450|640|28|60|32|8|1100
+Big burger (double patty, special sauce)|1 burger|220|532|26|44|28|9|1000
+Veggie burger|1 burger|170|315|14|40|11|7|700
+Burger Ramly (beef, egg)|1 burger|220|438|22|38|22|8|900
+Burger Ramly (chicken, egg)|1 burger|220|402|22|38|18|8|900
+Hot dog (with bun)|1 piece|120|262|10|24|14|4|760
+Hotdog sausage (1 pc)|1 piece|45|127|5|2|11|1|480
+Sausage (chicken)|1 piece|40|91|5|2|7|1|350
+Sausage (beef)|1 piece|40|109|5|2|9|1|380
+French fries (small)|1 serving|80|241|3|28|13|0.5|150
+French fries (medium)|1 serving|115|347|4|40|19|0.5|200
+French fries (large)|1 serving|150|444|5|52|24|1|260
+Potato wedges|1 serving|150|286|4|36|14|1|400
+Hash brown|1 piece|60|136|1|15|8|0.5|290
+Curly fries|1 serving|130|348|4|38|20|1|700
+Onion rings (6 pieces)|1 serving|100|250|3|28|14|3|450
+Fried chicken (fast food, 1 piece)|1 piece|130|290|22|10|18|0|700
+Fried chicken (crispy strip, 3 pieces)|3 pieces|120|254|18|14|14|0|750
+Chicken nuggets (6 pieces)|6 pieces|100|264|14|16|16|0|600
+Chicken nuggets (9 pieces)|9 pieces|150|396|21|24|24|0|900
+Chicken wings (fried, 4 pieces)|4 pieces|200|412|30|10|28|1|900
+Chicken wings (buffalo, 6 pieces)|6 pieces|240|412|32|8|28|2|1400
+Popcorn chicken (regular)|1 serving|100|238|14|14|14|0|620
+Chicken tenders (3 pieces)|3 pieces|150|304|20|20|16|0|900
+Fried fish and chips|1 plate|450|604|28|60|28|2|1100
+Fish and chips (grilled fish)|1 plate|450|490|32|50|18|2|1000
+Fish fingers (4 pieces)|4 pieces|100|183|10|20|7|1|450
+Pizza slice (cheese, regular)|1 slice|100|254|11|30|10|3|640
+Pizza slice (pepperoni)|1 slice|110|285|12|30|13|3|740
+Pizza slice (chicken)|1 slice|110|262|13|30|10|3|650
+Pizza slice (supreme)|1 slice|130|297|13|32|13|4|780
+Pizza (thin crust, 1 slice)|1 slice|80|196|9|22|8|2|540
+Pizza personal (cheese)|1 pizza|220|500|22|58|20|5|1400
+Garlic bread|2 slices|60|184|4|24|8|2|420
+Sandwich (grilled cheese)|1 piece|130|304|12|28|16|3|720
+Toasted sandwich (ham and cheese)|1 piece|160|302|14|30|14|4|950
+Panini (chicken pesto)|1 piece|250|376|22|36|16|4|1100
+Wrap (chicken caesar)|1 piece|250|386|22|34|18|3|1000
+Wrap (falafel)|1 piece|250|350|12|44|14|6|900
+Wrap (tuna)|1 piece|250|350|20|36|14|3|950
+Shawarma (chicken)|1 piece|250|340|24|34|12|5|1000
+Shawarma (beef)|1 piece|250|376|24|34|16|5|1050
+Kebab (chicken, in pita)|1 piece|250|340|24|34|12|5|1000
+Kebab (lamb, in pita)|1 piece|250|394|24|34|18|5|1050
+Burrito (chicken rice)|1 piece|350|466|24|52|18|4|1200
+Burrito bowl|1 bowl|450|514|28|60|18|4|1100
+Taco (beef, hard shell)|1 piece|80|165|8|13|9|1|300
+Taco (chicken)|1 piece|90|155|9|14|7|1|320
+Nachos with cheese|1 plate|180|348|8|34|20|2|700
+Quesadilla (chicken cheese)|1 piece|200|364|18|28|20|3|900
+Caesar salad (with chicken)|1 bowl|300|376|24|16|24|4|900
+Caesar salad (no chicken)|1 bowl|250|290|8|15|22|3|700
+Coleslaw|1 serving|100|116|1|10|8|7|280
+Garden salad (no dressing)|1 bowl|150|44|2|8|0.5|4|30
+Garden salad (with dressing)|1 bowl|180|128|2|12|8|6|250
+Greek salad|1 bowl|250|242|8|12|18|6|800
+Chicken salad (grilled)|1 bowl|300|276|30|12|12|4|600
+Tuna salad|1 bowl|300|270|24|12|14|3|600
+Pasta salad|1 bowl|250|318|8|40|14|4|550
+Potato salad|1 serving|150|200|3|20|12|3|500
+Russian salad|1 serving|150|158|3|14|10|3|450
+Mashed potatoes|1 serving|200|213|3|30|9|2|450
+Baked potato (plain)|1 piece|200|199|5|44|0.3|2|20
+Baked potato (with cheese and bacon)|1 piece|280|406|13|48|18|3|600
+Corn on the cob (butter)|1 cob|170|190|4|30|6|5|120
+Corn in a cup (with butter)|1 cup|130|152|3|26|4|5|180
+Mac and cheese (box, prepared)|1 serving|200|342|10|44|14|5|750
+Steak (sirloin, grilled, 200 g)|1 piece|200|362|50|0|18|0|120
+Steak (ribeye, grilled, 200 g)|1 piece|200|482|44|0|34|0|110
+Steak (tenderloin, 150 g)|1 piece|150|234|36|0|10|0|90
+Steak with fries (set)|1 plate|450|650|42|44|34|3|1000
+Lamb chop (grilled, 2 pieces)|2 pieces|150|352|34|0|24|0|110
+Chicken chop (grilled)|1 plate|300|310|36|10|14|4|800
+Grilled chicken breast (skinless)|1 piece|150|229|46|0|5|0|130
+Grilled chicken thigh (skinless)|1 piece|120|194|26|0|10|0|120
+Rotisserie chicken (breast, skin on)|1 piece|200|380|50|0|20|0|700
+Pork chop (grilled)|1 piece|150|270|36|0|14|0|90
+Pork chop (fried, breaded)|1 piece|180|366|30|12|22|1|700
+Lamb curry|1 bowl|300|342|26|10|22|3|900
+Beef stew|1 bowl|350|320|26|18|16|5|900
+Chicken pot pie|1 piece|250|408|12|36|24|4|700
+Lasagna|1 piece|300|396|20|34|20|6|900
+Meatballs (6 pieces)|6 pieces|150|248|16|10|16|2|600
+Meatball spaghetti|1 plate|370|554|26|72|18|10|1000
+Fried chicken burger set|1 set|600|694|26|80|30|10|1400
+Sundae (soft serve with sauce)|1 cup|150|215|4|34|7|30|120
+Soft serve ice cream (cone)|1 cone|100|136|3|22|4|18|60
+Ice cream (vanilla, 1 scoop)|1 scoop|60|127|2|14|7|14|50
+Ice cream (chocolate, 1 scoop)|1 scoop|60|135|2|16|7|14|50
+Ice cream (2 scoops)|2 scoops|120|262|4|30|14|28|100
+Ice cream (premium, pint 1 serving)|1 serving|100|234|3|24|14|22|60
+Ice cream (Magnum)|1 bar|80|231|2|22|15|18|35
+Ice cream (Cornetto)|1 cone|90|194|2|24|10|18|60
+Ice cream (Walls Paddle Pop)|1 piece|60|87|1|14|3|13|20
+Ice cream sandwich (potong)|1 piece|60|112|1|18|4|14|30
+Ice lolly (fruit)|1 piece|60|56|0|14|0|12|5
+Ais potong (ice lolly, coconut)|1 piece|60|75|0.5|16|1|14|10
+Gelato (1 scoop)|1 scoop|90|142|2|20|6|18|50
+Frozen yoghurt|1 cup|150|167|5|30|3|26|70
+Milkshake (chocolate)|1 glass|400|406|10|60|14|52|250
+Milkshake (vanilla)|1 glass|400|390|10|56|14|50|250
+Milkshake (strawberry)|1 glass|400|384|9|60|12|52|220
+McFlurry (Oreo)|1 cup|200|332|8|48|12|44|180
+McDonald's Big Mac|1 burger|215|554|26|45|30|9|1000
+McDonald's McChicken|1 burger|170|418|15|40|22|6|770
+McDonald's Filet-O-Fish|1 burger|140|356|15|38|16|5|580
+McDonald's Double Cheeseburger|1 burger|165|430|24|34|22|7|950
+McDonald's Ayam Goreng McD (1 piece)|1 piece|130|290|22|10|18|0|700
+McDonald's fries (medium)|1 serving|115|347|4|40|19|0.5|200
+McDonald's Chicken McNuggets (6)|6 pieces|100|264|14|16|16|0|600
+McDonald's Apple pie|1 piece|80|261|2|34|13|12|200
+McDonald's McFlurry Oreo|1 cup|200|332|8|48|12|44|180
+McDonald's sundae|1 cup|150|215|4|34|7|30|120
+KFC Original Recipe (1 piece, drumstick)|1 piece|80|165|15|6|9|0|500
+KFC Original Recipe (1 piece, thigh)|1 piece|130|288|19|8|20|0|650
+KFC Original Recipe (1 piece, breast)|1 piece|160|304|30|10|16|0|800
+KFC Zinger burger|1 burger|200|454|22|42|22|6|1100
+KFC Twister wrap|1 piece|220|412|18|40|20|4|1000
+KFC Popcorn chicken|1 serving|100|238|14|14|14|0|620
+KFC mashed potato|1 serving|100|91|2|14|3|1|450
+KFC coleslaw|1 serving|100|116|1|10|8|7|280
+KFC biscuit|1 piece|60|184|3|25|8|2|450
+KFC fries|1 serving|120|320|4|40|16|0.5|280
+Subway turkey sub (6 inch)|1 sub|230|296|18|47|4|8|760
+Subway chicken teriyaki (6 inch)|1 sub|270|365|24|56|5|14|870
+Subway tuna (6 inch)|1 sub|250|400|20|44|16|6|870
+Subway veggie delite|1 sub|200|239|9|44|3|7|500
+Pizza Hut pan pizza (1 slice, supreme)|1 slice|120|268|10|30|12|4|750
+Domino's pizza (1 slice, pepperoni)|1 slice|110|285|12|30|13|3|740
+Starbucks frappuccino (grande)|1 cup|400|386|5|60|14|58|220
+Starbucks caramel macchiato|1 cup|350|248|8|36|8|32|120
+Starbucks brownie|1 piece|80|273|3|36|13|24|140
+Starbucks croissant|1 piece|60|249|5|28|13|3|280
+Starbucks muffin (blueberry)|1 piece|110|364|5|50|16|28|340
+Starbucks chicken pie|1 piece|200|426|14|34|26|3|900
+Starbucks cake pop|1 piece|40|169|2|20|9|16|80
+Dunkin' donut (glazed)|1 piece|60|232|3|28|12|11|270
+Dunkin' donut (Boston cream)|1 piece|90|282|3|36|14|16|280
+Big Apple donut (glazed)|1 piece|60|232|3|28|12|11|270
+Texas Chicken (fried, 1 piece)|1 piece|130|290|22|10|18|0|700
+Marrybrown (fried chicken, 1 piece)|1 piece|130|290|22|10|18|0|700
+Marrybrown (burger)|1 burger|220|446|22|40|22|8|900
+A&W curly fries|1 serving|130|348|4|38|20|1|700
+Baskin Robbins (1 scoop)|1 scoop|90|152|2|18|8|16|50
+Dairy Queen (blizzard, small)|1 cup|250|430|7|60|18|50|220
+Auntie Anne's pretzel|1 piece|120|291|6|60|3|8|1000
+Famous Amos cookie|1 piece|20|119|1|13|7|6|120
+Chocolate chip cookie|1 piece|20|101|1|13|5|7|110
+Oreo cookies (3 pieces)|3 pieces|34|159|1|23|7|14|150
+Biscuits (plain, 2 pieces)|2 pieces|20|87|1|14|3|3|100
+Cream crackers (3 pieces)|3 pieces|25|112|2|17|4|0.5|200
+Marie biscuits (3 pieces)|3 pieces|20|82|1|15|2|4|90
+Biskut kering (shortbread, 2 pieces)|2 pieces|20|101|1|13|5|5|80
+Hup Seng cream crackers (3 pieces)|3 pieces|25|112|2|17|4|0.5|200
+Jacob's cream crackers (2 pieces)|2 pieces|16|79|1|12|3|0.4|130
+Munchy's oat crunch (2 pieces)|2 pieces|20|87|1|14|3|4|90
+Tiger biscuit (2 pieces)|2 pieces|20|91|1|15|3|3|90
+Hello Panda biscuit (1 pack)|1 pack|25|131|1|16|7|8|50
+Twisties|1 pack|30|152|2|18|8|1|420
+Mamee monster snack|1 pack|25|135|2|16|7|1|330
+Chipsmore|1 piece|12|61|0.6|8|3|3|40
+Lay's potato chips|1 small bag|30|162|2|16|10|0.5|170
+Pringles (30 g)|1 serving|30|164|1.5|17|10|0.5|150
+Cheetos|1 pack|30|166|2|17|10|0.5|300
+Doritos|1 serving|30|152|2|18|8|1|220
+Popcorn (plain, air-popped)|1 bowl|20|77|2|15|1|0|2
+Popcorn (butter, cinema)|1 bowl|60|276|3|30|16|1|400
+Popcorn (caramel)|1 bowl|60|256|2|44|8|28|150
+Pop-tarts|1 piece|50|193|2|35|5|16|180
+Chocolate bar (milk, 1 bar)|1 bar|45|238|3|25|14|24|45
+Chocolate bar (dark, 3 squares)|3 squares|30|167|2|15|11|9|5
+Cadbury Dairy Milk (1 bar, 45 g)|1 bar|45|238|3|25|14|24|45
+Kit Kat (4 finger)|1 bar|42|219|3|27|11|20|35
+Snickers|1 bar|50|248|4|31|12|27|130
+Mars bar|1 bar|51|242|2|36|10|30|110
+Twix|1 pack|50|252|2|34|12|26|70
+Ferrero Rocher (1 piece)|1 piece|12.5|71|1|5.5|5|4.5|5
+Oreo|1 cookie|11|53|0.4|7.6|2.3|4.6|50
+M&M's (1 bag)|1 bag|45|222|2|31|10|28|20
+Gummy bears|1 handful|30|100|2|23|0|14|10
+Marshmallow (3 pieces)|3 pieces|21|70|0.5|17|0|12|10
+Chocolate bar (Tango wafer)|1 bar|20|110|1|13|6|8|20
+Chocolate wafer (Beng-Beng)|1 piece|22|123|1|14|7|10|30
+Beng-Beng|1 piece|22|123|1|14|7|10|30
+Super Ring|1 pack|14|69|0.5|10|3|1|80
+Mamee noodle snack|1 pack|25|139|3|16|7|1|420
+Lollipop|1 piece|10|40|0|10|0|10|0
+Hard candy|1 piece|5|20|0|5|0|4|0
+Kopiko candy|1 piece|4|20|0|4|0.5|3|0
+Eclairs candy|1 piece|8|33|0|6|1|4|10
+Jelly (konnyaku)|1 piece|40|36|0|9|0|8|10
+Yoghurt drink (bottle)|1 bottle|200|130|4|24|2|18|60
+White rice (uncooked)|100 g|100|354|7|80|0.7|0|5
+Brown rice (uncooked)|100 g|100|365|7.5|77|3|1|5
+Glutinous rice (cooked)|1 bowl|200|196|4|44|0.4|0|5
+Basmati rice (cooked)|1 bowl|180|199|4.5|44|0.6|0|3
+Jasmine rice (cooked)|1 bowl|180|222|4.5|50|0.5|0|3
+Rice, fried (plain, no meat)|1 bowl|200|219|5|34|7|1|450
+Quinoa (cooked)|1 cup|185|220|8|39|3.6|1.6|13
+Couscous (cooked)|1 cup|160|163|6|34|0.3|0.2|10
+Oats (dry)|40 g|40|151|5.4|26|2.8|0.4|3
+Oats (instant, Quaker, 1 sachet)|1 sachet|30|110|3|20|2|1|20
+Oats (rolled, cooked in water)|1 bowl|240|164|6|27|3.6|1|8
+Barley (cooked)|1 cup|160|199|4|44|0.8|0.4|5
+Bulgur (cooked)|1 cup|180|162|5.6|34|0.4|0.2|9
+Cornflakes|1 bowl|30|115|2|26|0.3|2|220
+Muesli|1 bowl|50|192|5|34|4|10|40
+Granola (1 serving)|1 serving|45|199|4|30|7|10|40
+Bread (white, 2 slices)|2 slices|60|158|5|30|2|3|290
+Bread (wholemeal, 2 slices)|2 slices|70|162|8|28|2|4|300
+Bread (multigrain, 2 slices)|2 slices|70|167|7|28|3|3|280
+Bread (high-fibre, 2 slices)|2 slices|60|142|6|25|2|2|260
+Bread (rye, 2 slices)|2 slices|70|158|5|30|2|2|350
+Bread (sourdough, 1 slice)|1 slice|50|117|4|24|0.6|0.5|240
+Bread (pita)|1 piece|60|157|5|32|1|1|290
+Bread (tortilla, 1 piece)|1 piece|45|135|3|24|3|1|300
+Bread (baguette, 1 piece)|1 piece|60|153|5|32|0.6|1|350
+Bread bun (hamburger)|1 piece|50|138|4|26|2|4|200
+Bread (focaccia)|1 slice|60|186|5|28|6|1|400
+Spaghetti (cooked)|1 cup|140|213|8|43|1|1|1
+Spaghetti (dry)|100 g|100|366|13|75|1.5|3|6
+Penne (cooked)|1 cup|140|213|8|43|1|1|1
+Macaroni (cooked)|1 cup|140|213|8|43|1|1|1
+Egg noodles (cooked)|1 cup|160|210|7|40|2.5|1|8
+Vermicelli (cooked)|1 cup|140|187|4|42|0.3|0|5
+Kway teow (cooked)|1 cup|180|156|2|36|0.4|0|5
+Glass noodles (cooked)|1 cup|140|160|0.1|40|0|0|5
+Yellow noodles (cooked)|1 cup|180|194|6|38|2|1|8
+Shirataki noodles|1 pack|200|18|0.5|4|0|0|10
+Sweet potato (boiled)|1 medium|130|119|2|27|0.3|7|55
+Sweet potato (baked)|1 medium|130|130|2|30|0.2|9|40
+Potato (boiled)|1 medium|150|122|3|27|0.2|1.5|10
+Potato (baked, with skin)|1 medium|200|199|5|44|0.3|2|20
+Cassava (boiled)|100 g|100|160|1.4|38|0.3|2|14
+Yam (boiled)|100 g|100|120|1.5|28|0.2|0.5|10
+Taro (boiled)|100 g|100|112|1.5|26|0.2|0.5|10
+Pumpkin (boiled)|100 g|100|29|1|6|0.1|2|1
+Corn (boiled, kernels)|1 cup|165|158|5|30|2|5|20
+Plantain (cooked)|100 g|100|136|1|32|0.4|16|5
+Egg (whole, large, boiled)|1 egg|50|71|6|0.5|5|0.5|65
+Egg (whole, large, fried)|1 egg|46|90|6.3|0.4|7|0.2|95
+Egg white|1 egg|33|15|3.6|0.2|0|0.2|55
+Egg yolk|1 yolk|17|54|2.7|0.6|4.5|0.1|8
+Century egg (pidan)|1 egg|60|104|7|1|8|0|250
+Salted egg yolk (cooked)|1 yolk|17|59|3|0.5|5|0|600
+Quail eggs (5)|5 eggs|50|71|6|0.4|5|0.3|70
+Milk (full cream)|1 glass|250|152|8|12|8|12|100
+Milk (low fat)|1 glass|250|104|8.5|12|2.5|12|100
+Milk (skim)|1 glass|250|86|8.5|12|0.5|12|100
+Milk (chocolate)|1 glass|250|190|8|26|6|24|120
+Milk (strawberry)|1 glass|250|181|7|27|5|26|100
+Milk (UHT, full cream)|1 box|200|122|6.4|9.6|6.4|9.6|80
+Dutch Lady milk (pack)|1 box|200|118|6|10|6|10|80
+Farm Fresh milk (bottle)|1 bottle|200|118|6|10|6|10|85
+Evaporated milk (Carnation, 1 tbsp)|1 tbsp|15|19|1|1.5|1|1.5|20
+Evaporated milk (1 can)|1 can|400|560|28|40|32|40|500
+Sweetened condensed milk (1 tbsp)|1 tbsp|20|64|1.5|11|1.5|11|30
+Sweetened condensed milk (2 tbsp)|2 tbsp|40|127|3|22|3|22|60
+Cream (whipping, 1 tbsp)|1 tbsp|15|48|0.3|0.4|5|0.4|5
+Cream (cooking, 1 tbsp)|1 tbsp|15|31|0.4|0.5|3|0.5|6
+Milk powder (full cream, 1 serving)|1 serving|30|148|8|11|8|11|100
+Milk powder (1 tbsp)|1 tbsp|8|38|2|3|2|3|27
+Soy milk (unsweetened)|1 glass|250|76|7|3|4|1|70
+Soy milk (sweetened)|1 glass|250|107|6|14|3|10|60
+Almond milk (unsweetened)|1 glass|250|30|1|1|2.5|0|170
+Oat milk|1 glass|250|103|3|16|3|8|100
+Coconut milk (1 tbsp)|1 tbsp|15|49|0.3|0.6|5|0.4|3
+Coconut milk (1/2 cup)|1/2 cup|120|224|1.2|3|23|2|13
+Coconut milk (1 can, 400 ml)|1 can|400|758|4|10|78|6|40
+Santan (coconut milk, packet 65 ml)|1 packet|65|146|0.8|2|15|1|10
+Yoghurt (plain, full fat)|1 cup|150|102|5|7|6|6|70
+Yoghurt (plain, low fat)|1 cup|150|78|6|9|2|8|80
+Yoghurt (Greek, plain, full fat)|1 cup|170|174|15|6|10|5|60
+Yoghurt (Greek, plain, 0%)|1 cup|170|92|17|6|0|5|65
+Yoghurt (flavoured, fruit)|1 cup|150|135|5|22|3|20|70
+Yoghurt (Marigold, 1 cup)|1 cup|135|103|4|15|3|14|60
+Yoghurt (Nestle, 1 cup)|1 cup|110|92|3.5|14|2.5|12|50
+Yoghurt (Activia)|1 cup|125|115|4|18|3|15|55
+Yoghurt (frozen, plain)|1 cup|150|159|5|28|3|26|70
+Lassi (sweet)|1 glass|250|213|6|36|5|32|80
+Lassi (mango)|1 glass|250|229|6|40|5|36|80
+Lassi (salted)|1 glass|250|117|6|12|5|10|400
+Ayran / buttermilk|1 glass|250|99|8|10|3|9|300
+Cheese (cheddar, 1 slice)|1 slice|20|84|5|0.2|7|0.1|180
+Cheese (cheddar, 30 g)|1 serving|30|119|7|0.3|10|0.1|200
+Cheese (mozzarella, 30 g)|1 serving|30|86|7|1|6|0.5|180
+Cheese (cottage, 100 g)|1 serving|100|92|11|3|4|3|350
+Cheese (cream, 1 tbsp)|1 tbsp|15|50|0.6|0.6|5|0.5|50
+Cheese (parmesan, 1 tbsp)|1 tbsp|5|22|2|0.2|1.5|0|85
+Cheese (feta, 30 g)|1 serving|30|83|4|1|7|1|310
+Cheese (processed slice, Kraft)|1 slice|20|63|3|1.5|5|1|280
+Cheese spread (1 tbsp)|1 tbsp|15|40|1|1|3.5|1|180
+Paneer (100 g)|1 serving|100|264|18|3|20|3|20
+Tofu (firm)|100 g|100|85|8|2|5|0.5|10
+Tofu (silken)|100 g|100|55|5|2|3|0.5|8
+Tofu (fried, puffs)|3 pieces|40|112|7|3|8|0|20
+Taukua (pressed tofu)|100 g|100|127|14|2|7|0|10
+Tempeh|100 g|100|211|19|9|11|0|9
+Tempeh (fried)|100 g|100|252|19|8|16|0|10
+Soya chunks (dry, 1 serving)|30 g|30|108|16|10|0.5|0|10
+Soya chunks (cooked)|1 serving|120|92|14|8|0.5|0|8
+Seitan|100 g|100|138|25|5|2|0|15
+Veggie meat (nuggets)|4 pieces|80|168|10|14|8|1|480
+Butter (1 tsp)|1 tsp|5|36|0|0|4|0|40
+Butter (1 tbsp)|1 tbsp|14|99|0.1|0|11|0|80
+Margarine (1 tbsp)|1 tbsp|14|99|0|0|11|0|90
+Ghee (1 tbsp)|1 tbsp|13|117|0|0|13|0|0
+Mayonnaise (1 tbsp)|1 tbsp|14|92|0.1|0.4|10|0.1|95
+Mayonnaise (light, 1 tbsp)|1 tbsp|15|33|0.1|1.5|3|1|110
+Salad dressing (1000 island, 1 tbsp)|1 tbsp|15|53|0.1|2|5|2|130
+Salad dressing (sesame, 1 tbsp)|1 tbsp|15|54|0.2|2|5|2|110
+Salad dressing (Caesar, 1 tbsp)|1 tbsp|15|68|0.3|1|7|0.5|160
+Salad dressing (vinaigrette, 1 tbsp)|1 tbsp|15|58|0|1|6|1|120
+Chicken breast (cooked, skinless)|100 g|100|156|31|0|3.6|0|74
+Chicken breast (raw)|100 g|100|110|23|0|2|0|65
+Chicken breast (fried, with skin)|1 piece|150|334|35|8|18|0|600
+Chicken thigh (cooked, skin on)|1 piece|110|249|24|0|17|0|100
+Chicken thigh (cooked, skinless)|1 piece|90|169|22|0|9|0|90
+Chicken drumstick (cooked, skin on)|1 piece|80|144|18|0|8|0|90
+Chicken wing (cooked)|1 piece|40|99|9|0|7|0|50
+Chicken liver (cooked)|100 g|100|158|25|1|6|0|90
+Chicken gizzard (cooked)|100 g|100|147|30|0|3|0|70
+Chicken feet (cooked)|3 pieces|90|176|16|1|12|0|110
+Chicken skin (fried)|1 serving|30|190|7|0|18|0|150
+Duck (roasted, with skin)|100 g|100|328|19|0|28|0|90
+Duck breast (cooked)|100 g|100|191|23|0|11|0|80
+Turkey breast (cooked)|100 g|100|134|29|0|2|0|80
+Turkey ham (slice)|1 slice|20|18|3|0.5|0.5|0|230
+Beef (lean, cooked)|100 g|100|184|28|0|8|0|60
+Beef (steak, cooked)|100 g|100|234|27|0|14|0|60
+Beef mince (lean, cooked)|100 g|100|239|26|0|15|0|75
+Beef mince (regular, cooked)|100 g|100|276|24|0|20|0|75
+Beef brisket (cooked)|100 g|100|292|28|0|20|0|80
+Beef liver (cooked)|100 g|100|177|29|4|5|0|75
+Beef tendon (cooked)|100 g|100|98|20|0|2|0|50
+Beef tripe (cooked)|100 g|100|96|15|0|4|0|60
+Beef bacon (1 slice)|1 slice|12|35|2|0|3|0|180
+Beef jerky|1 serving|30|70|10|3|2|2|600
+Bacon (pork, fried, 2 slices)|2 slices|16|87|6|0|7|0|390
+Bacon (turkey, 2 slices)|2 slices|20|43|4|0|3|0|300
+Ham (slice)|1 slice|30|36|5|0.5|1.5|0.5|400
+Pork (lean, cooked)|100 g|100|189|27|0|9|0|60
+Pork belly (cooked)|100 g|100|434|14|0|42|0|55
+Pork mince (cooked)|100 g|100|253|25|0|17|0|75
+Pork ribs (cooked)|100 g|100|348|24|0|28|0|90
+Pork liver (cooked)|100 g|100|152|26|3|4|0|90
+Pork floss (rousong)|1 tbsp|10|42|3|3|2|2|200
+Chicken floss|1 tbsp|10|42|3|3|2|2|200
+Lamb (lean, cooked)|100 g|100|194|26|0|10|0|70
+Lamb chop (cooked)|100 g|100|280|25|0|20|0|70
+Lamb mince (cooked)|100 g|100|276|24|0|20|0|75
+Mutton (cooked)|100 g|100|230|26|0|14|0|70
+Goat (cooked)|100 g|100|135|27|0|3|0|85
+Venison (cooked)|100 g|100|147|30|0|3|0|60
+Rabbit (cooked)|100 g|100|204|33|0|8|0|50
+Sausage (pork, cooked)|1 piece|50|153|7|2|13|1|420
+Sausage (cocktail)|3 pieces|45|104|5|3|8|1|350
+Sausage (chicken frankfurter)|1 piece|50|126|6|3|10|2|480
+Sausage (beef frankfurter)|1 piece|50|144|6|3|12|2|490
+Salami (3 slices)|3 slices|30|98|6|0.5|8|0|500
+Pepperoni (5 slices)|5 slices|15|88|4|0|8|0|300
+Luncheon meat (Spam, 2 slices)|2 slices|50|149|6|2|13|1|550
+Corned beef (canned, 100 g)|100 g|100|214|22|0|14|0|950
+Chicken luncheon meat (Ayam Brand)|2 slices|50|135|6|3|11|1|500
+Meatball (beef, 1 piece)|1 piece|25|56|3|2|4|0.5|150
+Meatball (chicken, 1 piece)|1 piece|25|38|3|2|2|0.5|140
+Meatball (fish, 1 piece)|1 piece|20|24|3|2|0.5|0|180
+Burger patty (beef, cooked)|1 patty|90|250|22|0|18|0|75
+Chicken patty (cooked)|1 patty|90|214|16|6|14|1|420

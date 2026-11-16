@@ -1,0 +1,290 @@
+# SaviorFuel built-in foods. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg  (all values are per serving, estimates)
+Nasi lemak (egg, sambal, anchovies, peanuts)|1 plate|300|644|18|80|28|9|950
+Nasi lemak ayam goreng (fried chicken)|1 plate|420|844|36|85|40|9|1300
+Nasi lemak rendang (beef or chicken)|1 plate|400|764|30|80|36|9|1250
+Nasi lemak sambal sotong (squid)|1 plate|380|684|26|82|28|10|1200
+Nasi lemak sambal udang (prawn)|1 plate|380|662|25|82|26|10|1250
+Nasi lemak ikan bilis only (basic)|1 plate|250|492|10|68|20|6|800
+Nasi lemak bungkus (small wrapped pack)|1 pack|120|230|5|30|10|3|400
+Coconut rice (nasi lemak rice only)|1 bowl|200|316|4|48|12|1|300
+Nasi putih (steamed white rice)|1 bowl|180|232|4.8|52|0.5|0|2
+Nasi putih (steamed white rice)|1 cup|160|205|4.3|46|0.4|0|2
+Brown rice (cooked)|1 bowl|180|202|4.5|42|1.8|0.5|8
+Nasi goreng kampung (village fried rice)|1 plate|350|478|14|65|18|2|1100
+Nasi goreng ayam (chicken fried rice)|1 plate|420|564|26|70|20|3|1250
+Nasi goreng daging (beef fried rice)|1 plate|420|564|26|70|20|3|1250
+Nasi goreng seafood|1 plate|420|538|24|70|18|3|1300
+Nasi goreng USA (with chicken chop)|1 plate|520|668|32|72|28|5|1400
+Nasi goreng pattaya (wrapped in omelette)|1 plate|450|556|20|65|24|3|1200
+Nasi goreng cili padi (spicy)|1 plate|380|486|15|66|18|3|1250
+Nasi goreng ikan masin (salted fish)|1 plate|380|481|16|66|17|2|1500
+Nasi goreng tomyam|1 plate|400|506|18|68|18|4|1400
+Nasi goreng belacan|1 plate|370|473|14|66|17|2|1350
+Nasi goreng mamak|1 plate|480|596|20|75|24|4|1350
+Nasi goreng pete|1 plate|380|478|14|65|18|2|1100
+Nasi goreng Cina (Chinese egg fried rice)|1 plate|380|427|11|62|15|2|1000
+Yangzhou fried rice|1 plate|400|474|16|62|18|3|1050
+Fried rice with salted fish and chicken|1 plate|420|510|22|65|18|2|1500
+Kimchi fried rice|1 plate|400|451|13|66|15|4|1300
+Nasi ayam (Hainanese chicken rice, steamed)|1 plate|400|612|28|80|20|3|1100
+Nasi ayam (Hainanese chicken rice, roasted)|1 plate|400|638|30|80|22|4|1150
+Nasi ayam (fried chicken)|1 plate|430|700|32|80|28|3|1200
+Chicken rice ball (nasi ayam bebola)|1 set|380|546|26|70|18|3|1050
+Chicken rice only (rice portion)|1 bowl|200|292|5|50|8|0|450
+Nasi kandar (chicken curry, veg, rice)|1 plate|500|758|32|90|30|6|1500
+Nasi kandar (fried chicken, curry gravy)|1 plate|600|862|38|92|38|6|1600
+Nasi kandar (beef rendang, veg)|1 plate|550|802|34|90|34|6|1500
+Nasi kandar (fish curry, veg, egg)|1 plate|520|732|30|90|28|6|1500
+Nasi kandar (campur, 3 dishes)|1 plate|650|842|34|100|34|7|1700
+Nasi kerabu (Kelantan blue rice)|1 plate|310|458|20|72|10|6|1100
+Nasi dagang (Terengganu)|1 plate|500|578|24|80|18|5|1150
+Nasi tomato|1 plate|240|364|8|65|8|4|700
+Nasi tomato with ayam masak merah|1 plate|520|574|28|75|18|8|1100
+Nasi briyani ayam (chicken biryani)|1 plate|380|574|30|82|14|4|1100
+Nasi briyani kambing (mutton biryani)|1 plate|410|618|32|82|18|4|1150
+Nasi briyani gam (Johor)|1 plate|440|658|30|85|22|4|1200
+Nasi minyak (ghee rice)|1 plate|260|391|9|64|11|2|600
+Nasi kuning (turmeric rice)|1 plate|230|345|8|58|9|2|550
+Nasi ulam (herb rice)|1 plate|240|362|12|65|6|2|650
+Nasi campur (mixed rice, 3 dishes)|1 plate|420|630|32|85|18|6|1400
+Nasi campur (economy rice, 2 veg 1 meat)|1 plate|380|576|28|80|16|5|1200
+Nasi campur kampung (Malay buffet style)|1 plate|460|694|34|90|22|7|1500
+Nasi lauk ayam masak kicap|1 plate|380|574|30|82|14|9|1300
+Nasi bujang (rice, egg, sambal)|1 plate|290|437|14|75|9|5|900
+Nasi tumpang (Kelantan)|1 pack|250|254|10|40|6|3|500
+Nasi bakar (grilled rice)|1 pack|300|317|10|58|5|1|600
+Nasi jagung (corn rice)|1 bowl|220|239|5|48|3|2|20
+Nasi ayam penyet (smashed chicken rice)|1 plate|470|680|32|75|28|4|1300
+Nasi lemak ayam penyet|1 plate|480|736|34|78|32|4|1350
+Nasi paprik (paprik chicken, rice)|1 plate|550|602|30|80|18|8|1200
+Nasi tomyam seafood set|1 plate|370|550|28|78|14|5|1500
+Nasi goreng kerabu|1 plate|420|488|16|70|16|3|1000
+Nasi hujan panas|1 plate|420|630|28|80|22|6|1300
+Nasi sambal telur|1 plate|330|494|14|78|14|6|900
+Nasi telur dadar (omelette rice)|1 plate|310|469|16|72|13|3|850
+Nasi kangkung (rice with kangkung)|1 plate|300|446|14|75|10|4|950
+Claypot chicken rice|1 pot|350|532|28|78|12|4|1300
+Yam rice (steamed with dried shrimp)|1 bowl|300|325|9|52|9|2|700
+Glutinous rice with chicken (loh mai kai)|1 piece|250|300|12|45|8|2|600
+Pulut kuning (yellow glutinous rice)|1 portion|150|196|4|36|4|2|120
+Pulut panggang (grilled glutinous rice with filling)|1 piece|90|123|4|20|3|1|220
+Pulut udang|1 piece|90|136|5|20|4|1|240
+Pulut hitam (black glutinous rice dessert)|1 bowl|200|227|3|38|7|18|30
+Lemang|1 slice|100|169|3|28|5|1|60
+Ketupat (compressed rice cake)|1 piece|120|125|2.5|28|0.3|0|3
+Lontong (rice cake in vegetable gravy)|1 plate|230|352|9|52|12|5|800
+Nasi impit|1 piece|100|102|2|23|0.2|0|3
+Bubur ayam (chicken porridge)|1 bowl|350|278|16|40|6|1|900
+Bubur lambuk (Ramadan porridge)|1 bowl|300|264|10|38|8|2|650
+Bubur nasi (plain rice porridge)|1 bowl|300|176|5|38|0.5|0|8
+Bubur kacang hijau (mung bean porridge)|1 bowl|250|245|6|44|5|22|20
+Bubur cha cha|1 bowl|250|243|3|42|7|24|30
+Congee with pork and century egg|1 bowl|400|313|16|42|9|1|1000
+Plain congee (Chinese porridge)|1 bowl|350|184|5|40|0.5|0|10
+Fish porridge (fish slices)|1 bowl|400|275|20|42|3|1|900
+Chicken congee|1 bowl|400|293|18|44|5|1|950
+Mee goreng mamak|1 plate|400|500|15|65|20|8|1450
+Mee goreng basah (wet fried noodles)|1 plate|420|504|15|66|20|9|1500
+Mee goreng seafood|1 plate|420|506|20|66|18|6|1500
+Maggi goreng (fried instant noodles)|1 plate|300|454|11|62|18|3|1700
+Maggi goreng ayam|1 plate|340|508|20|62|20|3|1750
+Maggi kari (curry instant noodles)|1 bowl|460|434|10|58|18|3|1800
+Maggi sup (soup instant noodles)|1 bowl|450|339|8|52|11|2|1650
+Maggi tomyam|1 bowl|480|360|9|54|12|3|1750
+Maggi goreng cheese|1 plate|350|528|16|62|24|4|1800
+Indomie goreng|1 pack|85|418|8|56|18|6|1150
+Instant noodles (cup, soup)|1 cup|65|310|6|40|14|3|1500
+Mee kari (curry noodles)|1 bowl|530|502|18|58|22|5|1700
+Mee kari with cockles and tofu puffs|1 bowl|520|528|20|58|24|5|1800
+Mee rebus (Johor-style)|1 bowl|540|510|18|78|14|18|1300
+Mee soto|1 bowl|560|420|20|58|12|3|1300
+Mee hailam (Hokkien prawn mee gravy)|1 plate|510|485|20|72|13|5|1500
+Hokkien mee (KL dark soy)|1 plate|350|524|20|75|16|6|1600
+Hokkien mee (Penang prawn mee soup)|1 bowl|490|369|22|50|9|3|1500
+Penang prawn mee (spicy)|1 bowl|510|386|22|52|10|3|1600
+Mee siam|1 plate|460|435|14|70|11|8|1100
+Mee bandung Muar|1 bowl|500|478|20|68|14|12|1250
+Mee udang (prawn noodles)|1 bowl|590|444|22|62|12|4|1500
+Wantan mee (dry, with char siu)|1 plate|320|453|22|62|13|7|1500
+Wantan mee soup|1 bowl|450|341|20|45|9|3|1700
+Kolo mee (Sarawak)|1 plate|300|454|20|62|14|4|1100
+Sarawak laksa|1 bowl|520|498|24|60|18|4|1600
+Curry laksa (Penang asam laksa)|1 bowl|430|408|18|66|8|8|1400
+Asam laksa (Penang)|1 bowl|410|390|16|68|6|10|1500
+Curry laksa (KL-style with coconut)|1 bowl|590|559|22|66|23|5|1900
+Laksa Johor|1 bowl|540|512|20|72|16|6|1400
+Laksam (Kelantan)|1 bowl|520|494|14|78|14|8|1000
+Laksa utara|1 bowl|410|391|16|66|7|8|1450
+Char kway teow|1 plate|490|738|22|95|30|5|1800
+Char kway teow (small)|1 plate|370|550|16|72|22|4|1400
+Char kway teow (no cockles, no egg)|1 plate|400|600|14|82|24|3|1500
+Kway teow soup (chicken)|1 bowl|450|334|20|50|6|1|1400
+Kway teow soup (beef)|1 bowl|490|368|24|50|8|1|1500
+Kway teow thng (Penang style)|1 bowl|450|334|18|52|6|1|1450
+Kway teow goreng (fried flat rice noodles, dry)|1 plate|340|507|15|78|15|4|1400
+Kuey teow kerang|1 plate|520|527|20|78|15|4|1500
+Pan mee (dry)|1 bowl|310|439|20|65|11|2|1300
+Pan mee (soup)|1 bowl|490|369|20|52|9|2|1400
+Curry mee (dry)|1 plate|340|483|16|62|19|3|1500
+Loh mee|1 bowl|530|506|20|75|14|8|1800
+Lor mee (Ipoh)|1 bowl|490|468|22|68|12|6|1700
+Dry mee pok (fish ball noodles)|1 bowl|520|390|20|55|10|3|1500
+Fish ball noodles (soup)|1 bowl|460|343|20|50|7|2|1600
+Yong tau foo (soup, 6 pieces with noodles)|1 bowl|530|394|24|52|10|3|1400
+Yong tau foo (dry with sauce)|1 plate|420|422|24|50|14|8|1500
+Chee cheong fun (with sweet sauce)|1 plate|300|295|6|52|7|12|700
+Chee cheong fun (with shrimp)|1 plate|320|319|12|52|7|6|800
+Bak chor mee|1 bowl|340|503|24|68|15|4|1600
+Bee hoon goreng (fried vermicelli)|1 plate|290|436|12|70|12|3|1300
+Bee hoon soup|1 bowl|450|338|16|55|6|1|1200
+Mee hoon goreng mamak|1 plate|300|454|14|68|14|5|1400
+Mihun sup (Malay vermicelli soup)|1 bowl|390|295|14|44|7|2|1000
+Mee sup (clear noodle soup)|1 bowl|410|311|16|46|7|2|1100
+Mee sup daging|1 bowl|490|371|22|46|11|2|1200
+Mee kuah ayam|1 bowl|530|394|18|58|10|4|1250
+Mee jawa (Java noodles)|1 plate|330|493|16|78|13|14|1200
+Mee curry Penang|1 bowl|560|528|18|60|24|5|1700
+Mee tarik|1 plate|290|442|16|72|10|3|1100
+Ban mian (soup)|1 bowl|590|444|22|62|12|2|1500
+Spaghetti bolognese|1 plate|360|546|24|72|18|10|900
+Spaghetti carbonara|1 plate|440|656|22|70|32|3|950
+Spaghetti aglio olio (with prawns)|1 plate|370|550|20|68|22|3|850
+Spaghetti with chicken bolognese|1 plate|350|519|26|70|15|10|900
+Macaroni cheese|1 plate|360|544|20|62|24|7|900
+Pad Thai (chicken)|1 plate|400|596|24|80|20|12|1500
+Pad see ew|1 plate|390|588|22|80|20|10|1600
+Tom yum noodle soup|1 bowl|490|371|20|48|11|5|1700
+Boat noodles|1 bowl|380|288|18|36|8|3|1400
+Pho (beef)|1 bowl|540|405|26|55|9|4|1500
+Ramen (tonkotsu)|1 bowl|650|600|28|68|24|3|1900
+Ramen (shoyu)|1 bowl|650|504|24|66|16|3|1800
+Udon (soup)|1 bowl|520|390|14|70|6|4|1500
+Soba (cold with dipping sauce)|1 plate|230|342|13|68|2|5|1200
+Japchae|1 plate|270|399|10|65|11|10|750
+Jajangmyeon|1 plate|460|692|18|110|20|14|1900
+Cup noodles (Korean ramen)|1 pack|120|496|10|78|16|4|1700
+Roti canai (plain)|1 piece|90|250|5|35|10|1|330
+Roti canai (plain)|2 pieces|180|500|10|70|20|2|660
+Roti telur (egg)|1 piece|130|306|9|36|14|1|420
+Roti bawang (onion)|1 piece|110|276|6|36|12|2|380
+Roti planta (margarine and sugar)|1 piece|110|298|5|38|14|10|350
+Roti sardin (sardine)|1 piece|160|327|12|36|15|2|550
+Roti tisu (paper thin)|1 piece|70|213|3|30|9|10|200
+Roti boom (sweet, round)|1 piece|80|222|3|30|10|12|220
+Roti pisang (banana)|1 piece|140|295|5|44|11|14|330
+Roti bom|1 piece|100|275|4|40|11|12|280
+Roti naan (plain)|1 piece|90|253|8|44|5|3|480
+Roti naan (garlic)|1 piece|100|288|8|46|8|3|520
+Roti naan (cheese)|1 piece|130|345|11|46|13|3|620
+Roti chapati|1 piece|50|121|3.5|20|3|0.5|120
+Roti paratha (frozen, fried)|1 piece|80|192|4|26|8|1|280
+Thosai / dosai (plain)|1 piece|90|119|3|20|3|1|220
+Masala thosai (with potato filling)|1 piece|250|285|6|45|9|3|520
+Idli|2 pieces|100|116|4|24|0.5|0.5|200
+Vadai (lentil fritter)|1 piece|60|128|4|10|8|1|180
+Murukku|1 handful|30|135|3|15|7|0.5|180
+Putu mayam (string hoppers)|1 plate|100|149|3|32|1|0.5|70
+Appam (with coconut)|1 piece|60|96|1.5|18|2|3|60
+Puttu (steamed rice with coconut)|1 piece|100|183|3|36|3|1|100
+Mutton varuval|1 serving|120|228|16|5|16|1|550
+Chicken 65|1 serving|130|222|18|6|14|1|600
+Dhal (lentil curry)|1 bowl|200|158|8|18|6|3|450
+Dhal curry (thick)|1 serving|120|116|6|14|4|2|350
+Papadam (fried)|1 piece|12|49|1.5|4|3|0|110
+Papadum (baked)|1 piece|10|28|2|4|0.5|0|90
+Banana leaf rice set (veg, curry, papadam)|1 set|360|546|14|100|10|6|1500
+Banana leaf rice with fish curry|1 set|600|612|26|100|12|6|1600
+Banana leaf rice with chicken curry|1 set|620|646|30|100|14|6|1600
+Thali (vegetarian)|1 set|470|700|20|110|20|10|1600
+Briyani rice only|1 bowl|250|292|5|50|8|1|450
+Vegetable curry|1 bowl|200|184|3|16|12|6|650
+Fish head curry|1 bowl|350|362|36|14|18|5|1300
+Fish curry (ikan kari)|1 bowl|250|254|22|10|14|4|900
+Prawn curry|1 bowl|250|256|18|10|16|4|900
+Chicken curry (kari ayam, with potato)|1 bowl|300|306|24|12|18|4|900
+Mutton curry|1 bowl|300|316|26|8|20|4|900
+Kari kepala ikan Nyonya|1 bowl|350|362|34|16|18|5|1300
+Roti jala (net crepe)|1 piece|50|74|2|12|2|1|60
+Roti jala with chicken curry|1 set|300|321|18|42|9|3|750
+Roti john (egg, meat, bread)|1 piece|300|386|18|38|18|5|1000
+Roti john special|1 piece|400|472|24|40|24|6|1300
+Murtabak ayam (chicken)|1 piece|290|373|22|42|13|3|1000
+Murtabak daging (beef)|1 piece|330|426|24|42|18|3|1100
+Murtabak sardin|1 piece|280|365|20|42|13|3|950
+Murtabak kambing (mutton)|1 piece|350|452|26|42|20|3|1100
+Lempeng|1 piece|60|73|2|14|1|1|120
+Lempeng kelapa|1 piece|70|82|2|14|2|2|100
+Pancake (home-made)|1 piece|80|86|3|14|2|5|200
+Cekodok pisang (banana fritter)|1 piece|50|96|1|14|4|6|60
+Cekodok (plain)|1 piece|40|84|2|10|4|2|90
+Goreng pisang (fried banana)|1 piece|60|117|1|17|5|7|30
+Goreng pisang (fried banana)|3 pieces|180|351|3|51|15|21|90
+Ubi goreng (fried cassava)|1 piece|40|83|1|13|3|1|40
+Keledek goreng (fried sweet potato)|1 piece|40|73|0.5|11|3|3|40
+Karipap (curry puff, chicken potato)|1 piece|60|143|3|17|7|1|220
+Karipap (sardine)|1 piece|60|143|4|16|7|1|250
+Karipap pusing (spiral curry puff)|1 piece|60|148|3|16|8|1|230
+Samosa (vegetable)|1 piece|60|131|3|14|7|1|220
+Pau (steamed bun, char siu)|1 piece|80|189|6|30|5|8|360
+Pau (steamed bun, red bean)|1 piece|80|183|4|35|3|10|90
+Pau (steamed bun, chicken)|1 piece|90|202|7|30|6|5|400
+Pau (steamed bun, plain)|1 piece|60|137|4|28|1|5|120
+Pau kaya (kaya filling)|1 piece|80|183|3|36|3|12|100
+Pau lotus paste|1 piece|80|192|4|35|4|14|90
+Egg tart|1 piece|60|127|3|13|7|6|90
+Egg sandwich (kopitiam)|1 set|200|249|12|30|9|4|600
+Kaya toast (2 slices)|1 set|120|309|5|52|9|18|420
+Kaya toast with butter|1 set|140|354|5|52|14|18|480
+Roti bakar kaya (toast with kaya and butter)|2 slices|120|345|5|52|13|18|450
+Roti bakar (toast, 2 slices butter)|2 slices|90|238|5|32|10|4|380
+Roti bakar peanut butter|2 slices|120|290|7|34|14|5|420
+Roti bakar telur separuh masak (set)|1 set|220|303|13|38|11|6|500
+Half-boiled eggs (2)|2 eggs|100|142|12|1|10|0|150
+Half-boiled egg with soy sauce|2 eggs|100|142|12|1|10|0|400
+Soft-boiled eggs with kaya toast set|1 set|280|435|20|55|15|18|700
+Toast with butter and jam|2 slices|100|260|5|42|8|12|420
+French toast|2 slices|140|258|8|34|10|10|300
+Pancakes with syrup|3 pieces|180|316|6|55|8|22|500
+Waffle (plain)|1 piece|90|205|5|26|9|6|330
+Granola with yoghurt|1 bowl|250|301|11|44|9|20|110
+Oats porridge (made with water)|1 bowl|240|164|6|27|3.6|1|8
+Oats porridge (with milk)|1 bowl|260|239|10|34|7|10|110
+Overnight oats (with milk and fruit)|1 jar|250|292|10|45|8|16|90
+Cornflakes with milk|1 bowl|200|215|7|40|3|14|250
+Milo cereal with milk|1 bowl|230|240|8|44|3.5|16|200
+Granola bar|1 bar|40|157|2|26|5|10|50
+Cheese omelette|1 piece|150|240|13|2|20|1|420
+Telur dadar (omelette, 2 eggs)|1 piece|120|178|12|1|14|0.5|350
+Telur mata (fried egg)|1 egg|45|89|6|0.5|7|0|95
+Telur goreng (fried egg)|2 eggs|90|178|12|1|14|0|190
+Telur rebus (boiled egg)|1 egg|50|71|6|0.5|5|0.5|65
+Telur masin (salted egg)|1 egg|55|77|7|1|5|0|750
+Telur bistik|1 egg|60|104|6|2|8|1|200
+Scrambled eggs|2 eggs|120|213|13|2|17|1|400
+Telur separuh masak (half-boiled, 1)|1 egg|50|71|6|0.5|5|0|70
+Telur dadar sambal|1 portion|130|154|9|7|10|4|500
+Bread (white, 1 slice)|1 slice|30|79|2.5|15|1|1.5|150
+Bread (wholemeal, 1 slice)|1 slice|35|81|4|14|1|2|150
+Gardenia white bread|2 slices|60|146|5|27|2|4|280
+Gardenia wholemeal bread|2 slices|60|142|6|25|2|3|260
+Buttered bun|1 piece|60|165|3|27|5|7|180
+Kaya bun|1 piece|80|183|3|36|3|13|160
+Bun (red bean paste)|1 piece|80|195|4|38|3|12|110
+Sausage roll|1 piece|90|222|6|18|14|1|450
+Chicken floss bun|1 piece|80|188|6|32|4|7|310
+Pandan chiffon cake|1 slice|60|176|4|22|8|13|130
+Muffin (chocolate)|1 piece|90|306|5|40|14|22|300
+Muffin (blueberry)|1 piece|100|335|5|45|15|23|320
+Croissant (plain)|1 piece|60|249|5|28|13|3|280
+Croissant (chocolate)|1 piece|80|338|6|38|18|14|290
+Doughnut (glazed)|1 piece|60|232|3|28|12|11|270
+Doughnut (chocolate)|1 piece|70|266|3|32|14|13|290
+Doughnut (jam filled)|1 piece|75|256|3|34|12|14|240
+Bagel (plain)|1 piece|95|246|10|48|1.5|5|450
+Bagel with cream cheese|1 piece|130|320|12|50|8|6|550
+Sandwich (egg mayo)|1 piece|120|235|8|26|11|3|480
+Sandwich (tuna mayo)|1 piece|130|234|10|26|10|3|520
+Sandwich (chicken)|1 piece|140|236|14|27|8|3|600
+Sandwich (club)|1 piece|250|364|20|35|16|5|1000
+Sub (6 inch, turkey)|1 piece|230|296|18|47|4|8|760
+Sub (6 inch, chicken teriyaki)|1 piece|270|365|24|56|5|14|870

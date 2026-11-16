@@ -1,0 +1,332 @@
+# SaviorFuel built-in foods. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg  (all values are per serving, estimates)
+Kuih lapis (layer cake)|1 piece|50|102|1|20|2|9|20
+Kuih seri muka|1 piece|80|174|2|28|6|12|60
+Kuih talam (pandan coconut)|1 piece|50|87|1|14|3|6|40
+Kuih talam ubi|1 piece|50|83|1|13|3|5|30
+Kuih koci (glutinous rice with coconut filling)|1 piece|50|111|1|20|3|9|15
+Kuih ketayap (pandan crepe, coconut)|1 piece|40|87|1|14|3|8|15
+Kuih dadar (pandan crepe)|1 piece|40|87|1|14|3|8|15
+Kuih lopes|1 piece|50|111|1|20|3|9|15
+Kuih keria (sweet potato donut)|1 piece|50|120|1|20|4|8|25
+Kuih keria gula melaka|1 piece|50|120|1|20|4|10|25
+Kuih bakar (baked pandan custard)|1 piece|50|91|2|14|3|9|35
+Kuih bingka ubi|1 piece|80|149|2|24|5|10|35
+Kuih bingka|1 piece|80|149|2|24|5|11|35
+Kuih cucur badak|1 piece|60|127|1|24|3|10|30
+Kuih cucur kodok|1 piece|60|113|1|16|5|7|25
+Kuih cara berlauk|1 piece|40|117|4|14|5|2|200
+Kuih cara manis|1 piece|40|71|1|10|3|6|30
+Kuih apam balik (peanut pancake)|1 piece|120|245|5|36|9|14|180
+Apam balik (peanut, thin crisp)|1 piece|60|129|3|18|5|7|100
+Apam balik (cheese and corn)|1 piece|130|241|6|34|9|10|200
+Apam gula hangus|1 piece|50|88|1|20|0.5|10|10
+Apam nasi|1 piece|50|89|1.5|14|3|4|40
+Apam beras|1 piece|40|61|1|12|1|2|20
+Kuih kosui|1 piece|40|59|0.5|12|1|7|10
+Kuih pulut inti (glutinous rice with coconut)|1 piece|60|129|1.5|24|3|10|15
+Kuih lompang|1 piece|40|59|0.5|12|1|6|10
+Kuih sagu|1 piece|40|54|0.5|12|0.5|6|10
+Kuih lapis sagu|1 piece|50|66|0.5|15|0.5|8|10
+Kuih lapis Sarawak (layer cake slice)|1 slice|40|144|2|16|8|12|40
+Kuih sarang semut|1 piece|50|115|2|20|3|10|25
+Kuih jala mas|1 piece|10|36|0.5|4|2|3|5
+Kuih bahulu|1 piece|20|47|1.5|8|1|5|30
+Kuih makmur|1 piece|15|72|1|8|4|5|20
+Kuih semperit|1 piece|12|57|0.5|7|3|3|25
+Kuih cornflakes (cookie)|1 piece|10|44|0.5|6|2|3|20
+Kuih bangkit|1 piece|8|30|0.3|5|1|2|4
+Kuih kapit (love letter)|1 piece|8|32|0.5|4|1.5|2|10
+Kuih rangi|1 piece|30|62|1|10|2|5|10
+Kuih badak berendam|1 piece|50|112|1|18|4|9|20
+Kuih ubi kayu (tapioca cake)|1 piece|80|151|1|30|3|12|25
+Kuih tepung pelita|1 piece|50|87|1|14|3|6|20
+Kuih koci (pandan)|1 piece|50|111|1|20|3|9|15
+Kuih seri muka (Nyonya)|1 piece|80|174|2|28|6|12|60
+Kuih bongkong|1 piece|60|113|1.5|20|3|8|20
+Kuih lapis Nyonya (nine layers)|1 piece|50|102|1|20|2|9|20
+Onde-onde (glutinous rice balls with palm sugar)|3 pieces|60|94|1|18|2|8|10
+Ondeh-ondeh|3 pieces|60|94|1|18|2|8|10
+Kuih pie tee|4 pieces|60|105|3|12|5|2|250
+Kuih bakul|1 slice|60|116|1|27|0.5|13|5
+Nian gao (Chinese new year cake)|1 slice|60|116|1|27|0.5|13|5
+Kuih bulan (mooncake, lotus)|1 piece|100|456|4|56|24|34|140
+Mooncake (lotus, double yolk)|1/4 piece|50|246|2|28|14|18|70
+Mooncake (red bean)|1 piece|100|352|3|58|12|32|100
+Mooncake (snow skin)|1 piece|60|198|2|34|6|20|20
+Lunar new year pineapple tart|1 piece|20|82|0.5|11|4|6|20
+Kuih bangkit (coconut cookie)|1 piece|8|30|0.3|5|1|2|4
+Pineapple tart|1 piece|20|82|0.5|11|4|6|20
+Love letters|1 piece|8|32|0.5|4|1.5|2|10
+Kuih lapis legit|1 slice|50|210|3|18|14|10|40
+Kek lapis|1 slice|50|210|3|18|14|10|40
+Kek batik|1 piece|50|185|2|24|9|14|50
+Kek span (sponge cake)|1 slice|40|119|3|20|3|13|80
+Kek coklat moist (chocolate cake)|1 slice|100|378|4|50|18|36|250
+Kek pisang (banana cake)|1 slice|70|220|3|34|8|18|120
+Kek butter|1 slice|60|223|3|28|11|16|120
+Kek cawan (cupcake)|1 piece|50|188|2|27|8|20|100
+Kek jejari|1 piece|40|134|2|18|6|10|70
+Kek karamel|1 slice|60|165|2|28|5|20|90
+Kek red velvet|1 slice|100|396|4|50|20|38|290
+Kek cheese (cheesecake)|1 slice|100|316|6|28|20|20|230
+Brownie (chocolate)|1 piece|60|240|3|30|12|22|120
+Swiss roll|1 slice|40|124|2|20|4|12|90
+Tiramisu|1 slice|120|294|5|28|18|20|90
+Puff pastry (cream puff)|1 piece|60|140|3|14|8|6|100
+Mango pudding|1 cup|120|132|2|22|4|18|30
+Caramel pudding (puding karamel)|1 piece|120|165|4|26|5|24|90
+Pudding diraja (royal pudding)|1 piece|120|195|5|28|7|24|90
+Agar-agar (jelly, flavoured)|1 piece|100|62|0.5|15|0|14|20
+Agar-agar (coconut milk)|1 piece|100|96|1|14|4|12|25
+Puding roti (bread pudding)|1 piece|120|236|5|36|8|22|180
+Puding jagung|1 piece|100|132|2|22|4|12|60
+Cendol (with coconut milk and gula melaka)|1 bowl|350|374|3|68|10|50|60
+Cendol pulut|1 bowl|400|410|4|76|10|52|70
+Ais kacang (ABC)|1 bowl|400|403|4|90|3|68|50
+ABC special (with ice cream)|1 bowl|450|484|5|98|8|76|80
+Ais kacang durian|1 bowl|450|486|5|94|10|66|60
+Sago gula melaka|1 bowl|200|236|1|40|8|32|25
+Bubur pulut hitam|1 bowl|250|242|3|44|6|22|30
+Tau fu fah (soy pudding with syrup)|1 bowl|250|180|6|30|4|24|40
+Tau fu fah (warm soybean curd)|1 bowl|250|176|7|28|4|22|30
+Tong sui (red bean soup)|1 bowl|250|225|4|50|1|30|10
+Tong sui (green bean soup)|1 bowl|250|221|5|48|1|26|10
+Tong sui (barley and gingko)|1 bowl|250|194|4|40|2|22|20
+Ginger sweet soup (tang yuan)|1 bowl|250|268|3|55|4|28|15
+Tang yuan (glutinous balls in soup)|3 balls|100|139|2|26|3|14|10
+Mango sago pomelo|1 bowl|300|274|3|52|6|38|30
+Durian pancake|1 piece|80|144|2|16|8|8|30
+Durian puff|1 piece|60|142|3|10|10|6|50
+Lompat tikam|1 plate|100|172|1|24|8|14|20
+Dodol|1 piece|30|109|0.5|20|3|15|10
+Dodol durian|1 piece|30|101|0.5|18|3|14|10
+Wajik|1 piece|40|127|1|24|3|12|20
+Wajik pandan|1 piece|40|119|1|22|3|11|20
+Halwa (Indian sweet)|1 piece|40|139|1|18|7|14|30
+Gulab jamun|1 piece|40|127|2|14|7|10|30
+Rasmalai|1 piece|60|109|4|12|5|10|50
+Jalebi|1 piece|30|104|1|16|4|10|10
+Laddu (Indian sweet)|1 piece|40|177|2|22|9|14|20
+Burfi|1 piece|30|126|2|16|6|10|20
+Payasam|1 bowl|200|228|5|34|8|24|60
+Pisang goreng cheese|1 piece|90|165|3|18|9|9|80
+Pisang rebus (boiled banana)|1 piece|120|121|1.5|28|0.3|15|2
+Pisang salai|1 piece|50|78|1|18|0.2|10|2
+Cokodok|1 piece|40|84|2|10|4|2|90
+Ubi kayu rebus (boiled cassava)|1 piece|100|161|1.5|38|0.3|2|15
+Keledek rebus (boiled sweet potato)|1 piece|130|119|2|27|0.3|7|55
+Jagung rebus (boiled corn)|1 cob|150|142|4|28|1.5|5|20
+Jagung bakar (grilled corn)|1 cob|150|155|4|28|3|5|40
+Kacang rebus (boiled peanuts)|1 handful|60|207|9|9|15|2|5
+Kacang tanah (roasted peanuts)|1 handful|30|187|8|5|15|1|5
+Kacang tumbuk|1 handful|30|183|8|4|15|1|3
+Kacang kuda|1 handful|30|117|7|11|5|1|30
+Kacang botol rebus|1 handful|50|50|3|5|2|1|10
+Kuaci (watermelon seeds)|1 handful|20|100|5|2|8|0|100
+Keropok (shrimp crackers, fried)|1 handful|20|101|1|13|5|0|200
+Keropok lekor goreng|5 pieces|100|180|8|28|4|1|450
+Keropok ikan Terengganu|1 handful|30|151|4|18|7|1|450
+Keropok udang|1 handful|20|101|1|13|5|0|200
+Keropok palembang|1 piece|40|146|3|20|6|0|400
+Kerepek pisang (banana chips)|1 handful|30|174|1|20|10|10|20
+Kerepek ubi (tapioca chips)|1 handful|30|174|1|20|10|1|120
+Kerepek ubi pedas|1 handful|30|174|1|20|10|3|200
+Kerepek bawang (onion crackers)|1 handful|30|170|2|18|10|1|180
+Kerepek tempe|1 handful|30|141|5|10|9|0|200
+Kerepek pisang kunyit|1 handful|30|174|1|20|10|8|20
+Rempeyek (peanut crackers)|1 piece|15|64|2|5|4|0|80
+Rempah ratus|1 serving|10|14|0.5|2|0.5|0|10
+Muruku (spiral snack)|1 handful|30|135|3|15|7|0.5|180
+Rojak buah (fruit rojak)|1 plate|200|193|3|34|5|26|500
+Rojak (Indian rojak)|1 plate|250|392|8|45|20|6|900
+Rojak mamak|1 plate|250|406|10|42|22|8|900
+Rojak pasembor|1 plate|250|374|8|45|18|8|900
+Cendol durian|1 bowl|400|436|4|78|12|54|70
+Pasembor|1 plate|250|374|8|45|18|8|900
+Lok lok (skewers, 5 pieces)|5 skewers|150|178|12|10|10|2|700
+Satay celup (steamboat satay, 5 sticks)|5 sticks|150|186|12|12|10|3|800
+Steamboat (1 serving, mixed)|1 bowl|400|364|28|36|12|4|1500
+Hotpot (mixed meats and vegetables)|1 bowl|450|418|30|34|18|5|1800
+Takoyaki (6 pieces)|6 pieces|150|225|8|28|9|4|700
+Okonomiyaki|1 piece|250|336|12|36|16|6|900
+Teh tarik|1 glass|250|136|3|22|4|20|60
+Teh tarik kurang manis (less sugar)|1 glass|250|104|3|14|4|11|60
+Teh tarik kosong (no sugar)|1 glass|250|80|3|8|4|7|60
+Teh O (with sugar)|1 glass|250|64|0|16|0|16|5
+Teh O kosong|1 glass|250|0|0|0|0|0|5
+Teh O ais limau (iced lemon tea)|1 glass|300|80|0|20|0|20|5
+Teh C (evaporated milk)|1 glass|250|120|3|18|4|16|60
+Teh susu (milk tea)|1 glass|250|128|3|20|4|18|60
+Teh halia (ginger tea)|1 glass|250|136|3|22|4|20|60
+Teh tarik (iced)|1 glass|300|152|3|26|4|24|60
+Teh ais (iced tea with milk)|1 glass|300|160|3|28|4|26|60
+Teh O ais (iced, with sugar)|1 glass|300|72|0|18|0|18|5
+Teh O limau|1 glass|300|72|0|18|0|18|5
+Teh madu|1 glass|250|64|0|16|0|16|5
+Teh tarik cincau|1 glass|300|160|3|28|4|26|60
+Teh Cameron highland|1 glass|250|0|0|0|0|0|3
+Green tea (unsweetened)|1 cup|240|0|0|0|0|0|2
+Green tea (honey)|1 cup|250|60|0|15|0|15|3
+Chinese tea (unsweetened)|1 cup|240|0|0|0|0|0|2
+Jasmine tea|1 cup|240|0|0|0|0|0|2
+Kopi O (with sugar)|1 glass|250|64|0|16|0|16|5
+Kopi O kosong|1 glass|250|0|0|0|0|0|5
+Kopi (coffee with condensed milk)|1 glass|250|136|3|22|4|20|60
+Kopi C|1 glass|250|120|3|18|4|16|60
+Kopi susu|1 glass|250|144|3|24|4|22|60
+Kopi ais (iced coffee with milk)|1 glass|300|160|3|28|4|26|60
+Kopi O ais|1 glass|300|64|0|16|0|16|5
+Kopi tarik|1 glass|250|136|3|22|4|20|60
+Kopi peng|1 glass|300|160|3|28|4|26|60
+Kopi gula melaka|1 glass|250|60|1|14|0|12|10
+Kopi kampung (traditional coffee)|1 glass|250|68|1|16|0|16|10
+White coffee (Ipoh, hot)|1 cup|250|157|3|25|5|20|50
+White coffee (Ipoh, 3 in 1)|1 sachet|35|154|1|24|6|20|90
+White coffee (iced)|1 glass|300|169|3|28|5|24|50
+Nescafe (3 in 1 sachet)|1 sachet|20|82|1|15|2|10|30
+Latte (regular)|1 cup|350|164|9|14|8|13|120
+Latte (whole milk, large)|1 cup|470|210|12|18|10|17|150
+Cappuccino|1 cup|240|114|6|9|6|8|90
+Flat white|1 cup|240|114|6|9|6|8|90
+Espresso|1 shot|30|2|0.5|0|0|0|10
+Americano|1 cup|350|2|0.5|0|0|0|10
+Mocha|1 cup|350|241|8|32|9|30|120
+Caramel macchiato|1 cup|350|248|8|36|8|32|120
+Iced latte|1 cup|400|151|8|14|7|13|120
+Iced americano|1 cup|400|2|0.5|0|0|0|10
+Iced coffee with milk and sugar|1 cup|300|144|3|24|4|22|60
+Milo (hot)|1 glass|250|139|4|24|3|21|85
+Milo (hot, with condensed milk)|1 glass|250|193|5|32|5|28|110
+Milo dinosaur (iced, with Milo powder)|1 glass|400|278|6|50|6|44|120
+Milo ais|1 glass|300|139|4|24|3|21|85
+Milo peng|1 glass|300|193|5|32|5|28|110
+Milo godzilla|1 glass|450|332|7|58|8|50|140
+Milo (3 in 1 sachet)|1 sachet|33|136|1|24|4|17|60
+Milo powder|1 tbsp|9|30|0.7|5.7|0.5|3.5|10
+Horlicks (hot)|1 glass|250|151|5|26|3|18|80
+Ovaltine (hot)|1 glass|250|143|5|24|3|18|80
+Chocolate drink (hot)|1 cup|250|164|5|27|4|24|90
+Hot chocolate (café)|1 cup|300|270|9|36|10|32|160
+Bandung (rose syrup milk)|1 glass|250|164|4|28|4|26|60
+Bandung ais|1 glass|300|172|4|30|4|28|60
+Bandung cincau|1 glass|300|188|4|34|4|30|60
+Sirap bandung|1 glass|250|143|3|26|3|24|50
+Sirap limau|1 glass|250|96|0|24|0|24|10
+Sirap selasih|1 glass|250|104|0|26|0|24|10
+Air sirap|1 glass|250|96|0|24|0|24|10
+Air kelapa (coconut water)|1 glass|250|44|1|9|0.5|8|90
+Air kelapa muda|1 young coconut|350|63|1.5|12|1|10|120
+Air kelapa shake|1 glass|350|179|2|36|3|32|100
+Coconut water (pack)|1 pack|330|59|1|13|0.3|12|120
+Air tebu (sugarcane)|1 glass|250|200|0|50|0|46|10
+Air tebu with lemon|1 glass|250|200|0|50|0|46|10
+Air katira|1 glass|300|133|1|30|1|26|20
+Air limau (lime juice, sugar)|1 glass|250|80|0|20|0|18|5
+Air limau asam boi|1 glass|300|96|0|24|0|22|180
+Asam boi (preserved plum drink)|1 glass|300|96|0|24|0|22|200
+Air mata kucing|1 glass|300|96|0|24|0|22|10
+Air jagung (corn drink)|1 glass|300|171|2|34|3|24|50
+Air soya (soy milk, sweetened)|1 glass|250|107|6|14|3|10|60
+Air soya (unsweetened)|1 glass|250|76|7|3|4|1|70
+Soya cincau|1 glass|300|163|6|28|3|22|60
+Air kacang soya|1 glass|250|107|6|14|3|10|60
+Air barli|1 glass|250|82|0.5|20|0|16|10
+Air barli lemon|1 glass|300|90|0.5|22|0|18|10
+Air buah (mixed fruit juice)|1 glass|250|116|1|28|0|26|10
+Air halia (ginger drink)|1 glass|250|72|0|18|0|14|10
+Air asam jawa|1 glass|250|88|0|22|0|20|20
+Air bunga kekwa (chrysanthemum)|1 glass|250|80|0|20|0|20|20
+Luo han guo|1 glass|250|80|0|20|0|18|20
+Air kelapa laut|1 glass|300|66|2|10|2|8|120
+Air cincau|1 glass|300|88|0|22|0|20|20
+Air cincau susu|1 glass|300|151|3|28|3|24|50
+Air susu segar (fresh milk)|1 glass|250|152|8|12|8|12|100
+Air susu soya|1 glass|250|104|7|10|4|7|60
+Air susu kurma|1 glass|300|205|6|34|5|30|60
+Air oren (orange juice)|1 glass|250|114|1.5|26|0.4|22|3
+Air tembikai (watermelon juice)|1 glass|250|87|1|20|0.3|18|5
+Air epal (apple juice)|1 glass|250|116|0.4|28|0.3|24|8
+Air nanas (pineapple juice)|1 glass|250|127|1|30|0.3|25|6
+Air carrot juice|1 glass|250|92|2|20|0.5|14|140
+Air jus tembikai|1 glass|250|87|1|20|0.3|18|5
+Air jus mangga (mango juice)|1 glass|250|144|1|34|0.5|30|8
+Air jus epal|1 glass|250|116|0.4|28|0.3|24|8
+Air jus carrot|1 glass|250|92|2|20|0.5|14|140
+Mixed vegetable juice|1 glass|250|67|2|14|0.3|10|180
+Lemon honey drink|1 glass|250|64|0|16|0|15|5
+Honey lemon tea|1 glass|250|64|0|16|0|15|5
+Chia seed drink|1 glass|300|111|3|18|3|14|10
+Kombucha|1 bottle|350|56|0|14|0|10|20
+Smoothie (banana and milk)|1 glass|350|252|8|46|4|32|80
+Smoothie (mango yoghurt)|1 glass|350|263|7|52|3|42|70
+Smoothie (berry, protein)|1 glass|350|260|20|36|4|22|120
+Smoothie (green)|1 glass|350|211|6|40|3|26|70
+Smoothie (strawberry banana)|1 glass|350|246|5|52|2|36|50
+Protein shake (1 scoop whey in water)|1 glass|300|126|24|3|2|2|150
+Protein shake (whey in milk)|1 glass|350|272|34|16|8|15|280
+Protein shake (2 scoops)|1 glass|350|252|48|6|4|4|320
+Whey protein (1 scoop)|1 scoop|30|122|24|3|1.5|2|130
+Whey protein isolate (1 scoop)|1 scoop|30|112|26|1|0.5|1|140
+Casein protein (1 scoop)|1 scoop|33|121|24|4|1|2|180
+Mass gainer (1 serving)|1 serving|150|556|30|100|4|20|300
+Creatine (5 g)|1 serving|5|0|0|0|0|0|0
+Pre-workout (1 scoop)|1 scoop|10|12|0|3|0|0|50
+BCAA drink|1 serving|10|20|5|0|0|0|30
+Electrolyte drink|1 bottle|500|80|0|20|0|18|180
+Bubble tea (milk tea with pearls, regular)|1 cup|500|367|4|72|7|52|140
+Bubble tea (milk tea with pearls, less sugar)|1 cup|500|287|4|52|7|32|140
+Bubble tea (brown sugar boba milk)|1 cup|500|448|6|88|8|66|130
+Bubble tea (taro milk tea)|1 cup|500|388|5|74|8|52|150
+Bubble tea (matcha latte)|1 cup|500|324|7|56|8|38|130
+Bubble tea (fruit tea)|1 cup|500|244|1|60|0|48|40
+Bubble tea (oolong milk tea, no pearls)|1 cup|500|238|4|42|6|34|120
+Bubble tea (milk foam green tea)|1 cup|500|288|4|50|8|36|180
+Bubble tea (cheese foam)|1 cup|500|352|5|56|12|38|220
+Tealive (brown sugar pearl milk tea)|1 cup|500|420|5|82|8|62|140
+Tealive (milk tea, regular)|1 cup|500|278|4|52|6|40|140
+Chatime (pearl milk tea, regular)|1 cup|500|351|4|68|7|50|140
+Chatime (mango green tea)|1 cup|500|228|1|56|0|46|40
+Gong cha (milk tea with pearls)|1 cup|500|351|4|68|7|50|140
+Boba (tapioca pearls, 1 serving)|1 serving|80|180|0|45|0|22|10
+Sugar syrup (1 tbsp)|1 tbsp|20|80|0|20|0|20|0
+Honey (1 tbsp)|1 tbsp|21|68|0|17|0|17|1
+Coca-Cola|1 can|330|140|0|35|0|35|10
+Coca-Cola Zero|1 can|330|0|0|0|0|0|15
+Pepsi|1 can|330|144|0|36|0|36|15
+Sprite|1 can|330|132|0|33|0|33|20
+7-Up|1 can|330|136|0|34|0|34|20
+Fanta orange|1 can|330|160|0|40|0|40|20
+Mountain Dew|1 can|330|180|0|45|0|44|35
+100plus (isotonic)|1 can|325|80|0|20|0|18|120
+100plus Active|1 can|325|68|0|17|0|15|130
+100plus Zero|1 can|325|0|0|0|0|0|130
+Pocari Sweat|1 bottle|500|124|0|31|0|30|240
+Gatorade|1 bottle|500|120|0|30|0|28|220
+Red Bull|1 can|250|112|0|28|0|27|100
+Red Bull Sugarfree|1 can|250|0|0|0|0|0|100
+Monster Energy|1 can|500|216|0|54|0|53|380
+Livita|1 bottle|150|100|0|25|0|20|20
+Vitagen|1 bottle|65|51|1|11|0.3|10|20
+Yakult|1 bottle|65|56|1|13|0|11|15
+Yakult Light|1 bottle|65|28|1|6|0|5|15
+Ribena (blackcurrant, diluted)|1 glass|250|104|0|26|0|24|10
+Sunquick (orange, diluted)|1 glass|250|80|0|20|0|18|10
+Cordial (diluted, regular)|1 glass|250|80|0|20|0|20|10
+Soda water|1 can|330|0|0|0|0|0|30
+Root beer|1 can|330|160|0|40|0|40|55
+Ginger ale|1 can|330|128|0|32|0|32|25
+Tonic water|1 can|330|104|0|26|0|26|35
+Lychee drink (can)|1 can|240|104|0|26|0|25|15
+Grass jelly drink (can)|1 can|300|112|0|28|0|26|20
+Bird's nest drink|1 bottle|180|80|0|20|0|20|10
+Soya bean drink (Yeo's)|1 box|250|131|6|20|3|18|80
+Chrysanthemum tea (Yeo's)|1 box|250|80|0|20|0|20|20
+Packet drink (Teh Bunga)|1 box|250|80|0|20|0|20|20
+Mineral water|1 bottle|500|0|0|0|0|0|5
+Beer (regular)|1 can|330|140|1|13|0|0|10
+Beer (light)|1 can|330|100|1|6|0|0|10
+Wine (red)|1 glass|150|125|0|4|0|1|5
+Wine (white)|1 glass|150|120|0|4|0|1|5
+Whisky (30 ml)|1 shot|30|70|0|0|0|0|0
+Vodka (30 ml)|1 shot|30|65|0|0|0|0|0
+Tuak (rice wine)|1 glass|200|140|1|20|0|8|10
