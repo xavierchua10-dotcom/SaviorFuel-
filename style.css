@@ -2225,3 +2225,6 @@ body[data-theme="light"] .log-empty button{color:#fff;}
 
 .food-suggest-name .brand{white-space:normal; overflow:visible; text-overflow:clip;}
 .last-serv{white-space:nowrap;}
+
+.food-thumb.has-ico{background:transparent;}
+.food-thumb.has-ico img{object-fit:contain;}

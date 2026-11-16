@@ -1658,6 +1658,34 @@
     [/\b(honey|madu)\b/i, '\uD83C\uDF6F'],
     [/\b(sauce|sos|ketchup|sambal|kicap|mayonnaise|dressing|paste|jam)\b/i, '\uD83E\uDD6B']
   ];
+  // Hand-drawn dish icons (data/icons/NAME.webp). Checked before the emoji
+  // list, so a dish with its own icon shows that; everything else keeps its
+  // emoji. More are added as sheets are drawn. Specific names go first.
+  var FOOD_ICON_RULES = [
+    [/\bnasi lemak\b/i, 'nasi-lemak'],
+    [/\b(nasi goreng|fried rice)\b/i, 'nasi-goreng'],
+    [/\b(mee goreng|mi goreng|mie goreng|fried noodles?|maggi goreng)\b/i, 'mee-goreng'],
+    [/\b(char kuey teow|char kway teow|char koay teow|kuey teow goreng)\b/i, 'char-kuey-teow'],
+    [/\b(laksa|curry mee)\b/i, 'laksa'],
+    [/\b(roti canai|roti prata|prata|roti telur|roti tisu|roti planta)\b/i, 'roti-canai'],
+    [/^(?!.*\b(bee hoon|bihun|noodles?|mee|burger|burrito|wrap|pizza)\b).*\b(satay|sate)\b/i, 'satay'],
+    [/\bnasi kandar\b/i, 'nasi-kandar'],
+    [/\brendang\b/i, 'rendang'],
+    [/^(?!.*\b(burrito|wrap|burger|pizza|sandwich|bun|roll)\b).*\b(chicken rice|nasi ayam|hainanese)\b/i, 'chicken-rice'],
+    [/\b(wantan|wanton|wonton) (mee|noodles?)\b/i, 'wantan-mee'],
+    [/\b(bak kut teh|bkt)\b/i, 'bak-kut-teh'],
+    [/\bcendol\b/i, 'cendol'],
+    [/\b(teh tarik|teh c|teh o|teh ais|teh susu|milk tea)\b/i, 'teh-tarik'],
+    [/\b(kopi|kopitiam coffee)\b/i, 'kopi-o'],
+    [/\b(kaya toast|roti bakar|half[- ]boiled|telur separuh masak)\b/i, 'kaya-toast']
+  ];
+  function foodIcon(name){
+    var n = String(name || '');
+    for (var i = 0; i < FOOD_ICON_RULES.length; i++){
+      if (FOOD_ICON_RULES[i][0].test(n)) return FOOD_ICON_RULES[i][1];
+    }
+    return '';
+  }
   var FOOD_EMOJI_DEFAULT = '\uD83C\uDF7D\uFE0F'; // plate with cutlery
 
   function foodEmoji(name){
@@ -1687,6 +1715,8 @@
     if (img){
       return '<span class="food-thumb" data-emoji="' + emoji + '"><img src="' + esc(img) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span>';
     }
+    var ico = foodIcon(p.product_name);
+    if (ico) return '<span class="food-thumb has-ico"><img class="food-ico" src="data/icons/' + ico + '.webp" alt="" loading="lazy" decoding="async"></span>';
     return '<span class="food-thumb">' + emoji + '</span>';
   }
 

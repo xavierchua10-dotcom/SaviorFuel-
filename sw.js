@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v111';
+var SHELL_CACHE = 'saviorfuel-shell-v112';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -58,7 +58,23 @@ var SHELL_FILES = [
   './data/foods/nutrition3-part2-european-american-latin.txt',
   './data/foods/nutrition3-part3-produce-meat-seafood.txt',
   './data/foods/nutrition3-part4-healthy-special-diet.txt',
-  './data/foods/nutrition3-part5-dessert-cafe-bakery.txt'
+  './data/foods/nutrition3-part5-dessert-cafe-bakery.txt',
+  './data/icons/bak-kut-teh.webp',
+  './data/icons/cendol.webp',
+  './data/icons/char-kuey-teow.webp',
+  './data/icons/chicken-rice.webp',
+  './data/icons/kaya-toast.webp',
+  './data/icons/kopi-o.webp',
+  './data/icons/laksa.webp',
+  './data/icons/mee-goreng.webp',
+  './data/icons/nasi-goreng.webp',
+  './data/icons/nasi-kandar.webp',
+  './data/icons/nasi-lemak.webp',
+  './data/icons/rendang.webp',
+  './data/icons/roti-canai.webp',
+  './data/icons/satay.webp',
+  './data/icons/teh-tarik.webp',
+  './data/icons/wantan-mee.webp'
 ];
 // Nice-to-have (big 3D models for the Insights tab): fetched after install,
 // one by one, and a failure here never blocks the install.
