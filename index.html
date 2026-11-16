@@ -323,17 +323,20 @@
   function lbToKg(lb){ return lb / 2.20462; }
 
   var ACTIVITY_LEVELS = [
-    { id: 'sedentary', label: 'Sedentary (little/no exercise)', mult: 1.2 },
-    { id: 'light', label: 'Light (1-3 days/week)', mult: 1.375 },
-    { id: 'moderate', label: 'Moderate (3-5 days/week)', mult: 1.55 },
-    { id: 'active', label: 'Very active (6-7 days/week)', mult: 1.725 },
-    { id: 'extra', label: 'Extra active (physical job + training)', mult: 1.9 }
+    { id: 'sedentary', label: 'Sedentary · no exercise', mult: 1.2 },
+    { id: 'light', label: 'Light · 1-3 days/wk', mult: 1.375 },
+    { id: 'moderate', label: 'Moderate · 3-5 days/wk', mult: 1.55 },
+    { id: 'active', label: 'Very active · 6-7 days/wk', mult: 1.725 },
+    { id: 'extra', label: 'Extra active · hard job + training', mult: 1.9 }
   ];
   var GOAL_OPTIONS = [
-    { id: 'lose', label: 'Lose weight', calAdjust: -500 },
-    { id: 'maintain', label: 'Maintain', calAdjust: 0 },
-    { id: 'gain', label: 'Build muscle', calAdjust: 300 }
+    { id: 'lose', label: 'Lose weight', pct: -0.20, protein: 2.0, desc: 'About 20% under maintenance, with high protein to keep your muscle.' },
+    { id: 'maintain', label: 'Maintain', pct: 0, protein: 1.6, desc: 'Around maintenance calories with balanced protein.' },
+    { id: 'gain', label: 'Build muscle', pct: 0.10, protein: 2.0, desc: 'About 10% over maintenance, with high protein to build muscle.' }
   ];
+  // Sensible limits for the body details (stored as kg / cm)
+  var PLAN_LIMITS = { age: [10, 100], heightCm: [100, 250], weightKg: [30, 300] };
+  function goalById(id){ return GOAL_OPTIONS.find(function(g){ return g.id === id; }) || GOAL_OPTIONS[1]; }
 
   var STORE = loadStore();
   var state = { tab: 'log' };
@@ -357,8 +360,9 @@
   };
 
   function loadStore(){
+    var raw = null;
     try {
-      var raw = localStorage.getItem(STORAGE_KEY);
+      raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {}, photos: {} };
       var parsed = JSON.parse(raw);
       // Merge (not replace) so existing saved goals keep whatever the
@@ -381,6 +385,8 @@
       return parsed;
     } catch (e){
       console.error('SaviorFuel: failed to load local store, starting fresh —', e);
+      // Keep the unreadable data (the next save would overwrite it) so it can still be recovered.
+      try { if (raw) localStorage.setItem(STORAGE_KEY + '_unreadable', raw); } catch (e2){}
       return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {}, photos: {} };
     }
   }
@@ -446,12 +452,12 @@
     if (!m || typeof m !== 'object') return null;
     var t = Number(m.loggedAt);
     if (!isFinite(t) || t <= 0) return null;
-    var n = function(v){ v = Number(v); return (isFinite(v) && v > 0) ? v : 0; };
+    var n = function(v, max){ v = Number(v); return (isFinite(v) && v > 0) ? Math.min(v, max) : 0; };
     var clean = {
       id: String(m.id || ('m_' + t + '_' + Math.random().toString(36).slice(2, 7))),
       name: String(m.name == null ? 'Food' : m.name).slice(0, 120),
-      calories: n(m.calories), protein: n(m.protein), carbs: n(m.carbs), fat: n(m.fat),
-      fiber: n(m.fiber), sugar: n(m.sugar), sodium: n(m.sodium),
+      calories: n(m.calories, 20000), protein: n(m.protein, 2000), carbs: n(m.carbs, 2000), fat: n(m.fat, 2000),
+      fiber: n(m.fiber, 1000), sugar: n(m.sugar, 2000), sodium: n(m.sodium, 50000),
       loggedAt: t
     };
     if (typeof m.category === 'string') clean.category = m.category;
@@ -3108,6 +3114,10 @@
 
     // A name and a calories entry are required. 0 is fine when typed on purpose (black coffee, plain tea, water).
     if (!name || document.getElementById('mealCal').value.trim() === '') return;
+    if (cal > 10000 || protein > 1000 || carbs > 1000 || fat > 1000){
+      showToast('Those numbers look too high for one meal. Please check them.');
+      return;
+    }
 
     var dayKey = document.getElementById('mealDate').value;
     var editing = ui.editingMealId ? mealById(ui.editingMealId) : null;
@@ -4423,15 +4433,15 @@
 
   function saveGoalsFromInputs(){
     // A goal can be 0 (e.g. no sugar target); only blank or invalid falls back to the default.
-    var read = function(id, def, min){
+    var read = function(id, def, min, max){
       var v = parseInt(document.getElementById(id).value, 10);
-      return (isFinite(v) && v >= (min || 0)) ? Math.min(v, 50000) : def;
+      return (isFinite(v) && v >= (min || 0)) ? Math.min(v, max || 20000) : def;
     };
     STORE.goals = {
-      calories: read('goalCalories', DEFAULT_GOALS.calories, 1),
-      protein: read('goalProtein', DEFAULT_GOALS.protein),
-      carbs: read('goalCarbs', DEFAULT_GOALS.carbs),
-      fat: read('goalFat', DEFAULT_GOALS.fat),
+      calories: read('goalCalories', DEFAULT_GOALS.calories, 1, 10000),
+      protein: read('goalProtein', DEFAULT_GOALS.protein, 0, 2000),
+      carbs: read('goalCarbs', DEFAULT_GOALS.carbs, 0, 2000),
+      fat: read('goalFat', DEFAULT_GOALS.fat, 0, 2000),
       sugar: read('goalSugar', DEFAULT_GOALS.sugar),
       sodium: read('goalSodium', DEFAULT_GOALS.sodium),
       water: read('goalWater', DEFAULT_GOALS.water)
@@ -4455,27 +4465,30 @@
     var p = STORE.profile;
     var imperial = STORE.appSettings.unit === 'imperial';
     var heightVal = imperial ? Math.round(cmToIn(p.heightCm)) : p.heightCm;
-    var weightVal = imperial ? Math.round(kgToLb(p.weightKg)) : p.weightKg;
-    return '<div class="settings-section"><h3>Your profile</h3><div class="card">' +
-      '<div class="settings-goal-row"><label>Sex</label>' +
-        '<select id="profSex">' +
+    var weightVal = imperial ? Math.round(kgToLb(p.weightKg) * 10) / 10 : p.weightKg;
+    var chg = ' data-action-change="save-profile"';
+    return '<div class="settings-section"><div class="plan-h">Your details</div><div class="card">' +
+      '<div class="settings-goal-row"><label for="profSex">Sex</label>' +
+        '<select id="profSex"' + chg + '>' +
           '<option value="male"' + (p.sex === 'male' ? ' selected' : '') + '>Male</option>' +
           '<option value="female"' + (p.sex === 'female' ? ' selected' : '') + '>Female</option>' +
         '</select>' +
       '</div>' +
-      '<div class="settings-goal-row"><label>Age</label>' +
-        '<input type="number" inputmode="numeric" id="profAge" value="' + p.age + '"></div>' +
-      '<div class="settings-goal-row"><label>Height (' + (imperial ? 'in' : 'cm') + ')</label>' +
-        '<input type="number" inputmode="numeric" id="profHeight" value="' + heightVal + '"></div>' +
-      '<div class="settings-goal-row"><label>Bodyweight (' + (imperial ? 'lb' : 'kg') + ')</label>' +
-        '<input type="number" inputmode="numeric" id="profWeight" value="' + weightVal + '"></div>' +
-      '<div class="settings-goal-row"><label>Activity level</label>' +
-        '<select id="profActivity">' + selectOptionsHtml(ACTIVITY_LEVELS, p.activityLevel) + '</select>' +
+      '<div class="settings-goal-row"><label for="profAge">Age</label>' +
+        '<input type="number" inputmode="numeric" id="profAge" min="10" max="100" value="' + p.age + '"' + chg + '></div>' +
+      '<div class="settings-goal-row"><label for="profHeight">Height (' + (imperial ? 'in' : 'cm') + ')</label>' +
+        '<input type="number" inputmode="numeric" id="profHeight" value="' + heightVal + '"' + chg + '></div>' +
+      '<div class="settings-goal-row"><label for="profWeight">Bodyweight (' + (imperial ? 'lb' : 'kg') + ')</label>' +
+        '<input type="number" inputmode="decimal" id="profWeight" value="' + weightVal + '"' + chg + '></div>' +
+      '<div class="settings-goal-row"><label for="profActivity">Activity level</label>' +
+        '<select id="profActivity"' + chg + '>' + selectOptionsHtml(ACTIVITY_LEVELS, p.activityLevel) + '</select>' +
       '</div>' +
-      '<div class="settings-goal-row"><label>Goal</label>' +
-        '<select id="profGoal">' + selectOptionsHtml(GOAL_OPTIONS, p.goal) + '</select>' +
+      '<div class="settings-goal-row"><label for="profGoal">Goal</label>' +
+        '<select id="profGoal"' + chg + '>' + selectOptionsHtml(GOAL_OPTIONS, p.goal) + '</select>' +
       '</div>' +
-      '<button class="btn-primary" data-action="calculate-plan" style="margin-top:10px;">Calculate My Plan</button>' +
+      '<div class="plan-hint" id="profGoalDesc">' + esc(goalById(p.goal).desc) + '</div>' +
+      '<button class="btn-primary" data-action="calculate-plan" style="margin-top:10px;">Set my daily goals</button>' +
+      '<div class="plan-hint centre">Works out calories and macros from your details. You can still change any number below.</div>' +
     '</div></div>';
   }
 
@@ -4488,41 +4501,61 @@
       : (10 * profile.weightKg) + (6.25 * profile.heightCm) - (5 * profile.age) - 161;
     var activityMult = (ACTIVITY_LEVELS.find(function(a){ return a.id === profile.activityLevel; }) || ACTIVITY_LEVELS[2]).mult;
     var tdee = bmr * activityMult;
-    var goalAdjust = (GOAL_OPTIONS.find(function(g){ return g.id === profile.goal; }) || GOAL_OPTIONS[1]).calAdjust;
-    var calories = Math.max(1200, Math.round(tdee + goalAdjust)); // 1200 floor as a basic safety rail
-    // Macro split: protein by bodyweight (1.8g/kg), fat at 25% of calories, carbs fill the rest.
-    var protein = Math.round(profile.weightKg * 1.8);
+    var goal = goalById(profile.goal);
+    // Safety floor so a small person on "Lose weight" never lands on a crash diet.
+    var floor = profile.sex === 'male' ? 1500 : 1200;
+    var calories = Math.max(floor, Math.round(tdee * (1 + goal.pct)));
+    // Protein by bodyweight (depends on the goal), fat at 25% of calories, carbs fill the rest.
+    var protein = Math.round(profile.weightKg * goal.protein);
     var fatCal = calories * 0.25;
     var fat = Math.round(fatCal / 9);
     var carbs = Math.round(Math.max(0, calories - protein * 4 - fatCal) / 4);
     return { tdee: tdee, calories: calories, protein: protein, carbs: carbs, fat: fat };
   }
 
-  function calculatePlanFromForm(){
+  // Reads the body-details form. Returns { profile, err } — err is a plain
+  // sentence when something is blank or out of range, so nothing silly
+  // (a -5 kg weight, a 300-year-old) ever reaches the plan.
+  function readProfileForm(){
     var imperial = STORE.appSettings.unit === 'imperial';
-    var rawHeight = parseFloat(document.getElementById('profHeight').value) || (imperial ? cmToIn(DEFAULT_PROFILE.heightCm) : DEFAULT_PROFILE.heightCm);
-    var rawWeight = parseFloat(document.getElementById('profWeight').value) || (imperial ? kgToLb(DEFAULT_PROFILE.weightKg) : DEFAULT_PROFILE.weightKg);
-    var profile = {
-      sex: document.getElementById('profSex').value,
-      age: parseInt(document.getElementById('profAge').value, 10) || DEFAULT_PROFILE.age,
-      heightCm: Math.round(imperial ? inToCm(rawHeight) : rawHeight),
-      weightKg: Math.round(imperial ? lbToKg(rawWeight) : rawWeight),
-      activityLevel: document.getElementById('profActivity').value,
-      goal: document.getElementById('profGoal').value
+    var v = function(id){ return document.getElementById(id).value; };
+    var age = parseInt(v('profAge'), 10), h = parseFloat(v('profHeight')), w = parseFloat(v('profWeight'));
+    var hCm = imperial ? inToCm(h) : h, wKg = imperial ? lbToKg(w) : w;
+    var L = PLAN_LIMITS, err = null;
+    if (!(age >= L.age[0] && age <= L.age[1])) err = 'Age should be between ' + L.age[0] + ' and ' + L.age[1] + '.';
+    else if (!(hCm >= L.heightCm[0] && hCm <= L.heightCm[1])) err = 'Height should be between ' + (imperial ? Math.ceil(cmToIn(L.heightCm[0])) + ' and ' + Math.floor(cmToIn(L.heightCm[1])) + ' in' : L.heightCm[0] + ' and ' + L.heightCm[1] + ' cm') + '.';
+    else if (!(wKg >= L.weightKg[0] && wKg <= L.weightKg[1])) err = 'Bodyweight should be between ' + (imperial ? Math.ceil(kgToLb(L.weightKg[0])) + ' and ' + Math.floor(kgToLb(L.weightKg[1])) + ' lb' : L.weightKg[0] + ' and ' + L.weightKg[1] + ' kg') + '.';
+    return {
+      err: err,
+      profile: err ? null : { sex: v('profSex'), age: age, heightCm: Math.round(hCm), weightKg: Math.round(wKg * 10) / 10, activityLevel: v('profActivity'), goal: v('profGoal') }
     };
-    STORE.profile = profile;
+  }
 
-    var plan = computePlan(profile);
-    var tdee = plan.tdee, targetCalories = plan.calories, proteinG = plan.protein, fatG = plan.fat, carbG = plan.carbs;
+  // Body details save as soon as you change them (no need to press Calculate
+  // just to keep them); Calculate is only for turning them into daily goals.
+  function saveProfileFromForm(){
+    if (!document.getElementById('profWeight')) return;
+    var r = readProfileForm();
+    if (r.err){ showToast(r.err); return; }
+    STORE.profile = r.profile;
+    saveStore();
+  }
 
-    // Merge rather than replace — the calculator only derives
-    // calories/protein/carbs/fat, so fiber/sugar/sodium goals
-    // (whatever the person set, or the defaults) carry over instead
-    // of getting wiped to undefined.
-    STORE.goals = Object.assign({}, STORE.goals, { calories: targetCalories, protein: proteinG, carbs: carbG, fat: fatG });
-    STORE.lastPlanTdee = Math.round(tdee);
+  function calculatePlanFromForm(){
+    var r = readProfileForm();
+    if (r.err){ showToast(r.err); return; }
+    var prevGoals = Object.assign({}, STORE.goals), prevTdee = STORE.lastPlanTdee;
+    STORE.profile = r.profile;
+    var plan = computePlan(r.profile);
+    // Merge rather than replace — the calculator only derives calories and
+    // protein/carbs/fat, so sugar/sodium/water goals carry over.
+    STORE.goals = Object.assign({}, STORE.goals, { calories: plan.calories, protein: plan.protein, carbs: plan.carbs, fat: plan.fat });
+    STORE.lastPlanTdee = Math.round(plan.tdee);
     saveStore();
     renderApp();
+    showToast('Daily goals set: ' + plan.calories + ' kcal', 'Undo', function(){
+      STORE.goals = prevGoals; STORE.lastPlanTdee = prevTdee; saveStore(); renderApp();
+    });
   }
 
   // One collapsible settings card: icon + title + one-line summary, and
@@ -4781,8 +4814,8 @@
       planBody += '<div class="plan-result-banner">Estimated maintenance (TDEE): <b>' + STORE.lastPlanTdee + ' kcal/day</b> \u2014 your goals were calculated from this.</div>';
     }
     planBody += profileFormHtml();
-    planBody += '<div class="settings-section"><div class="card">' +
-      settingsGoalRow('Calories', 'goalCalories', g.calories) +
+    planBody += '<div class="settings-section"><div class="plan-h">Daily goals</div><div class="card">' +
+      settingsGoalRow('Calories (kcal)', 'goalCalories', g.calories) +
       settingsGoalRow('Protein (g)', 'goalProtein', g.protein) +
       settingsGoalRow('Carbs (g)', 'goalCarbs', g.carbs) +
       settingsGoalRow('Fat (g)', 'goalFat', g.fat) +
@@ -5634,6 +5667,7 @@
     } else if (action === 'pick-scan-photo'){
       document.getElementById('scanFile').click();
     } else if (action === 'set-unit'){
+      if (document.getElementById('profWeight')){ var pr = readProfileForm(); if (!pr.err) STORE.profile = pr.profile; }
       STORE.appSettings.unit = el.dataset.unit;
       saveStore();
       renderApp();
@@ -5719,8 +5753,15 @@
   // also handles the "grams" field on a selected search result, which
   // just recomputes the prefill macros rather than saving anything.
   document.addEventListener('change', function(e){
-    if (e.target.dataset && e.target.dataset.actionChange === 'save-goal'){
+    var ac = e.target.dataset && e.target.dataset.actionChange;
+    if (ac === 'save-goal'){
       saveGoalsFromInputs();
+    } else if (ac === 'save-profile'){
+      if (e.target.id === 'profGoal'){
+        var gd = document.getElementById('profGoalDesc');
+        if (gd) gd.textContent = goalById(e.target.value).desc;
+      }
+      saveProfileFromForm();
     }
   });
 
@@ -6396,14 +6437,15 @@
     if (g('wActivity') !== null) welcome.activity = g('wActivity');
   }
 
+  function inRange(v, lim){ return v >= lim[0] && v <= lim[1]; }
   function welcomeBuildPlan(){
     var imperial = welcome.unit === 'imperial';
     var h = parseFloat(welcome.height), w = parseFloat(welcome.weight), age = parseInt(welcome.age, 10);
     var profile = {
       sex: welcome.sex,
-      age: (age >= 10 && age <= 100) ? age : DEFAULT_PROFILE.age,
-      heightCm: Math.round(h > 0 ? (imperial ? inToCm(h) : h) : DEFAULT_PROFILE.heightCm),
-      weightKg: Math.round(w > 0 ? (imperial ? lbToKg(w) : w) : DEFAULT_PROFILE.weightKg),
+      age: (age >= PLAN_LIMITS.age[0] && age <= PLAN_LIMITS.age[1]) ? age : DEFAULT_PROFILE.age,
+      heightCm: Math.round(inRange(imperial ? inToCm(h) : h, PLAN_LIMITS.heightCm) ? (imperial ? inToCm(h) : h) : DEFAULT_PROFILE.heightCm),
+      weightKg: Math.round((inRange(imperial ? lbToKg(w) : w, PLAN_LIMITS.weightKg) ? (imperial ? lbToKg(w) : w) : DEFAULT_PROFILE.weightKg) * 10) / 10,
       activityLevel: welcome.activity,
       goal: welcome.goal
     };
@@ -6448,7 +6490,7 @@
       body = '<h2>Your goal</h2><p>Pick what fits you. You can change it any time in Settings.</p>' +
         '<div class="welcome-goals">' + GOAL_OPTIONS.map(function(o){
           return '<button data-w="goal" data-v="' + o.id + '" class="' + (welcome.goal === o.id ? 'active' : '') + '"><b>' + o.label + '</b><span>' +
-            (o.calAdjust < 0 ? 'Eat a bit under maintenance' : (o.calAdjust > 0 ? 'Eat a bit over, with high protein' : 'Eat around maintenance')) + '</span></button>';
+            esc(o.desc) + '</span></button>';
         }).join('') + '</div>' +
         '<div class="welcome-field"><label for="wActivity">Activity level</label><select id="wActivity">' +
           ACTIVITY_LEVELS.map(function(a){ return '<option value="' + a.id + '"' + (welcome.activity === a.id ? ' selected' : '') + '>' + a.label + '</option>'; }).join('') +
