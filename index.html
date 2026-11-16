@@ -1733,7 +1733,8 @@
     [/^(?!.*\b(sandwich|burger|pie|noodles?|rice|nasi|mee|salad|wrap|pizza|bun|roll|sauce|seasoning|sub|subway|tuna|fish|salmon|tofu|cheese)\b).*\bsteak\b/i, 'beef-steak'],
     [/^(?!.*\b(rice|nasi|burger|sandwich|wrap|salad|noodles?|mee|pizza|bun|roll|pie|soup|sup|puff|pau|roti|laksa|sub|subway)\b).*\b(roast(ed)? chicken|ayam panggang|rotisserie|ayam golek|whole chicken)\b/i, 'roast-chicken'],
     [/^(?!.*\b(burger|sandwich|rice|nasi|biryani|briyani|satay|soup|sup|pie|pizza|bun|roti|mee|noodles?|murtabak|martabak|chapati|capati|keema|prata|canai|sub|subway)\b).*\b(gulai kambing|kari kambing|mutton curry|lamb curry|kambing masak|curry (mutton|lamb)|rogan josh|kambing|mutton)\b/i, 'gulai-kambing'],
-    [/\b(steamed fish|ikan (stim|kukus)|(kukus|stim) ikan|teochew steamed fish)\b/i, 'steamed-fish']
+    [/\b(steamed fish|ikan (stim|kukus)|(kukus|stim) ikan|teochew steamed fish)\b/i, 'steamed-fish'],
+    [/^(?!.*\b(rice|nasi|noodles?|mee|laksa)\b).*\b(asam pedas|assam pedas|ikan asam|asam rebus|ikan masak asam)\b/i, 'asam-pedas']
   ];
   function foodIcon(name){
     var n = String(name || '');
