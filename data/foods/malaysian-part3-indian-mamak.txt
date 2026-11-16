@@ -1,0 +1,135 @@
+# Malaysian foods batch (Part_3). name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg  (per serving, estimates)
+Roti Canai Kosong (Roti Canai Plain with Dhal and Curry)|1 piece|95|256|6.2|36.5|9.5|2.2|420
+Roti Telur Double (Roti Canai with Double Egg)|1 piece|195|394|17|37.5|19.5|2.8|560
+Roti Telur Bawang (Roti Canai with Onion and Egg)|1 piece|160|336|12|39.5|14.5|3.5|510
+Roti Susu (Roti Canai Sweetened Condensed Milk)|1 piece|115|317|6.8|46.5|11.5|14.5|420
+Roti Cheese (Roti Canai with Cheese)|1 piece|120|320|10.5|37|14.5|2.5|580
+Roti Plaster (Roti Canai Plaster with Sunny Side Up Egg)|1 piece|145|334|11.5|37|15.5|2.5|490
+Roti Banjir Special (Roti Canai Tsunami Flooded with Curry and Soft Egg)|1 plate|260|392|14.5|42|18.5|3.5|780
+Roti Kaya (Roti Canai with Kaya Jam)|1 piece|115|312|6.5|45.5|11.5|12.5|430
+Roti Milo (Roti Canai with Milo Powder)|1 piece|115|312|7.2|46|11|13.5|430
+Roti Bawang Putih (Roti Canai with Garlic)|1 piece|105|272|6.5|38|10.5|2.4|440
+Roti Cheese Telur (Roti Canai with Mozzarella and Egg)|1 piece|170|388|15.5|37.5|19.5|2.8|650
+Roti Jala Kari Ayam (Roti Jala Net Crepe with Chicken Curry)|3 pieces with curry|240|356|18.5|38|14.5|3.5|680
+Roti Jala Kosong (Roti Jala Net Crepe Plain)|3 pieces|110|186|4.5|32|4.5|1.8|240
+Mamak Chicken Murtabak (Murtabak Ayam Mamak Style)|1 piece|300|430|24|44|17.5|3.8|840
+Mamak Beef Murtabak (Murtabak Daging Mamak Style)|1 piece|300|440|25|43.5|18.5|3.5|860
+Mamak Mutton Murtabak (Murtabak Kambing Mamak Style)|1 piece|310|456|24.5|43.5|20.5|3.5|880
+Mamak Sardine Murtabak (Murtabak Sardine Mamak Style)|1 piece|290|410|21.5|44|16.5|3.8|850
+Mamak Cheese Murtabak (Murtabak Cheese Special)|1 piece|340|504|28.5|44.5|23.5|4|990
+Capati Kosong (Chapati Whole Wheat Flatbread Plain)|1 piece|75|157|5.2|28.5|2.5|1.2|210
+Capati Kari Ayam (Chapati with Dhal and Chicken Curry)|1 set|250|356|22.5|34|14.5|3.2|690
+Capati Keema (Chapati with Keema Minced Mutton)|1 set|240|360|23|32|15.5|2.8|710
+Roti Naan Kosong (Naan Plain Tandoori Flatbread)|1 piece|110|238|7.5|44|3.5|3.2|360
+Roti Naan Bawang Putih (Naan Garlic)|1 piece|115|252|7.8|45|4.5|3.4|380
+Roti Naan Mentega (Naan Butter)|1 piece|120|282|7.5|44|8.5|3.2|410
+Roti Naan Cheese (Naan Cheese)|1 piece|150|336|13.5|44.5|11.5|3.5|560
+Roti Naan Cheese Bawang Putih (Naan Cheese Garlic)|1 piece|155|345|13.8|45.5|12|3.6|580
+Roti Naan Kashmiri (Naan Kashmiri Sweet Nut and Raisin)|1 piece|150|318|8.5|54|7.5|16.5|350
+Set Naan Ayam Tandoori (Naan with Tandoori Chicken Quarter)|1 set|340|460|36.5|48|13.5|4.5|980
+Set Naan Cheese Ayam Tandoori (Naan Cheese with Tandoori Chicken Quarter)|1 set|380|558|42.5|48.5|21.5|4.8|1180
+Ayam Tandoori Peha (Tandoori Chicken Quarter Leg)|1 piece|210|218|28.5|4.5|9.5|1.5|610
+Ayam Tandoori Dada (Tandoori Chicken Breast Quarter)|1 piece|210|204|32|4.5|6.5|1.5|590
+Ayam Tikka (Chicken Tikka Boneless Skewers)|4 pieces|160|190|26.5|4|7.5|1.2|540
+Puri (Poori Deep-Fried Puffed Bread)|2 pieces|100|250|4.5|32|11.5|1.5|280
+Puri Masala (Poori with Potato Masala)|1 set|220|340|6.5|46|14.5|3.2|560
+Bhatura (Bhatura Large Fried Leavened Bread)|1 piece|120|296|5.5|38|13.5|2.5|340
+Chole Bhatura (Chole Bhatura Chickpea Curry with Fried Bread)|1 set|320|444|13.5|56|18.5|4.8|790
+Tosai Kosong (Thosai Plain Crispy Fermented Crepe)|1 piece|110|176|4.2|32|3.5|1.2|280
+Tosai Masala (Thosai Masala with Spiced Potato Filling)|1 piece|220|294|6.5|48|8.5|2.8|540
+Tosai Telur (Thosai Egg)|1 piece|160|244|9.5|32.5|8.5|1.5|360
+Tosai Bawang (Thosai Onion)|1 piece|135|192|4.5|35|3.8|2.4|290
+Tosai Ghee Paper (Thosai Ghee Paper Thin)|1 piece|120|238|4.2|34|9.5|1.2|310
+Tosai Rava (Thosai Rava Semolina Crepe)|1 piece|140|230|4.8|38|6.5|1.5|340
+Tosai Rava Masala (Thosai Rava Masala)|1 piece|240|335|7|52|11|3|590
+Tosai Cheese (Thosai Cheese)|1 piece|140|240|8.5|32.5|8.5|1.5|440
+Tosai Sardin (Thosai Sardine)|1 piece|190|260|12.5|34.5|8|2.2|520
+Uttapam Kosong (Uttapam Thick Rice Lentil Pancake Plain)|1 piece|140|205|5.2|36|4.5|1.5|320
+Uttapam Bawang Tomato (Uttapam Onion and Tomato)|1 piece|170|224|5.8|39|5|2.8|350
+Idli Kosong (Idli Plain Steamed Cake)|2 pieces|120|137|4.8|28|0.6|0.8|240
+Putu Piring (Putu Piring Steamed Rice Cake with Palm Sugar)|2 pieces|90|153|1.8|28.5|3.5|12.5|110
+Putu Bambu (Putu Bambu Steamed Bamboo Rice Cake with Palm Sugar)|2 pieces|100|168|2|31.5|3.8|13.5|115
+Apam India (Appam Hopper Bowl-Shaped Fermented Pancake)|1 piece|95|150|3.2|26.5|3.5|4.5|180
+Apam Santan Manis (Appam with Sweet Coconut Milk)|1 piece|130|198|3.8|31|6.5|8.5|195
+Apam Telur (Appam with Egg)|1 piece|145|218|8.5|27|8.5|4.8|260
+Kuzhi Paniyaram Manis (Paniyaram Sweet Fried Dumplings)|4 pieces|120|207|3.2|34|6.5|12.5|140
+Kuzhi Paniyaram Pedas (Paniyaram Savory Spiced Dumplings)|4 pieces|120|188|4.5|28|6.5|2.2|340
+Mee Goreng Mamak Telur Mata (Mamak Mee Goreng with Egg)|1 plate|475|541|22.8|58.5|24|6.8|1220
+Mee Goreng Mamak Ayam (Mamak Mee Goreng with Ayam Goreng)|1 plate|540|624|34.5|62|26.5|7|1380
+Mee Goreng Mamak Sotong (Mamak Mee Goreng with Cuttlefish Sambal)|1 plate|480|514|23.5|61|19.5|8.5|1260
+Maggi Goreng Mamak (Mamak Maggi Goreng Fried Instant Noodles)|1 plate|380|428|13.5|54|17.5|5.2|1240
+Maggi Goreng Double (Mamak Maggi Goreng Double)|1 plate|540|626|19.5|82|24.5|6.8|1780
+Bihun Goreng Mamak (Mamak Bihun Goreng Fried Rice Vermicelli)|1 plate|370|408|14.5|55|14.5|5.5|980
+Kuey Teow Goreng Mamak (Mamak Kuey Teow Goreng Fried Flat Noodles)|1 plate|400|440|15.5|55|17.5|5.8|1060
+Indomee Goreng Telur (Mamak Indomee Goreng Special with Egg)|1 plate|360|432|14.5|52|18.5|6.2|1180
+Mee Rebus Mamak (Mamak Mee Rebus with Sweet Potato Gravy)|1 bowl|480|480|17.5|72|13.5|14.5|1120
+Mee Rojak Mamak (Mamak Mee Rojak with Fritters and Peanut Sauce)|1 plate|460|496|16.5|66|18.5|16.5|980
+Rojak Mamak Biasa (Mamak Rojak Pasembur without Noodles)|1 plate|350|386|13.5|46|16.5|14.5|820
+Rojak Ayam Mamak (Mamak Rojak Ayam with Fried Chicken)|1 plate|450|512|28.5|49|22.5|15|1040
+Rojak Sotong Mamak (Mamak Rojak Sotong with Sambal Squid)|1 plate|410|440|20.5|49|18|16.5|990
+Nasi Kandar Ayam Goreng (Nasi Kandar White Rice with Fried Chicken and Mixed Curries)|1 plate|480|592|33.5|64|22.5|4.8|1180
+Nasi Kandar Ayam Madu (Nasi Kandar with Ayam Madu Honey Chicken)|1 plate|490|594|32|68|21.5|11.5|1210
+Nasi Kandar Ayam Bawang (Nasi Kandar with Ayam Bawang Onion Chicken)|1 plate|490|604|33|65|23.5|6.5|1220
+Nasi Kandar Daging Hitam (Nasi Kandar with Daging Masak Hitam Dark Beef)|1 plate|470|566|31.5|64|20.5|6.8|1190
+Nasi Kandar Kambing (Nasi Kandar with Kambing Masala Mutton)|1 plate|490|598|33.5|63|23.5|5.2|1240
+Nasi Kandar Sotong (Nasi Kandar with Sotong Sambal Squid)|1 plate|450|520|26.5|64|17.5|6.5|1160
+Nasi Kandar Telur Sotong (Nasi Kandar with Telur Sotong Fish Roe)|1 plate|450|538|28.5|62|19.5|4.5|1180
+Nasi Kandar Kepala Ikan (Nasi Kandar with Kari Kepala Ikan Fish Head Curry)|1 plate|540|592|34.5|65|21.5|5.2|1280
+Nasi Kandar Udang (Nasi Kandar with Udang Galah Giant Prawn)|1 plate|470|536|29.5|63|18.5|4.8|1150
+Nasi Kandar Kuah Banjir Kosong (Nasi Kandar Kuah Banjir Flooded Curry Plain)|1 plate|320|364|7.5|62|9.5|3.5|780
+Nasi Daun Pisang Sayur (Banana Leaf Rice Vegetarian Set)|1 meal|520|516|14.5|82|14.5|5.5|1080
+Nasi Daun Pisang Ayam Goreng (Banana Leaf Rice with Fried Chicken)|1 meal|660|728|38.5|84|26.5|5.8|1420
+Nasi Daun Pisang Kambing Varuval (Banana Leaf Rice with Mutton Varuval)|1 meal|650|730|37.5|83|27.5|5.8|1460
+Nasi Daun Pisang Ikan (Banana Leaf Rice with Fish Curry and Fried Fish)|1 meal|650|690|36.5|83|23.5|5.8|1390
+Nasi Daun Pisang Ketam (Banana Leaf Rice with Crab Masala)|1 meal|660|672|34.5|85|21.5|6.2|1440
+Nasi Briyani Ayam India (Indian Chicken Briyani with Raita and Curry)|1 plate|490|600|33.5|68|21.5|5.2|1120
+Nasi Briyani Kambing India (Indian Mutton Briyani with Raita and Curry)|1 plate|500|624|35|67|24|5|1160
+Nasi Briyani Sayur (Indian Vegetable Briyani)|1 plate|420|456|11.5|72|13.5|5.5|890
+Nasi Dum Briyani Ayam (Hyderabadi Chicken Dum Briyani)|1 plate|510|614|35|68|22.5|5.2|1140
+Nasi Dum Briyani Kambing (Hyderabadi Mutton Dum Briyani)|1 plate|520|639|36.5|67|25|5|1180
+Thakkali Sadam (Tomato Rice Indian Style)|1 plate|260|296|5.5|54|6.5|3.8|480
+Elumichai Sadam (Lemon Rice South Indian Style)|1 plate|250|292|5.5|53|6.5|1.8|440
+Puliyodharai (Tamarind Rice South Indian Style)|1 plate|260|307|5.8|54|7.5|3.5|510
+Thayir Sadam (Curd Rice Yogurt Rice)|1 bowl|250|264|7.5|46|5.5|4.2|390
+Ven Pongal (Pongal Savory Rice and Lentil Porridge)|1 bowl|280|308|9.5|46|9.5|1.5|520
+Sakkarai Pongal (Sweet Pongal Jaggery Rice Pudding)|1 bowl|240|298|5.5|52|7.5|26.5|140
+Rava Upma (Upma Spiced Semolina Porridge)|1 bowl|240|262|6.5|42|7.5|2.2|480
+Ayam Varuval (Chicken Varuval Dry Spiced Chicken)|1 serving|160|250|25.5|6.5|13.5|2.2|590
+Kambing Varuval (Mutton Varuval Dry Spiced Mutton)|1 serving|160|272|26.5|6.5|15.5|2.2|620
+Ayam Perattal (Chicken Perattal Spicy Thick Curry)|1 serving|170|258|24.5|7.5|14.5|2.8|610
+Kambing Perattal (Mutton Perattal Spicy Thick Curry)|1 serving|170|280|25.5|7.5|16.5|2.8|640
+Ayam 65 (Chicken 65 Spiced Deep-Fried Chicken Bites)|1 serving|150|264|24|9.5|14.5|1.8|620
+Bunga Kobis 65 (Gobi 65 Spiced Deep-Fried Cauliflower)|1 serving|140|196|4.5|18.5|11.5|2.5|490
+Ayam Chettinad (Chicken Chettinad Pepper Chicken Curry)|1 serving|180|258|24.5|7.5|14.5|2.5|630
+Ayam Mentega India (Butter Chicken North Indian Creamy Tomato Curry)|1 serving|190|294|23.5|10.5|17.5|5.8|640
+Ayam Tikka Masala (Chicken Tikka Masala)|1 serving|190|284|24|10|16.5|5.5|650
+Paneer Mentega Masala (Paneer Butter Masala)|1 serving|180|230|11|11.5|15.5|5.2|580
+Kuah Dal (Dal Tadka Yellow Lentil Curry)|1 bowl|180|172|8.5|22|5.5|2.2|480
+Kuah Sambar (Sambar Lentil Vegetable Stew)|1 bowl|180|132|6.5|18.5|3.5|3.5|520
+Kuah Rasam (Rasam Tangy Tamarind Pepper Soup)|1 bowl|180|47|1.8|6.5|1.5|2.2|460
+Kari Kepala Ikan India (Fish Head Curry Indian Style)|1 serving|260|284|26.5|9.5|15.5|3.2|760
+Udang Masala (Prawn Masala Spicy Prawn Curry)|1 serving|160|220|20.5|8.5|11.5|3.2|610
+Ketam Masala (Crab Masala Spicy Crab Curry)|1/2 crab|240|226|23.5|9.5|10.5|3.5|740
+Cutlet Ikan (Fish Cutlet Fried Spiced Fish Patty)|2 pieces|120|192|12.5|16.5|8.5|1.5|420
+Sup Kambing Mamak (Mutton Bone Soup Indian Spiced)|1 bowl|350|254|23.5|7.5|14.5|1.8|920
+Sup Ayam Mamak (Chicken Soup Indian Spiced)|1 bowl|340|210|22|7|10.5|1.5|860
+Telur Ikan Goreng Rempah (Fish Roe Fried Spiced)|1 serving|100|204|18.5|4.5|12.5|0.8|480
+Peria Goreng Rangup (Bitter Gourd Chips Crispy Fried)|1 serving|60|190|2.5|14.5|13.5|1.5|360
+Pachadi Terung (Brinjal Pachadi Sweet Sour Eggplant Relish)|1 serving|100|124|1.8|14.5|6.5|8.5|380
+Raita Timun (Cucumber Raita Yogurt Salad)|1 serving|100|61|3.5|5.5|2.8|3.8|240
+Vadai Kacang Dal (Masala Vadai Crispy Lentil Fritter)|2 pieces|90|187|6.8|18.5|9.5|1.2|320
+Vadai Lembut (Ulundu Vadai Donut-Shaped Urad Dal Fritter)|2 pieces|90|190|6.5|19.5|9.5|1.2|310
+Samosa Sayur (Samosa Vegetable Fried Triangle Pastry)|2 pieces|110|209|4.2|24.5|10.5|2.2|380
+Samosa Ayam (Samosa Chicken Fried Triangle Pastry)|2 pieces|110|228|8.5|22.5|11.5|2|410
+Samosa Kambing (Samosa Mutton Fried Triangle Pastry)|2 pieces|110|236|9|22|12.5|2|420
+Pakora Bawang (Onion Pakora Crispy Onion Fritters)|4 pieces|100|191|3.8|22.5|9.5|2.8|340
+Pakora Pisang (Banana Pakora Sweet Fried Fritters)|4 pieces|100|199|2.2|28.5|8.5|11.5|210
+Aloo Bonda (Bondas Spiced Potato Balls)|2 pieces|110|188|3.5|24.5|8.5|1.8|350
+Omapodi (Omapodi Thin Crispy Sev Noodles)|1 serving|40|204|3.5|21.5|11.5|0.8|270
+Kacang Putih Campur (Mixture Spicy Indian Trail Mix)|1 serving|45|224|5.5|22.5|12.5|1.8|310
+Kacang Kuda Goreng (Kacang Putih Roasted Chickpeas)|1 serving|45|172|8.5|24.5|4.5|2.5|240
+Kacang Kuda Rebus (Kacang Kuda Rebus Boiled Spiced Chickpeas)|1 cup|120|183|10.5|28|3.2|3.5|360
+Mysore Pak (Mysore Pak Ghee Gram Flour Fudge)|1 piece|45|214|2.8|22.5|12.5|16.5|25
+Rava Kesari (Kesari Semolina Sweet Pudding with Cashews)|1 serving|100|262|2.5|44|8.5|26.5|45
+Gajar Ka Halwa (Halwa Carrot Sweet Pudding)|1 serving|100|244|3.2|36.5|9.5|24.5|55
+Barfi (Barfi Milk Fudge Square)|1 piece|45|181|3.8|24.5|7.5|18.5|45

@@ -1,0 +1,320 @@
+# Malaysian foods batch (Part_1). name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg  (per serving, estimates)
+Nasi Lemak Biasa (Coconut Milk Rice Plain)|1 packet|230|334|9.5|42|14.2|3.5|480
+Nasi Lemak Telur Mata (Coconut Milk Rice with Fried Egg)|1 plate|285|422|15.8|42.5|21|3.8|560
+Nasi Lemak Ayam Goreng Berempah (Coconut Milk Rice with Fried Chicken)|1 plate|420|602|34.5|52|28.5|5.2|920
+Nasi Lemak Rendang Ayam (Coconut Milk Rice with Chicken Rendang)|1 plate|410|580|31.2|48.5|29|6.5|890
+Nasi Lemak Rendang Daging (Coconut Milk Rice with Beef Rendang)|1 plate|400|564|32|47|27.5|6|870
+Nasi Lemak Sambal Kerang (Coconut Milk Rice with Sambal Cockles)|1 plate|350|448|21.4|46.8|19.5|6.8|950
+Nasi Lemak Ikan Goreng (Coconut Milk Rice with Sambal Fried Fish)|1 plate|380|490|28|46|21.5|5.5|860
+Nasi Lemak Ekstra Bilis Kacang (Coconut Milk Rice with Fried Anchovies and Peanuts Extra)|1 plate|310|448|16.5|46|22|4.5|780
+Nasi Kerabu Ayam Percik (Herb Rice with Fried Chicken)|1 plate|450|556|33|62|19.5|7.5|980
+Nasi Kerabu Ikan Celup Tepung (Herb Rice with Fried Fish)|1 plate|440|544|29.5|66|18|6.8|940
+Nasi Kerabu Solok Lada Telur Masin (Herb Rice with Salted Egg and Solok Lada)|1 plate|410|478|21|61.5|16.5|6.5|1150
+Nasi Kerabu Daging Bakar (Herb Rice with Grilled Beef)|1 plate|430|528|32.5|60|17.5|7.2|960
+Nasi Dagang Ikan Tongkol (East Coast Fish Curry Rice)|1 plate|420|513|27.5|58|19|5.8|880
+Nasi Dagang Ayam (East Coast Fish Curry Rice with Chicken)|1 plate|430|538|30|58.5|20.5|6|910
+Pulut Kuning Rendang Ayam (Turmeric Glutinous Rice with Chicken Rendang)|1 plate|340|480|24.5|54|18.5|4.5|690
+Pulut Kuning Rendang Daging (Turmeric Glutinous Rice with Beef Rendang)|1 plate|335|474|25.5|53|17.8|4.2|680
+Nasi Tomato Ayam Masak Merah (Spiced Tomato Rice with Ayam Masak Merah)|1 plate|450|550|31|65|18.5|9.5|960
+Nasi Minyak Kurma Ayam (Ghee Rice with Chicken Kurma)|1 plate|460|572|30.5|64|21.5|6.5|920
+Nasi Minyak Set Kenduri (Ghee Rice with Beef Dalca and Ayam Masak Merah)|1 plate|520|644|35|72|24|10.2|1120
+Nasi Ayam Melayu (Malay Chicken Rice)|1 plate|430|516|32|62|15.5|5|980
+Nasi Ayam Panggang (Malay Roasted Chicken Rice)|1 plate|435|517|33.5|62.5|14.8|5.5|990
+Nasi Lele Penyet (Smashed Catfish Rice)|1 plate|440|551|29|57|23|4|990
+Nasi Empal Penyet (Smashed Beef Rice)|1 plate|430|553|34.5|56.5|21|4.5|1020
+Nasi Ayam Geprek (Geprek Spicy Fried Chicken Rice)|1 plate|450|607|35.5|60|25|3.8|1080
+Nasi Kak Wok (Kelantanese Braised Chicken Rice)|1 plate|410|506|28.5|61|16.5|4.8|890
+Nasi Kukus Ayam Goreng Berempah (Kelantanese Spiced Chicken Rice)|1 plate|460|594|34|66|21.5|5.2|950
+Nasi Kukus Ayam Percik (Steamed Rice with Grilled Chicken)|1 plate|450|563|33|65|19|7.5|930
+Lemang Biasa (Bamboo Lemang Plain)|3 pieces|150|275|3.8|46.5|8.2|1.5|320
+Lemang Rendang Daging (Bamboo Lemang with Beef Rendang)|1 plate|280|458|21.5|49|19.5|4.8|740
+Nasi Impit Kuah Kacang (Compressed Rice Cubes with Peanut Sauce)|1 bowl|270|326|9.5|44|12.5|8.5|540
+Lontong Kuah Lodeh (Compressed Rice Cubes with Lodeh)|1 bowl|420|430|14|52|18.5|6.5|890
+Lontong Lengkap (Compressed Rice Cubes with Lodeh and Sambal Sotong)|1 bowl|480|508|21.5|56|22|8.2|1080
+Ketupat Palas (Ketupat Palas Glutinous Rice Plain)|2 pieces|120|214|3|36|6.5|2|240
+Ketupat Palas Serunding (Ketupat Palas with Serunding Daging)|2 pieces|150|269|9.5|38|8.8|3.5|420
+Nasi Goreng Paprik Ayam (Malay Fried Rice Paprik Chicken)|1 plate|470|516|26.5|61|18.5|7.5|1140
+Nasi Goreng Daging Merah (Malay Fried Rice Daging Merah)|1 plate|460|520|27|59|19.5|8.2|1120
+Nasi Goreng Ladna (Malay Fried Rice Ladna)|1 plate|480|489|24|60|17|5|1060
+Nasi Goreng Dabai (Malay Fried Rice Dabai Sarawak)|1 plate|380|426|14.5|55|16.5|2.5|890
+Nasi Goreng Corned Beef (Malay Fried Rice Corned Beef)|1 plate|390|452|19.5|54|17.5|2.8|1050
+Bubur Ayam Melayu (Malay Chicken Porridge)|1 bowl|350|276|16.5|38|6.5|1.8|780
+Bubur Lambuk Daging (Ramadan Spiced Beef Porridge)|1 bowl|380|326|18|42|9.5|2.2|820
+Bubur Lambuk Udang (Ramadan Spiced Seafood Porridge)|1 bowl|380|312|16.5|42.5|8.5|2.2|840
+Bubur Lambuk Terengganu (Terengganu Fish Porridge)|1 bowl|370|304|17.5|41|7.8|2|860
+Nasi Putih Separuh (White Steamed Rice Small)|1/2 plate|100|123|2.2|28|0.2|0.1|5
+Nasi Perang (Brown Steamed Rice)|1 plate|200|241|5.2|51|1.8|0.5|12
+Nasi Kerabu Biru Kosong (Blue Pea Flower Rice)|1 plate|200|244|4.5|55.5|0.5|0.3|15
+Nasi Kunyit Kosong (Yellow Turmeric Rice)|1 plate|200|275|4.6|54|4.5|0.5|180
+Nasi Minyak Kosong (Ghee Rice Plain)|1 plate|220|320|5|56|8.5|1.8|340
+Nasi Tomato Kosong (Tomato Rice Plain)|1 plate|220|306|4.8|57|6.5|3.5|380
+Nasi Briyani Kosong (Briyani Rice Plain Malay Style)|1 plate|230|335|5.5|58|9|2|410
+Nasi Briyani Gam Ayam (Johor Gam Briyani Chicken)|1 plate|500|628|35|68|24|6|1100
+Nasi Briyani Gam Kambing (Johor Gam Briyani Mutton)|1 plate|510|652|36.5|67|26.5|5.8|1120
+Nasi Campur Ayam Kari Sayur (Mixed Rice with Chicken Curry and Vegetables)|1 plate|450|526|28|62|18.5|4.5|920
+Nasi Campur Ikan Goreng Ulam (Mixed Rice with Fried Fish and Sambal Belacan)|1 plate|420|494|27.5|60|16|3.8|850
+Nasi Campur Daging Hitam (Mixed Rice with Beef Masak Hitam and Stir-fried Cabbage)|1 plate|440|536|29|61|19.5|6.5|960
+Nasi Campur Asam Pedas Telur Dadar (Mixed Rice with Asam Pedas Fish and Omelette)|1 plate|460|520|29.5|60|18|4.8|990
+Nasi Campur Masak Lemak Ayam (Mixed Rice with Masak Lemak Cili Api Chicken)|1 plate|450|545|28.5|60.5|21|4.2|910
+Mee Kari Melayu (Malay Curry Noodles)|1 bowl|480|530|24|58|22.5|5.5|1180
+Laksa Penang (Penang Assam Laksa)|1 bowl|450|382|19|62|6.5|8.5|1150
+Laksa Kedah (Kedah Laksa)|1 bowl|440|372|18.5|61|6|7.5|1120
+Laksam Kelantan (Kelantan Laksam)|1 bowl|420|430|16.5|56|15.5|6.5|890
+Laksa Kelantan Kuah Putih (Kelantan Laksa Kuah Putih)|1 bowl|420|426|17|57|14.5|6|880
+Laksa Kelantan Kuah Merah (Kelantan Laksa Kuah Merah)|1 bowl|430|439|18|58|15|6.8|920
+Laksa Sarawak (Sarawak Laksa)|1 bowl|470|503|24.5|54|21|5.2|1140
+Laksa Lemak Nyonya (Nyonya Curry Laksa)|1 bowl|490|544|23|58|24.5|6.5|1190
+Mee Kari Kering Ipoh (Ipoh Curry Mee Dry)|1 plate|420|482|22.5|54|19.5|4.8|1020
+Mee Goreng Melayu (Malay Fried Yellow Noodles)|1 plate|390|426|15.5|56|15.5|6.5|980
+Mee Goreng Ayam (Malay Fried Yellow Noodles with Chicken)|1 plate|460|518|27.5|58|19.5|6.8|1120
+Mee Rebus Melayu (Malay Mee Rebus)|1 bowl|470|476|18.5|68|14.5|12|1080
+Mee Soto Ayam (Malay Mee Soto Ayam)|1 bowl|440|400|22|52|11.5|3.5|960
+Mee Sup Ayam (Malay Mee Sup Ayam)|1 bowl|440|386|22|51|10.5|2.8|950
+Mee Ladna (Malay Mee Ladna)|1 plate|470|449|21.5|57|15|5.2|1040
+Mee Kungfu (Malay Mee Kungfu)|1 plate|480|490|23|58|18.5|5|1080
+Kuey Teow Goreng Melayu (Malay Fried Kuey Teow)|1 plate|380|424|15|54|16.5|5.8|950
+Char Kuey Teow Basah Melayu (Malay Wet Fried Kuey Teow)|1 plate|430|456|18.5|55|18|6.8|1080
+Kuey Teow Kungfu (Malay Kuey Teow Kungfu)|1 plate|470|476|22.5|56|18|4.8|1050
+Kuey Teow Sup Ayam (Malay Kuey Teow Sup Ayam)|1 bowl|430|370|21|50|9.5|2.5|920
+Bihun Goreng Melayu (Malay Fried Bihun)|1 plate|350|387|13.5|54|13|5.2|860
+Bihun Goreng Putih (Malay White Fried Bihun)|1 plate|340|380|14|53|12.5|3.2|820
+Bihun Sup Utara (Malay Bihun Sup Utara)|1 bowl|450|412|23|54|11.5|3.5|990
+Bihun Soto (Malay Bihun Soto)|1 bowl|430|392|21.5|53|10.5|3.2|940
+Soto Ayam Nasi Impit (Malay Soto Ayam with Nasi Impit)|1 bowl|420|381|22.5|48|11|3|920
+Mee Bakso (Malay Bakso Soup)|1 bowl|450|418|22|52|13.5|3.5|1050
+Maggi Goreng Melayu (Malay Instant Noodles Fried)|1 plate|360|406|12.5|52|16.5|4.5|1180
+Maggi Goreng Telur Mata (Malay Instant Noodles Fried with Egg)|1 plate|415|492|18.8|52.5|23|4.8|1260
+Maggi Sup Telur (Malay Instant Noodles Soup with Egg)|1 bowl|420|389|15.5|48|15|3.5|1290
+Rendang Kerang (Cockles Rendang)|1 serving|120|232|18.5|6.8|14.5|3.5|580
+Rendang Kupang (Mussels Rendang)|1 serving|120|222|17.5|6.5|14|3.4|560
+Kari Ayam Melayu (Chicken Curry Malay Style)|1 piece with gravy|180|248|19.5|7.5|15.5|2.8|560
+Kari Daging Melayu (Beef Curry Malay Style)|1 serving|160|246|22|7|14.5|2.5|550
+Kari Kepala Ikan Melayu (Fish Head Curry Malay Style)|1 serving|250|290|26|9.5|16.5|3.5|720
+Kari Ikan Pari (Stingray Fish Curry)|1 piece with gravy|180|235|22.5|7|13|2.8|580
+Kari Udang Nenas (Prawn Curry with Pineapple)|1 serving|160|226|18|10.5|12.5|5.8|540
+Spicy Tomato Chicken (Ayam Masak Merah)|1 piece with gravy|170|262|21.5|11.5|14.5|7.5|580
+Soy Sauce Chicken (Ayam Masak Kicap)|1 piece with gravy|170|248|22|9.5|13.5|5.5|680
+Negeri Sembilan Spicy Coconut Chicken (Ayam Masak Lemak Cili Api)|1 piece with gravy|180|266|21|6|17.5|2.2|540
+Smoked Beef in Spicy Coconut Gravy (Daging Salai Masak Lemak Cili Api)|1 serving|160|284|23.5|5.8|18.5|2|590
+Smoked Catfish in Coconut Gravy (Ikan Keli Salai Masak Lemak Cili Api)|1 fish with gravy|190|266|22|6.2|17|2.2|570
+Prawns in Coconut Gravy with Pineapple (Udang Masak Lemak Cili Api dengan Nenas)|1 serving|160|242|18.5|9.5|14.5|5|530
+Duck Egg in Spicy Coconut Gravy (Telur Itik Masak Lemak Cili Api)|1 egg with gravy|150|216|11.5|5.5|16.5|2|490
+Grilled Spiced Chicken with Coconut Sauce (Ayam Percik Kelantan)|1 piece|190|274|25|8.5|15.5|5.2|560
+Spiced Fried Chicken (Ayam Goreng Berempah)|1 piece|160|278|24.5|8|16.5|1.5|490
+Turmeric Fried Chicken Pieces (Ayam Goreng Kunyit)|1 serving|140|240|22|6.5|14|1.2|460
+Turmeric Fried Beef Pieces (Daging Goreng Kunyit)|1 serving|140|242|24|6|13.5|1.5|480
+Dark Spiced Beef (Daging Masak Hitam)|1 serving|150|280|24.5|10.5|15.5|6.2|620
+Crispy Spiced Beef (Daging Dendeng)|1 serving|120|294|25.5|11|16.5|6.8|650
+Fried Beef Lung with Chili (Paru Goreng Berlada)|1 serving|120|258|22|7.5|15.5|2.8|590
+Beef Liver in Soy Sauce (Hati Lembu Masak Kicap)|1 serving|130|222|21.5|8|11.5|4.2|610
+Beef Spleen in Chili (Limpa Masak Berlada)|1 serving|120|216|20.5|6.5|12|2.5|580
+Beef Tripe in Coconut Gravy (Babat Masak Lemak)|1 serving|150|214|16.5|5.5|14|2|540
+Beef Bone Soup (Sup Tulang)|1 bowl|350|252|22|8.5|14.5|1.8|890
+Oxtail Soup (Sup Ekor)|1 bowl|350|286|24|8|17.5|1.8|910
+Marrow Bone Soup (Sup Gear Box)|1 bowl|420|340|26.5|9|22|2|960
+Village Chicken Soup (Sup Ayam Kampung)|1 bowl|320|202|21.5|7.5|9.5|1.5|780
+Malay Mutton Soup (Sup Kambing Melayu)|1 bowl|340|266|23.5|8|15.5|1.8|880
+Malay Mushroom Soup (Sup Cendawan)|1 bowl|280|100|5.5|9.5|4.5|1.5|680
+Malay Mixed Vegetable Soup (Sup Sayur Campur)|1 bowl|280|92|4.5|10.5|3.5|2.5|650
+Spicy Sour Stingray Stew (Asam Pedas Ikan Pari)|1 piece with gravy|200|200|22.5|8.5|8.5|3.5|680
+Spicy Sour Mackerel Stew (Asam Pedas Ikan Kembung)|1 fish with gravy|190|184|21|8|7.5|3.2|660
+Spicy Sour Snapper Stew (Asam Pedas Ikan Jenahak)|1 piece with gravy|200|190|23.5|8.2|7|3.2|650
+Spicy Sour Beef Trimmings Stew (Asam Pedas Daging Tetel)|1 serving|180|248|20.5|9|14.5|3.8|710
+Spicy Sour Chicken Stew (Asam Pedas Ayam)|1 piece with gravy|190|219|21.5|8.5|11|3.5|670
+Silver Catfish in Fermented Durian Gravy (Ikan Patin Masak Tempoyak)|1 piece with gravy|210|266|22.5|11.5|14.5|4.8|640
+Fried Catfish with Chili (Ikan Keli Goreng Berlada)|1 fish|160|250|21|6.5|15.5|2.5|540
+Fried Indian Mackerel (Ikan Kembung Goreng)|1 fish|110|187|20.5|1.5|11|0.2|320
+Fried Mackerel with Chili (Ikan Kembung Goreng Berlada)|1 fish|140|238|21|6|14.5|2.5|510
+Grilled Indian Mackerel (Ikan Kembung Bakar)|1 fish|110|130|21.5|1|4.5|0.2|280
+Grilled Barramundi with Chili Paste (Ikan Siakap Bakar Sambal)|1/2 fish|220|282|34|8.5|12.5|3.8|690
+Three-Flavor Fried Barramundi (Ikan Siakap Tiga Rasa)|1/2 fish|250|350|32|18.5|16.5|11.5|780
+Steamed Barramundi with Lime (Ikan Siakap Stim Limau)|1/2 fish|230|222|33.5|7.5|6.5|3.2|650
+Stuffed Fried Hardtail Scad (Ikan Cencaru Sumbat Sambal)|1 fish|160|256|24|7.5|14.5|3|580
+Fried Tilapia with Chili (Ikan Talapia Goreng Berlada)|1 fish|180|259|24.5|6.5|15|2.5|550
+Pomfret in Soy Sauce (Ikan Bawal Masak Kicap)|1 fish|170|238|23|8.5|12.5|4.5|620
+Clear Turmeric Fish Soup (Ikan Masak Singgang)|1 bowl|250|136|20.5|5.5|3.5|1.5|610
+Fried Anchovies with Onion and Chili (Ikan Bilis Goreng Bawang Cili)|1 serving|60|214|16.5|5.5|14|1.8|780
+Anchovies in Fermented Durian with Stink Beans (Ikan Bilis Masak Tempoyak Petai)|1 serving|100|214|14.5|11|12.5|4.2|720
+Prawns in Chili Paste with Stink Beans (Sambal Udang Petai)|1 serving|150|228|19.5|9.5|12.5|4.5|640
+Rehydrated Cuttlefish in Chili Paste (Sambal Sotong Kembang)|1 serving|150|218|18|10.5|11.5|5.5|680
+Fresh Squid in Chili Paste (Sambal Sotong Segar)|1 serving|150|215|19.5|9.5|11|4.8|620
+Hard-Boiled Eggs in Chili Paste (Sambal Telur Rebus)|2 eggs|140|218|13.5|8.5|14.5|4.5|540
+Poached Eggs in Chili Paste (Sambal Telur Pecah)|2 eggs|140|219|13|8|15|4.2|530
+Anchovies in Chili Paste (Sambal Ikan Bilis)|1 serving|80|202|14|8.5|12.5|4.8|690
+Crispy Tempeh and Anchovies in Chili (Sambal Tempe dan Ikan Bilis)|1 serving|90|254|14.5|12|16.5|5.2|620
+Canned Sardines in Chili Paste (Sambal Sardin)|1 serving|130|208|18.5|7.5|11.5|3.8|650
+Spicy Galangal Cockles Stew (Sambal Tahun Kerang)|1 serving|130|214|17.5|8|12.5|2.5|610
+Fern Shoots in Coconut Milk (Masak Lemak Pucuk Paku)|1 serving|140|148|3.5|7.5|11.5|1.8|450
+Pumpkin in Coconut Milk (Masak Lemak Labu Manis)|1 serving|150|164|3|14.5|10.5|5.5|420
+Young Jackfruit in Coconut Milk (Masak Lemak Nangka Muda)|1 serving|150|166|3.2|13.5|11|3.2|460
+Cabbage in Coconut Milk (Masak Lemak Kobis)|1 serving|140|136|2.8|7.5|10.5|2.8|430
+Mixed Vegetables in Coconut Gravy (Sayur Lodeh)|1 bowl|220|202|5.5|14.5|13.5|4.2|640
+Water Spinach Stir-Fried with Shrimp Paste (Kangkung Goreng Belacan)|1 serving|130|116|3.5|6.5|8.5|1.5|580
+Chinese Kale with Salted Fish (Kailan Ikan Masin)|1 serving|130|116|4.5|6.5|8|1.5|650
+Bean Sprouts with Salted Fish (Taugeh Goreng Ikan Masin)|1 serving|120|108|4|6|7.5|1.8|590
+Long Beans Stir-Fried with Egg (Kacang Panjang Goreng Telur)|1 serving|130|132|6.5|7.5|8.5|2.2|480
+Angled Luffa Clear Soup (Petola Masak Air)|1 bowl|180|54|2.5|6.5|2|2.2|460
+Mustard Greens Clear Soup (Sawi Masak Air)|1 bowl|180|51|2.8|5.5|2|1.5|450
+Spinach Clear Soup (Bayam Masak Air)|1 bowl|180|51|3.2|5|2|1.2|440
+Pineapple in Spiced Coconut Curry (Pajeri Nenas)|1 serving|140|188|2.5|18.5|11.5|13.5|480
+Brinjal in Spiced Coconut Curry (Pajeri Terung)|1 serving|140|174|2.8|12.5|12.5|7.5|490
+Fried Brinjal with Chili (Terung Goreng Berlada)|1 serving|130|156|2.5|10.5|11.5|4.2|480
+Fried Okra with Chili (Bendi Goreng Berlada)|1 serving|120|131|2.8|8.5|9.5|3.2|450
+Bitter Gourd Stir-Fried with Egg (Peria Goreng Telur)|1 serving|130|133|6.5|6.5|9|1.5|470
+Banana Blossom in Coconut Milk (Jantung Pisang Masak Lemak)|1 serving|140|154|3|9.5|11.5|2.5|460
+Bamboo Shoots with Tripe in Coconut Gravy (Rebung Masak Lemak Perut)|1 serving|160|202|12.5|7.5|13.5|2|560
+Spicy Mango Salad (Kerabu Mangga)|1 serving|120|108|2.5|16.5|3.5|9.5|480
+Spicy Fern Shoot Salad (Kerabu Pucuk Paku)|1 serving|120|98|3.5|8.5|5.5|3.2|460
+Bean Sprouts and Cockles Salad (Kerabu Taugeh dan Kerang)|1 serving|130|123|11.5|8|5|3|540
+Spicy Squid Salad (Kerabu Sotong)|1 serving|130|124|14.5|8.5|3.5|4.2|520
+Spicy Beef Salad (Kerabu Daging)|1 serving|130|164|18.5|8|6.5|4|550
+Spicy Boneless Chicken Feet Salad (Kerabu Kaki Ayam)|1 serving|130|158|14|8.5|7.5|4.2|560
+Spicy Instant Noodle Salad (Kerabu Maggi)|1 plate|280|308|11.5|44|9.5|6.5|980
+Kelantanese Seaweed Salad (Kerabu Sare)|1 serving|120|114|3.5|10.5|6.5|3.5|490
+King's Salad Leaves (Ulam Raja Raw)|1 serving|50|22|1.5|3.5|0.2|0.5|10
+Pennywort Leaves (Pegaga Raw)|1 serving|50|19|1.2|3.2|0.2|0.4|15
+Boiled Tapioca Leaves (Pucuk Ubi Rebus)|1 serving|80|44|3.5|6.5|0.5|0.8|20
+Stink Beans (Petai Raw)|1 serving|40|47|3.5|6.5|0.8|1.2|12
+Dogfruit (Jering Raw)|1 serving|40|50|3.2|8.5|0.4|1.5|10
+Archidendron Bubalinum (Kerdas Raw)|1 serving|40|46|3|7.5|0.4|1.2|10
+Cucumber Slices (Timun Raw)|1 serving|60|11|0.4|2.2|0.1|1|2
+Pea Eggplant (Terung Pipit Raw)|1 serving|40|23|1.2|3.8|0.3|0.8|8
+Winged Beans (Kacang Botol Raw)|1 serving|50|24|1.8|3.5|0.3|1|10
+Chili Shrimp Paste Dip (Sambal Belacan)|1 tbsp|20|22|1.2|2.5|0.8|1.2|380
+Fermented Durian Chili Dip (Sambal Tempoyak)|1 tbsp|25|37|1|5.5|1.2|2.2|290
+Fermented Anchovy Sauce (Budu)|1 tbsp|15|14|1.8|1.2|0.2|0.5|850
+Fermented Small Shrimp Sauce (Cencaluk)|1 tbsp|20|19|2.4|1.5|0.4|0.6|790
+Spicy Sweet Soy Sauce Dip (Sambal Kicap)|1 tbsp|15|23|0.8|4.5|0.2|3.8|420
+Tamarind Chili Dip (Air Asam)|1 tbsp|20|16|0.4|3.2|0.2|1.8|310
+Pounded Bird's Eye Chili Paste (Sambal Gesek)|1 tbsp|20|34|0.8|2.2|2.5|0.8|340
+Green Chili Paste (Sambal Hijau)|1 tbsp|20|41|0.6|2.4|3.2|0.8|320
+Salted Duck Egg Half (Telur Masin)|1/2 egg|35|63|4.5|0.5|4.8|0.1|580
+Malay Style Omelette (Telur Dadar Melayu)|1 piece|90|145|8.5|1.8|11.5|0.5|320
+Sunny Side Up Fried Egg (Telur Mata Kerbau)|1 egg|55|88|6.3|0.5|6.8|0.3|80
+Hard-Boiled Egg (Telur Rebus)|1 egg|50|75|6.3|0.6|5.3|0.5|62
+Fried Salted Croaker Fish (Ikan Masin Gelama Goreng)|1 piece|30|80|9.5|0.5|4.5|0|980
+Fried Salted Gourami Fish (Ikan Masin Sepat Goreng)|1 piece|30|76|9|0.5|4.2|0|950
+Fried Salted Threadfin Fish (Ikan Masin Kurau Goreng)|1 piece|30|78|10.2|0.4|4|0|920
+Spiced Beef Floss (Serunding Daging)|1 serving|30|114|9.5|4.5|6.5|2.8|340
+Spiced Chicken Floss (Serunding Ayam)|1 serving|30|108|9.2|4.8|5.8|3|330
+Spiced Fish Floss (Serunding Ikan)|1 serving|30|103|8.8|5.2|5.2|3.2|350
+Spiced Grated Coconut (Serunding Kelapa)|1 serving|30|110|1.8|6.5|8.5|3.5|240
+Pickled Cucumber and Pineapple (Acar Timun dan Nenas)|1 serving|60|44|0.6|9.5|0.4|7.5|260
+Spiced Mixed Vegetable Pickles (Acar Rampai)|1 serving|60|78|1.2|10.5|3.5|7.2|340
+Spiced Dried Fruit Pickles (Acar Buah)|1 serving|50|116|1|18.5|4.2|14.5|380
+Terengganu Fried Fish Sausage (Keropok Lekor Fried)|5 pieces|100|241|11.5|24|11|1.5|680
+Terengganu Boiled Fish Sausage (Keropok Lekor Boiled)|5 pieces|100|168|12|24.5|2.5|1.5|650
+Fried Fish Crackers (Keropok Keping Ikan)|5 pieces|30|152|4.5|16.5|7.5|0.8|340
+Fried Prawn Crackers (Keropok Udang)|5 pieces|30|156|2.5|18.5|8|1.2|360
+Fried Melinjo Nut Crackers (Emping Melinjo)|1 serving|30|150|3.2|17.5|7.5|0.8|280
+Crispy Peanut Anchovy Cracker (Rempeyek Kacang Tanah)|1 piece|35|182|5.5|16.5|10.5|1.2|290
+Crispy Mung Bean Cracker (Tumpi Kacang Hijau)|1 piece|35|175|4.8|17.5|9.5|1|280
+Beef Satay (Sate Daging with Peanut Sauce)|5 sticks|150|274|24|14|13.5|8.2|640
+Mutton Satay (Sate Kambing with Peanut Sauce)|5 sticks|150|285|23.5|14|15|8.2|650
+Beef Tripe Satay (Sate Perut with Peanut Sauce)|5 sticks|150|234|18.5|14|11.5|8.2|630
+Kajang Style Chicken Satay (Sate Kajang Chicken)|5 sticks|175|302|26.5|16.5|14.5|9.5|710
+Kajang Style Beef Satay (Sate Kajang Beef)|5 sticks|175|316|28|16|15.5|9.2|730
+Grilled Spiced Fish Paste in Banana Leaf (Otak-Otak Muar Fish)|3 pieces|90|148|11.5|8.5|7.5|2.2|480
+Grilled Spiced Prawn Paste in Banana Leaf (Otak-Otak Prawn)|3 pieces|90|143|12|8|7|2.2|470
+Grilled Spiced Fish Coconut Parcel (Satar Terengganu)|3 pieces|105|172|12.5|11.5|8.5|3.5|460
+Grilled Glutinous Rice with Spicy Coconut Filling (Pulut Panggang)|1 piece|85|162|3.5|24.5|5.5|3.8|260
+Stuffed Pan-Fried Flatbread Chicken (Murtabak Ayam Malay Style)|1 piece|280|402|21.5|42|16.5|3.5|780
+Stuffed Pan-Fried Flatbread Beef (Murtabak Daging Malay Style)|1 piece|280|414|22.5|41.5|17.5|3.2|810
+Omelette Baguette Sandwich Chicken (Roti John Chicken)|1/2 loaf|240|336|17.5|34|14.5|5.5|720
+Omelette Baguette Sandwich Beef (Roti John Beef)|1/2 loaf|240|348|18.5|33.5|15.5|5.2|740
+Omelette Baguette Sandwich Sardine (Roti John Sardine)|1/2 loaf|240|324|16.5|34|13.5|5|750
+Omelette Baguette with Cheese and Sauces (Roti John Cheese Special)|1/2 loaf|270|392|20.5|36|18.5|7.5|890
+Malaysian Street Burger Chicken (Burger Ramly Chicken Single)|1 burger|210|320|16.5|31|14.5|5.5|760
+Malaysian Street Burger Beef (Burger Ramly Beef Single)|1 burger|210|330|17|30.5|15.5|5.2|780
+Wrapped in Egg with Sauces (Burger Ramly Chicken Special)|1 burger|265|412|22.5|32|21.5|6.5|880
+Wrapped in Egg with Sauces (Burger Ramly Beef Special)|1 burger|265|420|23|31.5|22.5|6.2|910
+Double Patty Wrapped in Egg (Burger Ramly Double Beef Special)|1 burger|340|549|34.5|33|31|7|1180
+Fried Egg Street Burger (Burger Benjo)|1 burger|165|260|10.5|28.5|11.5|4.8|590
+Oblong Beef Street Burger (Burger Daging Oblong)|1 burger|240|372|19.5|34|17.5|6.5|860
+Crispy Fried Chicken Street Burger (Burger Ayam Crispy)|1 burger|250|402|21|38|18.5|6|920
+Stuffed Fried Tofu with Chicken and Potato (Tauhu Bergedil Ayam)|2 pieces|140|206|11.5|16.5|10.5|1.8|460
+Stuffed Fried Tofu with Beef and Potato (Tauhu Bergedil Daging)|2 pieces|140|211|12|16|11|1.8|470
+Fried Potato Patty (Bergedil Kentang)|2 pieces|100|156|3.5|18.5|7.5|1.2|320
+Stuffed Fried Tofu with Cucumber and Bean Sprouts (Tauhu Sumbat)|2 pieces|160|172|9.5|14.5|8.5|5.5|420
+Fresh Spring Roll with Sweet Chili Sauce (Popia Basah)|2 pieces|160|182|6.5|26.5|5.5|8.5|480
+Crispy Fried Spring Roll (Popia Goreng)|2 pieces|120|182|5|21.5|8.5|4.2|390
+Crispy Spring Roll Glazed in Sweet Chili (Popia Sira Sambal)|2 pieces|130|204|5.2|25.5|9|8.2|450
+Prawn Fritters (Cucur Udang)|3 pieces|135|210|8.5|22.5|9.5|2.5|460
+Anchovy Fritters (Cucur Bilis)|3 pieces|120|192|7.5|21.5|8.5|2|480
+Onion Fritters (Cucur Bawang)|3 pieces|120|176|3.5|22.5|8|2.5|390
+Sweet Corn Fritters (Cucur Jagung)|3 pieces|120|184|3.5|24.5|8|4.5|380
+Banana Fritters Balls (Cucur Pisang)|5 pieces|125|223|2.2|34.5|8.5|14.5|240
+Battered Fried Banana (Pisang Goreng)|3 pieces|150|272|2|42.5|10.5|18.5|220
+Fried Banana with Grated Cheese and Condensed Milk (Pisang Goreng Cheese)|1 serving|200|366|6.5|48|16.5|24|360
+Battered Fried Sweet Potato (Keledek Goreng)|3 pieces|150|256|2.2|40.5|9.5|11.5|210
+Battered Fried Breadfruit (Sukun Goreng)|3 pieces|150|247|2.4|39|9|6.5|210
+Battered Fried Cempedak (Cempedak Goreng)|3 pieces|150|273|3.2|41.5|10.5|19.5|220
+Battered Fried Taro (Keladi Goreng)|3 pieces|150|250|2.5|38.5|9.5|3.5|210
+Battered Fried Tempeh (Tempe Goreng Tepung)|3 pieces|120|220|12.5|16.5|11.5|1.2|360
+Battered Fried Tofu (Tauhu Goreng Tepung)|3 pieces|130|194|10.5|14.5|10.5|1|340
+Taiwanese-Style Spicy Fried Chicken Cutlet (Ayam Gunting)|1 piece|200|382|32|22|18.5|1.5|890
+Grilled Street Sausage (Sosej Bakar)|1 stick|80|164|8.5|6.5|11.5|2.5|560
+Fried Fish Balls on Skewer (Bebola Ikan Goreng)|5 pieces|100|154|9.5|14.5|6.5|1.5|580
+Fried Beef Balls on Skewer (Bebola Daging Goreng)|5 pieces|100|172|11.5|12.5|8.5|1.5|610
+Grilled Sweet Corn on the Cob (Jagung Bakar)|1 cob|180|178|4.5|32|3.5|7.5|180
+Steamed Sweet Corn Cup with Butter and Milk (Jagung Cup Manis)|1 cup|150|189|4.2|28.5|6.5|9.5|260
+Boiled Peanuts in Shell (Kacang Rebus)|1 cup|100|318|13.5|11|24.5|2.2|280
+Boiled Tapioca with Grated Coconut (Ubi Kayu Rebus dengan Kelapa Parut)|1 serving|180|262|2.5|48.5|6.5|3.5|190
+Fried Tapioca Wedges (Ubi Kayu Goreng)|1 serving|150|272|2|44.5|9.5|2.2|240
+Crispy Thin Fish Crackers (Leikor Goreng Rangup)|1 cup|50|240|7.5|24.5|12.5|1.2|490
+Pandan Custard Glutinous Rice Cake (Kuih Seri Muka)|1 piece|85|160|3.2|24.5|5.5|11.5|140
+Steamed Layered Rice Flour Cake (Kuih Lapis)|1 piece|80|132|1.5|23.5|3.5|11|110
+Steamed Two-Layer Pandan Coconut Cake (Kuih Talam Pandan)|1 piece|85|141|2|22.5|4.8|10.5|135
+Steamed Two-Layer Taro Coconut Cake (Kuih Talam Keladi)|1 piece|85|146|2.2|23.5|4.8|10.5|135
+Steamed Two-Layer Tapioca Coconut Cake (Kuih Talam Ubi)|1 piece|85|148|1.5|25.5|4.5|11.5|120
+Savory Spiced Meat Coconut Batter Cake (Kuih Cara Berlauk)|2 pieces|80|130|5.5|14.5|5.5|2.2|260
+Sweet Pandan Coconut Batter Cake (Kuih Cara Manis)|2 pieces|75|128|2|21.5|3.8|10.5|115
+Pandan Crepe Rolled with Palm Sugar Coconut (Kuih Ketayap)|1 piece|75|137|2.2|22.5|4.2|11.5|110
+Sweet Potato Doughnut Glazed with Sugar (Kuih Keria)|1 piece|60|134|1.2|24.5|3.5|10.5|85
+Sweet Potato Doughnut Glazed with Palm Sugar (Kuih Keria Gula Melaka)|1 piece|65|149|1.3|27.5|3.8|13.5|90
+Glutinous Rice Triangle with Coconut and Palm Sugar Syrup (Kuih Lopes)|1 piece|95|166|2.2|31.5|3.5|12.5|110
+Steamed Palm Sugar Rice Cake with Grated Coconut (Kuih Kosui)|2 pieces|80|129|1.5|24.5|2.8|11.5|95
+Steamed Pandan Rice Cake with Grated Coconut (Kuih Kaswi Pandan)|2 pieces|80|129|1.5|24.5|2.8|11.5|95
+Pandan Glutinous Rice Balls with Palm Sugar (Kuih Onde-Onde)|3 pieces|65|117|1.4|21.5|2.8|10.5|75
+Glutinous Rice Balls in Creamy Coconut Sauce (Kuih Badak Berendam)|3 pieces|130|200|2.5|28.5|8.5|12.5|145
+Steamed Pandan Coconut Milk Pudding in Banana Leaf (Kuih Tepung Pelita)|1 piece|85|126|1.8|19.5|4.5|9.5|115
+Steamed Water Chestnut Coconut Pudding in Pandan Leaf (Kuih Tako)|1 piece|85|126|1.6|20.5|4.2|10|110
+Kelantanese Layered Rice Pudding with Palm Sugar (Kuih Lompat Tikam)|1 bowl|150|208|2.8|34.5|6.5|14.5|135
+Kelantanese Wrinkled Egg and Palm Sugar Cake (Kuih Akok Kedut)|1 piece|65|134|4.5|16.5|5.5|11.5|95
+Terengganu Sponge Cake in Sweet Syrup (Kuih Nekbat)|2 pieces|90|135|2.5|28.5|1.2|18.5|65
+Kelantanese Golden Egg Yolk Threads (Kuih Jala Mas)|1 serving|50|146|4.2|24.5|3.5|19.5|45
+Kelantanese Sweet Egg White Fudge (Kuih Tahi Itik)|2 pieces|60|146|4.5|26.5|2.5|21.5|60
+Kelantanese Spiced Egg Yolk Drop in Syrup (Kuih Buah Tanjung)|2 pieces|65|150|4.8|25.5|3.2|20.5|55
+Kelantanese Sweet Potato Fritter with Sugar Center (Kuih Cek Mek Molek)|2 pieces|80|160|1.5|28.5|4.5|12.5|85
+Steamed Red Tapioca Pearl Cake with Coconut (Kuih Sagu Merah)|1 piece|75|124|0.8|24.5|2.5|10.5|75
+Baked Tapioca Cake (Kuih Bingka Ubi)|1 piece|85|152|1.4|26.5|4.5|11.5|110
+Baked Pandan Custard Cake (Kuih Bingka Pandan)|1 piece|85|151|2.8|22.5|5.5|10.5|125
+Baked Pandan Sesame Custard Cake (Kuih Bakar Kemboja)|1 piece|85|152|3|22|5.8|10.5|125
+Traditional Baked Egg Sponge Cake (Kuih Bahulu)|3 pieces|45|129|2.8|24.5|2.2|12.5|65
+Crispy Peanut Sweet Corn Folded Pancake (Kuih Apam Balik Crispy)|1 piece|95|189|4.2|28.5|6.5|11.5|165
+Fluffy Peanut Sweet Corn Folded Pancake (Kuih Apam Balik Thick)|1 piece|140|254|5.8|38.5|8.5|14.5|220
+Steamed Colorful Blossom Rice Cake (Kuih Apam Mekar)|1 piece|60|96|1.8|19.5|1.2|8.5|75
+Steamed Caramel Sponge Cake (Kuih Apam Gula Hangus)|1 piece|65|117|2.2|21.5|2.5|10.5|95
+Steamed Fermented Rice Cake with Coconut (Kuih Apam Nasi)|2 pieces|80|124|2|23.5|2.5|8.5|90
+Steamed Palm Sugar Rice Cake in Rambai Leaf (Kuih Apam Johol)|1 piece|85|136|2.2|25.5|2.8|11.5|95
+Steamed Bun with Red Bean Paste (Kuih Pau Kacang Merah)|1 piece|85|178|4.5|34.5|2.5|11.5|160
+Steamed Bun with Coconut Egg Jam (Kuih Pau Kaya)|1 piece|85|182|4.2|33.5|3.5|12.5|165
+Steamed Bun with Sweet Palm Sugar Coconut (Kuih Pau Kelapa)|1 piece|85|186|4|34|3.8|12|160
+Steamed Bun with Savory Chicken Filling (Kuih Pau Ayam)|1 piece|95|200|7.5|32.5|4.5|4.5|280
+Steamed Bun with Savory Beef Filling (Kuih Pau Daging)|1 piece|95|205|8|32|5|4.2|290
+Potato Curry Puff (Karipap Kentang)|1 piece|65|156|2.5|19.5|7.5|1.5|210
+Chicken and Potato Curry Puff (Karipap Ayam)|1 piece|70|167|4.2|19.5|8|1.5|230
+Beef and Potato Curry Puff (Karipap Daging)|1 piece|70|170|4.5|19|8.5|1.5|240
+Sardine Curry Puff (Karipap Sardin)|1 piece|70|165|4.8|18.5|8|1.8|250
+Spiral Flaky Crust Curry Puff (Karipap Pusing)|1 piece|75|193|3.2|21.5|10.5|1.5|235
+Vegetable Fried Pastry Puff (Epok-Epok Sayur)|1 piece|65|152|2.2|19.5|7.2|1.8|205
+Sweet Potato Fritter with Spicy Coconut Filling (Kuih Cucur Badak)|1 piece|65|140|2.2|20.5|5.5|3.5|195
+Steamed Glutinous Rice with Sweet Coconut Topping (Kuih Pulut Inti)|1 piece|85|159|2.4|26.5|4.8|10.5|115
+Grilled Glutinous Rice with Dried Shrimp (Kuih Pulut Panggang Udang Kering)|1 piece|85|162|4.2|24|5.5|3.2|290
+Sweet Glutinous Rice Cooked with Palm Sugar and Coconut (Kuih Wajik)|1 piece|70|162|1.8|28.5|4.5|14.5|85
+Sticky Palm Sugar Coconut Toffee (Dodol Gula Melaka)|1 piece|35|109|0.8|18.5|3.5|12.5|45
+Sticky Durian Coconut Toffee (Dodol Durian)|1 piece|35|114|0.9|19|3.8|13|45
+Sabah Crispy Ring Biscuit (Kuih Cincin Sabah)|2 pieces|50|178|1.5|28.5|6.5|11.5|95
+Sabah and Sarawak Fried Palm Sugar Rice Cake (Kuih Penyaram)|1 piece|65|154|1.6|24.5|5.5|11.5|85
+Sarawak Steamed Pandan Coconut Cone Cake (Kuih Jelurut)|1 piece|75|135|1.8|22.5|4.2|10.5|105
+Sarawak Steamed Rice Flour and Palm Sugar Pudding (Kuih Bongkol)|1 piece|110|164|2|26.5|5.5|12.5|120
