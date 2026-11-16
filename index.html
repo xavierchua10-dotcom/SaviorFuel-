@@ -2074,7 +2074,7 @@
      serving. They are loaded in the background, searched on the phone (so
      they work offline) and shown after your own/saved foods, before the
      online sources. They are estimates, and are labelled that way. */
-  var BUILTIN_FILES = ['rice-noodles-breakfast', 'malaysian-dishes', 'kuih-desserts-drinks', 'western-staples', 'fruit-veg-asian-more', 'malaysian-part1-malay', 'malaysian-part2-chinese-kopitiam', 'malaysian-part3-indian-mamak', 'malaysian-part4-nyonya-east-malaysia', 'malaysian-part5-drinks-fruit-staples', 'nutrition-part1-chains', 'nutrition-part2-packaged-brands', 'nutrition-part3-sg-th-id-ph-bn', 'nutrition-part4-japan-korea-vn-china', 'nutrition-part5-western-mideast-indian', 'nutrition-part6-raw-ingredients', 'nutrition-part7-snacks-bakery-fitness', 'nutrition2-part1-indonesian', 'nutrition2-part2-indo-brands-malaysian-regional', 'nutrition2-part3-convenience-hk-taiwan', 'nutrition2-part4-thai-vn-khmer-lao-burmese']; // file order = tie-break order in results
+  var BUILTIN_FILES = ['rice-noodles-breakfast', 'malaysian-dishes', 'kuih-desserts-drinks', 'western-staples', 'fruit-veg-asian-more', 'malaysian-part1-malay', 'malaysian-part2-chinese-kopitiam', 'malaysian-part3-indian-mamak', 'malaysian-part4-nyonya-east-malaysia', 'malaysian-part5-drinks-fruit-staples', 'nutrition-part1-chains', 'nutrition-part2-packaged-brands', 'nutrition-part3-sg-th-id-ph-bn', 'nutrition-part4-japan-korea-vn-china', 'nutrition-part5-western-mideast-indian', 'nutrition-part6-raw-ingredients', 'nutrition-part7-snacks-bakery-fitness', 'nutrition2-part1-indonesian', 'nutrition2-part2-indo-brands-malaysian-regional', 'nutrition2-part3-convenience-hk-taiwan', 'nutrition2-part4-thai-vn-khmer-lao-burmese', 'nutrition3-part1-south-asian', 'nutrition3-part2-european-american-latin', 'nutrition3-part3-produce-meat-seafood', 'nutrition3-part4-healthy-special-diet', 'nutrition3-part5-dessert-cafe-bakery']; // file order = tie-break order in results
   var builtinFoods = null, builtinLoading = null;
 
   function parseBuiltin(text){
@@ -2086,7 +2086,7 @@
       var n = function(i){ var v = parseFloat(p[i]); return isFinite(v) && v > 0 ? v : 0; };
       var g = n(2);
       // "1 plate" -> "1 plate (300 g)" so the serving also works in grams / ounces
-      var label = p[1] + ((g > 0 && !/(^|\s)(g|ml)$/i.test(p[1])) ? ' (' + g + ' g)' : '');
+      var label = p[1] + ((g > 0 && !/(^|\s|\d)(g|ml)$/i.test(p[1])) ? ' (' + g + ' g)' : '');
       out.push({
         product_name: p[0], brands: '', _image: '', _note: '', _source: 'saved', _builtin: true,
         _servingLabel: label, _k: p[0].toLowerCase(),

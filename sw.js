@@ -17,7 +17,7 @@
 // caching logic changes, so old cached entries get cleaned up on
 // the next activate rather than lingering forever.
 
-var SHELL_CACHE = 'saviorfuel-shell-v106';
+var SHELL_CACHE = 'saviorfuel-shell-v107';
 var RUNTIME_CACHE = 'saviorfuel-runtime-v1';
 
 // Required: cache.addAll() aborts the whole install if even one URL in
@@ -53,7 +53,12 @@ var SHELL_FILES = [
   './data/foods/nutrition2-part1-indonesian.txt',
   './data/foods/nutrition2-part2-indo-brands-malaysian-regional.txt',
   './data/foods/nutrition2-part3-convenience-hk-taiwan.txt',
-  './data/foods/nutrition2-part4-thai-vn-khmer-lao-burmese.txt'
+  './data/foods/nutrition2-part4-thai-vn-khmer-lao-burmese.txt',
+  './data/foods/nutrition3-part1-south-asian.txt',
+  './data/foods/nutrition3-part2-european-american-latin.txt',
+  './data/foods/nutrition3-part3-produce-meat-seafood.txt',
+  './data/foods/nutrition3-part4-healthy-special-diet.txt',
+  './data/foods/nutrition3-part5-dessert-cafe-bakery.txt'
 ];
 // Nice-to-have (big 3D models for the Insights tab): fetched after install,
 // one by one, and a failure here never blocks the install.

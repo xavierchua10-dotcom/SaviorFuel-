@@ -1,0 +1,131 @@
+# Nutrition batch 3 part 1. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Nihari (slow-cooked beef shank stew)|1 bowl|350|390|34|14|22|3|980
+Haleem (wheat, lentil and shredded meat porridge)|1 bowl|300|358|22|36|14|3|850
+Chicken Karahi (wok-cooked spicy tomato poultry curry)|1 bowl|280|323|28|10|19|4|790
+Mutton Karahi (wok-cooked spicy goat meat curry)|1 bowl|280|338|26|9|22|4|820
+Chapli Kebab (spiced minced beef flat patty)|1 piece|120|248|18|8|16|1.5|540
+Seekh Kebab (grilled skewered minced lamb)|2 pieces|140|234|22|5|14|1|610
+Chicken Sajji (whole roasted marinated poultry)|1 quarter|220|287|36|2|15|0.5|680
+Paya (slow-simmered goat trotter soup)|1 bowl|320|282|24|6|18|1|890
+Aloo Keema (minced beef and potato curry)|1 bowl|250|312|20|22|16|3|720
+Bun Kebab (spiced lentil and egg burger)|1 piece|180|275|12|32|11|4|640
+Sindhi Biryani (spicy layered mutton and potato rice)|1 plate|380|490|24|58|18|4|1050
+Chicken Peshawari Karahi (black pepper and tomato poultry dish)|1 bowl|280|310|29|8|18|3.5|760
+Daal Mash (dry-fried white urad lentils)|1 bowl|200|229|11|26|9|2|510
+Shami Kebab (pan-fried minced meat and chana dal patty)|2 pieces|120|197|15|14|9|1.5|480
+Kacchi Biryani (marinated raw goat meat layered with basmati)|1 plate|400|532|26|62|20|3.5|1120
+Bhuna Khichuri (spiced roasted rice and mung lentil pilaf)|1 plate|320|368|11|54|12|2|680
+Shorshe Ilish (hilsa fish in pungent mustard gravy)|1 piece|200|279|22|5|19|1.5|620
+Chingri Malai Curry (prawns cooked in creamy coconut milk)|1 bowl|240|274|20|8|18|4|690
+Beef Tehari (spiced mustard oil beef and rice pilaf)|1 plate|360|465|22|56|17|2.5|940
+Panta Bhat (fermented overnight soaked rice)|1 bowl|250|230|4.5|52|0.5|0.5|15
+Aloo Bhorta (mashed potatoes with mustard oil and chili)|1 scoop|100|125|2|18|5|1|320
+Begun Bhorta (charred mashed eggplant with onions)|1 scoop|100|96|1.5|9|6|3.5|290
+Shutki Bhorta (spicy mashed fermented dried fish)|1 tablespoon|40|92|11|3|4|1|780
+Morog Polao (mild aromatic chicken and fragrant rice)|1 plate|380|476|25|58|16|3|890
+Fuchka (crispy hollow shells with spiced tamarind water)|6 pieces|160|202|5|32|6|5|650
+Chotpoti (spiced yellow peas with grated egg and tamarind)|1 bowl|240|242|11|36|6|4.5|710
+Mughlai Paratha (pan-fried flatbread stuffed with egg and mince)|1 piece|220|327|14|34|15|2|640
+Roshogolla (spongy cottage cheese balls in light syrup)|2 pieces|100|206|5|42|2|38|35
+Mishti Doi (sweetened caramelized fermented yogurt)|1 cup|140|190|6|28|6|24|75
+Dal Bhat Tarkari (lentil soup, steamed rice and vegetable curry)|1 platter|480|477|15|84|9|4|820
+Chicken Momo (steamed spiced poultry dumplings)|8 pieces|240|271|18|34|7|2|680
+Buff Momo (steamed water buffalo meat dumplings)|8 pieces|240|284|20|33|8|2|710
+Veg Momo (steamed cabbage and paneer dumplings)|8 pieces|240|242|9|38|6|3|620
+Jhol Momo (dumplings submerged in spicy sesame tomato broth)|1 bowl|350|336|19|38|12|4|920
+Thukpa (Himalayan noodle soup with vegetables and meat)|1 bowl|420|394|22|54|10|4.5|1080
+Sel Roti (traditional ring-shaped sweet fried rice bread)|1 piece|90|293|2.5|46|11|14|120
+Chatamari (thin rice flour crepe topped with egg and mince)|1 piece|160|207|12|24|7|1.5|450
+Yomari (steamed rice flour dumpling filled with molasses)|2 pieces|140|256|3|52|4|22|45
+Aloo Tama (tangy bamboo shoot, potato and black-eyed pea curry)|1 bowl|220|203|7|28|7|3|690
+Gundruk (fermented leafy greens soup)|1 bowl|200|83|4|10|3|2|580
+Sekuwa (charcoal-grilled marinated spiced pork)|150g|150|242|26|3|14|1|590
+Choila (spiced grilled water buffalo meat salad)|1 bowl|160|231|28|5|11|1.5|640
+Bara (pan-fried black lentil savory pancake)|2 pieces|120|182|10|22|6|1|410
+Juju Dhau (creamy sweetened clay-pot yogurt)|1 cup|150|196|7|24|8|20|85
+Kottu Roti (chopped flatbread stir-fried with egg and vegetables)|1 plate|380|414|16|56|14|4|980
+Chicken Kottu (chopped flatbread stir-fried with poultry and curry)|1 plate|400|460|24|55|16|4|1060
+Hoppers (bowl-shaped fermented rice and coconut pancake)|2 pieces|120|160|3|28|4|2|240
+Egg Hopper (crispy rice pancake with baked egg center)|1 piece|110|159|8|16|7|1.5|290
+String Hoppers (steamed red rice flour noodle nests)|6 pieces|150|161|4|34|1|0.5|180
+Pol Sambol (spicy fresh grated coconut and chili relish)|2 tablespoons|40|103|1.5|4|9|2|280
+Fish Ambul Thiyal (dry sour black pepper tuna curry)|150g|150|189|32|4|5|1|740
+Parippu (creamy coconut milk red lentil curry)|1 bowl|200|216|10|26|8|2.5|520
+Pol Roti (thick coconut and wheat flour flatbread)|2 pieces|140|234|4|32|10|2|360
+Lamprais (baked banana leaf parcel of rice, meat and sambols)|1 packet|450|514|26|62|18|5|1150
+Watalappan (steamed coconut custard with jaggery and cardamom)|1 slice|130|231|5|28|11|24|95
+Kiribath (creamy coconut milk-cooked rice squares)|2 pieces|180|256|4|42|8|2|260
+Kukul Mas Curry (spicy roasted curry powder chicken stew)|1 bowl|250|266|27|8|14|3|780
+Isso Wade (crispy deep-fried lentil fritters topped with prawns)|2 pieces|130|240|11|22|12|1.5|490
+Gotukola Sambol (finely shredded pennywort herb salad)|1 bowl|80|77|2|6|5|1.5|210
+Dhokla (steamed fermented chickpea flour spongy cake)|3 pieces|150|181|8|26|5|6|540
+Khandvi (rolled seasoned gram flour pinwheels with mustard seeds)|6 pieces|120|150|6|18|6|3|460
+Thepla (spiced fenugreek and whole wheat flatbread)|2 pieces|110|187|5|26|7|2|390
+Undhiyu (slow-cooked mixed winter vegetables and fenugreek dumplings)|1 bowl|250|274|7|30|14|6|680
+Fafda (crispy fried spiced chickpea flour strips)|50g|50|242|7|22|14|1|420
+Handvo (baked savory lentil and bottle gourd cake)|1 slice|140|178|7|24|6|3.5|480
+Sev Khamani (crumbled spiced gram flour topped with pomegranate)|1 bowl|160|203|7|28|7|8|510
+Gujarati Kadhi (sweet and tangy yogurt gram flour soup)|1 bowl|200|121|5|14|5|8|490
+Muthiya (steamed fenugreek and wheat flour dumplings)|4 pieces|140|173|6|26|5|3|440
+Khakhra (thin roasted crispy whole wheat cracker)|2 pieces|60|198|4|32|6|1|340
+Basundi (thickened sweetened milk flavored with nuts and saffron)|1 bowl|150|234|8|28|10|24|110
+Lilva Kachori (fried pastry stuffed with spiced green pigeon peas)|2 pieces|120|241|5|26|13|3|450
+Dabeli (spiced mashed potato bun with peanuts and pomegranate)|1 piece|180|244|5|38|8|9|620
+Shrikhand (strained thick yogurt sweetened with saffron and cardamom)|1 bowl|130|223|8|32|7|28|65
+Chole Bhature (spicy chickpea curry with puffy fried bread)|1 plate|360|510|14|64|22|5|980
+Paneer Tikka (chargrilled marinated cottage cheese and peppers)|6 pieces|180|230|18|8|14|3.5|590
+Rajma Chawal (red kidney bean curry served over steamed rice)|1 plate|380|400|14|68|8|4|780
+Sarson Da Saag (spiced mustard greens puree with butter)|1 bowl|220|188|6|14|12|3|640
+Makki Di Roti (pan-cooked yellow cornmeal flatbread)|2 pieces|140|206|4|34|6|1.5|320
+Amritsari Kulcha (crisp tandoor bread stuffed with spiced potatoes)|1 piece|180|282|6|42|10|2.5|560
+Kadai Paneer (cottage cheese cooked with bell peppers and coriander)|1 bowl|240|269|15|14|17|4.5|710
+Pinni (roasted whole wheat and ghee sweet energy ball)|1 piece|60|224|3|26|12|16|35
+Macher Jhol (light turmeric and potato river fish stew)|1 bowl|280|233|24|14|9|2.5|680
+Kosha Mangsho (slow-braised rich dark mutton curry)|1 bowl|250|341|28|10|21|4|810
+Luchi Aloor Dom (puffy white fried flatbreads with spiced potatoes)|1 plate|280|380|7|52|16|4.5|690
+Shukto (creamy bitter gourd and mixed vegetable stew)|1 bowl|220|173|5|18|9|4|540
+Cholar Dal (sweetened Bengal gram lentils with coconut bits)|1 bowl|200|232|10|30|8|7|490
+Fish Kabiraji (crisp egg-net coated fried fish fillet)|1 piece|180|287|22|16|15|1.5|580
+Doi Maach (river fish simmered in spiced yogurt gravy)|1 piece|220|241|23|8|13|3.5|640
+Sandesh (delicate sweetened fresh cottage cheese fudge)|2 pieces|70|157|6|22|5|18|30
+Chomchom (oval cottage cheese sweet coated in mawa flakes)|2 pieces|100|229|6|40|5|34|40
+Kadala Curry (roasted coconut and black chickpea gravy)|1 bowl|220|233|10|28|9|3|580
+Kerala Beef Fry (slow-roasted spicy meat with coconut slivers)|150g|150|280|28|6|16|2|690
+Meen Pollichathu (pearl spot fish roasted in banana leaf)|1 whole|240|278|30|8|14|3|750
+Avial (mixed vegetables in thick coconut and yogurt sauce)|1 bowl|200|179|4|16|11|4|480
+Malabar Parotta (flaky layered pan-fried flatbread)|1 piece|110|191|3.5|24|9|1.5|340
+Idiyappam (steamed pressed rice flour string hoppers)|4 pieces|140|151|3.5|32|1|0.5|190
+Fish Molee (mild creamy coconut milk fish stew)|1 bowl|250|276|24|9|16|4|640
+Erissery (pumpkin and cowpea curry with roasted coconut)|1 bowl|200|192|6|24|8|5|460
+Ada Pradhaman (rice flakes simmered in jaggery and coconut milk)|1 bowl|180|286|3|46|10|34|65
+Chicken Chettinad (fiery roasted spice and black pepper poultry curry)|1 bowl|260|305|28|10|17|3|820
+Mutton Chukka (dry-roasted spicy goat chunks with curry leaves)|150g|150|267|27|6|15|2|710
+Kuzhi Paniyaram (pan-fried fermented rice and lentil dumplings)|5 pieces|150|194|5|30|6|2|420
+Karaikudi Nandu Masala (spicy Chettinad flower crab curry)|1 bowl|250|232|22|9|12|3|860
+Kothu Parotta (shredded layered flatbread stir-fried with egg and salna)|1 plate|380|428|15|56|16|3.5|990
+Vellai Paniyaram (sweet soft fried rice and urad dal puffs)|4 pieces|130|189|3.5|28|7|9|180
+Kavuni Arisi (sweet black glutinous rice pudding with coconut)|1 bowl|160|238|4|42|6|22|45
+Pani Puri (crisp shells filled with spiced mint water and chickpeas)|6 pieces|150|181|4|30|5|4|680
+Bhel Puri (puffed rice tossed with chutneys, sev and vegetables)|1 bowl|180|227|5|36|7|8|620
+Sev Puri (flat crisp puris topped with potatoes, chutneys and noodles)|6 pieces|160|213|5|28|9|6|590
+Dahi Puri (crisp shells stuffed with yogurt, potatoes and tamarind)|6 pieces|180|224|6|32|8|9|640
+Aloo Tikki Chaat (fried potato patties topped with chickpeas and yogurt)|1 plate|260|308|8|42|12|7|740
+Samosa Chaat (crushed fried pastry with spicy peas and chutneys)|1 plate|280|338|9|44|14|8|790
+Papdi Chaat (crisp dough wafers with yogurt, potatoes and mint chutney)|1 plate|220|250|6|34|10|8|660
+Pav Bhaji (spiced mashed vegetable curry with buttered soft rolls)|1 plate|360|416|10|58|16|7|940
+Vada Pav (deep-fried spiced potato fritter inside a soft bun)|1 piece|170|237|5|34|9|3|560
+Ragda Pattice (potato cakes topped with white pea gravy and chutneys)|1 plate|280|310|9|46|10|6|750
+Raj Kachori (large crisp shell stuffed with sprouts, yogurt and sev)|1 piece|250|291|8|40|11|10|720
+Kaju Katli (diamond-shaped cashew nut and sugar fudge)|2 pieces|40|174|3.5|22|8|18|15
+Motichoor Ladoo (sweet round ball of tiny fried gram flour pearls)|1 piece|50|194|2.5|28|8|21|25
+Besan Ladoo (roasted chickpea flour and ghee sweet ball)|1 piece|50|208|3.5|26|10|18|20
+Soan Papdi (flaky, crisp spun-sugar and gram flour sweet)|1 piece|40|176|2|24|8|19|30
+Kulfi (dense traditional cardamom and pistachio milk ice cream)|1 stick|80|187|4.5|22|9|19|65
+Rabri (slow-simmered thickened sweet milk with clotted cream layers)|1 bowl|120|210|6|24|10|20|85
+Kalakand (moist grainy milk cake flavored with cardamom)|1 piece|60|196|5|26|8|22|55
+Peda (soft semi-sweet milk fudge disc with saffron)|2 pieces|50|166|4|24|6|20|50
+Boondi Ladoo (sweet golden fried gram flour droplets pressed into balls)|1 piece|55|211|2.5|30|9|23|30
+Malpua (sweet pan-fried milk pancake dipped in sugar syrup)|1 piece|80|237|3|36|9|28|50
+Imarti (flower-shaped deep-fried black lentil batter in syrup)|1 piece|65|234|2.5|38|8|30|35
+Balushahi (flaky glazed traditional Indian doughnut)|1 piece|70|261|2.5|38|11|26|60
+Kheer (creamy cardamom rice pudding garnished with almonds)|1 bowl|160|202|5|32|6|22|70

@@ -1,0 +1,131 @@
+# Nutrition batch 3 part 3. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Jackfruit Ripe (sweet yellow tropical fruit pods, raw)|1 bowl|150|159|2.6|35|1|28.6|3
+Jackfruit Young Green (unripe tender flesh, boiled or canned)|1 bowl|150|69|2.4|14|0.4|1.5|15
+Cempedak Fresh (fragrant sweet golden tropical fruit arils)|6 pods|120|138|3|30.5|0.5|25|4
+Ciku (ripe brown sapodilla fruit with malty sweet flesh)|2 pieces|140|128|0.6|28|1.5|20|17
+Kiwi Green (peeled tart-sweet emerald fruit with tiny black seeds)|2 pieces|150|102|1.7|22|0.8|13.5|5
+Kiwi Gold (peeled sweet yellow-fleshed tropical berry)|2 pieces|150|104|1.5|23.5|0.4|18|4
+Blueberries Fresh (whole sweet-tart dark blue berries)|1 cup|150|96|1.1|21.7|0.5|15|1
+Cherries Sweet (fresh pitted dark red stone fruit)|1 cup|140|98|1.5|22.4|0.3|18|0
+Pear Asian (crisp juicy round brown-skinned fruit)|1 piece|180|83|0.9|19|0.4|12.6|0
+Pear Bartlett (soft sweet green-yellow bell-shaped fruit)|1 piece|170|108|0.6|26|0.2|16.5|2
+Lychee Fresh (peeled translucent sweet floral white fruit)|10 pieces|100|73|0.8|16.5|0.4|15.2|1
+Longan Fresh (peeled small sweet aromatic dragon eye fruit)|15 pieces|100|66|1.3|15.1|0.1|14|0
+Rambutan Fresh (peeled hairy red fruit with sweet juicy flesh)|6 pieces|100|88|0.7|20.9|0.2|16|11
+Mangosteen Fresh (sweet tangy white segmented fruit from purple rind)|3 pieces|100|79|0.4|17.9|0.6|15|7
+Durian D24 (creamy pungent custard-like tropical fruit pulp)|3 seeds|120|195|1.8|32.5|6.4|24|2
+Soursop Fresh (creamy tangy fibrous white tropical pulp)|1 cup|150|110|1.5|25.2|0.4|20.3|21
+Custard Apple (sweet creamy segmented sugar apple pulp)|1 piece|150|155|2.5|35.4|0.4|28|14
+Starfruit Fresh (sliced crisp sweet-sour five-angled yellow fruit)|1 piece|120|40|1.2|8|0.4|4.8|2
+Rose Apple (crisp watery mildly sweet pink bell-shaped fruit)|3 pieces|120|34|0.7|6.8|0.4|5|0
+Pomelo Fresh (peeled sweet-tart pink citrus segments)|1 bowl|150|63|1.1|14.4|0.1|11|2
+Passion Fruit Fresh (tangy aromatic yellow pulp with edible seeds)|3 pieces|90|97|2|21|0.6|10.1|25
+Persimmon Fuyu (crisp sweet orange-red autumn fruit)|1 piece|160|126|0.9|29.8|0.3|20|2
+Pomegranate Seeds (juicy ruby-red sweet-tart arils)|1 cup|150|138|2.5|28|1.8|20.5|5
+Fig Fresh (soft sweet purple-skinned fruit with jammy interior)|3 pieces|150|123|1.1|28.8|0.4|24.4|2
+Blackberries Fresh (whole juicy dark purple bramble berries)|1 cup|145|70|2|13.9|0.7|7|1
+Raspberries Fresh (delicate sweet-tart hollow red berries)|1 cup|125|72|1.5|14.7|0.8|5.4|1
+Cranberries Dried (sweetened chewy tart red berries)|1 small bowl|40|136|0.1|33|0.4|29|2
+Apricot Fresh (velvety orange sweet-tart stone fruit)|3 pieces|105|56|1.5|11.7|0.4|9.7|1
+Plum Red (juicy sweet-tart purple-red stone fruit)|2 pieces|130|66|0.9|14.8|0.4|12.9|0
+Nectarine Fresh (smooth-skinned sweet yellow-fleshed stone fruit)|1 piece|140|69|1.5|14.8|0.4|11|0
+Mulberries Fresh (sweet dark purple elongated berries)|1 cup|140|67|2|13.7|0.5|11.3|14
+Gooseberries Fresh (tart translucent green-yellow berries)|1 cup|150|74|1.3|15.3|0.9|10|2
+Kale Raw Chopped (curly dark green leafy cruciferous greens)|1 bowl|70|38|2|6.2|0.6|1.6|30
+Kale Sauteed with Garlic (wilted leafy greens cooked in olive oil)|1 bowl|120|88|2.8|7.5|5.2|1.8|240
+Zucchini Grilled (sliced green summer squash charred with oil)|1 bowl|150|58|1.8|4.7|3.5|3.7|180
+Zucchini Noodles Raw (spiralized green summer squash strands)|1 bowl|150|30|1.8|4.7|0.5|3.8|12
+Asparagus Steamed (tender green spears cooked until bright)|6 spears|100|28|2.4|4.1|0.2|1.3|14
+Asparagus Grilled with Olive Oil (charred green stalks seasoned with sea salt)|6 spears|100|66|2.4|4.1|4.5|1.3|190
+Artichoke Boiled (whole steamed globe flower bud with tender heart)|1 piece|120|75|3.5|14.3|0.4|1.2|72
+Brussels Sprouts Roasted (halved mini cabbages caramelized in oil)|1 bowl|150|118|4|11|6.5|2.8|220
+Fennel Bulb Sliced (crisp anise-flavored white vegetable, raw)|1 cup|90|33|1.1|6.6|0.2|3.5|47
+Kohlrabi Raw (peeled crisp mild sweet turnip-like stem)|1 cup|135|44|2.3|8.4|0.1|3.5|27
+Swiss Chard Sauteed (wilted leafy greens with colorful stems)|1 bowl|140|71|2.6|5.8|4.2|1.5|310
+Collard Greens Braised (slow-simmered dark Southern leafy greens)|1 bowl|150|88|3.8|8.2|4.5|0.8|340
+Mustard Greens Stir-Fried (peppery Asian leafy greens with garlic)|1 bowl|140|78|3.2|5.6|4.8|1.4|290
+Radicchio Grilled (charred bitter red Italian chicory wedges)|1 bowl|100|58|1.4|4.5|3.8|0.6|140
+Endive Belgian Raw (crisp pale slightly bitter boat-shaped leaves)|1 cup|90|21|1.1|3.6|0.2|0.2|20
+Watercress Raw (peppery small dark green aquatic leaves)|1 bowl|50|8|1.2|0.6|0.1|0.1|21
+Arugula Raw (peppery tender rocket salad greens)|1 bowl|40|13|1|1.5|0.3|0.8|11
+Turnip Cubes Boiled (tender white-purple root vegetable pieces)|1 bowl|150|37|1.1|7.6|0.2|4.5|24
+Parsnip Roasted (caramelized sweet cream-colored root wedges)|1 bowl|150|150|1.8|25.5|4.5|7.2|180
+Rutabaga Mashed (creamy yellow-fleshed swede root puree)|1 bowl|170|98|1.8|14.8|3.5|7.5|210
+Celeriac Puree (smooth mashed knobby celery root with butter)|1 bowl|160|106|2.2|13.5|4.8|2.4|260
+Jicama Sticks Raw (crisp juicy sweet Mexican yam bean strips)|1 cup|120|47|0.9|10.6|0.1|2.2|5
+Chayote Stir-Fried (sliced mild green pear-shaped squash)|1 bowl|150|68|1.2|6.8|4|2.5|210
+Bitter Gourd Stir-Fried (sliced ridged green melon cooked with egg)|1 bowl|150|105|4.5|6.5|6.8|2|320
+Winged Beans Stir-Fried (crunchy four-angled tropical green pods)|1 bowl|120|83|4.2|6.4|4.5|1.8|240
+Petai Stir-Fried (pungent green twisted cluster beans in chili)|1 bowl|100|133|6.5|12.8|6.2|2.1|340
+Banana Blossom Salad (shredded purple flower bud in tangy dressing)|1 bowl|150|86|2.2|11.5|3.5|3.8|280
+Lotus Root Stir-Fried (crisp sliced perforated aquatic rhizome)|1 bowl|140|133|2.2|21.5|4.2|1.2|260
+Bamboo Shoots Braised (tender sliced young culms in savory sauce)|1 bowl|140|62|2.5|5.2|3.5|1.8|290
+Daikon Radish Braised (simmered translucent white Asian root chunks)|1 bowl|160|42|1|6.8|1.2|3.4|280
+Taro Steamed (starchy purple-flecked tropical root chunks)|1 bowl|150|164|1.5|39|0.2|1.2|22
+Cassava Boiled (tender starchy white tropical manioc root)|1 bowl|150|162|1.4|38.1|0.4|1.7|14
+Sweet Potato Purple Steamed (vibrant violet-fleshed sweet tuber)|1 piece|150|130|2|30|0.2|6.5|45
+Yam Chinese Stir-Fried (crisp mucilaginous white mountain tuber)|1 bowl|140|117|2.1|18.5|3.8|1|210
+Morel Mushrooms Sauteed (wild honeycomb-capped fungi cooked in butter)|1 bowl|100|80|3.1|5.1|5.2|0.6|180
+Chanterelle Mushrooms Sauteed (golden trumpet-shaped wild fungi)|1 bowl|100|77|1.5|6.9|4.8|1.1|170
+Porcini Mushrooms Grilled (meaty thick-stemmed wild Italian fungi)|1 bowl|120|75|3.6|7.2|3.5|1.2|160
+King Oyster Mushrooms Seared (thick meaty-stemmed Asian fungi slices)|1 bowl|140|85|3.5|8.4|4.2|1.5|220
+Enoki Mushrooms Boiled (slender white needle-like fungi clusters)|1 bowl|100|45|2.7|7.8|0.3|0.2|3
+Lamb Chop Grilled (bone-in rib cutlet seared with rosemary)|2 pieces|180|378|36|0|26|0|420
+Lamb Leg Roast (sliced tender oven-baked boneless roast meat)|150g|150|278|38|0|14|0|390
+Lamb Shank Braised (slow-cooked fall-off-the-bone meat in gravy)|1 piece|260|398|44|6|22|2.5|680
+Lamb Rack Roasted (herb-crusted tender rib section sliced)|3 ribs|180|364|34|3|24|0.5|440
+Lamb Mince Pan-Fried (browned ground sheep meat seasoned with herbs)|150g|150|348|32|1|24|0|380
+Mutton Curry Dry (spiced slow-cooked goat meat chunks in thick masala)|1 bowl|220|338|36|8|18|2.5|690
+Venison Steak Grilled (lean wild deer loin seared medium-rare)|180g|180|221|44|0|5|0|340
+Venison Stew (slow-simmered wild deer chunks with root vegetables)|1 bowl|300|272|34|16|8|4|640
+Venison Burger Patty (grilled lean ground deer meat patty, no bun)|1 piece|150|211|36|1|7|0|360
+Venison Sausage Grilled (spiced wild game link sausage)|2 links|140|260|26|3|16|1|780
+Wild Boar Stew (rich slow-braised forest pork ragu)|1 bowl|280|320|34|10|16|3|690
+Rabbit Braised (tender lean white game meat cooked in white wine)|200g|200|270|42|3|10|1|480
+Duck Breast Pan-Seared (crispy-skinned rosy poultry breast sliced)|180g|180|352|34|0|24|0|410
+Goose Roast (sliced dark rich festive waterfowl meat)|150g|150|378|36|0|26|0|420
+Quail Grilled (whole small marinated game bird charred)|2 birds|180|318|38|1|18|0.5|460
+Pheasant Roast (lean herb-basted wild game bird breast)|160g|160|223|40|0|7|0|350
+Ostrich Steak Grilled (lean red ratite fillet seared)|180g|180|208|42|0|4.5|0|320
+Kangaroo Steak Grilled (lean Australian red game fillet)|180g|180|196|41|0|3.5|0|310
+Bison Burger Patty (grilled lean North American buffalo patty, no bun)|150g|150|266|35|0|14|0|360
+Beef Tongue Braised (sliced tender slow-cooked organ meat)|150g|150|332|28|1|24|0|440
+Beef Liver Pan-Fried (sliced nutrient-dense organ meat with onions)|150g|150|236|34|7|8|2.5|390
+Chicken Hearts Grilled (skewered tender marinated poultry organs)|6 pieces|120|189|26|1|9|0|380
+Pork Belly Braised (rich layered fat and meat chunks in soy glaze)|150g|150|474|18|6|42|4.5|680
+Sea Scallops Pan-Seared (large caramelized tender bivalve medallions)|5 pieces|150|164|26|5|4.5|0|480
+Scallops Baked with Garlic Butter (broiled tender shellfish in shell)|6 pieces|160|228|24|6|12|0.5|560
+Mussels Steamed in White Wine (black-shelled mollusks in garlic broth)|1 bowl|250|173|24|8|5|1|690
+Mussels Sambal (stir-fried green-lipped shellfish in spicy chili paste)|1 bowl|220|217|22|12|9|4.5|780
+Oysters Raw on Half Shell (fresh briny saltwater bivalves with lemon)|6 pieces|120|82|10|5|2.5|0|340
+Oysters Rockefeller (baked shellfish topped with buttered greens and crumbs)|4 pieces|140|218|11|12|14|1|520
+Clams Steamed (tender littleneck bivalves in savory herb broth)|1 bowl|220|139|22|6|3|0.5|640
+Cockles Boiled (small blood clams blanched with chili dip)|1 bowl|150|118|20|4|2.5|0|480
+Abalone Braised (tender sliced luxury sea snail in oyster sauce)|100g|100|114|18|6|2|1.5|540
+Sea Urchin Roe (creamy sweet-briny golden uni tongues)|60g|60|67|8|2|3|0|180
+Octopus Grilled (charred tender tentacles dressed with olive oil)|150g|150|194|32|3|6|0|520
+Squid Grilled Whole (charred tender cephalopod with lemon and herbs)|1 piece|160|168|28|4|4.5|0|460
+Cuttlefish Stir-Fried (sliced firm white cephalopod with vegetables)|1 bowl|180|186|24|8|6.5|2|590
+King Crab Legs Steamed (sweet tender white leg meat with melted butter)|200g|200|243|36|0|11|0|890
+Soft Shell Crab Fried (whole crispy battered molted crustacean)|1 piece|140|262|18|16|14|1|540
+Lobster Tail Steamed (sweet firm crustacean tail meat with lemon)|150g|150|138|28|1|2.5|0|580
+Langoustine Grilled (split sweet Dublin Bay prawns with garlic oil)|4 pieces|160|170|28|1|6|0|520
+Crayfish Boiled (spiced freshwater mini lobsters)|1 bowl|200|139|26|2|3|0|640
+Tiger Prawns Grilled (large charred shell-on crustaceans)|5 pieces|160|172|32|1|4.5|0|490
+Sea Bass Steamed (delicate flaky white fish fillet with ginger)|180g|180|194|34|2|5.5|0.5|420
+Halibut Baked (firm thick white flatfish fillet with herbs)|180g|180|180|36|0|4|0|380
+Monkfish Roasted (meaty tail fillet wrapped in thin bacon)|180g|180|212|34|1|8|0|520
+Swordfish Steak Grilled (thick meaty steak-like pelagic fish)|180g|180|225|36|0|9|0|390
+Tuna Steak Seared (sesame-crusted rare red ahi fillet)|180g|180|216|42|2|4.5|0.5|360
+Mackerel Grilled (oily silver-skinned fish fillet with lemon)|160g|160|282|30|0|18|0|380
+Sardines Grilled Whole (charred small oily silver fish with sea salt)|4 pieces|140|238|28|0|14|0|460
+Anchovies Fried (crispy whole tiny silver fish)|1 bowl|100|228|22|8|12|0|680
+Trout Pan-Fried (whole pink-fleshed freshwater fish with almonds)|180g|180|256|34|3|12|0.5|390
+Arctic Char Baked (tender pink-orange cold-water salmonid fillet)|180g|180|257|35|0|13|0|360
+Red Snapper Steamed (whole sweet white reef fish with soy and scallions)|200g|200|201|36|3|5|1|540
+Grouper Fillet Steamed (firm moist white reef fish with light broth)|180g|180|184|35|2|4|0.5|460
+Pomfret Pan-Fried (crispy golden flat silver ocean fish)|1 piece|180|270|32|4|14|0|480
+Stingray Grilled (charred tender cartilage-ribbed fish wing in chili)|180g|180|243|30|6|11|2|640
+Eel Grilled Unagi (glazed sweet-savory freshwater fillet)|120g|120|280|22|12|16|9|580
+Smoked Salmon Slices (cold-cured silky pink fillet strips)|80g|80|100|16|0|4|0|680
+Caviar Black (cured sturgeon roe pearls)|30g|30|83|7.5|1.2|5.4|0|450

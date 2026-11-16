@@ -1,0 +1,110 @@
+# Nutrition batch 3 part 5. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+New York Cheesecake (dense baked cream cheese cake on graham cracker crust)|1 slice|140|418|7.5|34|28|26|290
+Basque Burnt Cheesecake (caramelized crustless baked cream cheese custard slice)|1 slice|135|374|7|28|26|23|260
+Matcha Mille Crepe Cake (layered thin green tea pancakes with pastry cream)|1 slice|150|355|5.5|36|21|22|140
+Tiramisu Classic (espresso-soaked ladyfingers layered with mascarpone cream)|1 slice|140|350|6|32|22|21|110
+Red Velvet Cake (cocoa-tinted crimson sponge with cream cheese frosting)|1 slice|150|458|4.5|56|24|42|340
+Carrot Walnut Cake (spiced grated root sponge with tangy cream frosting)|1 slice|155|461|5|54|25|38|310
+Black Forest Gateau (chocolate sponge with cherries and whipped cream)|1 slice|150|382|4.5|46|20|34|190
+Victoria Sponge Cake (butter cake layered with strawberry jam and cream)|1 slice|130|381|4.5|48|19|34|240
+Lemon Drizzle Loaf (zesty citrus butter sponge slice with sugar glaze)|1 slice|110|326|4|46|14|32|210
+Banana Walnut Bread (moist toasted sweet fruit loaf slice with butter)|1 slice|120|329|4.5|44|15|24|260
+Chocolate Fudge Cake (rich dark cocoa layer cake with ganache icing)|1 slice|155|488|5.5|58|26|44|280
+Opera Cake (almond sponge soaked in coffee syrup with ganache and buttercream)|1 slice|115|352|5|38|20|28|120
+Mille-Feuille Napoleon (crisp puff pastry layers with vanilla custard cream)|1 piece|130|373|4|42|21|22|190
+Chocolate Eclair (choux pastry log filled with cream and dark icing)|1 piece|110|290|4.5|32|16|18|160
+Cream Puff Profiterole (choux pastry sphere filled with vanilla whipped cream)|2 pieces|100|247|4|24|15|12|140
+Lemon Meringue Tart (crisp shortcrust shell with citrus curd and torched meringue)|1 slice|135|345|4.5|48|15|34|180
+Portuguese Egg Tart Pastel de Nata (flaky puff shell with blistered egg custard)|1 piece|65|201|3.5|22|11|12|110
+Fruit Tartlet (butter pastry cup with pastry cream and glazed berries)|1 piece|115|276|3.5|34|14|20|130
+Pecan Tart (sweet caramelized nut and maple filling in shortcrust shell)|1 slice|130|442|4.5|52|24|34|220
+Apple Crumble Tart (spiced baked orchard fruit in pastry with oat streusel)|1 slice|150|383|3.5|54|17|32|190
+Banoffee Pie (biscuit base layered with dulce de leche, banana, cream)|1 slice|150|414|4|50|22|36|210
+Key Lime Pie (tart citrus custard filling in graham crust with cream)|1 slice|135|356|4.5|44|18|32|220
+Butter Croissant (flaky laminated French yeast-leavened crescent pastry)|1 piece|65|269|5.5|28|15|5|260
+Almond Croissant (twice-baked flaky pastry filled with sweet frangipane)|1 piece|115|444|8.5|44|26|20|290
+Pain au Chocolat (flaky laminated pastry rolled with dark chocolate batons)|1 piece|80|322|6|34|18|11|240
+Cinnamon Roll with Icing (soft swirled brioche bun with brown sugar glaze)|1 piece|130|418|6|58|18|32|340
+Kouign-Amann (caramelized Breton butter and sugar laminated pastry)|1 piece|95|375|4.5|42|21|22|280
+Cardamom Knot Bun (braided Nordic spiced sweet yeast pastry)|1 piece|100|308|6|44|12|16|230
+Danish Pastry Berry Cream (flaky laminated pastry topped with custard and fruit)|1 piece|110|341|5|42|17|19|220
+Palmier Elephant Ear (crisp caramelized puff pastry heart cookie)|2 pieces|50|239|2.5|28|13|14|140
+Scone Plain with Clotted Cream and Jam (crumbly British tea biscuit with spreads)|1 piece|120|387|5.5|44|21|18|320
+Blueberry Muffin Bakery Style (domed sweet cake-like muffin with berries)|1 piece|135|390|5.5|56|16|32|340
+Chocolate Chip Cookie Soft Baked (chewy brown butter cookie with dark chunks)|1 piece|85|370|4|48|18|30|240
+Fudge Brownie (dense chewy dark chocolate square with crackly top)|1 piece|95|382|4.5|46|20|34|180
+Blondie White Chocolate (chewy brown sugar vanilla bar with macadamias)|1 piece|95|371|4|46|19|32|190
+Macaron French Assorted (delicate almond meringue sandwich cookies with ganache)|3 pieces|54|221|3|32|9|28|45
+Canele de Bordeaux (rum and vanilla custard pastry with caramelized crust)|1 piece|55|151|2.5|24|5|16|65
+Madeleine Butter Shell (light spongy French tea cake with lemon zest)|2 pieces|50|207|3|24|11|14|110
+Financier Almond Cake (moist brown butter and ground nut mini rectangle)|2 pieces|60|246|4|26|14|18|95
+Churros with Chocolate Sauce (fried fluted dough sticks dusted in cinnamon sugar)|4 pieces|140|452|5.5|58|22|26|280
+Glazed Ring Donut (yeast-raised fried dough ring dipped in sugar icing)|1 piece|65|268|3.5|32|14|16|210
+Boston Cream Donut (custard-filled yeast round topped with chocolate glaze)|1 piece|95|338|4.5|44|16|22|250
+Old Fashioned Cake Donut (crisp-edged sour cream fried dough ring)|1 piece|75|320|3.5|36|18|18|260
+Bomboloni Custard Filled (Italian sugar-dusted brioche donut with pastry cream)|1 piece|100|332|5|42|16|19|220
+Belgian Liege Waffle (dense caramelized pearl sugar yeast grid cake)|1 piece|110|376|5.5|48|18|22|260
+Brussels Waffle with Whipped Cream and Strawberries (crisp light grid cake with toppings)|1 plate|210|444|7.5|54|22|24|320
+Chicken and Waffles (crispy fried poultry tenders over buttermilk grid cake with syrup)|1 plate|340|636|32|64|28|24|980
+Croffle Plain Caramelized (croissant dough pressed in waffle iron with glaze)|1 piece|85|328|5.5|36|18|12|270
+Croffle Biscoff Cream (pressed flaky pastry topped with spiced cookie spread and cream)|1 piece|130|452|6.5|48|26|22|310
+Sweet Crepe Nutella and Banana (thin French pancake folded with hazelnut spread)|1 plate|200|458|7.5|62|20|36|220
+Sweet Crepe Suzette (thin folded pancake in caramelized orange butter sauce)|1 plate|180|358|5.5|48|16|28|210
+Savory Galette Complete (buckwheat crepe folded with ham, gruyere, fried egg)|1 plate|260|413|22|34|21|3|780
+Buttermilk Pancakes Stack (fluffy griddle cakes served with butter and maple syrup)|3 pieces|240|432|8.5|68|14|28|560
+Japanese Souffle Pancakes (tall jiggly airy whipped egg-white griddle cakes)|2 pieces|190|279|9|36|11|16|210
+Dutch Baby Oven Pancake (puffed baked skillet batter dusted with powdered sugar)|1 plate|180|276|8|34|12|14|240
+Brioche French Toast (thick egg-dipped pan-fried sweet bread with berries and syrup)|2 slices|240|420|11|58|16|26|420
+Gelato Pistachio Artisanal (dense churned Italian nut frozen dairy dessert)|1 scoop|100|213|4.5|24|11|20|75
+Gelato Stracciatella (sweet cream Italian ice dessert with dark chocolate ribbons)|1 scoop|100|204|3.5|25|10|22|60
+Gelato Dark Chocolate Fondente (rich intense cocoa Italian frozen dessert)|1 scoop|100|204|4|28|8.5|24|55
+Gelato Salted Caramel (sweet burnt-sugar Italian frozen dairy scoop)|1 scoop|100|203|3.5|27|9|24|140
+Sorbet Mango Alphonso (dairy-free churned tropical fruit ice scoop)|1 scoop|100|116|0.5|28|0.2|25|10
+Sorbet Lemon Basil (refreshing tangy citrus and herb frozen fruit ice)|1 scoop|100|106|0.3|26|0.1|24|10
+Frozen Yogurt Tart Plain (tangy soft-serve cultured milk swirl cup)|1 cup|150|172|5.5|32|2.5|26|95
+Frozen Yogurt with Fruit and Mochi (tart soft-serve topped with mango and rice bites)|1 cup|210|243|6|48|3|36|110
+Soft Serve Vanilla Cone (creamy swirled dairy ice in crisp wafer cone)|1 cone|130|216|4|32|8|22|110
+Affogato al Caffe (scoop of vanilla gelato drowned in hot espresso shot)|1 glass|130|186|3.5|24|8.5|21|55
+Banana Split Sundae (three ice cream scoops, banana, hot fudge, whipped cream)|1 bowl|320|516|7.5|72|22|54|180
+Panna Cotta Vanilla Berry (chilled Italian set sweet cream pudding with coulis)|1 cup|140|272|3.5|24|18|20|55
+Creme Brulee (rich vanilla bean custard under brittle caramelized sugar crust)|1 ramekin|140|328|4.5|28|22|26|75
+Chocolate Lava Cake Molten (warm dark sponge with liquid ganache center)|1 piece|130|396|5.5|44|22|32|170
+Sticky Toffee Pudding (moist date sponge drenched in warm butterscotch sauce)|1 piece|160|434|4|64|18|48|290
+Bread and Butter Pudding (baked custard-soaked brioche slices with raisins)|1 bowl|180|336|6.5|46|14|26|240
+Apple Strudel Warm (thin flaky pastry rolled with spiced apples and raisins)|1 slice|140|296|3|44|12|24|160
+Pavlovas Berry Cream (crisp baked meringue nest with whipped cream and passionfruit)|1 piece|130|279|3|42|11|38|45
+Choux Craquelin (crisp cookie-topped cream puff filled with vanilla diplomat cream)|1 piece|85|236|3.5|24|14|13|110
+Big Breakfast Cafe Plate (eggs, bacon, sausage, hash brown, mushrooms, toast)|1 plate|480|628|32|44|36|5|1280
+Eggs Benedict with Ham (poached eggs, Canadian bacon, hollandaise on English muffin)|1 plate|310|434|22|28|26|3|890
+Eggs Florentine (poached eggs, wilted spinach, hollandaise on toasted muffin)|1 plate|290|383|17|27|23|3|640
+Eggs Royale Smoked Salmon (poached eggs, cured fish, hollandaise on muffin)|1 plate|300|417|21|27|25|3|920
+Smashed Avocado Feta on Sourdough (crushed green fruit, crumbled cheese, poached egg)|1 plate|260|373|14|32|21|3|560
+Turkish Eggs Cilbir (poached eggs over garlicky yogurt with spiced chili butter)|1 bowl|250|310|16|12|22|5|490
+Breakfast Burrito Cafe Style (scrambled eggs, chorizo, black beans, cheddar in tortilla)|1 piece|320|462|24|42|22|3.5|880
+Croque Monsieur (baked ham and gruyere sandwich topped with creamy bechamel)|1 sandwich|260|405|22|32|21|4|940
+Croque Madame (grilled ham and cheese bechamel sandwich topped with fried egg)|1 sandwich|310|474|28|32|26|4|1010
+Ham and Cheese Toastie (grilled buttered white bread with shaved ham and cheddar)|1 sandwich|210|319|16|30|15|3.5|780
+Tuna Melt Toastie (grilled sourdough filled with flaked tuna mayo and melted cheese)|1 sandwich|240|378|22|32|18|3.5|740
+Three Cheese Grilled Sandwich (melted cheddar, gruyere, mozzarella on thick toast)|1 sandwich|200|355|16|30|19|3.5|690
+Kimchi Cheese Toastie (grilled sourdough with spicy fermented cabbage and cheddar)|1 sandwich|220|332|14|33|16|4.5|820
+Mushroom Truffle Melt (sauteed wild fungi, swiss cheese, truffle oil on toast)|1 sandwich|230|333|13|32|17|3.5|620
+Reuben Sourdough Sandwich (corned beef, sauerkraut, swiss cheese, Russian dressing)|1 sandwich|290|412|24|34|20|5|1120
+Chicken Pesto Sourdough Sandwich (grilled breast, basil sauce, mozzarella, sun-dried tomato)|1 sandwich|280|410|28|34|18|4|790
+BLT Sourdough Sandwich (crispy streaky bacon, lettuce, tomato, mayo on toasted loaf)|1 sandwich|230|337|14|32|17|4.5|760
+Club Sandwich Triple Decker (roasted turkey, bacon, egg, lettuce, tomato on toast)|1 sandwich|340|478|28|42|22|5.5|980
+Smoked Salmon Cream Cheese Bagel (toasted ring bun with cured fish, capers, red onion)|1 bagel|240|355|18|46|11|6|840
+Egg Mayo Brioche Roll (creamy chopped boiled egg salad in soft buttered bun)|1 roll|200|303|12|30|15|4.5|460
+Pulled Pork Brioche Bun (slow-roasted BBQ shredded pork with apple coleslaw)|1 burger|280|407|24|44|15|14|820
+Caprese Focaccia Sandwich (fresh mozzarella, tomato, basil pesto on herbed flatbread)|1 sandwich|260|366|15|36|18|4|680
+Mortadella Pistachio Focaccia (Italian cured pork, stracciatella, crushed nuts on bread)|1 sandwich|270|410|18|35|22|3|890
+Iced Spanish Latte (espresso poured over cold milk and sweetened condensed milk)|1 glass|300|193|6.5|26|7|24|95
+Iced Caramel Macchiato (layered vanilla milk, espresso, and caramel drizzle)|1 glass|320|218|6|34|6.5|31|110
+Iced Mocha Dark Chocolate (chilled espresso blended with cocoa syrup and milk)|1 glass|320|246|7.5|36|8|30|115
+Flat White Whole Milk (double espresso topped with velvety microfoamed milk)|1 cup|180|104|5.5|8|5.5|8|75
+Cappuccino Whole Milk (espresso with equal parts steamed milk and thick foam)|1 cup|180|95|5|7.5|5|7.5|70
+Chai Tea Latte Sweetened (spiced black tea concentrate with steamed milk)|1 mug|280|202|6|32|5.5|29|95
+Hot Chocolate Classic (steamed milk whisked with melted dark chocolate and cocoa)|1 mug|260|267|8|34|11|28|110
+Iced Matcha Strawberry Latte (whisked green tea layered over berry puree and milk)|1 glass|320|203|5.5|34|5|30|85
+Dirty Matcha Iced (whisked green tea milk topped with hot espresso shot)|1 glass|300|144|6.5|16|6|14|90
+Yuzu Honey Fizz (sparkling water mixed with sweet citrus marmalade)|1 glass|300|113|0.2|28|0|26|25
+Passionfruit Iced Tea (brewed black tea shaken with tropical pulp and syrup)|1 glass|320|106|0.4|26|0.1|24|15

@@ -1,0 +1,132 @@
+# Nutrition batch 3 part 2. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Tacos al Pastor (marinated spit-grilled pork on soft corn tortillas)|3 pieces|240|332|22|34|12|4|740
+Carne Asada Tacos (grilled skirt steak with cilantro and onions)|3 pieces|240|327|25|32|11|2.5|710
+Fish Tacos (battered fried cod with cabbage slaw and crema)|2 pieces|220|309|18|30|13|3|680
+Chicken Burrito (large flour tortilla stuffed with rice, beans and poultry)|1 piece|380|471|28|56|15|4|1050
+Beef Burrito Bowl (rice, black beans, seasoned ground meat and salsa)|1 bowl|420|498|30|54|18|5|980
+Cheese Quesadilla (folded grilled flour tortilla filled with melted cheddar)|1 piece|200|312|14|28|16|2|640
+Chicken Quesadilla (toasted tortilla stuffed with shredded poultry and jack cheese)|1 piece|260|374|24|29|18|2.5|760
+Chicken Enchiladas (corn tortillas rolled with poultry in red chili sauce)|2 pieces|280|350|22|34|14|4.5|840
+Beef Fajitas (sizzling strips of steak with bell peppers and onions)|1 plate|320|352|28|24|16|5|790
+Nachos Supreme (tortilla chips topped with melted cheese, beef and jalapenos)|1 plate|350|464|18|44|24|3.5|960
+Guacamole with Chips (mashed avocado dip served with salted corn crisps)|1 bowl|180|264|4|26|16|2|480
+Tamales (steamed corn dough filled with seasoned pork in husk)|2 pieces|220|292|12|34|12|2|620
+Chiles Rellenos (roasted poblano pepper stuffed with cheese and fried)|1 piece|240|277|13|18|17|4|690
+Pozole Rojo (traditional hominy corn and pork red chili stew)|1 bowl|360|340|22|36|12|3.5|920
+Elote (grilled Mexican street corn with mayo, cotija and chili)|1 cob|180|222|5|28|10|5|420
+Churros with Chocolate (fried dough pastries dusted with cinnamon sugar)|3 pieces|130|306|3|42|14|22|210
+Doner Kebab Wrap (shaved spiced lamb in flatbread with salad and garlic sauce)|1 piece|320|418|24|40|18|4.5|940
+Chicken Shish Kebab (chargrilled marinated poultry cubes with pita)|1 plate|300|338|34|28|10|3|780
+Adana Kebab (hand-minced spicy lamb skewered and grilled over charcoal)|1 skewer|200|274|24|4|18|1.5|690
+Iskender Kebab (sliced doner meat over pita with tomato sauce and yogurt)|1 plate|420|520|30|46|24|6|1180
+Lahmacun (thin crispy flatbread topped with minced meat and herbs)|1 piece|160|211|11|26|7|2.5|520
+Pide with Cheese and Egg (boat-shaped baked Turkish flatbread)|1 piece|280|366|16|44|14|3|740
+Manti (tiny beef-filled dumplings topped with garlic yogurt and butter)|1 bowl|280|329|15|38|13|3.5|710
+Menemen (scrambled eggs cooked with tomatoes, green peppers and spices)|1 bowl|240|240|14|10|16|5|580
+Mercimek Corbasi (smooth red lentil soup with mint and lemon)|1 bowl|250|222|10|32|6|3|640
+Imam Bayildi (whole eggplant stuffed with braised onions, garlic and tomatoes)|1 piece|220|210|3|18|14|8|490
+Kunefe (shredded pastry soaked in syrup with melted unsalted cheese)|1 square|160|348|7|44|16|30|180
+Chicken Gyros (pita wrap stuffed with rotisserie poultry, fries and tzatziki)|1 piece|340|407|24|44|15|4|910
+Pork Souvlaki (grilled skewered meat cubes served with lemon and oregano)|2 skewers|200|228|28|2|12|0.5|610
+Moussaka (baked casserole of eggplant, spiced minced meat and bechamel)|1 square|300|340|18|22|20|6.5|780
+Pastitsio (Greek baked pasta with ground beef and creamy white sauce)|1 square|320|382|19|36|18|5|820
+Spanakopita (flaky filo pastry pie filled with spinach and feta cheese)|1 piece|160|207|7|20|11|1.5|460
+Horiatiki Salad (chunky tomatoes, cucumbers, olives and block feta)|1 bowl|260|242|8|12|18|6|690
+Tzatziki with Pita (strained yogurt cucumber garlic dip with warm bread)|1 plate|180|194|7|28|6|3.5|440
+Dolmades (grape leaves stuffed with herbed rice and pine nuts)|4 pieces|120|145|3|22|5|1.5|480
+Saganaki (pan-seared golden crusted sheep milk cheese with lemon)|1 slice|120|286|18|4|22|0.5|790
+Margherita Pizza (thin crust pie with tomato sauce, mozzarella and basil)|2 slices|240|282|12|36|10|3.5|620
+Pepperoni Pizza (baked crust topped with mozzarella and cured spicy sausage)|2 slices|260|335|14|36|15|3.5|780
+Quattro Formaggi Pizza (white pie topped with four melted Italian cheeses)|2 slices|250|353|16|34|17|2.5|740
+Hawaiian Pizza (tomato base pie topped with ham, mozzarella and pineapple)|2 slices|260|303|13|38|11|6.5|710
+Fettuccine Alfredo (ribbon pasta coated in rich butter and parmesan cream)|1 plate|340|472|14|50|24|2.5|760
+Beef Lasagna (layered flat pasta with meat ragu, ricotta and mozzarella)|1 square|350|403|22|36|19|6|880
+Risotto alla Milanese (creamy arborio rice infused with saffron and parmesan)|1 bowl|300|336|9|48|12|1.5|690
+Mushroom Risotto (slow-cooked arborio rice with porcini and white wine)|1 bowl|310|327|8|49|11|2|670
+Gnocchi al Pesto (soft potato dumplings tossed in basil pine nut sauce)|1 plate|280|342|8|46|14|2|640
+Ossobuco (braised cross-cut veal shanks in white wine and vegetable broth)|1 piece|280|304|32|8|16|3|740
+Chicken Parmigiana (breaded poultry cutlet baked with marinara and mozzarella)|1 piece|280|353|30|20|17|5|860
+Caprese Salad (sliced fresh mozzarella, ripe tomatoes, basil and olive oil)|1 plate|200|207|12|6|15|4|340
+Arancini (deep-fried crispy risotto balls stuffed with ragu and peas)|2 pieces|180|230|7|28|10|1.5|490
+Panna Cotta (chilled sweetened cream custard topped with berry coulis)|1 cup|140|235|3|22|15|19|65
+Cannoli (crisp fried pastry tube filled with sweet ricotta and chocolate chips)|1 piece|90|211|4|24|11|15|85
+Ham and Cheese Crepe (thin buckwheat galette folded with gruyere and jambon)|1 piece|220|272|15|26|12|2|680
+Nutella Banana Crepe (thin sweet pancake folded with hazelnut spread and fruit)|1 piece|200|304|5|44|12|26|160
+Coq au Vin (chicken braised slowly with red wine, mushrooms and bacon)|1 bowl|320|304|30|10|16|3.5|790
+Beef Bourguignon (tender beef stew slow-cooked in Burgundy wine with carrots)|1 bowl|340|338|32|12|18|4|820
+Quiche Lorraine (savory shortcrust tart filled with egg custard, bacon and cheese)|1 slice|180|256|10|18|16|1.5|490
+Croque Monsieur (baked ham and gruyere sandwich topped with bechamel sauce)|1 piece|240|328|18|28|16|3|840
+Croque Madame (grilled ham and cheese sandwich topped with a fried egg)|1 piece|280|384|23|28|20|3|890
+French Onion Soup (caramelized onion beef broth topped with melted cheese crouton)|1 bowl|320|268|12|28|12|8|960
+Ratatouille (stewed Provençal zucchini, eggplant, peppers and tomatoes)|1 bowl|220|139|3|16|7|9|420
+Steak Frites (pan-seared ribeye served with crispy thin-cut potatoes)|1 plate|380|504|34|38|24|1|780
+Duck Confit (slow-cooked crisp-skinned duck leg preserved in its own fat)|1 leg|220|332|28|1|24|0.5|640
+Bouillabaisse (traditional Provençal seafood stew with saffron broth)|1 bowl|360|258|28|14|10|3.5|940
+Creme Brulee (rich vanilla custard topped with caramelized hard sugar crust)|1 ramekin|140|282|4|26|18|22|75
+Macarons (almond meringue sandwich cookies with buttercream filling)|3 pieces|60|205|3|28|9|24|45
+Wiener Schnitzel (thin breaded and pan-fried golden veal cutlet)|1 piece|220|320|26|18|16|1|620
+Chicken Schnitzel (crispy breaded pan-fried poultry breast cutlet)|1 piece|220|310|28|18|14|1|610
+Bratwurst with Sauerkraut (grilled pork sausage served with fermented cabbage)|1 plate|260|302|16|10|22|3|980
+Currywurst (sliced steamed and fried pork sausage in spiced ketchup sauce)|1 plate|250|328|15|22|20|12|940
+Sauerbraten (marinated pot-roasted beef in sweet and sour gravy)|1 plate|300|302|30|14|14|6|790
+Spaetzle (soft egg noodles tossed in butter and melted emmental cheese)|1 bowl|250|326|12|38|14|2|560
+Potato Salad German Style (warm sliced potatoes in vinegar, mustard and bacon dressing)|1 bowl|200|209|4|28|9|4|520
+Bavarian Pretzel (baked dark-crusted twisted knot bread with coarse salt)|1 piece|110|267|8|52|3|2|680
+Black Forest Cake (chocolate sponge layered with whipped cream and cherries)|1 slice|160|294|4|38|14|26|140
+Apple Strudel (flaky thin pastry rolled with spiced apples and raisins)|1 slice|150|235|2.5|36|9|20|130
+Seafood Paella (saffron rice cooked with prawns, mussels, squid and peas)|1 plate|380|411|24|54|11|3|920
+Patatas Bravas (crispy fried potato cubes with spicy tomato sauce and aioli)|1 bowl|220|278|4|34|14|3|580
+Tortilla Espanola (thick pan-cooked Spanish potato and onion omelet)|1 wedge|180|216|9|18|12|2.5|440
+Gambas al Ajillo (sizzling prawns sauteed in olive oil, garlic and chili)|1 bowl|160|218|20|3|14|0.5|590
+Croquetas de Jamon (creamy bechamel and cured ham breaded fritters)|3 pieces|120|173|7|16|9|1.5|460
+Gazpacho (chilled blended ripe tomato, cucumber and bell pepper soup)|1 bowl|250|120|2.5|14|6|8|540
+Pulpo a la Gallega (boiled octopus slices dressed with olive oil and paprika)|1 plate|150|185|22|4|9|0.5|620
+Jamon Serrano Plate (thinly sliced dry-cured Spanish mountain ham)|60g|60|146|18|0.5|8|0|1150
+Churros con Chocolate (looped fried dough sticks with thick hot cocoa dip)|1 serving|180|356|5|48|16|24|230
+Feijoada (rich black bean stew slow-cooked with smoked pork and beef)|1 bowl|350|376|24|34|16|3|960
+Picanha Steak (grilled top sirloin cap steak seasoned with rock salt)|200g|200|350|38|0|22|0|580
+Pao de Queijo (baked chewy cheese bread rolls made with tapioca flour)|3 pieces|120|197|5|24|9|1|340
+Coxinha (teardrop-shaped fried dough filled with shredded creamy chicken)|2 pieces|160|235|10|24|11|1.5|480
+Moqueca (Brazilian fish stew simmered in coconut milk, palm oil and peppers)|1 bowl|300|298|24|10|18|4.5|720
+Brigadeiro (fudgy chocolate truffle balls rolled in chocolate sprinkles)|2 pieces|50|158|2|24|6|20|35
+Australian Meat Pie (flaky pastry crust filled with minced beef and gravy)|1 piece|200|328|14|32|16|2.5|680
+Barramundi Fillet Grilled (pan-seared Australian white fish with lemon butter)|180g|180|221|34|1|9|0.5|460
+Vegemite on Toast (buttered wholemeal bread spread with yeast extract)|2 slices|110|227|7|34|7|2|620
+Lamington (sponge cake square coated in chocolate icing and desiccated coconut)|1 piece|90|229|3|34|9|24|140
+Pavlova (crisp meringue base topped with whipped cream and fresh berries)|1 slice|140|245|3|38|9|34|65
+BBQ Pork Ribs (slow-smoked baby back ribs glazed in sweet tangy sauce)|half rack|320|442|30|22|26|16|980
+Buffalo Chicken Wings (deep-fried poultry wings tossed in spicy cayenne butter)|6 pieces|220|270|24|3|18|1|920
+BBQ Chicken Wings (baked poultry wings coated in smoky sweet barbecue glaze)|6 pieces|230|292|23|14|16|11|840
+Honey Garlic Wings (crispy fried chicken wings tossed in sweet soy glaze)|6 pieces|230|300|23|16|16|13|860
+Classic Hot Dog (grilled beef frankfurter in a soft bun with mustard)|1 piece|140|266|11|24|14|3.5|680
+Chili Cheese Dog (frankfurter in bun topped with beef chili and cheddar)|1 piece|220|356|16|28|20|4.5|940
+Corn Dog (battered frankfurter on a stick deep-fried until golden)|1 piece|130|244|8|26|12|4|590
+Cheeseburger Classic (grilled beef patty with cheddar, lettuce and tomato)|1 piece|240|379|22|30|19|5|780
+Bacon Double Cheeseburger (two beef patties with crispy bacon and American cheese)|1 piece|320|516|34|32|28|5.5|1120
+Patty Melt (grilled beef patty with melted swiss and onions on rye bread)|1 piece|260|406|24|28|22|4|840
+Philly Cheesesteak (thinly sliced ribeye with melted provolone in hoagie roll)|1 piece|300|436|28|36|20|4.5|960
+Reuben Sandwich (corned beef, swiss cheese, sauerkraut and dressing on rye)|1 piece|280|378|24|30|18|4|1080
+Club Sandwich (triple-decker toasted bread with turkey, bacon, lettuce and mayo)|1 piece|290|376|24|34|16|4.5|890
+Macaroni and Cheese (elbow pasta baked in rich creamy cheddar sauce)|1 bowl|280|370|14|38|18|4|760
+Chicken Fried Steak (breaded pan-fried cube steak topped with white gravy)|1 plate|320|398|26|24|22|2.5|890
+Meatloaf with Gravy (baked seasoned ground beef slice with brown sauce)|1 slice|220|271|20|14|15|4.5|680
+Pulled Pork Sandwich (slow-smoked shredded pork with BBQ sauce on brioche)|1 piece|260|340|24|34|12|11|820
+Biscuits and Gravy (flaky buttermilk biscuits smothered in sausage cream gravy)|1 plate|280|372|10|38|20|3|940
+Chicken and Waffles (crispy fried poultry tenders served over Belgian waffle)|1 plate|340|460|26|44|20|9|880
+Loaded Baked Potato (russet potato topped with sour cream, cheese and bacon)|1 piece|280|331|11|38|15|2.5|540
+Mozzarella Sticks (breaded fried cheese sticks served with marinara dip)|5 pieces|160|288|14|22|16|2.5|640
+Clam Chowder (creamy New England soup with chopped clams and potatoes)|1 bowl|300|278|12|26|14|3.5|880
+Cobb Salad (chopped greens topped with chicken, bacon, egg, avocado and blue cheese)|1 bowl|340|368|28|10|24|4|790
+Caesar Salad with Chicken (romaine lettuce with grilled poultry, croutons and parmesan)|1 bowl|300|322|26|14|18|2.5|720
+Buttermilk Pancakes (stack of three fluffy griddle cakes with butter and syrup)|3 pieces|240|329|6|56|9|22|540
+Blueberry Pancakes (griddle cakes studded with fresh berries and maple syrup)|3 pieces|260|337|6|58|9|24|520
+Chocolate Chip Pancakes (sweet pancakes loaded with melted cocoa morsels)|3 pieces|260|376|7|60|12|26|540
+Western Omelet (three-egg omelet filled with diced ham, peppers and onions)|1 omelet|220|248|20|6|16|3|640
+Hash Browns (shredded potatoes pan-fried until crispy and golden)|1 cup|140|204|2.5|26|10|1|360
+Corned Beef Hash (pan-fried diced cured beef with cubed potatoes and onions)|1 bowl|240|296|16|22|16|2|840
+Milkshake Vanilla (blended vanilla ice cream and whole milk topped with cream)|1 glass|320|368|8|48|16|42|180
+Milkshake Chocolate (rich blended cocoa ice cream shake with whipped topping)|1 glass|320|388|9|52|16|45|210
+Apple Pie (double-crust baked pastry filled with spiced cinnamon apples)|1 slice|160|284|2|42|12|22|240
+Key Lime Pie (tart citrus custard in graham cracker crust with whipped cream)|1 slice|150|277|4|36|13|26|190
+New York Cheesecake (dense baked cream cheese cake on graham base)|1 slice|150|314|6|32|18|24|260
+Brownie Sundae (warm chocolate fudge brownie topped with vanilla ice cream)|1 bowl|220|398|5|54|18|38|220
