@@ -1670,6 +1670,8 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+    // sheet 10 (staples & veg): boiled egg beats the 'ayam' rules
+    [/^(?!.*\b(sambal|chili|mayo|toast|brioche|sandwich|fried)\b)(hard.boiled eggs?|boiled eggs?|soft.boiled eggs?|telur (rebus|puyuh|pindang|ayam)|egg \((boiled|hard|whole|raw|large|medium))/i, 'boiled-eggs'],
     // sheet 8 (Indonesian & Thai): priority rules
     [/\b(gado[- ]?gado|lotek|karedok)\b/i, 'gado-gado'],
     [/^(?!.*\blele\b).*\b(nasi pecel|pecel|ketoprak|urap)\b/i, 'pecel'],
@@ -1818,6 +1820,22 @@
     [/^(?!.*\b(cake|kek|juice|jus|drink|smoothie|tart|tat|donut|doughnut|pie|goreng|fried|curry|kari|rice|nasi|pulut|pudding|sauce|chips|kerepek|fritters?|cucur|pakora|sorbet|yogh?urt|lassi|milk|susu|bun|polo|ice|ais|aiskrim|sago|sagu|salad|kerabu|pickle|pickled|acar|jam|muffin|bread|roti|cookies?|biscuits?|pizza|pork|prawn|udang|ikan|fish|chicken|ayam|soup|dessert|bowl|mochi|toffee|dodol|cendol|puff|pancake|porridge|bubur|tempoyak|stew|gulai|latte|tea|shake|powder|flavou?red|jelly|crumble|strudel|cider|vinegar|toast)\b)(guava|jambu batu)\b/i, 'guava'],
     [/^(?!.*\b(cake|kek|juice|jus|drink|smoothie|tart|tat|donut|doughnut|pie|goreng|fried|curry|kari|rice|nasi|pulut|pudding|sauce|chips|kerepek|fritters?|cucur|pakora|sorbet|yogh?urt|lassi|milk|susu|bun|polo|ice|ais|aiskrim|sago|sagu|salad|kerabu|pickle|pickled|acar|jam|muffin|bread|roti|cookies?|biscuits?|pizza|pork|prawn|udang|ikan|fish|chicken|ayam|soup|dessert|bowl|mochi|toffee|dodol|cendol|puff|pancake|porridge|bubur|tempoyak|stew|gulai|latte|tea|shake|powder|flavou?red|jelly|crumble|strudel|cider|vinegar|toast)\b)(buah )?(jackfruit|nangka|cempedak)\b/i, 'jackfruit'],
     [/^(?!.*\b(cake|kek|juice|jus|drink|smoothie|tart|tat|donut|doughnut|pie|goreng|fried|curry|kari|rice|nasi|pulut|pudding|sauce|chips|kerepek|fritters?|cucur|pakora|sorbet|yogh?urt|lassi|milk|susu|bun|polo|ice|ais|aiskrim|sago|sagu|salad|kerabu|pickle|pickled|acar|jam|muffin|bread|roti|cookies?|biscuits?|pizza|pork|prawn|udang|ikan|fish|chicken|ayam|soup|dessert|bowl|mochi|toffee|dodol|cendol|puff|pancake|porridge|bubur|tempoyak|stew|gulai|latte|tea|shake|powder|flavou?red|jelly|crumble|strudel|cider|vinegar|toast)\b)(avocado|avokado|alpukat)\b/i, 'avocado'],
+    // sheet 10 (staples & veg): start-anchored ingredient names only
+    [/^(?!.*\b(cake|cakes|fried|goreng|kuih|balls?|roll|triangle|uncooked|puffed|peanut|chicken)\b)(nasi putih|nasi perang|(white|brown|steamed|cooked|jasmine|basmati|glutinous) rice)\b/i, 'white-rice'],
+    [/^(?!.*\b(roll|cream|bun|sandwich|toast)\b)((gardenia|massimo)\b.*\b(bread|loaf)\b|(white|wholemeal) bread|bread \((white|wholemeal|brown)|roti (putih|wholemeal|sourdough))/i, 'bread'],
+    [/^(?!.*\b(sauce|spread|omelette|quesadilla|sticks|cake|burger|pizza|sandwich|toast)\b)(cheese \(|.*\b(cheese slices?|processed cheddar|cheddar slices?)\b)/i, 'cheese'],
+    [/^(?!.*\b(goreng|fried|crispy|mapo|stir|stew|soup|jjigae)\b)(tauhu|tofu)\b/i, 'tofu'],
+    [/^(?!.*\b(salad|wedges|puff|chips|fries|fried|goreng)\b)(potato|potatoes|baked potato|ubi kentang|kentang)\b/i, 'potato'],
+    [/^(?!.*\b(fritter|doughnut|donut|goreng|fried|kuih|cake|chips)\b)(sweet potato|keledek|ubi keledek)\b/i, 'sweet-potato'],
+    [/^(?!.*\b(sauce|paste|puree|ketchup|kuey teow|canned)\b)tomato\b/i, 'tomato'],
+    [/^(?!.*\bcake\b)(carrot|carrots|lobak merah)\b/i, 'carrot'],
+    [/^(?!.*\b(goreng|fried|stir)\b)(broccoli|brokoli)\b/i, 'broccoli'],
+    [/^(?!.*\b(sauce|risotto|tofu|truffle|melt|seafood)\b)(mushrooms?|shiitake|enoki|cendawan)\b/i, 'mushroom'],
+    [/^(?!.*\b(coconut|soup|stir|goreng|fried|belacan|garlic|oyster|sauce|masak|tiram sauce|bunga|cauliflower)\b)(cabbage|kobis|lettuce|bok choy|pak choy|choy sum|sawi|spinach|bayam|kailan)\b/i, 'cabbage'],
+    [/^(?!.*\b(pickle|pickled|acar|salad|kerabu|soup)\b)(cucumber|timun)\b/i, 'cucumber'],
+    [/^(?!.*\b(sambal|goreng|curry|pajeri|stir|fried|salted)\b)(eggplant|brinjal|aubergine|terung)\b/i, 'eggplant'],
+    [/^(?!.*\b(sauce|paste|dip|pan mee|cheese|dog|powder|belacan|crab|prawn|noodles?|chicken|fried|goreng)\b)(chilli|chili|cili|lada (merah|hijau)|capsicum|bell pepper)\b/i, 'chilli'],
+    [/^(?!.*\b(butter|sauce|satay|chocolate|chicken|milk|croissant|cake|biscuits?|cookies?)\b)(peanuts?|kacang tanah|kacang rebus|groundnuts?|almonds?|mixed nuts|kacang gajus|kacang walnut|cashew nuts?)\b/i, 'peanuts'],
   ];
   function foodIcon(name){
     var n = String(name || '');
