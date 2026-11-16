@@ -1670,6 +1670,10 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+    // sheet 11 (meat & seafood): raw/plain ingredient names; these beat older rules
+    [/^(?!.*\b(biryani|korma|curry|mandi|kebab|satay|varuval|perattal)\b)(lamb chops?|daging kambing mentah|kambing mentah|raw lamb)/i, 'lamb-chops'],
+    [/^(?!.*\b(soup|curry|kari|masak|sambal|goreng|fried|head|bee hoon|noodles?|sauce|tempoyak|asam|canned|paste|balls?|cakes?|roe|teriyaki|sashimi|nigiri|sushi|crackers?|keropok|otak|tuna|sardin\w*)\b)(ikan (kembung|tenggiri|siakap|merah|tilapia|bawal|patin|kerapu|selar|keli|tongkol|cencaru|kerisi)|mackerel|snapper|tilapia|catfish|seabass|barramundi|pomfret|cod|grouper|sea bass)\b/i, 'whole-fish'],
+    [/^(?!.*\b(puff|sandwich|salad|melt|mayo|mayonnaise|john|murtabak|thosai|tosai|onigiri|sushi|kimbap|spread|masak)\b)(canned (sardines?|tuna|mackerel)|sardines? in |sardin in |tuna (in |chunks|flakes)|(yeo's|rex|ayam brand|john west) (sardines|tuna)|mackerel \(canned|salmon \(canned)/i, 'canned-fish'],
     // sheet 10 (staples & veg): boiled egg beats the 'ayam' rules
     [/^(?!.*\b(sambal|chili|mayo|toast|brioche|sandwich|fried)\b)(hard.boiled eggs?|boiled eggs?|soft.boiled eggs?|telur (rebus|puyuh|pindang|ayam)|egg \((boiled|hard|whole|raw|large|medium))/i, 'boiled-eggs'],
     // sheet 8 (Indonesian & Thai): priority rules
@@ -1836,6 +1840,20 @@
     [/^(?!.*\b(sambal|goreng|curry|pajeri|stir|fried|salted)\b)(eggplant|brinjal|aubergine|terung)\b/i, 'eggplant'],
     [/^(?!.*\b(sauce|paste|dip|pan mee|cheese|dog|powder|belacan|crab|prawn|noodles?|chicken|fried|goreng)\b)(chilli|chili|cili|lada (merah|hijau)|capsicum|bell pepper)\b/i, 'chilli'],
     [/^(?!.*\b(butter|sauce|satay|chocolate|chicken|milk|croissant|cake|biscuits?|cookies?)\b)(peanuts?|kacang tanah|kacang rebus|groundnuts?|almonds?|mixed nuts|kacang gajus|kacang walnut|cashew nuts?)\b/i, 'peanuts'],
+    // sheet 11 (meat & seafood)
+    [/^(?!.*\b(burger|patty|kebab|lasagna)\b)(daging lembu kisar|ayam kisar|raw (lean |regular )?minced|minced (beef|chicken|pork|lamb|meat)|ground (beef|pork|chicken|turkey|meat))/i, 'minced-meat'],
+    [/^(?!.*\b(liver|gizzard|egg|soup|satay|curry|rice|goreng|fried|bakar|panggang|masak|rendang|percik|katsu|teriyaki|chop)\b)(dada ayam|peha ayam|drumstick ayam|kepak ayam|(raw )?(skinless )?chicken (breast|thigh|drumstick|wing))/i, 'chicken-breast'],
+    [/^(raw )?whole chicken\b|^ayam (utuh|keseluruhan|stim)\b|\b(white cut chicken|poached chicken|chicken sajji)\b/i, 'whole-chicken'],
+    [/^(raw (local )?beef|daging lembu (batang pinang|sirloin|tempatan))/i, 'raw-steak'],
+    [/^(perut babi|pork belly|raw pork|daging babi loin)/i, 'pork-belly'],
+    [/^(?!.*\b(roll|dog|hotdog|bun|burger|nuggets?)\b)(sausage|sosej|frankfurter)\b/i, 'sausages'],
+    [/^(?!.*\b(burger|cheeseburger|toastie|crepe|sandwich|blt)\b)(bacon|beef bacon|turkey bacon|streaky|ham\b(?! (chim|sui))|salami|luncheon meat|spam)/i, 'bacon'],
+    [/^(?!.*\b(teriyaki|don|sushi|nigiri|roll|maki|sandwich|poke|bowl|sashimi)\b)(salmon|ikan salmon|raw (atlantic )?salmon)\b/i, 'salmon-fillet'],
+    [/^(?!.*\b(fried|goreng|masak|fritters?|cucur|omelette|paste|chili|sambal|petai|telur masin|butter|nestum|kung pao|chicken|curry|kari|noodles?|crackers?|keropok|mee|biryani|rice|bowl)\b)(prawns?|shrimps?|udang|raw (fresh |tiger )?prawns)\b/i, 'prawns'],
+    [/^(?!.*\b(goreng|fried|masak|sambal|curry|kari|tepung|balls?)\b)(squid|sotong|calamari|cuttlefish|raw (fresh )?squid)\b/i, 'squid'],
+    [/^(?!.*\b(chilli|chili|cili|masak|black pepper|stick|omelette|soup|noodles?|bee hoon|curry)\b)(crab|ketam)\b/i, 'crab'],
+    [/^(?!.*\b(sauce|sambal|masak|soup|goreng|fried|noodles?|omelette|chowder|mushroom|rockefeller)\b)(clams?|lala|kerang|cockles?|mussels?|kupang|oysters?|scallops?|raw (blood )?cockles)\b/i, 'clams'],
+    [/^(?!.*\b(noodles?|soup|mee|bee hoon|bihun|congee|bubur|yong tau foo|skewer)\b)(fish ?balls?|bebola ikan|hotpot fish ball|surimi|crab stick|fishcake)/i, 'fish-balls'],
   ];
   function foodIcon(name){
     var n = String(name || '');
