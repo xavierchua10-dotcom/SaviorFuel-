@@ -1670,6 +1670,12 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+    // sheet 6 (breads & snacks): priority rules that must beat older ones
+    [/\bsamosas?\b(?!.*\b(thoke|chaat)\b)/i, 'samosa'],
+    [/\b(roti john|omelette baguette)\b/i, 'roti-john'],
+    [/^(?!.*\b(keping|rangup|crispy|crackers?)\b).*\b(lekor|leikor)\b|\bfish sausages?\b/i, 'keropok-lekor'],
+    [/^(?!.*\b(cream crackers?|wheat crackers?|sugar crackers?|golden crackers?|calcium|malkist|weetameal|biscuits?|seblak|gado|soto|nasi|mee|noodles?|rice crackers?|senbei|snack|egg roll)\b).*\b(keropok|kerupuk|krupuk|prawn (crackers?|chips?)|shrimp (chips?|crackers?)|fish crackers?|emping|rempeyek|kemplang|melinjo)\b/i, 'prawn-crackers'],
+    [/^(?!.*\b(fries|french fries|fish|noodles?|mee|nachos?|guacamole|topped)\b).*\b(potato (chips|crisps)|crisps|kerepek|(banana|tapioca|cassava|sweet potato|bitter gourd|jackfruit|kale|vegetable|veggie|apple) chips|pringles|lay'?s|mister potato|chipster)\b/i, 'potato-chips'],
     [/\b(bubble tea|boba|bobba|pearl milk tea|brown sugar (pearl|boba)|milk tea with pearls|with pearl|pearl (medium|regular|large)|deerioca|tapioca)\b/i, 'bubble-tea'],
     [/\b((iced|ice|cold) (latte|coffee|cappuccino|mocha|americano|cold brew)|latte ais|kopi (susu |o |c )?ais|iced white coffee|cold brew)\b/i, 'iced-latte'],
     [/\b(lemon tea|teh limau|teh o ais limau|iced lemon|limau ais|(iced|ice) tea|teh ais limau|peach tea)\b/i, 'iced-lemon-tea'],
@@ -1750,7 +1756,19 @@
     [/\b(isotonic|sports drink|100 ?plus|gatorade|pocari|energy drink|electrolyte|powerade|vitamin water|red ?bull|monster energy)\b/i, 'isotonic-drink'],
     [/^(?!.*\b(melon|chestnut|spinach|coconut|cress|buffalo|biscuit|crackers?|tuna|sardines?|chunks|noodles?|pasta|jelly|canned)\b).*\b((mineral|drinking|plain|spring|bottled|sparkling) water|air mineral|air kosong)\b|^water$/i, 'mineral-water'],
     [/\b(chrysanthemum|krisantemum|kek ?wa|herbal tea|chinese tea|green tea|jasmine tea|oolong|barley tea|ginger tea|teh halia|roselle)\b/i, 'chrysanthemum-tea'],
-    [/^(?!.*\b(chocolate|tea|bun|bread|cake|cookies?|biscuits?|pudding|powder|ice cream|candy|jelly|coffee|shake|rice|soup|cereal|cheese|yogh?urt|lassi|soy|soya|almond|oat|coconut|tart|flan|tofu|pau|roll|bar|custard|toffee|corn|fish|bee hoon|bihun|fudge|barfi|condensed|evaporated|creamer|pekat|sejat|steamed|butter|sweet)\b).*\b(milk|susu)\b/i, 'fresh-milk']
+    [/^(?!.*\b(chocolate|tea|bun|bread|cake|cookies?|biscuits?|pudding|powder|ice cream|candy|jelly|coffee|shake|rice|soup|cereal|cheese|yogh?urt|lassi|soy|soya|almond|oat|coconut|tart|flan|tofu|pau|roll|bar|custard|toffee|corn|fish|bee hoon|bihun|fudge|barfi|condensed|evaporated|creamer|pekat|sejat|steamed|butter|sweet)\b).*\b(milk|susu)\b/i, 'fresh-milk'],
+    [/\b(curry puffs?|karipap)\b/i, 'curry-puff'],
+    [/^(?!.*\b(soto|mee|noodles?|nasi|seblak|gado|rice|tuaran|bowl|dan bing|belanda|basah|fresh|soft|goi cuon|summer|turon|banana)\b).*\b(spring rolls?|popiah|popia|lumpia|lumpiang|cha gio|egg rolls?|poh pia)\b/i, 'spring-rolls'],
+    [/^(?!.*\b(soto|mee|noodles?|nasi|seblak|gado|rice|bowl)\b).*(\b(popiah|popia|lumpia)\b|fresh spring rolls?|goi cuon|summer rolls?)/i, 'popiah'],
+    [/^(?!.*\b(cream bun|roti ban|gardenia|massimo|polo bun|bor lor|pang susie|biapong|xiao long|bun bo|bun cha|burger|cheeseburger|brioche|toast|hot ?dog|bolo|pineapple bun|sausage|sticky rice)\b).*\b(pau|bao|baozi|siopao|steamed buns?|mantou|manapua)\b/i, 'pau'],
+    [/^(?!.*\bmanis\b).*(\b(murtabak|mutabak|martabak)\b|mughlai paratha)/i, 'murtabak'],
+    [/\b(thosai|tosai|dosa|dosai)\b/i, 'thosai'],
+    [/^(?!.*\b(with (tandoori|dhal|dhall|chicken)|butter chicken|set naan|kari|curry|keema)\b).*\b(naan|chapati|chapatti|capati)\b/i, 'naan-chapati'],
+    [/\bparatha\b/i, 'roti-canai'],
+    [/^(?!.*\b(pav|pisang|banana)\b).*\b(vadai|vada|vadas|wadai|bonda|bondas|pakora|bhaji)\b/i, 'vadai'],
+    [/\b(egg tarts?|dan tat|pastel de nata|tart telur|custard tarts?)\b/i, 'egg-tarts'],
+    [/\b(pineapple tarts?|tart nenas|tat nenas|nastar)\b/i, 'pineapple-tarts'],
+    [/^(?!.*\b(soup|fritters?|cucur|bakwan|bun|pancake|cendol|bubur|drink|air jagung|nasi|dough|tamales?|aiskrim|ice cream)\b).*\b(corn on the cob|jagung (bakar|rebus|manis rebus|cup)|grilled (sweet )?corn|boiled (sweet )?(yellow )?corn|steamed (sweet )?corn|corn cobs?)\b/i, 'corn-on-the-cob'],
   ];
   function foodIcon(name){
     var n = String(name || '');
