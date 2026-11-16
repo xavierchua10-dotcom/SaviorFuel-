@@ -2820,6 +2820,20 @@
   }
   function aiLeftSet(n){
     try { localStorage.setItem(AI_LEFT_KEY, JSON.stringify({ day: utcDay(), n: n })); } catch (e){}
+    refreshAiLeftPill();
+  }
+  // One place builds the "N free scans left" pill so the Add food screen and
+  // the camera always show the same number, even if the screen was drawn
+  // before a scan used one up.
+  function aiLeftPillHtml(left){
+    return '<span class="ai-left-pill"><b>AI</b>' + (left == null ? 'Free daily scans' : (left === 0 ? 'No free scans left today' : left + ' free scan' + (left === 1 ? '' : 's') + ' left')) + '</span>';
+  }
+  function refreshAiLeftPill(){
+    var el = document.querySelector('.ai-left-pill');
+    if (!el || !aiScanEnabled()) return;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = aiLeftPillHtml(aiLeftGet());
+    el.innerHTML = tmp.firstChild.innerHTML;
   }
 
   function runAiScan(canvas){
@@ -5240,7 +5254,7 @@
     var photoSub = aiScanEnabled() ? 'Point at your plate and the AI lists what\'s on it.' : 'Take a photo of your meal to get a starting guess';
     var left = aiScanEnabled() ? aiLeftGet() : null;
     var leftLine = !aiScanEnabled() ? '' :
-      '<span class="scan-pill"><b>AI</b>' + (left == null ? 'Free daily scans' : (left === 0 ? 'No free scans left today' : left + ' free scan' + (left === 1 ? '' : 's') + ' left')) + '</span>';
+      aiLeftPillHtml(left);
     function tile(action, mode, icon, title, sub, disabled){
       return '<button type="button" class="scan-option scan-tile" data-action="' + action + '"' + (mode ? ' data-mode="' + mode + '"' : '') + (disabled ? ' disabled' : '') + '>' +
         '<span class="scan-option-icon">' + icon + '</span>' +
