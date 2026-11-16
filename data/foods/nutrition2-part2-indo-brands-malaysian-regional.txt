@@ -1,0 +1,172 @@
+# Nutrition batch 2 part 2. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Indomie Mi Goreng Aceh (Spicy Acehnese Style Instant Fried Noodles)|1 packet|90|409|8|56|17|6|1190
+Indomie Mi Goreng Sambal Matah (Balinese Shallot Chili Instant Noodles)|1 packet|85|392|8|54|16|5|1120
+Indomie Mi Goreng Jumbo (Large Portion Instant Fried Noodles)|1 packet|129|592|12|82|24|9|1620
+Indomie Ayam Bawang (Onion Chicken Flavor Instant Noodle Soup)|1 packet|69|303|7|44|11|3|1250
+Indomie Kari Ayam (Rich Chicken Curry Instant Noodle Soup)|1 packet|72|325|7|45|13|3|1310
+Indomie Empal Gentong (Cirebon Beef Soup Instant Noodles)|1 packet|75|329|7|46|13|3|1290
+Indomie Soto Banjar Limau Kuit (South Kalimantan Lime Soup Noodles)|1 packet|75|329|7|46|13|3|1260
+Mie Sedaap Goreng Original (Crispy Onion Instant Fried Noodles)|1 packet|90|418|8|56|18|6|1090
+Mie Sedaap Korean Spicy Chicken (Extra Hot Korean Style Instant Noodles)|1 packet|87|405|8|55|17|7|1180
+Mie Sedaap Kari Spesial (Thick Curry Instant Noodle Soup)|1 packet|75|338|7|46|14|3|1340
+Mie Sedaap Soto (Savory Lime Chicken Instant Noodle Soup)|1 packet|75|325|7|45|13|3|1300
+Mie Sedaap White Curry (Creamy Penang Style Instant Noodle Soup)|1 packet|81|360|7|47|16|4|1380
+Pop Mie Rasa Ayam (Chicken Flavor Instant Cup Noodles)|1 cup|75|338|7|46|14|3|1240
+Pop Mie Rasa Baso (Beef Meatball Flavor Instant Cup Noodles)|1 cup|75|338|7|46|14|3|1270
+Pop Mie Goreng Spesial (Instant Fried Cup Noodles)|1 cup|80|367|8|50|15|5|1040
+Pop Mie Pedas Dower (Fiery Spicy Instant Cup Noodles)|1 cup|75|342|7|47|14|4|1290
+Supermi Ayam Bawang (Classic Onion Chicken Instant Noodle Soup)|1 packet|75|328|7|48|12|3|1260
+Sarimi Isi 2 Ayam Kecap (Double Portion Sweet Soy Chicken Noodles)|1 packet|126|553|11|80|21|9|1580
+SilverQueen Chunky Bar Cashew (Indonesian Milk Chocolate with Cashews)|1 bar|30|171|3|15|11|12|30
+SilverQueen Almond Milk Chocolate (Milk Chocolate Bar with Roasted Almonds)|1 bar|28|158|3|14|10|11|25
+SilverQueen Green Tea Matcha (White Matcha Chocolate with Cashews)|1 bar|28|162|3|15|10|12|30
+Beng-Beng Wafer Caramel (Chocolate Coated Crispy Wafer with Rice Crispies)|1 bar|25|122|1|16|6|10|45
+Beng-Beng Maxx (Large Chocolate Caramel Crispy Wafer Bar)|1 bar|32|160|2|20|8|13|60
+Chitato Sapi Panggang (Ridged Potato Chips Beef Barbecue Flavor)|1 pack|35|187|2|20|11|2|240
+Chitato Ayam Bumbu (Ridged Potato Chips Spiced Chicken Flavor)|1 pack|35|187|2|20|11|2|230
+Chitato Indomie Mi Goreng (Fried Noodle Flavored Ridged Potato Chips)|1 pack|35|187|2|20|11|2|260
+Taro Net Potato Barbecue (Crispy Lattice Snack Barbecue Flavor)|1 pack|32|164|2|21|8|2|250
+Taro Net Seaweed (Crispy Lattice Snack Roasted Seaweed Flavor)|1 pack|32|164|2|21|8|2|240
+Kusuka Keripik Singkong Balado (Spicy Red Chili Cassava Chips)|1 pack|30|156|1|20|8|2|190
+Kusuka Keripik Singkong Original (Salted Crispy Cassava Chips)|1 pack|30|156|1|20|8|1|170
+Qtela Tempe Original (Crispy Salted Fermented Soybean Chips)|1 pack|30|166|5|14|10|1|210
+Qtela Singkong Balado (Chili Flavored Cassava Chips)|1 pack|30|161|1|19|9|2|200
+Oreo Indonesia Vanilla (Chocolate Sandwich Cookies with Vanilla Creme)|3 cookies|29|142|1|21|6|11|115
+Oreo Indonesia Chocolate Creme (Chocolate Sandwich Cookies with Cocoa Filling)|3 cookies|29|142|1|21|6|11|110
+Oreo Indonesia Strawberry (Chocolate Sandwich Cookies with Strawberry Creme)|3 cookies|29|142|1|21|6|12|110
+Better Sandwich Biscuit (Chocolate Coated Biscuit with Vanilla Cream)|1 pack|22|105|1|14|5|7|65
+Good Time Chocochips (Indonesian Chocolate Chip Butter Cookies)|3 cookies|24|122|2|15|6|7|75
+Tango Wafer Cokelat (Layered Chocolate Cream Crispy Wafer)|4 wafers|20|101|1|13|5|6|35
+Nabati Richeese Wafer Keju (Layered Cheddar Cheese Cream Wafer)|4 wafers|20|97|1|12|5|5|95
+Malkist Roma Abon (Crispy Cracker Topped with Savory Beef Floss)|2 crackers|27|125|2|18|5|4|160
+Malkist Roma Kelapa (Sweet Coconut Glazed Crispy Crackers)|3 crackers|27|129|2|19|5|6|110
+Teh Botol Sosro Original (Bottled Sweetened Jasmine Tea)|1 bottle|350|112|0|28|0|28|15
+Teh Botol Sosro Less Sugar (Bottled Lightly Sweetened Jasmine Tea)|1 bottle|350|60|0|15|0|15|15
+Teh Kotak Jasmine (Carton Sweetened Jasmine Tea Drink)|1 carton|250|80|0|20|0|20|10
+Fruit Tea Sosro Apple (Bottled Sweet Apple Flavored Black Tea)|1 bottle|350|128|0|32|0|31|20
+Fruit Tea Sosro Blackcurrant (Bottled Blackcurrant Flavored Tea)|1 bottle|350|132|0|33|0|32|20
+Teh Pucuk Harum (Bottled Sweet Jasmine Tea)|1 bottle|350|104|0|26|0|26|15
+Pocari Sweat Indonesia (Electrolyte Ion Supply Isotonic Drink)|1 bottle|350|92|0|23|0|22|170
+Ultra Milk Full Cream (Indonesian UHT Whole Cow's Milk)|1 carton|250|152|8|12|8|11|110
+Ultra Milk Cokelat (Indonesian UHT Chocolate Flavored Milk)|1 carton|250|191|8|24|7|22|130
+Ultra Milk Stroberi (Indonesian UHT Strawberry Flavored Milk)|1 carton|250|187|7|24|7|22|120
+Ultra Milk Low Fat High Calcium (Reduced Fat Fortified UHT Milk)|1 carton|250|115|9|13|3|12|125
+Bear Brand Susu Steril (Sterilized Pure Cow's Milk Can)|1 can|189|123|6|9|7|9|95
+Susu Kental Manis Frisian Flag (Sweetened Condensed Creamer)|2 tbsp|40|119|1|22|3|21|45
+Tolak Angin Cair Sidomuncul (Liquid Herbal Honey and Mint Cold Remedy)|1 sachet|15|36|0|9|0|8|10
+Antangin JRG Cair (Liquid Ginger, Royal Jelly, and Ginseng Herbal Syrup)|1 sachet|15|36|0|9|0|8|10
+Adem Sari Ching Ku (Herbal Cooling Drink Can)|1 can|320|96|0|24|0|23|25
+Larutan Penyegar Cap Badak (Bottled Mineral Cooling Water Drink)|1 bottle|200|0|0|0|0|0|15
+Kratingdaeng Indonesia (Bottled Taurine and Caffeine Energy Drink)|1 bottle|150|96|0|24|0|23|90
+Extra Joss Original (Powdered Ginseng and Vitamin Energy Drink Mix)|1 sachet|4|8|0|2|0|1|140
+Kuku Bima Ener-G Anggur (Grape Flavored Herbal Energy Powder Mix)|1 sachet|4|8|0|2|0|1|130
+Kopiko 78C Coffee Latte (Bottled Ready-to-Drink Sweet Coffee Latte)|1 bottle|240|151|3|28|3|26|85
+Good Day Cappuccino (Instant Cappuccino Coffee Mix with Choco Granules)|1 sachet|25|107|1|19|3|13|45
+Kapal Api Special Mix (Indonesian Instant Black Coffee with Sugar)|1 sachet|24|89|1|19|1|16|15
+Torabika Duo (Instant Sweetened Indonesian Ground Coffee Mix)|1 sachet|25|93|1|20|1|17|15
+Luwak White Koffie Original (Low-Acid Sweet Instant White Coffee)|1 sachet|20|91|1|15|3|11|35
+Nasi Kandar Daging Masak Hitam (Rice with Dark Soy Spiced Beef and Curry Gravy)|1 plate|480|600|30|66|24|6|1320
+Nasi Kandar Sotong Telur (Rice with Curry Roe-Stuffed Squid and Okra)|1 plate|460|547|28|66|19|4|1240
+Char Kuey Teow Penang Udang (Wok-Fried Flat Rice Noodles with Prawns and Cockles)|1 plate|380|444|18|48|20|4|1180
+Char Kuey Teow Penang Ketam (Wok-Fried Flat Rice Noodles with Crab Meat)|1 plate|390|443|20|48|19|4|1160
+Penang Hokkien Mee (Spicy Prawn and Pork Noodle Soup)|1 bowl|450|431|22|52|15|5|1340
+Penang Asam Laksa (Tangy Tamarind Mackerel Noodle Soup with Mint)|1 bowl|460|358|18|58|6|9|1280
+Mee Sotong Hameed Pata (Penang Wok-Fried Yellow Noodles with Spicy Sambal Squid)|1 plate|400|445|19|54|17|7|1150
+Roti Canai Banjir Penang (Flaky Flatbread Drenched in Dhal, Fish Curry, and Sambal)|1 plate|280|314|9|38|14|3|740
+Oh Chien Penang (Crispy Fried Oyster Omelette with Starch)|1 plate|240|296|14|24|16|2|690
+Lor Bak Penang (Five-Spice Pork Roll with Fried Tofu and Prawn Fritter)|1 plate|220|274|15|22|14|4|680
+Penang Chendol Jalan Penang (Shaved Ice with Pandan Jelly, Red Beans, and Palm Sugar)|1 bowl|300|284|3|50|8|34|85
+Penang Ais Kacang (Shaved Ice with Red Beans, Corn, Grass Jelly, and Rose Syrup)|1 bowl|320|284|4|58|4|42|75
+Curry Mee Penang (White Coconut Curry Noodle Soup with Blood Cubes and Cuttlefish)|1 bowl|450|482|21|50|22|4|1290
+Koay Teow Th'ng Penang (Clear Duck and Fishball Flat Rice Noodle Soup)|1 bowl|420|370|20|50|10|3|1080
+Apom Manis Penang (Thin Crispy-Edged Coconut Rice Flour Crepe)|2 pieces|90|107|2|18|3|9|75
+Tau Sar Piah Penang (Flaky Savory-Sweet Mung Bean Pastry)|2 pieces|70|92|3|11|4|4|110
+Nasi Kandar Ayam Rose (Rice with Red Tomato-Chili Braised Chicken and Gravy)|1 plate|480|589|31|69|21|7|1260
+Ipoh Hor Fun Ayam Carik (Silky Flat Rice Noodles in Prawn-Chicken Broth)|1 bowl|420|383|21|50|11|3|1090
+Ipoh Kai Si Hor Fun (Shredded Chicken and Prawn Silky Noodle Soup)|1 bowl|430|396|23|49|12|3|1120
+Ipoh Nga Choi Kai (Poached Chicken with Crunchy Bean Sprouts and Soy Oil)|1 plate|280|306|28|8|18|2|780
+Ipoh Hakka Mee (Minced Pork Dry Egg Noodles with Shallot Oil)|1 bowl|360|399|18|48|15|3|960
+Ipoh Curry Mee Dry (Dry Yellow Noodles in Thick Spicy Curry Sauce with Roast Pork)|1 plate|410|455|21|50|19|4|1140
+Ipoh White Coffee Hot (Roasted Margarine-Caramelized Coffee with Condensed Milk)|1 cup|220|145|3|22|5|19|65
+Ipoh White Coffee Iced (Chilled Frothy Ipoh Roasted Coffee with Milk)|1 glass|260|166|3|25|6|22|70
+Heong Peah Ipoh (Flaky Baked Pastry with Melted Maltose Filling)|2 pieces|80|100|2|14|4|7|85
+Tau Fu Fah Gunung Rapat (Silky Soy Pudding with Ginger Palm Sugar Syrup)|1 bowl|240|155|6|26|3|22|25
+Kaya Puff Ipoh (Flaky Puff Pastry Filled with Coconut Egg Jam)|2 pieces|90|109|2|14|5|7|95
+Caramel Egg Custard Ipoh (Steamed Silky Sweet Egg Pudding)|1 cup|130|137|5|18|5|16|65
+Hainanese Chicken Chop (Deep-Fried Battered Chicken Leg with Tangy Brown Onion Gravy)|1 plate|380|438|28|32|22|8|940
+Hainanese Roti Bakar Kaya Butter (Toasted White Bread with Coconut Jam and Butter)|2 slices|110|146|4|19|6|8|210
+Hainanese Half-Boiled Eggs (Two Soft-Cooked Eggs with Dark Soy Sauce and Pepper)|2 eggs|110|142|12|1|10|1|340
+Hainanese Kopi Peng (Iced Traditional Nanyang Coffee with Condensed Milk)|1 glass|260|153|3|24|5|21|65
+Hainanese Cham Hot (Half Coffee Half Milk Tea Nanyang Blend)|1 cup|220|141|3|21|5|18|60
+Hainanese Mee Hailam (Braised Thick Yellow Noodles in Dark Soy Gravy)|1 plate|420|422|18|56|14|6|1120
+Hainanese Nasi Ayam Roasted (Fragrant Chicken Rice with Crispy Roasted Chicken)|1 plate|450|522|28|62|18|4|980
+Hainanese Nasi Ayam Steamed (Fragrant Chicken Rice with Poached White Chicken)|1 plate|450|508|29|62|16|4|950
+Chicken Rice Balls Melaka (Compressed Ping-Pong Sized Fragrant Rice Balls)|5 balls|250|290|5|54|6|1|480
+Asam Pedas Ikan Pari Melaka (Melaka Sour and Spicy Stingray Stew with Okra)|1 bowl|280|225|26|10|9|3|820
+Asam Pedas Tetel Melaka (Sour and Spicy Beef Trimmings Stew)|1 bowl|290|294|22|11|18|3|860
+Satay Celup Melaka (Assorted Skewers Boiled in Thick Spicy Peanut Gravy)|10 skewers|320|355|22|24|19|11|940
+Nyonya Laksa Melaka (Rich Coconut Curry Noodle Soup with Cockles and Tofu Puff)|1 bowl|460|495|20|52|23|6|1260
+Pongteh Ayam Nyonya (Braised Chicken and Potato in Fermented Soybean Sauce)|1 bowl|240|269|22|16|13|6|790
+Nyonya Pai Tee (Crispy Pastry Cups Filled with Braised Jicama and Prawns)|4 pieces|120|129|5|16|5|4|340
+Nyonya Cendol Melaka (Shaved Ice with Pandan Jelly and Concentrated Gula Melaka)|1 bowl|300|288|2|52|8|36|80
+Nyonya Kuih Chang (Blue Pea Glutinous Rice Dumpling with Spiced Pork and Winter Melon)|1 piece|180|205|8|32|5|6|420
+Itik Tim Melaka (Salted Mustard Green and Duck Sour Soup)|1 bowl|340|264|22|8|16|2|960
+Mee Rebus Johor (Yellow Noodles in Thick Sweet Potato and Dried Shrimp Gravy)|1 bowl|450|455|16|64|15|12|1140
+Kacang Pool Johor (Spiced Fava Bean and Minced Beef Dip with Thick Toast)|1 plate|360|374|18|44|14|6|880
+Otak-Otak Muar (Grilled Spiced Mackerel Fish Paste in Nipah Leaf)|3 pieces|90|113|11|6|5|2|360
+Lontong Kering Johor (Compressed Rice Cake with Beef Rendang, Serunding, and Sambal)|1 plate|420|466|20|56|18|7|940
+Telur Pindang Johor (Herbal Spiced Marbled Hard-Boiled Egg)|1 egg|60|73|6|1|5|0|180
+Soto Ayam Johor (Clear Spiced Chicken Soup with Rice Cakes and Begedil)|1 bowl|420|401|23|48|13|3|990
+Nasi Ambeng Johor (Communal Platter of Rice, Soy Chicken, Serunding, and Noodles)|1 plate|520|597|28|74|21|8|1120
+Nasi Kerabu Kelantan Ayam Percik (Blue Herb Rice with Spiced Coconut Grilled Chicken)|1 plate|480|547|28|66|19|7|940
+Nasi Dagang Kelantan (Steamed Coconut Glutinous Rice Blend with Tuna Curry)|1 plate|450|514|24|64|18|6|890
+Nasi Tumpang Kelantan (Cone-Shaped Layered Rice with Fish Floss and Curry)|1 cone|280|305|14|42|9|4|620
+Ayam Percik Kelantan (Charcoal-Grilled Chicken Basted in White Coconut Spice Sauce)|1 quarter|200|279|28|8|15|5|640
+Akok Kedut Kelantan (Wrinkled Baked Egg, Coconut Milk, and Palm Sugar Cake)|2 pieces|90|108|4|14|4|10|75
+Nekbat Kelantan (Baked Rice Flour Sponge Soaked in Clove-Scented Syrup)|2 pieces|100|105|2|22|1|16|45
+Lompat Tikam Kelantan (Layered Pandan Rice Pudding with Sweet Sticky Rice and Palm Sugar)|1 bowl|180|197|2|36|5|18|65
+Tahi Itik Kelantan (Sweet Whipped Egg White and Coconut Confection)|3 pieces|60|74|3|11|2|9|40
+Jala Mas Kelantan (Golden Egg Yolk Threads Cooked in Sweet Syrup)|1 portion|70|91|3|13|3|11|35
+Solok Lada Kelantan (Green Chilies Stuffed with Spiced Fish and Coconut)|2 pieces|110|118|8|8|6|3|340
+Budu Kelantan (Fermented Anchovy Sauce with Lime and Bird's Eye Chili)|1 tbsp|18|12|2|1|0|1|580
+Nasi Dagang Terengganu (Steamed Fenugreek Coconut Rice with Skipjack Tuna Curry)|1 plate|450|514|24|64|18|6|910
+Keropok Lekor Rebus (Boiled Chewy Mackerel Fish Sausage)|5 pieces|100|118|9|16|2|1|360
+Sata Terengganu (Grilled Spiced Fish and Coconut Paste in Banana Leaf Cone)|3 pieces|120|138|12|9|6|3|390
+Otak-Otak Terengganu (Steamed Spiced Fish Paste Wrapped in Banana Leaf)|3 pieces|100|117|11|7|5|2|350
+Laksa Kuah Putih Terengganu (Rice Noodles in Uncooked Creamy White Fish Coconut Gravy)|1 bowl|390|394|17|50|14|3|840
+Laksa Kuah Merah Terengganu (Rice Noodles in Spiced Red Coconut Fish Gravy)|1 bowl|400|416|18|50|16|4|890
+Nasi Minyak Terengganu (Spiced Ghee Rice with Chicken Curry and Acar)|1 plate|460|523|24|64|19|6|920
+Ketupat Sotong Terengganu (Squid Stuffed with Glutinous Rice in Sweet Coconut Gravy)|2 pieces|180|206|14|24|6|10|420
+Pulut Lepa Terengganu (Grilled Glutinous Rice Roll Stuffed with Spiced Fish Floss)|2 pieces|120|147|6|24|3|3|280
+Nasi Ulam Kedah (Cold Herbal Rice Salad with Salted Fish and Roasted Coconut)|1 plate|320|328|12|52|8|3|680
+Gulai Batang Pisang (Kedah Spiced Beef and Banana Stem Curry)|1 bowl|240|246|18|12|14|3|760
+Pekasam Ikan Lampam (Kedah Fermented River Fish Fried with Onion and Chili)|1 piece|90|134|16|4|6|1|690
+Laksa Kuala Perlis (Eel and Mackerel Sour Fish Soup with Sticky Rice Cake)|1 bowl|450|375|20|58|7|7|1180
+Harum Manis Pulut (Perlis Sweet Harumanis Mango with Coconut Glutinous Rice)|1 plate|260|287|4|52|7|28|160
+Ikan Bakar Kuala Perlis (Charcoal-Grilled Spiced Stingray with Tamarind Dip)|1 piece|180|199|28|6|7|3|590
+Masak Lemak Cili Api Daging Salai (Negeri Sembilan Smoked Beef in Fiery Turmeric Coconut)|1 bowl|220|282|24|6|18|2|740
+Masak Lemak Cili Api Ayam Kampung (Free-Range Chicken in Spicy Turmeric Coconut Gravy)|1 bowl|220|277|25|6|17|2|710
+Masak Lemak Cili Api Siput Sedut (River Snails Cooked in Turmeric Bird's Eye Chili Coconut)|1 bowl|240|231|16|8|15|2|780
+Rendang Minang Negeri Sembilan (Dry Spicy Beef Rendang with Turmeric Leaves)|1 portion|120|335|26|6|23|2|590
+Apam Johol (Steamed Palm Sugar Rice Cake Wrapped in Rambai Leaves)|2 pieces|100|114|2|22|2|10|75
+Gulai Tempoyak Ikan Patin Temerloh (Pahang Fermented Durian River Catfish Stew)|1 bowl|240|286|25|15|14|6|720
+Opor Daging Pekan (Pahang Royal Spiced Dark Roasted Coconut Beef Stew)|1 bowl|200|289|25|9|17|4|680
+Puding Raja Pekan (Pahang Royal Dessert with Jala Mas, Banana, and Cashews)|1 bowl|220|237|5|34|9|22|85
+Sambal Hitam Pahang (Spicy Bilimbi Fruit, Anchovy, and Bird's Eye Chili Paste)|2 tbsp|35|76|4|6|4|3|490
+Tuaran Mee Sabah (Wok-Fried Sabah Egg Noodles with Char Siu and Egg Roll)|1 plate|400|441|20|52|17|4|1060
+Beaufort Mee Sabah (Wok-Seared Noodles in Thick Dark Soy Vegetable Gravy)|1 plate|420|444|19|56|16|5|1120
+Ngiu Chap Sabah (Sabah Mixed Beef and Offal Noodle Soup)|1 bowl|440|440|26|48|16|3|1180
+Hinava Kadazan (Sabah Lime-Cured Raw Mackerel Salad with Ginger and Chili)|1 portion|130|148|22|6|4|2|460
+Ambuyat Sabah (Starchy Sago Paste Eaten with Tangy Mango and Fish Dip)|1 bowl|280|275|6|56|3|4|540
+Tuhau Sambal Sabah (Wild Ginger Pickled Relish with Chili and Lime)|2 tbsp|35|29|1|4|1|1|320
+Sang Nyuk Mee Tawau (Sabah Pork Broth Noodles Topped with Sliced Tender Pork)|1 bowl|430|432|24|48|16|3|1140
+Kolo Mee Sarawak Merah (Red Char Siu Sauce Tossed Springy Egg Noodles)|1 bowl|350|407|18|50|15|6|980
+Kolo Mee Sarawak Halal Chicken (Springy Egg Noodles with Minced Chicken and Shallot Oil)|1 bowl|350|394|19|48|14|3|920
+Mee Jawa Sarawak (Yellow Noodles in Sweet Potato Tomato Gravy with Beef Satay)|1 plate|450|464|20|60|16|11|1080
+Tomato Kuey Teow Sarawak (Crispy Fried Flat Noodles in Tangy Tomato Egg Gravy)|1 plate|420|432|18|54|16|8|1040
+Kompia Sibu Pork (Baked Foochow Sesame Bagel Stuffed with Braised Minced Pork)|1 piece|110|149|8|18|5|2|340
+Manok Pansuh Sarawak (Iban Bamboo-Cooked Chicken with Tapioca Leaves and Lemongrass)|1 bowl|220|222|26|7|10|2|580
+Umai Melanau Sarawak (Sarawak Raw Marinated Fish Salad with Shallots and Chili)|1 portion|130|135|22|5|3|1|450
+Midin Belacan Sarawak (Stir-Fried Wild Jungle Fern with Shrimp Paste and Garlic)|1 plate|150|124|4|9|8|2|520
+Linut Sarawak (Melanau Sago Starch Paste Served with Sambal Belacan)|1 bowl|270|258|4|56|2|2|480
+Dabai Fried Rice Sarawak (Stir-Fried Rice with Black Sarawak Olive Fruit)|1 plate|360|394|11|56|14|3|840

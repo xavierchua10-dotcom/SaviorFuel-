@@ -1,0 +1,99 @@
+# Nutrition batch 2 part 4. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Pad Thai Goong (Thai Stir-Fried Rice Noodles with Prawns, Tofu, Egg, and Peanuts)|1 plate|380|440|20|54|16|11|1040
+Pad Thai Gai (Thai Stir-Fried Rice Noodles with Chicken, Egg, and Crushed Peanuts)|1 plate|380|439|22|54|15|11|1010
+Pad See Ew Moo (Stir-Fried Wide Rice Noodles with Pork, Chinese Broccoli, and Dark Soy)|1 plate|390|432|20|52|16|8|1120
+Pad Kee Mao Gai (Spicy Thai Drunken Noodles with Chicken, Chili, and Holy Basil)|1 plate|390|432|21|51|16|7|1160
+Rad Na Moo (Wide Rice Noodles Topped with Pork and Chinese Broccoli in Thick Gravy)|1 plate|430|409|19|54|13|5|1180
+Khao Pad Gai (Thai Wok-Fried Jasmine Rice with Chicken, Egg, and Scallions)|1 plate|360|405|18|54|13|4|920
+Khao Pad Sapparod (Thai Pineapple Fried Rice with Prawns, Cashews, and Raisins)|1 plate|380|426|17|58|14|12|940
+Pad Kra Pao Moo Kai Dao (Spicy Thai Holy Basil Minced Pork with Rice and Fried Egg)|1 plate|420|484|24|52|20|5|1080
+Pad Kra Pao Gai (Spicy Thai Holy Basil Minced Chicken over Steamed Jasmine Rice)|1 plate|370|422|23|51|14|5|990
+Khao Kha Moo (Slow-Braised Five-Spice Pork Leg over Rice with Pickled Mustard Greens)|1 plate|460|544|26|56|24|7|1140
+Khao Moo Daeng (Thai Red Barbecue Pork and Crispy Pork Belly Rice with Sweet Gravy)|1 plate|450|519|25|62|19|12|1090
+Khao Mok Gai (Thai Muslim Spiced Yellow Chicken Biryani with Mint Chutney)|1 plate|450|509|27|62|17|5|940
+Tom Yum Goong Nam Khon (Creamy Spicy and Sour Prawn Soup with Lemongrass and Galangal)|1 bowl|350|227|18|14|11|5|1280
+Tom Yum Goong Nam Sai (Clear Spicy and Sour Prawn Soup with Mushrooms and Lime)|1 bowl|350|152|18|11|4|4|1240
+Gaeng Keow Wan Gai (Thai Green Curry with Chicken, Thai Eggplant, and Sweet Basil)|1 bowl|280|307|22|12|19|6|940
+Gaeng Daeng Moo (Thai Red Curry with Sliced Pork, Bamboo Shoots, and Coconut Milk)|1 bowl|280|308|21|11|20|5|960
+Gaeng Massaman Gai (Southern Thai Peanut, Potato, and Cardamom Chicken Curry)|1 bowl|320|365|22|22|21|8|920
+Gaeng Panang Nua (Thick Creamy Red Peanut Curry with Sliced Beef and Kaffir Lime)|1 bowl|260|311|24|11|19|6|950
+Gaeng Som Pla (Southern Thai Sour Turmeric Fish Curry with Mixed Vegetables)|1 bowl|300|180|22|14|4|5|1040
+Sai Ua (Northern Thai Grilled Herbal Lemongrass and Chili Pork Sausage)|1 link|120|246|16|5|18|2|580
+Nam Prik Ong (Northern Thai Spicy Minced Pork and Tomato Chili Dip)|3 tbsp|60|89|6|5|5|3|340
+Som Tam Thai (Shredded Green Papaya Salad with Peanuts, Dried Shrimp, and Lime)|1 plate|220|191|6|26|7|14|780
+Som Tam Pu Pla Ra (Isan Fermented Fish and Salted Crab Green Papaya Salad)|1 plate|220|143|7|22|3|10|1140
+Nam Tok Nua (Isan Grilled Waterfall Beef Salad with Toasted Rice and Chili Flakes)|1 plate|180|214|24|7|10|2|680
+Khao Niao (Steamed Thai Sticky Glutinous Rice in Bamboo Basket)|1 portion|150|164|3|38|0|0|15
+Moo Ping (Thai Grilled Sweet Soy and Coconut Milk Marinated Pork Skewers)|3 skewers|120|190|16|9|10|7|480
+Pla Pao (Salt-Crusted Charcoal-Grilled Tilapia Fish Stuffed with Lemongrass)|1 fish|260|218|38|3|6|1|640
+Goong Ob Woonsen (Claypot Baked Prawns with Glass Noodles, Ginger, and Pepper)|1 bowl|340|355|22|42|11|4|980
+Tod Mun Pla (Deep-Fried Spiced Red Curry Fish Cakes with Cucumber Relish)|4 pieces|120|181|14|11|9|4|490
+Hoy Tod (Crispy Pan-Fried Mussel and Bean Sprout Egg Pancake)|1 plate|280|341|15|32|17|4|760
+Yum Woon Sen Talay (Spicy Thai Glass Noodle Salad with Prawns, Squid, and Pork)|1 plate|260|254|18|32|6|7|840
+Kai Jeow Moo Sab (Thai Crispy Deep-Fried Minced Pork Omelette)|1 plate|180|274|15|4|22|1|520
+Pad Pak Boong Fai Daeng (Wok-Fried Morning Glory with Garlic, Chili, and Fermented Soy)|1 plate|160|120|3|9|8|2|640
+Khao Niao Mamuang (Thai Sweet Coconut Sticky Rice with Fresh Ripe Mango)|1 plate|280|313|4|54|9|28|180
+Tub Tim Grob (Crunchy Water Chestnut Rubies in Sweetened Coconut Milk and Ice)|1 bowl|260|264|2|46|8|26|75
+Kluay Buat Chi (Bananas Simmered in Sweetened Salted Coconut Milk)|1 bowl|240|248|2|42|8|22|110
+Khanom Krok (Thai Grilled Coconut Rice Pudding Hotcakes)|4 pieces|100|126|2|16|6|7|120
+Cha Yen (Thai Iced Milk Tea Brewed with Spiced Ceylon Tea and Condensed Milk)|1 glass|300|185|3|32|5|30|75
+Cha Manao (Thai Iced Lime Tea with Sweet Syrup)|1 glass|300|112|0|28|0|27|20
+Nom Yen (Thai Iced Pink Sala Syrup Milk Drink)|1 glass|300|193|3|34|5|32|70
+Oliang (Traditional Thai Iced Black Coffee with Roasted Grains and Sugar)|1 glass|300|96|0|24|0|23|15
+Pho Bo Tai Nam (Vietnamese Beef Noodle Soup with Rare Steak and Brisket)|1 bowl|520|443|30|56|11|4|1380
+Pho Bo Vien (Vietnamese Beef Meatball Rice Noodle Soup with Herbs)|1 bowl|500|440|27|56|12|4|1340
+Bun Thit Nuong (Grilled Lemongrass Pork over Cold Rice Vermicelli, Peanuts, and Fish Sauce)|1 bowl|440|446|24|56|14|11|980
+Bun Rieu Cua (Vietnamese Crab and Tomato Paste Rice Vermicelli Soup with Tofu)|1 bowl|480|412|22|54|12|5|1290
+Hu Tieu Nam Vang (Phnom Penh Style Clear Pork and Prawn Rice Noodle Soup)|1 bowl|480|411|24|54|11|4|1240
+Mi Quang (Central Vietnamese Turmeric Rice Noodles with Pork, Shrimp, and Rice Cracker)|1 bowl|440|434|23|54|14|5|1140
+Cao Lau Hoi An (Chewy Lye-Water Noodles with Char Siu Pork, Greens, and Crispy Croutons)|1 bowl|420|420|22|56|12|5|1080
+Banh Mi Thit Nguoi (Vietnamese Baguette with Cold Cuts, Pate, Pickled Daikon, and Cilantro)|1 sandwich|240|324|16|38|12|5|760
+Banh Mi Ga Nuong (Vietnamese Baguette with Grilled Lemongrass Chicken and Pickles)|1 sandwich|240|309|19|38|9|5|690
+Banh Mi Op La (Vietnamese Baguette with Two Fried Eggs, Soy Sauce, and Fresh Herbs)|1 sandwich|220|303|14|37|11|4|580
+Banh Mi Xiu Mai (Vietnamese Baguette with Savory Tomato Pork Meatballs)|1 sandwich|250|327|17|40|11|6|740
+Com Tam Suon Bi Cha (Saigon Broken Rice with Grilled Pork Chop, Shredded Skin, and Egg Loaf)|1 plate|480|538|30|64|18|9|1080
+Com Ga Hoi An (Turmeric Chicken Rice Salad with Shredded Chicken, Onions, and Herbs)|1 plate|420|444|26|58|12|4|890
+Banh Khot (Mini Crispy Savory Coconut Shrimp Pancakes with Fresh Lettuce Wraps)|6 pieces|220|259|12|28|11|3|560
+Goi Cuon Tom Thit (Fresh Rice Paper Summer Rolls with Prawn, Pork, Vermicelli, and Peanut Dip)|2 rolls|180|209|13|28|5|6|490
+Cha Gio Nem Ran (Crispy Deep-Fried Vietnamese Pork, Taro, and Glass Noodle Spring Rolls)|3 pieces|135|203|8|18|11|2|420
+Banh Cuon (Steamed Delicate Rice Batter Rolls Stuffed with Minced Pork and Wood Ear Mushrooms)|1 plate|240|259|11|38|7|3|680
+Banh Bot Loc (Translucent Chewy Tapioca Dumplings Stuffed with Shrimp and Pork Belly)|4 pieces|140|164|8|24|4|3|440
+Bo Luc Lac (Vietnamese Shaking Beef Cubes Stir-Fried with Watercress and Onions)|1 plate|240|282|28|11|14|5|740
+Cha Ca La Vong (Hanoi Turmeric and Dill Pan-Fried Fish with Vermicelli and Peanuts)|1 plate|360|398|26|42|14|4|880
+Canh Chua Ca Loc (Mekong Sweet and Sour Snakehead Fish Soup with Pineapple and Okra)|1 bowl|340|197|22|16|5|8|860
+Ca Kho To (Caramelized Claypot Catfish Braised in Fish Sauce and Black Pepper)|1 bowl|180|221|24|11|9|8|890
+Bo Kho (Vietnamese Spiced Beef and Carrot Stew Served with French Baguette)|1 bowl|420|415|26|44|15|6|1040
+Che Ba Mau (Three-Color Vietnamese Dessert with Mung Bean, Red Bean, Pandan Jelly, and Coconut)|1 glass|280|284|5|48|8|28|65
+Banh Flan (Vietnamese Caramel Egg Custard Pudding with Crushed Ice and Coffee)|1 cup|150|153|5|22|5|19|75
+Ca Phe Trung (Hanoi Whipped Egg Yolk and Condensed Milk Cream over Hot Black Coffee)|1 cup|180|163|5|20|7|18|65
+Nuoc Mia (Freshly Pressed Sugarcane Juice with Kumquat Lime and Ice)|1 glass|300|136|0|34|0|33|15
+Amok Trey (Cambodian Steamed Coconut Curry Fish Mousse in Banana Leaf Cup)|1 bowl|220|250|22|9|14|4|640
+Lok Lak Beef (Cambodian Stir-Fried Marinated Beef Cubes with Lime Pepper Dipping Sauce)|1 plate|260|286|26|14|14|6|760
+Bai Sach Chrouk (Cambodian Grilled Marinated Pork Slices over Broken Rice with Pickles)|1 plate|400|454|24|58|14|7|840
+Nom Banh Chok (Khmer Rice Noodles Topped with Green Fish Lemongrass Gravy and Raw Herbs)|1 bowl|420|387|18|54|11|4|880
+Kuy Teav Phnom Penh (Cambodian Pork and Prawn Clear Rice Noodle Soup with Fried Garlic)|1 bowl|460|403|22|54|11|3|1180
+Samlor Korko (Cambodian Traditional Stirred Green Vegetable and Fish Soup with Roasted Rice)|1 bowl|320|223|18|22|7|4|790
+Pleah Sach Ko (Cambodian Lime-Cured Beef Salad with Lemongrass, Shallots, and Peanuts)|1 plate|180|196|22|9|8|3|620
+Num Ansom Chek (Cambodian Steamed Banana and Sticky Rice Cake Wrapped in Banana Leaf)|1 piece|160|179|2|36|3|14|45
+Laab Moo Lao (Lao Minced Pork Salad with Fermented Fish Sauce, Mint, and Toasted Rice)|1 plate|180|206|22|7|10|2|780
+Tam Mak Hoong (Lao Spicy Green Papaya Salad with Crab Paste and Fermented Fish)|1 plate|220|130|6|22|2|9|1160
+Khao Piak Sen (Lao Chewy Hand-Cut Rice Noodle Soup with Shredded Chicken and Fried Shallots)|1 bowl|440|406|21|58|10|3|1140
+Ping Gai Lao (Lao Charcoal-Grilled Lemongrass and Garlic Marinated Chicken)|1 quarter|200|248|29|6|12|3|680
+Mok Pa (Lao Steamed Dill and Lemongrass Fish Fillet Wrapped in Banana Leaf)|1 packet|180|183|24|6|7|2|560
+Or Lam (Luang Prabang Spicy Eggplant, Wood Ear Mushroom, and Buffalo Meat Stew)|1 bowl|300|233|20|18|9|3|840
+Sai Oua Lao (Lao Grilled Herbal Pork Sausage with Kaffir Lime Leaves and Galangal)|1 link|120|242|16|4|18|1|590
+Khao Poon (Lao Spicy Coconut Curry Rice Vermicelli Soup with Shredded Chicken and Cabbage)|1 bowl|450|453|21|54|17|5|1120
+Jeow Bong (Lao Sweet and Spicy Roasted Chili Paste with Buffalo Skin)|2 tbsp|35|63|2|7|3|4|380
+Khao Soi Lao (Luang Prabang Rice Noodle Soup Topped with Minced Pork Tomato Sauce)|1 bowl|440|425|21|56|13|5|1080
+Mohinga (Burmese Catfish and Lemongrass Chickpea Noodle Soup with Crispy Fritters)|1 bowl|460|433|21|58|13|4|1220
+Laphet Thoke (Burmese Fermented Tea Leaf Salad with Fried Beans, Peanuts, and Sesame)|1 plate|180|217|7|18|13|3|540
+Shan Noodles Soup (Burmese Shan Sticky Rice Noodles with Tomato Chicken Sauce and Peanuts)|1 bowl|420|412|20|56|12|5|1040
+Shan Noodles Dry (Tossed Shan Rice Noodles with Spiced Minced Chicken, Garlic Oil, and Pickles)|1 bowl|390|430|20|56|14|5|1020
+Ohn No Khao Swe (Burmese Coconut Chicken Noodle Soup with Crispy Egg Noodle Garnish)|1 bowl|480|505|23|56|21|5|1160
+Burmese Chicken Biryani Danbauk (Spiced Cashew and Raisin Rice Baked with Chicken Curry)|1 plate|480|544|27|64|20|8|980
+Nan Gyi Thoke (Burmese Thick Rice Noodle Salad with Chicken Curry, Chickpea Flour, and Egg)|1 plate|410|435|21|54|15|4|990
+Samosa Thoke (Burmese Crushed Samosa Salad with Chickpeas, Cabbage, and Tamarind Broth)|1 bowl|340|350|10|46|14|7|860
+Tohu Nway (Warm Burmese Chickpea Tofu Porridge Topped with Soy Sauce and Crushed Peanuts)|1 bowl|320|315|12|42|11|3|780
+Mont Hin Gar Fritter Bayar Kyaw (Burmese Crispy Yellow Split Pea Fritters)|3 pieces|90|139|5|14|7|1|280
+Sabuti (Chin State Hominy Corn Soup Served with Beef Broth)|1 bowl|340|294|14|46|6|2|760
+Falooda Burmese (Rose Syrup Milk Dessert with Basil Seeds, Jelly, Custard, and Ice Cream)|1 glass|340|330|6|54|10|42|95

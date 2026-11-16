@@ -1,0 +1,157 @@
+# Nutrition batch 2 part 3. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+FamilyMart Onigiri Salmon Teriyaki (Japanese Rice Ball with Sweet Soy Salmon)|1 piece|115|186|6|36|2|3|420
+FamilyMart Onigiri Tuna Mayo (Japanese Rice Ball with Tuna and Mayonnaise)|1 piece|115|205|5|35|5|2|390
+FamilyMart Onigiri Spicy Chicken Floss (Rice Ball with Chili Chicken Floss)|1 piece|115|199|6|37|3|4|440
+FamilyMart Onigiri Ayam Rendang (Rice Ball with Malaysian Spiced Beef-Style Chicken)|1 piece|115|204|6|36|4|2|460
+FamilyMart Oden Tom Yum Bowl (Assorted Fishcakes and Tofu in Spicy Sour Broth)|1 bowl|320|236|15|26|8|4|1240
+FamilyMart Oden Original Dashi Bowl (Assorted Fishcakes and Daikon in Kelp Broth)|1 bowl|320|223|15|25|7|3|1180
+FamilyMart Crispy Chiki Original (Boneless Fried Spiced Chicken Thigh Fillet)|1 piece|110|212|16|10|12|1|520
+FamilyMart Crispy Chiki Spicy (Hot Chili Marinated Fried Chicken Fillet)|1 piece|110|216|16|11|12|1|560
+FamilyMart Sofuto Matcha Cone (Japanese Green Tea Soft Serve Ice Cream)|1 cone|135|175|4|24|7|18|65
+FamilyMart Sofuto Belgian Dark Chocolate (Rich Dark Chocolate Soft Serve Cone)|1 cone|135|188|4|25|8|19|70
+FamilyMart Brown Sugar Bubble Milk (Fresh Milk with Caramelized Tapioca Pearls)|1 cup|360|292|7|48|8|42|110
+FamilyMart Chicken Katsu Bento (Breaded Fried Chicken Cutlet with Steamed Rice)|1 box|380|446|24|56|14|5|890
+FamilyMart Spaghetti Bolognese (Ready-to-Eat Tomato Minced Chicken Pasta)|1 box|340|342|15|48|10|7|780
+7-Eleven Egg Mayo Sandwich (Soft White Bread with Creamy Egg Salad Filling)|1 pack|130|227|8|24|11|4|420
+7-Eleven Tuna Mayo Sandwich (Soft White Bread with Seasoned Tuna Mayonnaise)|1 pack|130|213|9|24|9|3|450
+7-Eleven Chicken Ham and Cheese Sandwich (Triangle Sandwich with Processed Cheese)|1 pack|135|226|10|24|10|4|540
+7-Eleven Nasi Lemak Bungkus (Convenience Store Coconut Rice with Sambal and Egg)|1 packet|240|303|9|42|11|4|680
+7-Eleven Chicken Char Siu Pau (Steamed Fluffy Bun with Sweet BBQ Chicken)|1 piece|105|151|7|24|3|7|340
+7-Eleven Kaya Pau (Steamed Fluffy Bun Filled with Coconut Egg Jam)|1 piece|95|139|3|25|3|11|190
+7-Eleven Red Bean Pau (Steamed Fluffy Bun with Sweet Azuki Bean Paste)|1 piece|95|138|4|26|2|11|180
+7-Eleven Slurpee Cola Large (Carbonated Frozen Cola Slush Drink)|1 cup|450|184|0|46|0|46|45
+7-Eleven Big Gulp Mountain Dew (Large Fountain Citrus Soda)|1 cup|500|248|0|62|0|62|75
+7-Eleven Chicken Sausage Roll (Puff Pastry Wrapped Chicken Frankfurter)|1 piece|95|161|6|14|9|2|380
+7-Eleven Curry Puff Potato (Baked Flaky Pastry with Spiced Potato Filling)|1 piece|90|139|3|16|7|2|290
+Gardenia Breakthru Wholemeal Bread (100% Wholegrain Wheat Sandwich Bread)|2 slices|64|146|7|25|2|2|230
+Gardenia Sambal Bilis Bun (Soft Sweet Bun Filled with Spicy Anchovy Paste)|1 bun|70|168|5|28|4|6|320
+Gardenia Delicia Butterscotch Roll (Sweet Caramel Flavored Cream Bread Roll)|1 bun|65|168|4|29|4|10|190
+Gardenia Squiggles Chocolate (Cream-Filled Chocolate Flavored Mini Swiss Roll)|1 pack|50|158|2|24|6|14|110
+Ramly Chicken Burger Patty (Frozen Seasoned Minced Chicken Patty)|1 patty|70|145|10|6|9|1|340
+Ramly Beef Burger Patty (Frozen Seasoned Minced Beef Patty)|1 patty|70|172|11|5|12|1|360
+Ramly Burger Ayam Special (Street Burger with Egg, Cheese, and Sauces)|1 burger|260|398|18|32|22|6|890
+Ramly Burger Daging Double (Double Beef Patty Street Burger with Mayonnaise)|1 burger|290|450|24|30|26|6|960
+Ramly Chicken Frankfurter (Frozen Skinless Chicken Hot Dog Sausage)|2 pieces|70|137|9|5|9|1|480
+Ramly Chicken Nuggets Tempura (Frozen Batter-Coated Chicken Nuggets)|5 pieces|100|207|12|15|11|1|460
+Ayamas Crispy Chicken Nuggets (Frozen Breaded Chicken Breast Nuggets)|5 pieces|100|198|13|14|10|1|440
+Ayamas Chicken Drummets Honey (Frozen Roasted Honey Glazed Wing Drumettes)|3 pieces|105|191|15|8|11|5|490
+Ayamas Chicken Frankfurter Cheese (Chicken Sausages with Melted Cheese Bits)|2 pieces|75|146|9|5|10|1|510
+First Pride Tempura Chicken Nuggets (Crispy Battered Frozen Chicken Nuggets)|5 pieces|100|211|12|16|11|1|450
+Marina Tempura Fish Nuggets (Frozen Battered White Fish Nuggets)|5 pieces|100|193|11|17|9|1|430
+Figo Fish Ball (Frozen Bouncy White Fish Paste Balls)|6 pieces|90|81|8|10|1|1|520
+Figo Crab Flavored Stick (Frozen Surimi Imitation Crab Sticks)|4 sticks|65|65|5|9|1|2|410
+Mushroom Seafood Tofu (Frozen Fried Fish and Soy Bean Curd Cubes)|5 pieces|95|113|8|9|5|1|460
+Kawan Frozen Paratha Plain (Flaky Layered Indian-Style Frozen Flatbread)|1 piece|80|255|5|34|11|2|360
+Kawan Frozen Roti Canai (Traditional Malaysian Frozen Stretched Flatbread)|1 piece|85|254|5|36|10|2|380
+Kawan Frozen Chapati (Whole Wheat Unleavened Indian Frozen Flatbread)|2 pieces|80|187|6|34|3|1|290
+Kawan Frozen Spring Roll Vegetable (Crispy Frozen Vegetable Pastry Rolls)|3 pieces|90|138|3|18|6|2|310
+CP Shrimp Wanton Soup (Frozen Prawn Dumplings with Soup Base)|1 bowl|220|161|11|18|5|2|840
+CP Chicken Gyoza (Frozen Pan-Fried Japanese Chicken Dumplings)|5 pieces|100|154|9|16|6|2|420
+Maggi 2-Minute Curry Noodles (Malaysian Instant Curry Flavor Noodle Soup)|1 packet|79|341|7|49|13|3|1480
+Maggi 2-Minute Ayam Noodles (Malaysian Instant Chicken Flavor Noodle Soup)|1 packet|77|328|7|48|12|3|1420
+Mamee Chef Curry Laksa (Rich Coconut Curry Instant Noodles with Creamer)|1 packet|92|393|8|52|17|4|1450
+Mamee Monster BBQ Snack (Crunchy Seasoned Crushed Noodle Snack)|1 pack|25|122|2|15|6|1|190
+MyKuali Penang White Curry Mee (Rich Spicy Prawn Paste Instant Noodles)|1 packet|110|450|9|54|22|5|1680
+Cintan Mi Goreng Original (Classic Malaysian Instant Fried Noodles)|1 packet|80|358|7|51|14|4|1060
+Milo UHT Packet Drink (Chocolate Malt Beverage Carton)|1 carton|200|148|4|24|4|18|95
+Milo 3-in-1 Activ-Go (Instant Chocolate Malt Drink Mix Sachet)|1 sachet|33|127|3|22|3|14|65
+Milo Kaw Iced Kopitiam (Thick Concentrated Chocolate Malt Iced Drink)|1 glass|280|252|7|38|8|31|135
+100Plus Original Isotonic (Carbonated Electrolyte Sports Drink Can)|1 can|325|80|0|20|0|20|150
+100Plus Active Non-Carbonated (Still Lemon-Lime Electrolyte Drink Bottle)|1 bottle|500|112|0|28|0|28|220
+Yeo's Chrysanthemum Tea (Sweetened Herbal Flower Tea Packet)|1 carton|250|84|0|21|0|21|15
+Yeo's Soy Bean Milk (Sweetened Traditional Soybean Drink Packet)|1 carton|250|139|6|22|3|19|85
+Yeo's Lychee Drink (Sweetened Tropical Lychee Juice Drink Packet)|1 carton|250|104|0|26|0|26|20
+F&N Seasons Ice Lemon Tea (Sweetened Black Tea with Lemon Can)|1 can|300|104|0|26|0|26|25
+F&N Sarsi Cordial Drink (Carbonated Sarsaparilla Root Soda Can)|1 can|325|136|0|34|0|34|35
+Ribena Blackcurrant Packet (Vitamin C Rich Blackcurrant Juice Drink)|1 carton|200|88|0|22|0|22|15
+Dutch Lady Full Cream Milk UHT (Malaysian Whole Cow's Milk Carton)|1 carton|200|131|7|10|7|10|95
+Dutch Lady Low Fat High Calcium (Reduced Fat Fortified UHT Milk)|1 carton|200|95|7|10|3|10|100
+Dutch Lady Chocolate Flavored Milk (Sweetened Cocoa UHT Milk Carton)|1 carton|200|153|6|21|5|19|110
+Marigold HL Milk Low Fat (High Protein Low Fat Fortified Milk)|1 glass|250|119|10|13|3|12|130
+Vitagen Cultured Milk Less Sugar (Probiotic Fermented Milk Bottle)|1 bottle|125|64|2|14|0|13|35
+Yakult Ace Cultured Milk (Probiotic Lactobacillus Fermented Drink)|1 bottle|80|56|1|13|0|12|15
+Nestle Bliss Low Fat Yogurt Drink (Strawberry Probiotic Yogurt Smoothie)|1 bottle|200|117|3|24|1|21|75
+Anlene Actifit Plain Milk Powder (High Calcium Bone Health Milk Drink)|1 glass|200|102|7|14|2|11|110
+Horlicks Original Malted Drink (Wheat and Barley Malted Milk Beverage)|1 cup|220|160|5|26|4|16|120
+Nescafe Original Can (Ready-to-Drink Sweet Milky Coffee Can)|1 can|240|127|3|22|3|20|95
+Nescafe Tarik Kaw Can (Rich Pulled Malaysian Style Canned Milk Coffee)|1 can|240|144|3|24|4|21|105
+Wonda Coffee Kopi Tarik (Malaysian Pulled Milk Coffee Can)|1 can|240|140|3|23|4|20|100
+OldTown White Coffee 3-in-1 Classic (Instant Sweet Creamy White Coffee)|1 sachet|38|166|2|26|6|18|75
+Boh Teh Tarik Less Sweet (Instant Malaysian Pulled Milk Tea Sachet)|1 sachet|27|111|2|19|3|13|55
+Munchy's Lexus Cheese Cream (Calcium Crackers with Cheddar Cheese Filling)|3 packs|28|139|2|17|7|4|175
+Jacob's Weetameal Crackers (High Fiber Whole Wheat Crispy Crackers)|3 crackers|28|124|3|19|4|1|150
+Apollo Chocolate Layer Cake (Soft Sponge Cake with Cocoa Cream Coating)|1 piece|18|84|1|11|4|7|45
+London Choco Roll (Mini Chocolate Coated Sponge Roll Cake)|1 piece|16|80|1|10|4|6|40
+Super Ring Cheese Snack (Crispy Cheese Flavored Extruded Corn Rings)|1 pack|30|166|2|17|10|2|260
+Jack 'n Jill Roller Coaster BBQ (Crispy Potato Rings Barbecue Flavor)|1 pack|30|161|2|18|9|2|230
+Dahfa Dried Fish Fillet (Seasoned Shredded Sweet-Savory Fish Snack)|1 pack|30|101|9|14|1|8|580
+Tao Kae Noi Crispy Seaweed Original (Fried Seasoned Nori Seaweed Sheets)|1 pack|15|82|3|4|6|1|180
+Chesdale Processed Cheddar Slices (Individually Wrapped Cheese Slices)|1 slice|21|65|4|1|5|1|260
+Bega Stringers Cheese Stick (Mozzarella Peelable Snack Cheese Stick)|1 stick|20|56|5|0|4|0|150
+Sunglo Greek Style Natural Yogurt (Thick Unsweetened Strained Yogurt)|1 cup|140|130|11|8|6|7|75
+Nestle Milo Breakfast Cereal (Crunchy Chocolate Malt Wheat Puffs)|1 bowl|30|122|3|23|2|9|85
+HK Baked Pork Chop Rice (Egg Fried Rice Topped with Pork Chop and Tomato Cheese)|1 plate|520|592|30|64|24|11|1280
+HK Macaroni Soup with Ham (Clear Chicken Broth Macaroni with Sliced Ham and Egg)|1 bowl|420|367|19|48|11|3|1340
+HK Satay Beef Instant Noodles (Nissin Noodles in Thick Spicy Peanut Beef Gravy)|1 bowl|460|476|22|52|20|6|1420
+HK Scrambled Egg and Char Siu Rice (Fluffy Egg and BBQ Pork over Steamed Rice)|1 plate|460|507|26|58|19|8|1080
+HK Corned Beef and Egg Sandwich (Toasted Bread with Salted Beef and Omelette)|1 sandwich|180|251|14|24|11|3|680
+HK Pineapple Bun Bolo Bao (Sweet Crunchy Sugar-Crusted Soft Bun)|1 bun|95|289|6|46|9|16|240
+HK Pineapple Bun with Butter Bolo Yau (Warm Sugar Bun with Thick Cold Butter Slab)|1 bun|115|406|6|46|22|16|340
+HK Egg Tart Dan Tat (Flaky Puff Pastry Shell with Silky Egg Custard)|1 piece|85|211|4|24|11|12|140
+HK Condensed Milk Toast Nai Yau Do (Thick White Toast Drizzled with Butter and Milk)|1 slice|110|219|4|26|11|12|220
+HK French Toast Sai Do Si (Deep-Fried Peanut Butter Bread with Butter and Syrup)|1 piece|190|370|9|34|22|16|420
+HK Wonton Noodle Soup (Springy Egg Noodles with Shrimp Dumplings in Clear Broth)|1 bowl|380|336|20|46|8|2|1260
+HK Beef Brisket Noodle Soup (Tender Braised Beef Brisket and Tendon Egg Noodles)|1 bowl|440|440|28|46|16|3|1320
+HK Curry Fish Balls (Bouncy Street Fish Balls Simmered in Spicy Curry Sauce)|6 balls|120|137|11|12|5|2|690
+HK Cheung Fun with Peanut Sauce (Steamed Rice Noodle Rolls with Sweet Soy and Sesame)|1 plate|220|244|5|38|8|7|640
+HK Char Siu Rice (Cantonese Honey-Glazed BBQ Pork over Steamed Jasmine Rice)|1 plate|440|488|26|60|16|12|1060
+HK Siu Yuk Crispy Pork Belly Rice (Roasted Crackling Pork Belly with Rice)|1 plate|440|548|25|58|24|3|1090
+HK Roast Goose Rice (Cantonese Crispy-Skin Roasted Goose over Rice)|1 plate|460|578|28|58|26|5|1120
+HK White Cut Chicken Rice (Poached Ginger-Scallion Chicken over Steamed Rice)|1 plate|430|474|29|58|14|2|940
+HK Soy Sauce Chicken Rice (Braised Sweet Soy Whole Chicken Leg over Rice)|1 plate|450|496|28|60|16|7|1080
+HK Claypot Rice with Chinese Sausage (Scorched Rice with Lap Cheong and Chicken)|1 pot|480|532|24|64|20|6|1180
+HK Century Egg and Lean Pork Congee (Silky Rice Porridge with Preserved Egg)|1 bowl|400|302|16|46|6|1|980
+HK Sampan Congee (Cantonese Boat-Style Porridge with Squid, Peanuts, and Pork Skin)|1 bowl|420|345|18|48|9|1|1040
+HK Youtiao Fried Dough Stick (Crispy Deep-Fried Savory Cruller)|1 stick|75|274|5|32|14|1|340
+HK Silk Stocking Milk Tea Hot (Strong Ceylon Black Tea with Evaporated Milk)|1 cup|220|113|3|14|5|12|65
+HK Yin Yeung Iced (Chilled Blend of Hong Kong Milk Tea and Coffee)|1 glass|260|129|3|18|5|16|70
+HK Iced Lemon Tea Cha Chaan Teng (Strong Black Tea with Fresh Lemon Slices and Syrup)|1 glass|280|96|0|24|0|23|15
+HK Horlicks Iced (Chilled Malted Milk Drink Hong Kong Diner Style)|1 glass|260|168|5|28|4|19|115
+HK Ovaltine Hot (Warm Chocolate Malt Beverage Hong Kong Cafe Style)|1 cup|220|148|4|24|4|16|95
+HK Ribena with Lemon Iced (Chilled Blackcurrant Drink with Fresh Lemon)|1 glass|280|112|0|28|0|27|20
+HK Red Bean Ice Hung Dau Bing (Sweet Azuki Beans with Crushed Ice and Evaporated Milk)|1 glass|300|245|6|44|5|34|85
+Taiwanese Lu Rou Fan (Braised Minced Pork Belly Sauce over Steamed Rice)|1 bowl|320|418|16|48|18|6|880
+Taiwanese Kong Rou Fan (Thick Braised Soy Pork Belly Slab over Rice)|1 bowl|360|462|18|48|22|7|920
+Taiwanese Beef Noodle Soup Niu Rou Mian (Braised Beef Shank in Spicy Soy Broth)|1 bowl|520|514|32|56|18|5|1460
+Taiwanese Clear Broth Beef Noodle Soup (Light Herbal Braised Beef Noodle Soup)|1 bowl|500|470|31|55|14|4|1340
+Taiwanese Oyster Omelette O-A-Jian (Pan-Fried Oysters, Egg, and Sweet Potato Starch)|1 plate|260|290|13|28|14|7|780
+Taiwanese Gua Bao Pork Belly Bun (Steamed Lotus Bun with Braised Pork and Peanut Powder)|1 bun|150|269|12|26|13|7|520
+Taiwanese Fried Chicken Cutlet Ji Pai (XXL Crispy Spiced Five-Spice Chicken Breast)|1 piece|240|403|34|24|19|2|960
+Taiwanese Popcorn Chicken Yan Su Ji (Bite-Sized Crispy Basil Fried Chicken)|1 cup|160|278|22|16|14|1|680
+Taiwanese Oyster Vermicelli Mee Sua (Thickened Bonito Broth with Oysters and Intestines)|1 bowl|360|307|15|46|7|4|1180
+Taiwanese Dan Bing Egg Crepe (Pan-Fried Scallion Egg Roll with Sweet Soy Paste)|1 roll|140|179|9|20|7|3|440
+Taiwanese Scallion Pancake Cong You Bing (Flaky Pan-Fried Layered Spring Onion Flatbread)|1 piece|130|219|4|26|11|1|380
+Taiwanese Three Cup Chicken San Bei Ji (Braised Chicken in Sesame Oil, Soy, and Basil)|1 bowl|220|292|28|9|16|5|840
+Taiwanese Stinky Tofu Fried Chou Doufu (Crispy Fermented Tofu with Pickled Cabbage)|1 plate|200|238|14|14|14|4|760
+Taiwanese Iron Eggs Tie Dan (Chewy Soy-Braised Spiced Quail Eggs)|4 eggs|60|93|8|4|5|2|380
+Taiwanese Tea Egg Cha Ye Dan (Hard-Boiled Egg Simmered in Black Tea and Five-Spice)|1 egg|60|73|6|1|5|1|240
+Taiwanese Pineapple Cake Feng Li Su (Buttery Shortbread Tart with Pineapple Jam)|1 piece|45|176|2|24|8|13|55
+Taiwanese Sun Cake Tai Yang Bing (Flaky Puff Pastry with Sweet Maltose Filling)|1 piece|65|238|3|34|10|16|85
+Taiwanese Taro Balls Dessert Yu Yuan (Chewy Taro and Sweet Potato Balls in Syrup)|1 bowl|280|246|3|54|2|28|45
+Taiwanese Douhua Tofu Pudding (Silky Soy Pudding with Peanuts and Brown Sugar Syrup)|1 bowl|280|213|8|34|5|24|35
+Taiwanese Aiyu Jelly with Lemon (Refreshing Fig Seed Jelly in Honey Lemon Juice)|1 cup|260|104|0|26|0|25|15
+Taiwanese Pearl Milk Tea Boba (Classic Black Milk Tea with Chewy Tapioca Pearls)|1 cup|500|316|3|58|8|46|85
+Taiwanese Brown Sugar Boba Fresh Milk (Fresh Milk with Tiger-Stripe Brown Sugar Pearls)|1 cup|450|337|8|56|9|48|115
+Taiwanese Taro Milk Tea (Creamy Sweet Taro Flavored Milk Tea)|1 cup|500|341|3|62|9|48|95
+Taiwanese Cheese Foam Oolong Tea (Cold Brew Oolong Topped with Salted Cream Cheese)|1 cup|450|223|3|28|11|24|240
+Taiwanese Winter Melon Tea Dong Gua Cha (Caramelized Sweet Winter Melon Drink)|1 cup|450|152|0|38|0|37|25
+Taiwanese Passionfruit Green Tea with Coconut Jelly (Fruity Iced Tea with Nata de Coco)|1 cup|500|184|0|46|0|44|30
+Taiwanese Papaya Milk Mu Gua Niu Nai (Thick Blended Ripe Papaya and Fresh Milk)|1 cup|400|243|7|38|7|32|95
+Taiwanese Mung Bean Smoothie Lu Dou Sha (Blended Sweet Mung Bean Slush with Milk)|1 cup|400|276|8|52|4|36|75
+Taiwanese Sticky Rice Sausage Da Chang Bao Xiao Chang (Grilled Pork Sausage in Rice Bun)|1 piece|240|314|13|34|14|4|790
+Taiwanese Braised Cabbage Lu Bai Cai (Napa Cabbage Braised with Dried Shrimp and Mushrooms)|1 bowl|180|123|5|10|7|4|560
+Taiwanese Sesame Oil Chicken Soup Ma You Ji (Ginger and Rice Wine Chicken Soup)|1 bowl|380|334|26|8|22|2|840
+Taiwanese Pork Rib Herbal Soup Yao Dun Pai Gu (Pork Ribs Simmered in Chinese Herbs)|1 bowl|380|276|24|9|16|2|880
+Taiwanese Turnip Cake Luo Bo Gao (Pan-Fried Radish and Rice Flour Cake)|2 slices|140|162|3|24|6|2|460
+Taiwanese Cold Sesame Noodles Ma Jiang Mian (Wheat Noodles in Creamy Peanut Sesame Sauce)|1 bowl|320|367|12|46|15|5|780
+Taiwanese Fried Sweet Potato Balls Di Gua Qiao (Crispy Hollow Sweet Potato Puffs)|8 pieces|100|179|1|28|7|9|120

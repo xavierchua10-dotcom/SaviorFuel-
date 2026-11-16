@@ -1,0 +1,253 @@
+# Nutrition batch 2 part 1. name|serving|grams|kcal|protein|carbs|fat|sugar|sodium_mg (per serving, estimates)
+Rendang Daging Minang (West Sumatran Slow-Cooked Spiced Beef)|1 portion|120|344|26|6|24|2|580
+Rendang Ayam Padang (Spicy Coconut Braised Chicken)|1 piece|130|278|24|5|18|2|520
+Ayam Pop Padang (Steamed Skinless Poached Chicken)|1 piece|140|210|28|2|10|1|450
+Ayam Balado Merah (Fried Chicken in Red Chili Paste)|1 piece|140|303|25|8|19|3|590
+Ayam Cabe Ijo (Fried Chicken with Green Chili Relish)|1 piece|140|290|25|7|18|2|560
+Gulai Tunjang (Minangkabau Beef Tendon Curry)|1 bowl|180|292|22|6|20|2|680
+Gulai Otak (Spiced Cow Brain Coconut Curry)|1 portion|120|270|14|4|22|1|540
+Gulai Cincang (Diced Beef and Fat Spicy Curry)|1 bowl|160|338|20|6|26|2|650
+Gulai Kikil (Beef Skin and Cartilage Curry)|1 bowl|170|236|18|5|16|1|610
+Dendeng Balado (Crispy Beef Jerky with Chili)|1 portion|90|296|28|10|16|4|690
+Dendeng Batokok (Pounded Grilled Beef with Green Chili)|1 portion|100|266|29|6|14|2|620
+Ikan Tongkol Asam Padeh (Sour and Spicy Mackerel Tuna)|1 piece|130|200|26|6|8|2|580
+Kalio Daging (Wet Caramelized Spiced Beef Curry)|1 portion|130|326|25|7|22|3|590
+Gulai Daun Singkong (Cassava Leaves in Coconut Milk)|1 bowl|150|167|5|12|11|2|420
+Telur Dadar Padang (Thick Minang Spiced Omelette)|1 piece|110|212|11|6|16|1|480
+Perkedel Kentang Padang (Spiced Fried Potato Patty)|1 piece|65|131|3|14|7|1|240
+Nasi Padang Komplit Rendang (Steamed Rice with Beef Curry and Sides)|1 plate|450|736|34|78|32|6|1250
+Nasi Kapau (Bukittinggi Mixed Rice with Jackfruit Curry)|1 plate|480|726|32|82|30|7|1310
+Gulai Tambusu (Stuffed Cow Intestine Curry)|1 piece|120|255|15|6|19|1|570
+Sambal Lado Mudo (Padang Green Chili Tomato Relish)|2 tbsp|35|65|1|4|5|1|310
+Nasi Rawon (Steamed Rice with Black Beef Soup)|1 plate|520|563|30|68|19|4|1050
+Gudeg Jogja Komplit (Yogyakarta Sweet Jackfruit Stew with Chicken and Egg)|1 plate|460|598|26|74|22|24|890
+Gudeg Nangka (Sweet Young Jackfruit Coconut Stew)|1 bowl|160|218|4|28|10|18|380
+Krecek Pedas (Spicy Braised Cattle Skin)|1 portion|90|171|12|6|11|3|490
+Opor Ayam Putih (Javanese White Coconut Chicken Stew)|1 bowl|220|282|24|6|18|3|610
+Sayur Asem Jawa (Tamarind Sour Vegetable Soup)|1 bowl|250|106|4|18|2|6|620
+Garang Asem Ayam (Steamed Sour Spicy Chicken in Banana Leaf)|1 packet|200|232|23|8|12|3|640
+Brongkos Daging (Javanese Black Nut Beef and Tofu Stew)|1 bowl|260|305|22|16|17|7|780
+Tengkleng Kambing Solo (Spiced Goat Bone Soup)|1 bowl|320|264|24|6|16|2|840
+Tongseng Kambing (Sweet and Spicy Goat Stew with Cabbage)|1 bowl|340|347|26|18|19|9|890
+Sate Klathak (Solo Iron-Skewer Grilled Goat Meat)|2 skewers|140|228|28|2|12|1|520
+Nasi Liwet Solo (Coconut Savory Rice with Shredded Chicken and Egg)|1 plate|420|506|22|64|18|5|880
+Selat Solo (Javanese Braised Beef Steak Salad)|1 plate|350|352|24|28|16|12|760
+Timlo Solo (Clear Chicken Soup with Sausage Roll and Egg)|1 bowl|360|275|20|24|11|3|820
+Nasi Gandul Pati (Beef Stew Rice on Banana Leaf)|1 plate|430|510|25|62|18|7|910
+Tahu Gimbal Semarang (Fried Tofu with Prawn Fritter and Peanut Sauce)|1 plate|320|374|15|38|18|11|690
+Lumpia Semarang Goreng (Fried Bamboo Shoot and Prawn Spring Roll)|1 piece|85|169|6|16|9|4|280
+Lumpia Semarang Basah (Fresh Soft Bamboo Shoot Spring Roll)|1 piece|85|124|6|16|4|4|260
+Bandeng Presto (Pressure-Cooked Soft-Bone Milkfish)|1 piece|150|236|28|4|12|1|590
+Nasi Kucing Angkringan (Small Portion Rice with Dried Anchovies and Chili)|1 packet|140|164|6|26|4|2|340
+Sate Usus Angkringan (Grilled Marinated Chicken Intestine Skewer)|1 skewer|35|64|5|2|4|1|190
+Sate Telur Puyuh (Braised Quail Egg Skewer)|1 skewer|45|81|6|3|5|2|210
+Bacem Tahu (Javanese Sweet Soy Braised Tofu)|1 piece|70|96|7|8|4|6|290
+Bacem Tempe (Javanese Sweet Soy Braised Fermented Soybean)|1 piece|65|121|9|10|5|7|310
+Gethuk Lindri (Sweet Mashed Cassava Cake with Coconut)|2 pieces|90|135|1|26|3|12|85
+Tiwul Gunungkidul (Steamed Dried Cassava Granules with Palm Sugar)|1 bowl|150|187|2|38|3|14|60
+Nasi Timbel Komplit (Banana-Leaf Wrapped Rice with Fried Chicken and Tofu)|1 plate|480|598|32|68|22|5|940
+Karedok Sunda (Raw Vegetable Salad with Peanut and Galangal Dressing)|1 plate|240|254|8|24|14|9|480
+Lotek Bandung (Blanched Vegetable Salad in Sweet Peanut Sauce)|1 plate|260|283|9|28|15|11|510
+Empal Gepuk (Sundanese Sweet Fried Tenderized Beef)|1 piece|100|248|24|11|12|8|530
+Ayam Bakar Bakakak (Sundanese Whole-Split Grilled Spiced Chicken)|1 quarter|180|286|32|8|14|5|680
+Sayur Asem Sunda (West Javanese Tamarind Peanut Vegetable Soup)|1 bowl|250|115|5|17|3|6|610
+Nasi Tutug Oncom (Rice Mixed with Roasted Fermented Peanut Cake)|1 plate|320|353|12|56|9|3|670
+Nasi Liwet Sunda (Spiced Anchovy and Lemongrass Pot Rice)|1 plate|340|374|13|58|10|2|740
+Seblak Kerupuk Komplit (Spicy Wet Crackers with Egg and Meatballs)|1 bowl|350|384|14|46|16|5|1120
+Seblak Ceker (Spicy Wet Crackers with Braised Chicken Feet)|1 bowl|340|377|18|38|17|4|1080
+Mie Kocok Bandung (Beef Foot and Tendon Noodle Soup)|1 bowl|420|432|24|48|16|4|1050
+Cuanki Bandung (Clear Broth Fishball and Fried Won Ton Soup)|1 bowl|340|331|16|42|11|3|960
+Surabi Oncom (Savory Rice Flour Pancake with Fermented Peanut Topping)|1 piece|95|116|4|16|4|1|240
+Surabi Kinca (Sweet Rice Flour Pancake with Palm Sugar Coconut Syrup)|1 piece|110|132|2|22|4|11|120
+Peuyeum Bandung (Sweet Fermented Cassava)|100g|100|149|1|34|1|16|25
+Colenak (Roasted Fermented Cassava with Coconut Palm Sugar)|1 portion|130|190|2|32|6|18|90
+Cireng Bumbu Rujak (Fried Tapioca Fritters with Spicy Tamarind Dip)|5 pieces|140|217|2|32|9|8|420
+Cimol Bandung (Chewy Fried Tapioca Balls with Chili Powder)|1 cup|120|188|1|28|8|2|490
+Cilok Bumbu Kacang (Chewy Tapioca Balls with Peanut Sauce)|1 bowl|160|215|4|34|7|6|520
+Combro (Fried Grated Cassava Stuffed with Spicy Oncom)|1 piece|75|122|3|14|6|1|210
+Misro (Fried Grated Cassava Stuffed with Melted Palm Sugar)|1 piece|75|117|1|17|5|8|85
+Ayam Betutu Gilimanuk (Balinese Slow-Roasted Spiced Chicken)|1 quarter|200|310|30|7|18|2|740
+Bebek Betutu (Balinese Slow-Cooked Spiced Duck)|1 quarter|220|360|28|8|24|2|790
+Babi Guling Komplit (Balinese Suckling Pig Rice Plate)|1 plate|460|602|30|62|26|5|1020
+Sate Lilit Ikan (Balinese Minced Fish Lemongrass Skewer)|3 skewers|120|177|18|6|9|2|410
+Sate Lilit Ayam (Balinese Minced Chicken Coconut Skewer)|3 skewers|120|190|19|6|10|2|420
+Lawar Merah (Balinese Chopped Vegetables, Coconut, and Minced Pork)|1 portion|140|209|14|9|13|2|480
+Lawar Putih (Balinese Jackfruit, Long Bean, and Coconut Salad)|1 portion|140|179|6|14|11|3|390
+Nasi Campur Bali Ayam (Balinese Mixed Chicken Rice Plate)|1 plate|450|548|28|64|20|5|930
+Nasi Jinggo (Small Banana-Leaf Packet of Rice, Shredded Chicken, and Noodles)|1 packet|180|215|10|28|7|3|420
+Tum Ayam (Balinese Steamed Minced Chicken in Banana Leaf)|1 packet|110|152|16|4|8|1|360
+Serombotan Klungkung (Balinese Blanched Vegetables with Spicy Peanut Coconut Sauce)|1 plate|210|216|7|20|12|5|450
+Jukut Urab (Balinese Mixed Greens with Spiced Grated Coconut)|1 bowl|130|141|4|11|9|3|340
+Tipat Cantok (Balinese Rice Cake with Vegetables and Peanut Sauce)|1 plate|290|312|9|42|12|8|540
+Bubur Mengguh (North Balinese Savory Chicken Rice Porridge)|1 bowl|350|355|16|48|11|2|780
+Bubur Manado Tinutuan (Manado Vegetable and Pumpkin Rice Porridge)|1 bowl|340|301|8|56|5|6|680
+Cakalang Fufu (Minahasan Smoked Skipjack Tuna)|100g|100|148|27|1|4|0|540
+Cakalang Rabe Rica (Shredded Smoked Tuna in Fiery Chili Sauce)|1 portion|110|228|24|6|12|2|610
+Ayam Woku Belanga (Manado Basil and Lemongrass Spiced Chicken)|1 bowl|190|258|26|7|14|2|640
+Ayam Rica-Rica (Fiery Red Chili Stir-Fried Chicken)|1 portion|160|267|25|8|15|3|620
+Ikan Roa Sambal (Smoked Flying Fish Chili Relish)|2 tbsp|40|107|8|3|7|1|430
+Paniki (Minahasan Spiced Fruit Bat in Coconut Milk)|1 portion|150|238|22|6|14|1|590
+RW Rica-Rica (Minahasan Spicy Chili Braised Meat)|1 portion|160|268|24|7|16|2|640
+Brenebon Kacang Merah (Manado Red Kidney Bean Soup)|1 bowl|300|272|14|36|8|3|720
+Mie Cakalang Manado (Smoked Skipjack Tuna Noodle Soup)|1 bowl|410|395|22|52|11|3|980
+Panada Manado (Fried Bread Stuffed with Spicy Tuna)|1 piece|95|159|8|16|7|3|290
+Klappertaart Manado (Baked Dutch-Indonesian Coconut Custard Tart)|1 slice|130|185|4|22|9|14|140
+Lalampa Manado (Grilled Sticky Rice Roll Stuffed with Tuna)|1 piece|110|152|7|22|4|2|260
+Biapong Manado (Steamed Fluffy Bun with Sweet or Savory Filling)|1 piece|100|131|4|22|3|7|180
+Coto Makassar (South Sulawesi Spiced Beef Offal Soup)|1 bowl|340|306|24|12|18|2|940
+Konro Bakar (Makassar Grilled Spiced Beef Ribs)|1 portion|280|400|32|14|24|8|890
+Sop Konro (Makassar Rich Black-Spiced Beef Rib Soup)|1 bowl|400|376|30|10|24|3|980
+Sop Saudara (Pangkep Spiced Beef Soup with Glass Noodles)|1 bowl|360|332|23|24|16|2|910
+Pallubasa (Makassar Beef Soup with Toasted Grated Coconut)|1 bowl|360|354|25|14|22|3|950
+Mie Titi Makassar (Crispy Thin Noodles with Thick Chicken and Seafood Gravy)|1 plate|430|466|22|54|18|5|1040
+Nasi Kuning Makassar (Turmeric Rice with Shredded Tuna, Egg, and Liver)|1 plate|440|497|22|64|17|4|870
+Jalangkote (Makassar Fried Pastry Stuffed with Vegetables, Noodles, and Egg)|1 piece|95|139|4|15|7|2|250
+Pisang Epe (Grilled Pressed Banana with Palm Sugar Sauce)|1 portion|160|187|2|38|3|22|65
+Es Pisang Ijo (Green-Wrapped Banana in Sweet Coconut Marrow Porridge)|1 bowl|320|338|4|58|10|32|160
+Es Pallu Butung (Steamed Banana in Sweet Coconut Syrup and Pandan)|1 bowl|290|309|3|54|9|29|140
+Barongko (Steamed Mashed Banana and Coconut Custard in Banana Leaf)|1 packet|120|154|3|22|6|13|75
+Soto Betawi Daging (Jakarta Creamy Coconut and Milk Beef Soup)|1 bowl|380|368|24|14|24|4|960
+Soto Betawi Campur (Jakarta Creamy Beef and Offal Soup)|1 bowl|390|386|23|15|26|4|990
+Gado-Gado Betawi (Blanched Vegetables, Egg, and Crackers with Peanut Dressing)|1 plate|360|388|14|38|20|13|680
+Kerak Telor (Betawi Crispy Glutinous Rice and Duck Egg Omelette)|1 portion|180|240|11|22|12|2|460
+Nasi Uduk Betawi (Coconut Steamed Rice with Fried Chicken, Tempeh, and Egg)|1 plate|470|566|26|66|22|6|920
+Semur Jengkol (Betawi Sweet Soy Braised Dogfruit)|1 portion|140|175|6|22|7|9|520
+Semur Daging Betawi (Sweet Soy and Nutmeg Braised Beef)|1 bowl|180|270|24|12|14|8|680
+Sayur Babanci (Traditional Betawi Coconut Beef and Spice Stew)|1 bowl|280|299|20|12|19|4|790
+Asinan Betawi (Pickled Vegetables and Tofu in Sweet Sour Peanut Vinegar)|1 bowl|280|261|7|38|9|22|690
+Asinan Bogor (Pickled Tropical Fruits in Spicy Sweet Vinegar)|1 bowl|260|201|2|46|1|34|540
+Laksa Betawi (Yellow Coconut Curry Soup with Rice Vermicelli and Egg)|1 bowl|390|423|17|46|19|5|940
+Soto Tangkar (Jakarta Spiced Beef Rib Coconut Soup)|1 bowl|370|342|24|12|22|3|930
+Bir Pletok (Betawi Traditional Spiced Herbal Ginger Drink)|1 glass|250|88|0|22|0|20|35
+Kue Rangi (Betawi Coconut and Tapioca Waffle with Palm Sugar)|3 pieces|110|141|2|22|5|10|95
+Kue Ape (Betawi Crispy-Edged Pandan Rice Flour Pancake)|2 pieces|90|107|2|18|3|8|85
+Kue Pancong (Baked Coconut and Rice Flour Half-Moon Cake)|3 pieces|120|151|2|20|7|8|130
+Soto Medan (North Sumatran Yellow Coconut Chicken Soup)|1 bowl|380|345|23|16|21|3|920
+Bihun Bebek Medan (Medan Herbal Duck Rice Vermicelli Soup)|1 bowl|440|447|26|52|15|3|1080
+Mie Gomak Kuah (Batak Andaliman Pepper Spiced Noodle Soup)|1 bowl|410|410|15|56|14|4|990
+Mie Gomak Goreng (Batak Stir-Fried Thick Noodles with Andaliman)|1 plate|390|423|14|58|15|4|960
+Arsik Ikan Mas (Batak Spiced Carp Cooked with Torch Ginger and Andaliman)|1 piece|180|217|26|8|9|2|620
+Saksang Babi (Batak Spiced Minced Pork Cooked in Blood and Andaliman)|1 portion|160|292|22|6|20|2|690
+Babi Panggang Karo (Karo-Style Crispy Roasted Pork Belly)|1 portion|150|346|24|4|26|2|640
+Daun Ubi Tumbuk (Pounded Cassava Leaves Cooked in Coconut Milk)|1 bowl|160|171|5|13|11|2|410
+Naniura (Batak Acid-Cured Raw Carp in Spiced Paste)|1 portion|130|170|22|7|6|2|480
+Lontong Sayur Medan (Compressed Rice Cake in Rich Vegetable and Tauco Curry)|1 bowl|420|442|14|56|18|6|980
+Kwetiau Goreng Medan (Medan-Style Wok-Fried Flat Rice Noodles)|1 plate|400|442|16|54|18|5|1020
+Bika Ambon (Medan Honeycomb Pandan Tapioca Cake)|1 slice|95|141|3|21|5|12|90
+Bolu Meranti Gulung (Medan Soft Swiss Roll with Buttercream and Cheese)|1 slice|85|122|3|14|6|8|110
+Pempek Kapal Selam (Palembang Submarine Fishcake Stuffed with Whole Egg)|1 piece|220|281|16|34|9|6|640
+Pempek Lenjer (Palembang Cylindrical Mackerel Fishcake)|1 piece|110|147|9|21|3|4|380
+Pempek Adaan (Palembang Round Fried Mackerel Fishcake)|1 piece|75|121|6|13|5|3|290
+Pempek Kulit (Palembang Crispy Fried Fish Skin Cake)|1 piece|70|126|7|11|6|3|310
+Pempek Pistel (Palembang Fishcake Stuffed with Spiced Young Papaya)|1 piece|85|115|6|16|3|4|320
+Tekwan Palembang (Mackerel Fishball Soup with Jicama and Mushrooms)|1 bowl|340|263|18|32|7|4|890
+Model Palembang (Fried Tofu Stuffed with Fishcake in Shrimp Broth)|1 bowl|360|319|19|36|11|4|920
+Mie Celor Palembang (Thick Noodles in Creamy Coconut Shrimp Gravy)|1 bowl|430|467|20|54|19|6|1060
+Pindang Patin Palembang (Sour and Spicy Pangasius Catfish Soup)|1 bowl|320|243|26|10|11|4|780
+Pindang Tulang (Palembang Spicy Sour Beef Rib Soup)|1 bowl|350|288|25|11|16|4|840
+Burgo Palembang (Rolled Rice Flour Pancakes in White Fish Coconut Gravy)|1 bowl|330|349|14|44|13|4|790
+Lakso Palembang (Thick Rice Noodles in Turmeric Coconut Fish Gravy)|1 bowl|350|378|15|48|14|4|820
+Martabak HAR (Palembang Curry-Topped Egg Martabak)|1 plate|320|352|14|38|16|3|760
+Tempoyak Ikan Patin (Fermented Durian Pangasius Catfish Stew)|1 bowl|220|269|24|14|13|5|690
+Kemplang Panggang (Palembang Grilled Fish Cracker with Chili Dip)|4 pieces|45|138|4|26|2|2|340
+Soto Kudus (Clear Garlic Chicken Soup in Small Bowl)|1 bowl|300|285|19|32|9|2|790
+Soto Banjar (South Kalimantan Spiced Chicken Soup with Rice Cake)|1 bowl|390|380|22|46|12|3|910
+Soto Mie Bogor (Bogor Beef Noodle Soup with Fried Spring Roll)|1 bowl|430|445|21|52|17|4|1050
+Soto Sokaraja (Banyumas Beef Soup with Peanut Sambal and Crackers)|1 bowl|410|416|22|46|16|5|970
+Soto Padang (Clear Spiced Beef Broth with Crispy Beef and Vermicelli)|1 bowl|390|390|24|42|14|2|960
+Sate Ayam Madura (Grilled Chicken Skewers with Sweet Peanut Sauce)|10 skewers|260|344|32|18|16|10|780
+Sate Kambing Tegal (Young Goat Meat Skewers with Sweet Soy Chili)|10 skewers|250|346|34|12|18|8|740
+Sate Padang (Beef Skewers in Thick Spicy Turmeric Gravy)|10 skewers|280|343|30|22|15|4|890
+Sate Maranggi (Purwakarta Sweet Coriander Marinated Beef Skewers)|10 skewers|250|332|33|14|16|9|760
+Sate Taichan (Grilled White Chicken Skewers with Lime and Fiery Chili)|10 skewers|210|224|34|4|8|1|620
+Sate Buntel (Solo Minced Goat Meat Wrapped in Caul Fat)|2 skewers|180|318|24|6|22|3|680
+Sate Kerang Medan (Spiced Braised Cockle Skewers)|5 skewers|100|125|14|6|5|2|460
+Sate Ponorogo (Long Sliced Chicken Skewers in Rich Peanut Sauce)|6 skewers|240|319|29|17|15|9|720
+Bakso Sapi Kuah Komplit (Beef Meatball Noodle Soup with Tofu and Greens)|1 bowl|450|423|24|48|15|3|1180
+Bakso Urat (Coarse Beef Tendon Meatball Soup)|1 bowl|460|441|26|46|17|3|1210
+Bakso Mercon (Beef Meatballs Stuffed with Fiery Bird's Eye Chili)|1 bowl|450|428|24|47|16|3|1240
+Bakso Malang Komplit (Malang Meatball Soup with Fried Won Tons and Siomay)|1 bowl|480|479|23|54|19|4|1260
+Bakso Aci Garut (Chewy Tapioca Meatballs in Spicy Lime Broth)|1 bowl|380|371|10|58|11|3|1120
+Mie Ayam Jakarta (Soy-Seasoned Chicken Noodles with Bok Choy)|1 bowl|380|413|20|54|13|5|980
+Mie Ayam Yamin Manis (Sweet Dark Soy Chicken Noodles)|1 bowl|380|429|20|58|13|11|990
+Mie Aceh Goreng (Acehnese Spicy Curry Stir-Fried Noodles with Beef)|1 plate|420|466|22|54|18|4|1080
+Mie Aceh Kuah (Acehnese Thick Spiced Curry Noodle Soup)|1 bowl|450|475|22|54|19|4|1120
+Nasi Goreng Gila (Fried Rice Topped with Spicy Stir-Fried Meatballs and Sausage)|1 plate|450|517|22|60|21|6|1160
+Nasi Goreng Kambing Kebon Sirih (Spiced Ghee Goat Fried Rice)|1 plate|420|500|24|56|20|5|1040
+Nasi Goreng Mawut (Javanese Mixed Fried Rice and Noodles)|1 plate|410|456|16|62|16|6|1020
+Nasi Pecel Madiun (Rice with Blanched Vegetables, Peanut Sauce, and Rempeyek)|1 plate|400|433|14|56|17|11|780
+Tumpeng Mini (Cone-Shaped Turmeric Rice with Fried Chicken, Egg, and Tempeh)|1 plate|460|532|24|64|20|6|910
+Tahu Sumedang (Hollow Crispy Fried Tofu)|5 pieces|100|137|8|6|9|1|290
+Tahu Gejrot Cirebon (Fried Tofu in Sweet Spicy Garlic Tamarind Broth)|1 bowl|180|200|8|24|8|14|520
+Tahu Tek Surabaya (Fried Tofu, Egg, and Rice Cake in Petis Peanut Sauce)|1 plate|370|406|15|46|18|11|810
+Bakwan Jagung (Crispy Sweet Corn Fritter)|2 pieces|100|165|3|18|9|3|280
+Bakwan Sayur Bala-Bala (Crispy Mixed Vegetable Fritter)|2 pieces|110|178|3|19|10|2|310
+Tahu Isi Goreng (Bean-Sprout Stuffed Batter-Fried Tofu)|2 pieces|120|182|8|15|10|2|340
+Tempe Goreng Tepung (Crispy Battered Fried Tempeh)|2 pieces|100|173|9|14|9|1|310
+Pisang Goreng Tanduk (Crispy Battered Fried Plantain)|1 piece|110|180|1|26|8|11|140
+Pisang Molen (Pastry-Wrapped Fried Banana)|2 pieces|100|159|2|22|7|9|150
+Tape Goreng (Crispy Battered Fried Fermented Cassava)|2 pieces|100|163|1|24|7|12|110
+Risol Mayo (Breaded Fried Crepe Stuffed with Smoked Beef, Egg, and Mayonnaise)|1 piece|95|140|5|12|8|2|260
+Pastel Goreng (Crispy Fried Pastry with Vegetables, Vermicelli, and Egg)|1 piece|85|122|4|13|6|2|230
+Martabak Telur Daging (Pan-Fried Stuffed Crepe with Minced Beef and Scallions)|2 slices|150|216|11|16|12|1|420
+Martabak Manis Cokelat Keju (Thick Sweet Pancake with Chocolate and Cheese)|2 slices|180|244|6|28|12|16|280
+Martabak Manis Kacang Wijen (Thick Sweet Pancake with Peanuts and Sesame)|2 slices|170|235|6|28|11|15|240
+Sambal Terasi Matang (Cooked Shrimp Paste Chili Relish)|2 tbsp|35|69|2|4|5|2|420
+Sambal Matah Bali (Raw Shallot, Lemongrass, and Chili Oil Relish)|2 tbsp|35|79|1|3|7|1|290
+Sambal Bawang (Fiery Crushed Garlic and Chili Oil)|2 tbsp|35|88|1|3|8|1|310
+Sambal Ijo Padang (Coarse Green Chili and Tomato Relish)|2 tbsp|35|65|1|4|5|1|290
+Sambal Bajak (Sweet Caramelized Tamarind and Shrimp Paste Chili)|2 tbsp|35|73|1|6|5|4|340
+Sambal Dabu-Dabu (Manado Fresh Chopped Tomato, Chili, and Lime Salsa)|2 tbsp|35|34|1|3|2|1|240
+Pepes Ikan Mas (Steamed Spiced Carp in Banana Leaf)|1 packet|160|192|24|6|8|2|490
+Pepes Tahu Jamur (Steamed Spiced Crumbled Tofu and Mushroom in Banana Leaf)|1 packet|140|130|11|8|6|2|410
+Pepes Ayam Kemangi (Steamed Basil and Turmeric Chicken in Banana Leaf)|1 packet|160|197|24|5|9|2|470
+Botok Lamtoro Teri (Steamed Grated Coconut, River Tamarind, and Anchovies)|1 packet|120|158|9|8|10|2|440
+Lalapan Komplit (Assorted Raw Cucumber, Cabbage, Basil, and Eggplant)|1 plate|120|40|2|8|0|4|25
+Klepon (Boiled Pandan Glutinous Rice Balls with Liquid Palm Sugar)|4 pieces|80|110|1|22|2|11|45
+Onde-Onde Kacang Hijau (Sesame Seed Fried Glutinous Rice Ball with Mung Bean)|2 pieces|90|129|3|18|5|8|95
+Kue Lumpur Kentang (Soft Baked Potato and Coconut Custard Cake)|1 piece|75|100|2|14|4|7|85
+Kue Pukis (Half-Moon Coconut Milk Sponge Cake)|2 pieces|90|120|3|18|4|9|110
+Kue Cubit (Mini Street Sponge Cake with Chocolate Sprinkles)|4 pieces|80|112|3|16|4|8|95
+Dadar Gulung (Pandan Crepe Rolled with Sweet Grated Coconut)|1 piece|80|116|2|18|4|10|75
+Lemper Ayam (Glutinous Rice Roll Stuffed with Spiced Shredded Chicken)|1 piece|85|119|5|18|3|2|210
+Arem-Arem (Banana-Leaf Rice Roll Stuffed with Vegetables and Meat)|1 piece|110|144|5|22|4|2|240
+Nagasari (Steamed Rice Flour and Coconut Cake with Banana Center)|1 piece|85|107|1|19|3|9|55
+Kue Lapis Legit (Indonesian Thousand-Layer Spiced Butter Cake)|1 slice|60|137|3|11|9|8|95
+Kue Lapis Pepe (Steamed Layered Tapioca and Coconut Cake)|1 piece|75|103|1|18|3|9|60
+Kue Putu Bambu (Steamed Bamboo-Tube Rice Cake with Palm Sugar and Coconut)|2 pieces|80|111|1|20|3|9|50
+Cenil (Chewy Tapioca Pearls with Grated Coconut and Palm Sugar)|1 portion|100|135|1|26|3|12|40
+Serabi Solo Notosuman (Thin Rolled Coconut Milk Pancake)|1 piece|75|104|2|15|4|7|80
+Kue Cucur (Crispy-Edged Palm Sugar Fried Rice Flour Cake)|1 piece|70|104|1|16|4|9|55
+Kue Bugis Mandi (Glutinous Rice Dumpling in Thick Coconut Cream)|2 pieces|110|150|2|22|6|11|85
+Kue Talam Ubi (Two-Layer Steamed Sweet Potato and Coconut Cake)|1 piece|75|95|1|16|3|8|75
+Bolu Kukus Mekar (Blooming Steamed Sponge Cupcake)|1 piece|65|82|2|14|2|7|80
+Nastar Nanas (Pineapple Jam Filled Butter Cookie)|3 pieces|45|119|2|12|7|6|65
+Kastengel Keju (Baked Edam and Cheddar Cheese Shortbread Stick)|4 pieces|45|124|4|9|8|1|160
+Putri Salju (Crescent Cashew Butter Cookie Dusted with Icing Sugar)|3 pieces|45|115|2|11|7|5|55
+Kue Semprit (Piped Vanilla Custard Butter Cookie)|4 pieces|45|110|2|12|6|5|60
+Lidah Kucing (Thin Crispy Cat's Tongue Butter Biscuit)|5 pieces|40|102|2|10|6|5|55
+Kue Bangkit Santan (Melt-in-Your-Mouth Tapioca and Coconut Cookie)|5 pieces|40|88|1|12|4|5|45
+Es Campur (Mixed Fruit, Grass Jelly, and Tape in Rose Syrup and Milk)|1 bowl|320|291|3|54|7|38|95
+Es Doger (Fermented Cassava and Coconut Milk Shaved Ice)|1 glass|300|292|3|52|8|36|90
+Es Cendol Dawet Ayu (Pandan Rice Jelly in Coconut Milk and Palm Sugar)|1 glass|300|272|2|48|8|32|85
+Es Podeng (Traditional Coconut Ice Cream with Avocado and Bread)|1 bowl|300|307|4|48|11|32|120
+Es Selendang Mayang (Betawi Layered Rice Starch Cake in Coconut Palm Sugar)|1 bowl|280|255|2|46|7|28|80
+Es Kelapa Muda Gula Merah (Young Coconut Water and Flesh with Palm Sugar)|1 glass|300|158|1|34|2|28|65
+Es Jeruk Peras (Freshly Squeezed Sweet Mandarin Orange Juice with Ice)|1 glass|250|108|1|26|0|22|10
+Es Teh Manis (Indonesian Sweetened Iced Jasmine Tea)|1 glass|250|88|0|22|0|21|15
+Wedang Ronde (Hot Ginger Soup with Peanut-Stuffed Glutinous Rice Balls)|1 bowl|280|245|4|46|5|24|65
+Wedang Jahe (Traditional Hot Crushed Ginger and Palm Sugar Drink)|1 cup|220|80|0|20|0|18|20
+Wedang Uwuh (Yogyakarta Spiced Sappanwood, Clove, and Ginger Infusion)|1 cup|220|72|0|18|0|16|15
+Sekoteng (Hot Ginger Drink with Mung Beans, Peanuts, and Bread Cubes)|1 bowl|280|250|5|44|6|22|85
+Bajigur (Sundanese Hot Coconut Milk, Palm Sugar, and Ginger Drink)|1 cup|220|175|2|26|7|20|75
+Bandrek (Sundanese Hot Spiced Ginger and Palm Sugar Drink)|1 cup|220|109|1|24|1|21|30
+STMW Susu Telur Madu Jahe (Hot Milk, Raw Egg Yolk, Honey, and Ginger Tonic)|1 glass|250|229|11|26|9|22|120
+Jamu Kunyit Asam (Traditional Turmeric and Tamarind Herbal Tonic)|1 bottle|250|100|1|24|0|21|25
+Jamu Beras Kencur (Sweet Aromatic Ginger and Rice Herbal Drink)|1 bottle|250|116|1|28|0|23|20
+Jamu Pahitan Sambiloto (Bitter King of Bitters Herbal Tonic)|1 glass|150|16|0|4|0|1|15
+Kopi Tubruk Hitam (Unfiltered Indonesian Black Coffee with Grounds)|1 cup|200|4|0|1|0|0|5
+Kopi Tubruk Manis (Sweet Unfiltered Indonesian Black Coffee)|1 cup|200|56|0|14|0|13|10
+Es Kopi Susu Gula Aren (Iced Espresso with Fresh Milk and Palm Sugar)|1 glass|250|157|4|24|5|20|75
+Kopi Joss Jogja (Hot Black Coffee Plunged with Glowing Charcoal)|1 cup|200|56|0|14|0|13|10
+Kopi Tarik Aceh (Pulled Acehnese Robusta Coffee with Condensed Milk)|1 cup|220|136|3|22|4|19|65
+Kopi Sanger Aceh (Acehnese Filtered Coffee with Sweetened Condensed Milk)|1 cup|200|128|3|20|4|18|60
