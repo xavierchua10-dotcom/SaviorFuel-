@@ -201,7 +201,7 @@
 
     var editing = ui.editingMealId ? mealById(ui.editingMealId) : null;
     if (ui.editingMealId && !editing) ui.editingMealId = null; // it was deleted meanwhile
-    ui.selectedCategory = (editing && editing.category) ? editing.category : suggestCategoryForNow();
+    ui.selectedCategory = (editing && editing.category) ? editing.category : addCategoryNow();
     renderCategoryPicker();
     document.getElementById('addMealTitle').textContent = editing ? 'Edit meal' : 'Add Meal';
     document.getElementById('addMealSubmit').textContent = editing ? 'Save changes' : '+ Add Meal';

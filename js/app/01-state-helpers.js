@@ -41,6 +41,8 @@
     if (h < 18) return 'evening-snack';
     return 'dinner';
   }
+  // Which meal the Add flow is for: the one picked with "+ Add to <meal>" on the Log tab, otherwise whatever fits the time of day.
+  function addCategoryNow(){ return (typeof ui !== 'undefined' && ui.addCategory) || suggestCategoryForNow(); }
   var DEFAULT_PROFILE = { sex: 'male', age: 25, heightCm: 170, weightKg: 70, activityLevel: 'moderate', goal: 'maintain' };
   var DEFAULT_APP_SETTINGS = { unit: 'metric', haptic: true, density: 'comfortable', corners: 'rounded', theme: 'dark', bgArt: true, overviewMode: '3d', macroCardCollapsed: true, aiScanConsent: false };
   var APP_VERSION = '0.1.0';

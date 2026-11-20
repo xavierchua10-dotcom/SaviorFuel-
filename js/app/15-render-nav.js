@@ -44,7 +44,7 @@
     document.getElementById('view').innerHTML =
       '<div class="scan-page">' +
         '<h2 class="scan-page-title">Add food</h2>' +
-        '<div class="scan-ctx"><span class="ctx-pill"><i></i>Adding to ' + esc(CATEGORY_LABELS[suggestCategoryForNow()] || 'Meal') + '</span></div>' +
+        '<div class="scan-ctx"><span class="ctx-pill"><i></i>Adding to ' + esc(CATEGORY_LABELS[addCategoryNow()] || 'Meal') + '</span></div>' +
         '<button type="button" class="scan-option scan-hero" data-action="open-scanner" data-mode="photo">' +
           '<span class="scan-option-icon">' + icons.camera + '</span>' +
           '<span class="scan-option-text"><span class="scan-option-title">Snap your meal</span><span class="scan-option-sub">' + photoSub + '</span>' + leftLine + '</span>' +
@@ -238,6 +238,7 @@
   function switchTab(newTab){
     if (newTab === state.tab) return;
     var oldIndex = tabIndexOf(state.tab), newIndex = tabIndexOf(newTab);
+    if (state.tab === 'scan') ui.addCategory = null;   // leaving the Add page: forget which meal it was for
     closeScanner(); // safety: release the camera if it was somehow left open
     closeDayOverlay();
     closeFoodSearchOverlay();
@@ -344,6 +345,9 @@
     var action = el.dataset.action;
     if (action === 'set-tab'){
       switchTab(el.dataset.tab);
+    } else if (action === 'add-to-category'){
+      ui.addCategory = el.dataset.category;
+      switchTab('scan');
     } else if (action === 'add-meal'){
       addMealFromForm();
     } else if (action === 'close-add-meal-overlay'){

@@ -136,7 +136,9 @@
         '<span class="cat-count">' + group.length + (group.length === 1 ? ' food' : ' foods') + '</span>' +
         '<span class="category-section-total">' + Math.round(subtotal).toLocaleString() + ' kcal</span>' +
       '</button>' +
-      '<div class="acc meal-group' + (collapsed ? '' : ' open') + '"><div><div class="card flat">' + mealRowsHtml(group) + '</div></div></div>';
+      '<div class="acc meal-group' + (collapsed ? '' : ' open') + '"><div><div class="card flat">' + mealRowsHtml(group) +
+        (id === 'other' ? '' : '<button type="button" class="add-to-cat" data-action="add-to-category" data-category="' + id + '"><span aria-hidden="true">+</span> Add to ' + esc(label.toLowerCase()) + '</button>') +
+      '</div></div></div>';
   }
 
   // Foods that came from one photo (an AI scan logs each food on the plate

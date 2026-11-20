@@ -54,6 +54,7 @@
       if (dateKey(stamp) !== todayKey()) movedTo = dateKey(stamp);
     }
     expandMealGroup(ui.selectedCategory);
+    ui.addCategory = null;
     saveStore();
     maybeVibrate();
     closeAddMealOverlay(); // also clears the food selection state
