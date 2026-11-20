@@ -25,7 +25,10 @@
   function syncMealHash(m){ return syncH(syncStable(syncMealOut(m))); }
   function syncSettingsOut(){
     var a = Object.assign({}, STORE.appSettings); delete a.aiScanConsent;
-    return JSON.parse(JSON.stringify({ goals: STORE.goals, profile: STORE.profile, appSettings: a, myFoods: STORE.myFoods || [], water: STORE.water || {}, lastPlanTdee: STORE.lastPlanTdee || null }));
+    var o = { goals: STORE.goals, profile: STORE.profile, appSettings: a, myFoods: STORE.myFoods || [], water: STORE.water || {}, lastPlanTdee: STORE.lastPlanTdee || null };
+    if (STORE.weights && Object.keys(STORE.weights).length) o.weights = STORE.weights;   // only present once a weight is logged
+    if (STORE.goalsWeightKg) o.goalsWeightKg = STORE.goalsWeightKg;
+    return JSON.parse(JSON.stringify(o));
   }
   function syncSettingsHash(){ return syncH(syncStable(syncSettingsOut())); }
 
@@ -100,6 +103,9 @@
     if (keepLocalWater && STORE.water) Object.keys(STORE.water).forEach(function(k){ water[k] = Math.max(water[k] || 0, STORE.water[k] || 0); });
     STORE.water = water;
     if (rs.lastPlanTdee) STORE.lastPlanTdee = rs.lastPlanTdee;
+    var rw = cleanWeights(rs.weights), lw = keepLocalWater ? (STORE.weights || {}) : {};   // keepLocalWater = same account: keep days only logged here
+    STORE.weights = Object.assign({}, lw, rw);
+    if (rs.goalsWeightKg) STORE.goalsWeightKg = rs.goalsWeightKg; else if (!keepLocalWater) delete STORE.goalsWeightKg;
   }
 
   // The first sync after sign-in: three-way merge of this phone's log and
@@ -130,7 +136,7 @@
 
     var localHash = syncSettingsHash();
     if (!remoteDoc){
-      if (foreign){ STORE.goals = Object.assign({}, DEFAULT_GOALS); STORE.profile = Object.assign({}, DEFAULT_PROFILE); STORE.myFoods = []; STORE.water = {}; }
+      if (foreign){ STORE.goals = Object.assign({}, DEFAULT_GOALS); STORE.profile = Object.assign({}, DEFAULT_PROFILE); STORE.myFoods = []; STORE.water = {}; STORE.weights = {}; delete STORE.goalsWeightKg; }
       sync.meta.settingsHash = ''; sync.meta.settingsAt = 0;                                                    // nothing in the cloud yet: push ours
     } else if (foreign || !sync.meta.owner){
       syncApplyRemoteSettings(remoteDoc, !foreign);                                                             // the account is the source of truth

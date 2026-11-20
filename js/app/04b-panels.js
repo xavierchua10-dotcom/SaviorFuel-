@@ -84,7 +84,7 @@
         '<div class="pn-chips"><button type="button" class="pn-chip' + (imperial ? '' : ' on') + '" data-action="panel-unit" data-u="metric">KG</button>' +
           '<button type="button" class="pn-chip' + (imperial ? ' on' : '') + '" data-action="panel-unit" data-u="imperial">LB</button></div>' +
         '<div class="pn-err" id="pnErr" role="alert"></div>' +
-        '<div class="pn-hint">Your daily goals stay the same until you press Set my daily goals.</div>' +
+        '<div class="pn-hint">Your daily goals only change when you say so.</div>' +
         '<button type="button" class="btn-primary pn-save" data-action="panel-save">Save weight</button>' +
       '</div>');
   }
@@ -114,12 +114,56 @@
         (PN.unit === 'imperial' ? Math.ceil(kgToLb(L[0])) + ' and ' + Math.floor(kgToLb(L[1])) + ' lb' : L[0] + ' and ' + L[1] + ' kg') + '.';
       return;
     }
+    var prevKg = STORE.profile.weightKg;
     STORE.profile.weightKg = Math.round(kg * 10) / 10;
     STORE.appSettings.unit = PN.unit;
+    // goals count as "worked out at" the previous weight when a plan was calculated before this feature existed
+    if (!STORE.goalsWeightKg && STORE.lastPlanTdee) STORE.goalsWeightKg = prevKg;
+    recordWeight(STORE.profile.weightKg);
     saveStore();
     closePanel();
     renderApp();
     showToast('Weight saved');
+    if (goalsPromptNeeded()) setTimeout(openGoalsPrompt, prefersReducedMotion() ? 0 : 420);
+  }
+
+  /* ---- "Update your goals?" — offered after a weight change of 2 kg or more since the goals were last worked out.
+     Nothing changes unless the person taps Update. Keep also resets the baseline so it doesn't ask again for the same change. */
+  var GOALS_PROMPT_KG = 2;
+  function goalsPromptNeeded(){
+    var base = STORE.goalsWeightKg; if (!base) return false;
+    if (Math.abs(STORE.profile.weightKg - base) < GOALS_PROMPT_KG) return false;
+    var plan = computePlan(STORE.profile), g = STORE.goals;
+    return Math.abs(plan.calories - g.calories) >= 30 || Math.abs(plan.protein - g.protein) >= 5;
+  }
+  function pnFmtMass(kg){ return STORE.appSettings.unit === 'imperial' ? pnFmtWeight(kgToLb(kg)) + ' lb' : pnFmtWeight(kg) + ' kg'; }
+  function openGoalsPrompt(){
+    var base = STORE.goalsWeightKg; if (!base) return;
+    var plan = computePlan(STORE.profile), g = STORE.goals, diff = STORE.profile.weightKg - base;
+    PN.kind = 'goals';
+    function row(label, oldV, newV, unit){
+      return '<div class="pn-grow"><span class="pn-gl">' + label + '</span><s>' + Math.round(oldV).toLocaleString() + (unit || '') + '</s><b>' + Math.round(newV).toLocaleString() + (unit || '') + '</b></div>';
+    }
+    openPanel('Update your goals?',
+      '<div class="pn-goals"><div class="pn-sub">You\u2019re ' + (diff < 0 ? 'down ' : 'up ') + pnFmtMass(Math.abs(diff)) + ' since you set your goals. Want your targets to match ' + pnFmtMass(STORE.profile.weightKg) + '?</div>' +
+        row('Calories', g.calories, plan.calories) + row('Protein', g.protein, plan.protein, ' g') + row('Carbs', g.carbs, plan.carbs, ' g') + row('Fat', g.fat, plan.fat, ' g') +
+        '<button type="button" class="btn-primary pn-save" data-action="goals-update">Update my goals</button>' +
+        '<button type="button" class="pn-quiet" data-action="goals-keep">Keep my current goals</button></div>');
+  }
+  function applyGoalsPrompt(){
+    var prevGoals = Object.assign({}, STORE.goals), prevTdee = STORE.lastPlanTdee, prevBase = STORE.goalsWeightKg;
+    var plan = computePlan(STORE.profile);
+    STORE.goals = Object.assign({}, STORE.goals, { calories: plan.calories, protein: plan.protein, carbs: plan.carbs, fat: plan.fat });
+    STORE.lastPlanTdee = Math.round(plan.tdee);
+    STORE.goalsWeightKg = STORE.profile.weightKg;
+    saveStore(); closePanel(); renderApp();
+    showToast('Daily goals set: ' + plan.calories + ' kcal', 'Undo', function(){
+      STORE.goals = prevGoals; STORE.lastPlanTdee = prevTdee; STORE.goalsWeightKg = prevBase; saveStore(); renderApp();
+    });
+  }
+  function keepGoalsPrompt(){
+    STORE.goalsWeightKg = STORE.profile.weightKg;
+    saveStore(); closePanel();
   }
 
   /* ---- Name ---- */
@@ -148,6 +192,8 @@
     else if (a === 'pick-option') openOptionPanel(el.getAttribute('data-for'), el);
     else if (a === 'panel-opt') chooseOption(el.getAttribute('data-v'));
     else if (a === 'panel-unit') pnSetUnit(el.getAttribute('data-u'));
+    else if (a === 'goals-update') applyGoalsPrompt();
+    else if (a === 'goals-keep') keepGoalsPrompt();
     else if (a === 'panel-save'){ if (PN.kind === 'weight') saveWeightPanel(); else if (PN.kind === 'name') saveNamePanel(); }
   });
   // hold + or - to keep stepping

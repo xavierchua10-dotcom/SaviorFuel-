@@ -256,15 +256,19 @@
     if (!document.getElementById('profWeight')) return;
     var r = readProfileForm();
     if (r.err){ showToast(r.err); return; }
+    var wChanged = r.profile.weightKg !== STORE.profile.weightKg;
     STORE.profile = r.profile;
+    if (wChanged) recordWeight(r.profile.weightKg);
     saveStore();
   }
 
   function calculatePlanFromForm(){
     var r = readProfileForm();
     if (r.err){ showToast(r.err); return; }
-    var prevGoals = Object.assign({}, STORE.goals), prevTdee = STORE.lastPlanTdee;
+    var prevGoals = Object.assign({}, STORE.goals), prevTdee = STORE.lastPlanTdee, prevBase = STORE.goalsWeightKg;
     STORE.profile = r.profile;
+    STORE.goalsWeightKg = r.profile.weightKg;
+    recordWeight(r.profile.weightKg);
     var plan = computePlan(r.profile);
     // Merge rather than replace — the calculator only derives calories and
     // protein/carbs/fat, so sugar/sodium/water goals carry over.
@@ -273,7 +277,7 @@
     saveStore();
     renderApp();
     showToast('Daily goals set: ' + plan.calories + ' kcal', 'Undo', function(){
-      STORE.goals = prevGoals; STORE.lastPlanTdee = prevTdee; saveStore(); renderApp();
+      STORE.goals = prevGoals; STORE.lastPlanTdee = prevTdee; STORE.goalsWeightKg = prevBase; saveStore(); renderApp();
     });
   }
 

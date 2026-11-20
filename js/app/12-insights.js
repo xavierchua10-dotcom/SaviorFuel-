@@ -23,6 +23,45 @@
     return { stats: statsHtml };
   }
 
+  // Weight over time: current weight, change since the first point shown, a small line chart (last 8 weeks) and a quick log button.
+  function weightCardHtml(){
+    var imperial = STORE.appSettings.unit === 'imperial';
+    var all = weightSeries(), cutoff = dateKeyDaysAgo(56);
+    var pts = all.filter(function(p){ return p.key >= cutoff; });
+    if (pts.length < 2) pts = all.slice(-8);
+    var conv = function(kg){ return imperial ? kgToLb(kg) : kg; };
+    var unit = imperial ? 'lb' : 'kg';
+    var cur = pts[pts.length - 1], first = pts[0];
+    var curTxt = (Math.round(conv(cur.kg) * 10) / 10).toFixed(1);
+    var note = 'Log your weight now and then to see your trend.';
+    var chart = '';
+    if (pts.length >= 2){
+      var days = Math.max(1, Math.round((new Date(cur.key + 'T12:00:00') - new Date(first.key + 'T12:00:00')) / 86400000));
+      var span = days >= 14 ? Math.round(days / 7) + ' weeks' : days + (days === 1 ? ' day' : ' days');
+      var d = Math.round((conv(cur.kg) - conv(first.kg)) * 10) / 10;
+      note = d === 0 ? 'No change in ' + span : '<span class="wt-arrow">' + (d < 0 ? '\u2193' : '\u2191') + '</span> ' + Math.abs(d).toFixed(1) + ' ' + unit + ' in ' + span;
+      var W = 320, H = 120, lo = Infinity, hi = -Infinity;
+      pts.forEach(function(p){ var v = conv(p.kg); if (v < lo) lo = v; if (v > hi) hi = v; });
+      if (hi - lo < 1){ var mid = (hi + lo) / 2; lo = mid - 0.5; hi = mid + 0.5; }
+      var t0 = new Date(first.key + 'T12:00:00').getTime(), t1 = new Date(cur.key + 'T12:00:00').getTime();
+      var xy = pts.map(function(p){
+        var x = 10 + (t1 === t0 ? 0 : (new Date(p.key + 'T12:00:00').getTime() - t0) / (t1 - t0)) * (W - 20);
+        return [x, 12 + (hi - conv(p.kg)) / (hi - lo) * (H - 30)];
+      });
+      var line = xy.map(function(p, i){ return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+      var area = line + ' L' + xy[xy.length - 1][0].toFixed(1) + ' ' + (H - 8) + ' L' + xy[0][0].toFixed(1) + ' ' + (H - 8) + ' Z';
+      var ago = days >= 14 ? Math.round(days / 7) + ' WK AGO' : days + (days === 1 ? ' DAY AGO' : ' DAYS AGO');
+      chart = '<svg class="wt-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Weight over the last ' + span + '">' +
+        '<defs><linearGradient id="wtGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity=".28"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>' +
+        '<path d="' + area + '" fill="url(#wtGrad)"/><path d="' + line + '" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<circle cx="' + xy[xy.length - 1][0].toFixed(1) + '" cy="' + xy[xy.length - 1][1].toFixed(1) + '" r="5" fill="currentColor"/>' +
+        '<text x="10" y="' + (H - 1) + '" class="wt-ax">' + ago + '</text><text x="' + (W - 10) + '" y="' + (H - 1) + '" text-anchor="end" class="wt-ax">TODAY</text></svg>';
+    }
+    return '<div class="card wt-card"><div class="wt-top"><div><div class="wt-l">Weight</div>' +
+      '<div class="wt-v">' + curTxt + ' <small>' + unit + '</small></div><div class="wt-note">' + note + '</div></div>' +
+      '<button type="button" class="wt-log" data-action="edit-weight">+ Log weight</button></div>' + chart + '</div>';
+  }
+
   // One stat card: big Oswald number, small unit, mono label (same
   // building block as SaviorFit Logger's profile stats).
   function statCardHtml(value, unit, label, tone){
@@ -441,6 +480,7 @@
           '<div class="balance-chips">' + chip('Protein', 'protein', 'protein') + chip('Carbs', 'carbs', 'carbs') + chip('Fat', 'fat', 'fat') + '</div>' +
         '</div>' +
         insightsExtraParts().stats +
+        weightCardHtml() +
         weeklyBodyHtml() +
       '</div>';
     try {

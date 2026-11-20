@@ -385,8 +385,10 @@
           savedFoods: Array.isArray(parsed.savedFoods) ? parsed.savedFoods : [],
           myFoods: Array.isArray(parsed.myFoods) ? parsed.myFoods : [],
           water: (parsed.water && typeof parsed.water === 'object') ? parsed.water : {},
-          photos: {}
+          photos: {},
+          weights: cleanWeights(parsed.weights)
         };
+        if (parsed.goalsWeightKg > 0) STORE.goalsWeightKg = Number(parsed.goalsWeightKg);
         STORE.photos = cleanPhotos(parsed.photos, STORE.meals);
         saveStore();
         applyAppearanceSettings();

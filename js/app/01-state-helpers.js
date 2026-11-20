@@ -110,6 +110,7 @@
       if (!Array.isArray(parsed.myFoods)) parsed.myFoods = [];
       if (!parsed.water || typeof parsed.water !== 'object') parsed.water = {};
       parsed.photos = cleanPhotos(parsed.photos, parsed.meals);
+      parsed.weights = cleanWeights(parsed.weights);
       return parsed;
     } catch (e){
       console.error('SaviorFuel: failed to load local store, starting fresh —', e);
@@ -117,6 +118,29 @@
       try { if (raw) localStorage.setItem(STORAGE_KEY + '_unreadable', raw); } catch (e2){}
       return { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {}, photos: {} };
     }
+  }
+
+  /* ---- Weight history: STORE.weights = { 'YYYY-MM-DD': kg }, one entry per day (logging again the same day replaces it).
+     STORE.goalsWeightKg = the bodyweight your daily goals were last worked out at (drives the "Update your goals?" prompt). */
+  function cleanWeights(w){
+    var out = {};
+    if (!w || typeof w !== 'object') return out;
+    Object.keys(w).forEach(function(k){
+      var v = Number(w[k]);
+      if (/^\d{4}-\d{2}-\d{2}$/.test(k) && v >= PLAN_LIMITS.weightKg[0] && v <= PLAN_LIMITS.weightKg[1]) out[k] = Math.round(v * 10) / 10;
+    });
+    return out;
+  }
+  function recordWeight(kg){
+    if (!STORE.weights || typeof STORE.weights !== 'object') STORE.weights = {};
+    STORE.weights[todayKey()] = Math.round(kg * 10) / 10;
+  }
+  // [{ key, kg }] oldest first. With nothing logged yet, the profile weight counts as today's point.
+  function weightSeries(){
+    var w = STORE.weights || {};
+    var keys = Object.keys(w).sort();
+    if (!keys.length) return STORE.profile && STORE.profile.weightKg ? [{ key: todayKey(), kg: STORE.profile.weightKg }] : [];
+    return keys.map(function(k){ return { key: k, kg: w[k] }; });
   }
 
   // If the browser refuses the write (storage full, private mode, blocked)

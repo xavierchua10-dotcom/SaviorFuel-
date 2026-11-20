@@ -2276,3 +2276,23 @@ body[data-theme="light"] .log-empty button{color:#fff;}
 .pn-field input{width:100%; box-sizing:border-box; border:1.5px solid var(--accent); border-radius:16px; padding:16px 58px 16px 18px; background:var(--panel-2,var(--panel)); color:var(--text); font:600 20px 'Inter',sans-serif; outline:none;}
 .pn-count{position:absolute; right:16px; top:50%; transform:translateY(-50%); font:700 11px 'JetBrains Mono',ui-monospace,monospace; color:var(--text-faint);}
 .pn-name .pn-save{margin-top:18px;}
+
+/* v136: weight history card (Insights) + "Update your goals?" sheet */
+.wt-card{padding:16px 16px 12px; border-radius:22px; margin:12px 0 0; color:var(--accent);}
+.wt-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px;}
+.wt-l{font:700 11px 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint);}
+.wt-v{font:700 34px/1.1 'Oswald',sans-serif; margin-top:4px; color:var(--text);}
+.wt-v small{font:500 14px 'Inter',sans-serif; color:var(--text-faint);}
+.wt-note{font-size:13px; font-weight:600; margin-top:2px; color:var(--accent);}
+.wt-arrow{font-weight:700;}
+.wt-log{flex:none; padding:10px 16px; border-radius:99px; border:1px solid var(--accent); background:none; color:var(--accent); font:700 12px 'Oswald',sans-serif; letter-spacing:.08em; text-transform:uppercase; cursor:pointer;}
+.wt-log:active{transform:scale(.97);}
+.wt-chart{display:block; width:100%; height:auto; margin-top:10px;}
+.wt-ax{fill:var(--text-faint); font:10px 'JetBrains Mono',monospace;}
+.pn-goals .pn-sub{line-height:1.5; font-size:13.5px; margin:2px 4px 8px;}
+.pn-grow{display:flex; align-items:center; padding:11px 4px; border-bottom:1px solid var(--line);}
+.pn-gl{flex:1; color:var(--text-dim); font-size:14px;}
+.pn-grow s{color:var(--text-faint); font-size:15px; margin-right:10px;}
+.pn-grow b{font:700 20px 'Oswald',sans-serif; min-width:74px; text-align:right;}
+.pn-goals .pn-save{margin-top:18px;}
+.pn-quiet{display:block; width:100%; background:none; border:none; color:var(--text-dim); padding:14px; font:600 14px 'Inter',sans-serif; cursor:pointer;}

@@ -159,6 +159,8 @@
       STORE.profile = welcome.plan.profile;
       STORE.goals = Object.assign({}, STORE.goals, { calories: welcome.plan.calories, protein: welcome.plan.protein, carbs: welcome.plan.carbs, fat: welcome.plan.fat });
       STORE.lastPlanTdee = Math.round(welcome.plan.tdee);
+      STORE.goalsWeightKg = welcome.plan.profile.weightKg;
+      recordWeight(welcome.plan.profile.weightKg);
       STORE.appSettings.unit = welcome.unit;
     }
     saveStore();
