@@ -861,6 +861,19 @@
       heroTip = overCal ? 'You are ' + Math.abs(Math.round(left)).toLocaleString() + ' kcal over. A lighter next meal evens it out.' : 'You hit your calories for today. Nice.';
     } else {
       var nextCat = suggestCategoryForNow();
+      // If this slot is already covered but the day isn't finished, point at the next meal that still has room
+      // (so the card never says "covered" while hundreds of kcal are left).
+      if (g.calories > 0){
+        var startAt = 0;
+        MEAL_CATEGORIES.forEach(function(c, ci){ if (c.id === nextCat) startAt = ci; });
+        for (var si = 0; si < MEAL_CATEGORIES.length; si++){
+          var cand = MEAL_CATEGORIES[(startAt + si) % MEAL_CATEGORIES.length].id;
+          var ct = mealTarget(cand, 1);
+          if (ct.cal <= 0) continue;
+          var cg = totalsFor(dayMeals.filter(function(m){ return m.category === cand; }));
+          if (ct.cal - cg.calories > 0){ nextCat = cand; break; }
+        }
+      }
       heroLab = 'NEXT UP';
       heroTitle = CATEGORY_LABELS[nextCat] || 'Next meal';
       var tg = mealTarget(nextCat, 1);
@@ -2323,7 +2336,22 @@
       '<button type="button" data-action="open-quick-add">+ Quick add</button>' +
       '<button type="button" data-action="open-my-food">+ New food</button></div>';
     if (products.length === 0){
-      resultsEl.innerHTML = html + '<div class="food-suggest-status">Foods you log show up here for one-tap logging. Tap the star to pin your favorites, or create your own with New food.</div>';
+      var emptyNote = '<div class="food-suggest-status">Foods you log show up here for one-tap logging. Tap the star to pin your favorites, or create your own with New food.</div>';
+      resultsEl.innerHTML = html + emptyNote;
+      // Brand-new log: offer a few popular local foods so the first meal is one tap away.
+      var homeState = foodSearch;
+      loadBuiltinFoods().then(function(){
+        if (foodSearch !== homeState || foodSearch.query) return;
+        var pop = popularFoods();
+        if (!pop.length) return;
+        foodSearch.products = pop;
+        ui.lastSearchProducts = pop;
+        var el = document.getElementById('foodSearchResults');
+        if (!el) return;
+        el.innerHTML = html + '<div class="food-home-label">Popular in Malaysia</div>' +
+          pop.map(function(p, i){ return foodRowHtml(p, i); }).join('') +
+          '<div class="food-suggest-status">Foods you log show up here too. Tap the star to pin favorites.</div>';
+      });
       return;
     }
     if (mine.length) html += '<div class="food-home-label">My foods</div>' + mine.map(function(p, i){ return foodRowHtml(p, i); }).join('');
@@ -2524,6 +2552,16 @@
 
   // Every word you typed must appear in the name; names that start with
   // what you typed (or match at the start of a word) come first.
+  var POPULAR_QUERIES = ['nasi lemak', 'roti canai', 'teh tarik', 'mee goreng', 'char kuey teow', 'laksa'];
+  function popularFoods(){
+    var out = [], seen = {};
+    POPULAR_QUERIES.forEach(function(q){
+      var hit = searchBuiltinFoods(q)[0];
+      if (hit && !seen[hit._k]){ seen[hit._k] = 1; out.push(hit); }
+    });
+    return out;
+  }
+
   function searchBuiltinFoods(query){
     var q = query.trim().toLowerCase();
     if (!builtinFoods || q.length < 2) return [];
