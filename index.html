@@ -1670,6 +1670,21 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+  // sheet 15 (kuih, bakery & misc): these beat the older tray/pau/cookies/coconut rules
+  [/\broti jala\b/i, 'roti-jala'],
+  [/^(?!tau sar)[^(]*\b(mooncake|kuih bulan)\b/i, 'mooncake'],
+  [/^(nian gao|kuih bakul(?! goreng))/i, 'nian-gao'],
+  [/^(polo bun|pang susie|roti ban kaya|gardenia (squiggles|quickbites)[^(]*\([^)]*\bbun\b|massimo duetto[^(]*\([^)]*\bbun\b)/i, 'baked-bun'],
+  [/^idli/i, 'idli'],
+  [/^(chawanmushi|sushi king chawanmushi|steamed egg \()/i, 'steamed-egg'],
+  [/^(egg tofu \(|salted egg tofu)/i, 'tofu-egg'],
+  [/^(sambal telur(?! goreng)|telur masak sambal|hard-boiled eggs in chili|poached eggs in chili)/i, 'sambal-egg'],
+  [/\b(ketayap|kuih dadar|dadar gulung)\b/i, 'ketayap'],
+  [/^(puri|poori)\b(?!.*\bcrisp)/i, 'puri'],
+  [/^(love letters?|kuih kapit|kuih belanda)\b/i, 'love-letters'],
+  [/\b(swiss roll|bolu meranti gulung|london choco roll|kek gulung)\b/i, 'swiss-roll'],
+  [/^(?!buko pandan)[^(]*\b(air kelapa|coconut water|kelapa muda)\b/i, 'coconut-water'],
+  [/^(?!roti)[^(]*\bgarlic bread\b/i, 'garlic-bread'],
   [/^(?=.*\b(ais|iced|ice)\b)(?=.*\b(malt|chocolate|milo|neslo|ovaltine|horlicks)\b)(?!.*\b(cream|cake|tea|donut|doughnut|glazed|krispy|mocha|espresso|latte|zus)\b)/i, 'iced-milo'],
   // sheet 12 top rules (must beat older ones)
   [/^(?!.*\b(onigiri|bento|don|udon|chawanmushi|edamame|takoyaki|miso|tempura|bowl|salad|chirashi|poke)\b)(?=.*\b(sushi|nigiri|maki|sashimi|gunkan)\b)/i, 'sushi'],
