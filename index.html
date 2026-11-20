@@ -1670,6 +1670,23 @@
   // list, so a dish with its own icon shows that; everything else keeps its
   // emoji. More are added as sheets are drawn. Specific names go first.
   var FOOD_ICON_RULES = [
+  // sheet 16 (western, Indian, snacks & supplements)
+  [/^ondeh[- ]?ondeh/i, 'onde-onde'],
+  [/\btakoyaki\b/i, 'takoyaki'],
+  [/^(tong sui|bubur kacang (merah|hijau))/i, 'tong-sui'],
+  [/^(?!.*\b(steamed|stim)\b)(.*\b(fried (carrot|radish) cake|chai tow kway|char koay kak|lobak goreng|singapore carrot cake)\b)/i, 'fried-carrot-cake'],
+  [/^(adana kebab|lamb adana kebab|beef kofta kebab|seekh kebab)/i, 'adana-kebab'],
+  [/\bpretzels?\b/i, 'pretzel'],
+  [/\bmacarons?\b/i, 'macarons'],
+  [/\b(french toast|sai do si)\b/i, 'french-toast'],
+  [/^(palak|saag) paneer/i, 'palak-paneer'],
+  [/^(payasam|kheer)\b/i, 'payasam'],
+  [/^ratatouille/i, 'ratatouille'],
+  [/^(?!.*\b(zucchini|courgette)\b)(.*\b(pastitsio|lasagn?a|moussaka)\b)/i, 'baked-pasta'],
+  [/^gnocchi/i, 'gnocchi'],
+  [/^pork adobo/i, 'pork-adobo'],
+  [/^(ham and cheese crepe|savory galette|sweet crepe|nutella banana crepe)/i, 'crepe'],
+  [/^(?!.*\b(shake|smoothie|oat|oatmeal|overnight|pancakes?|bowl|mixed with|drink|milk|mug cake|balls|toast|bar)\b)(.*\b(whey|casein|gainer|protein powder|creatine|pre-workout|bcaa|amino energy|meal replacement shake)\b)/i, 'protein-powder'],
   // sheet 15 (kuih, bakery & misc): these beat the older tray/pau/cookies/coconut rules
   [/\broti jala\b/i, 'roti-jala'],
   [/^(?!tau sar)[^(]*\b(mooncake|kuih bulan)\b/i, 'mooncake'],
