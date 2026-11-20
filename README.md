@@ -25,7 +25,7 @@ Plain HTML, CSS and JavaScript (no build step), installable as a PWA. No account
 | `sw.js`, `manifest.json`, `icons/` | PWA service worker, manifest and icons |
 | `models/` | GLB models for the Insights tab |
 | `images/` | Background and guide illustrations |
-| `ai-proxy/` | Optional proxy for a Gemini photo scan (Cloudflare Worker or Netlify). Built and tested, not switched on yet: `AI_SCAN_URL` in `js/app/09-ai-scan.js` is empty. See [`ai-proxy/README.md`](ai-proxy/README.md) |
+| `ai-proxy/` | Optional proxy for a Gemini photo scan (Cloudflare Worker or Netlify). Built and tested, not switched on yet: `AI_SCAN_URL` in `js/app/08-scanner.js` is empty. See [`ai-proxy/README.md`](ai-proxy/README.md) |
 
 ## Run it
 
