@@ -165,13 +165,21 @@
      Slides up from the bottom; closes on Cancel, a tap outside, Escape,
      or by dragging the grab handle down. Nothing happens to the data
      until "Delete" is pressed. */
-  var confirmState = { onConfirm: null, closeTimer: 0 };
+  var confirmState = { onConfirm: null, onCancel: null, closeTimer: 0 };
+  var CONFIRM_ICON_WARN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
+  var CONFIRM_ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16.5"></line><circle cx="12" cy="7.8" r=".6" fill="currentColor"></circle></svg>';
 
   function openConfirmSheet(opts){
     clearTimeout(confirmState.closeTimer);
     confirmState.onConfirm = opts.onConfirm;
+    confirmState.onCancel = opts.onCancel || null;
+    var soft = opts.tone === 'soft';   // not destructive: info icon + accent button instead of the red delete look
+    document.getElementById('confirmOverlay').classList.toggle('soft', soft);
+    document.getElementById('confirmIcon').innerHTML = soft ? CONFIRM_ICON_INFO : CONFIRM_ICON_WARN;
+    document.getElementById('confirmCancel').textContent = opts.cancelLabel || 'Cancel';
     document.getElementById('confirmTitle').textContent = opts.title;
-    document.getElementById('confirmItemName').textContent = opts.name;
+    document.querySelector('#confirmOverlay .confirm-item').style.display = opts.name ? '' : 'none';
+    document.getElementById('confirmItemName').textContent = opts.name || '';
     document.getElementById('confirmItemDetail').textContent = opts.detail || '';
     document.getElementById('confirmItemKcal').textContent = opts.kcal != null ? opts.kcal + ' kcal' : '';
     document.getElementById('confirmNote').textContent = opts.note || '';
@@ -190,20 +198,23 @@
     document.getElementById('confirmCancel').focus({ preventScroll: true });
   }
 
-  function closeConfirmSheet(){
+  function closeConfirmSheet(fromYes){
     var overlay = document.getElementById('confirmOverlay');
     if (overlay.classList.contains('hidden')) return;
+    var cancelFn = fromYes === true ? null : confirmState.onCancel;
+    confirmState.onCancel = null;
     overlay.classList.remove('open');
     var sheet = overlay.querySelector('.confirm-sheet');
     sheet.classList.remove('dragging');
     sheet.style.transform = '';         // hand control back to the CSS slide-down
     confirmState.onConfirm = null;
     confirmState.closeTimer = setTimeout(function(){ overlay.classList.add('hidden'); }, prefersReducedMotion() ? 0 : 380);
+    if (cancelFn) cancelFn();
   }
 
   function confirmYes(){
     var fn = confirmState.onConfirm;
-    closeConfirmSheet();
+    closeConfirmSheet(true);
     if (fn) fn();
   }
 

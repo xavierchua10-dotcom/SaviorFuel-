@@ -113,11 +113,19 @@
   }
 
   function deleteMyFood(id){
-    if (!window.confirm('Delete this food from My Foods? Meals you already logged stay as they are.')) return;
-    STORE.myFoods = (STORE.myFoods || []).filter(function(f){ return f.id !== id; });
-    saveStore();
-    closeFoodSheet();
-    renderFoodHome();
+    var food = (STORE.myFoods || []).filter(function(f){ return f.id === id; })[0];
+    openConfirmSheet({
+      title: 'Delete this food?',
+      name: food ? food.name : 'This food',
+      note: 'It\u2019s removed from My Foods. Meals you already logged stay as they are.',
+      confirmLabel: 'Delete',
+      onConfirm: function(){
+        STORE.myFoods = (STORE.myFoods || []).filter(function(f){ return f.id !== id; });
+        saveStore();
+        closeFoodSheet();
+        renderFoodHome();
+      }
+    });
   }
 
   // ---- Water ----

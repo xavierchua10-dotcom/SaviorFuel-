@@ -375,7 +375,23 @@
       try {
         var parsed = JSON.parse(reader.result);
         if (!parsed || !Array.isArray(parsed.meals)) throw new Error('Not a valid SaviorFuel backup file');
-        if (!window.confirm('Replace everything currently on this device with this backup?')) return;
+        openConfirmSheet({
+          title: 'Replace everything?',
+          note: 'Everything on this phone is replaced with this backup. A safety copy of what you have now is kept first.',
+          confirmLabel: 'Replace',
+          tone: 'soft',
+          onConfirm: function(){ applyImportedBackup(parsed); }
+        });
+      } catch (err){
+        console.error('SaviorFuel: import failed —', err);
+        alert('That file doesn\'t look like a valid SaviorFuel backup.');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function applyImportedBackup(parsed){
+      try {
         makeSafetyCopy('before import');
         STORE = {
           meals: parsed.meals.map(sanitizeMeal).filter(Boolean),
@@ -397,8 +413,6 @@
         console.error('SaviorFuel: import failed —', err);
         alert('That file doesn\'t look like a valid SaviorFuel backup.');
       }
-    };
-    reader.readAsText(file);
   }
 
   /* ---- Safety copies: a few snapshots (no photos) kept on this phone.
@@ -437,7 +451,15 @@
   function restoreSafetyCopy(i){
     var b = readBackups()[i];
     if (!b) return;
-    if (!window.confirm('Add back anything missing from this copy (' + backupWhen(b.ts) + ')? Nothing you have now is deleted.')) return;
+    openConfirmSheet({
+      title: 'Add back missing meals?',
+      note: 'From the copy saved ' + backupWhen(b.ts) + '. Nothing you have now is deleted.',
+      confirmLabel: 'Add back',
+      tone: 'soft',
+      onConfirm: function(){ doRestoreSafetyCopy(b); }
+    });
+  }
+  function doRestoreSafetyCopy(b){
     makeSafetyCopy('before restore');
     var have = {}; STORE.meals.forEach(function(m){ have[m.id] = 1; });
     var added = 0;

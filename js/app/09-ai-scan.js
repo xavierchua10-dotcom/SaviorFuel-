@@ -47,13 +47,27 @@
     el.innerHTML = tmp.firstChild.innerHTML;
   }
 
+  // First use asks once (in-app sheet), then remembers the answer.
   function runAiScan(canvas){
-    if (!STORE.appSettings.aiScanConsent){
-      var ok = window.confirm('AI food scan sends this photo to Google\'s Gemini AI to estimate what\'s in it. The server doesn\'t store it; a small thumbnail stays on this phone with your meal. Continue?');
-      if (!ok) return Promise.reject({ declined: true });
-      STORE.appSettings.aiScanConsent = true;
-      saveStore();
-    }
+    if (STORE.appSettings.aiScanConsent) return doAiScan(canvas);
+    return new Promise(function(resolve, reject){
+      openConfirmSheet({
+        title: 'Use AI food scan?',
+        note: 'This sends the photo to Google\u2019s Gemini AI to estimate what\u2019s in it. The server doesn\u2019t store it; a small thumbnail stays on this phone with your meal.',
+        confirmLabel: 'Continue',
+        cancelLabel: 'Not now',
+        tone: 'soft',
+        onConfirm: function(){
+          STORE.appSettings.aiScanConsent = true;
+          saveStore();
+          doAiScan(canvas).then(resolve, reject);
+        },
+        onCancel: function(){ reject({ declined: true }); }
+      });
+    });
+  }
+
+  function doAiScan(canvas){
 
     var ctrl = new AbortController();
     var timer = setTimeout(function(){ ctrl.abort(); }, 25000);

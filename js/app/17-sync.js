@@ -331,9 +331,9 @@
     var reauth;
     if (google) reauth = Au.reauthenticateWithPopup(user, new Au.GoogleAuthProvider());
     else {
-      var pw = window.prompt('Enter your password to delete your account:');
-      if (pw === null) return Promise.reject({ code: 'auth/cancelled-popup-request' });
-      reauth = Au.reauthenticateWithCredential(user, Au.EmailAuthProvider.credential(user.email, pw));
+      reauth = askPasswordPanel().then(function(pw){
+        return Au.reauthenticateWithCredential(user, Au.EmailAuthProvider.credential(user.email, pw));
+      });
     }
     return reauth.then(function(){
       syncStop();

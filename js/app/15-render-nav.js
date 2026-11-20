@@ -506,13 +506,18 @@
       copyDayToToday(el.dataset.day);
       closeDayOverlay();
     } else if (action === 'clear-data'){
-      if (window.confirm(sync.user ? 'Erase all logged meals and reset goals? Because you\'re signed in, this also erases your online backup. This can\'t be undone.' : 'Erase all logged meals and reset goals? This can\'t be undone.')){
-        makeSafetyCopy('before erase');
-        STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {} };
-        saveStore();
-        applyAppearanceSettings();
-        renderApp();
-      }
+      openConfirmSheet({
+        title: 'Erase everything?',
+        note: sync.user ? 'All logged meals are removed and your goals reset. Because you\u2019re signed in, this also erases your online backup. This can\u2019t be undone.' : 'All logged meals are removed and your goals reset. This can\u2019t be undone.',
+        confirmLabel: 'Erase everything',
+        onConfirm: function(){
+          makeSafetyCopy('before erase');
+          STORE = { meals: [], goals: Object.assign({}, DEFAULT_GOALS), profile: Object.assign({}, DEFAULT_PROFILE), appSettings: Object.assign({}, DEFAULT_APP_SETTINGS), savedFoods: [], myFoods: [], water: {}, weights: {} };
+          saveStore();
+          applyAppearanceSettings();
+          renderApp();
+        }
+      });
     } else if (action === 'pick-food'){
       pickFoodResult(parseInt(el.dataset.index, 10));
     } else if (action === 'open-food-search-overlay'){

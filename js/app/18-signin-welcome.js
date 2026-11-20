@@ -141,10 +141,16 @@
       syncSignOut().then(function(){ closeAccount(); showToast('Signed out. Your log is still on this phone.'); })
         .catch(function(err){ acctMsg(syncAuthMessage(err), true); });
     } else if (what === 'delete'){
-      if (!window.confirm('Delete your account and all cloud data? This can’t be undone. The log on this phone stays.')) return;
-      acctMsg('Deleting…');
-      syncDeleteAccount().then(function(){ closeAccount(); showToast('Account deleted'); })
-        .catch(function(err){ acctMsg(syncAuthMessage(err) || '', true); });
+      openConfirmSheet({
+        title: 'Delete your account?',
+        note: 'Your account and everything stored online is deleted. This can\u2019t be undone. The log on this phone stays.',
+        confirmLabel: 'Delete account',
+        onConfirm: function(){
+          acctMsg('Deleting…');
+          syncDeleteAccount().then(function(){ closeAccount(); showToast('Account deleted'); })
+            .catch(function(err){ acctMsg(syncAuthMessage(err) || '', true); });
+        }
+      });
     }
   });
 

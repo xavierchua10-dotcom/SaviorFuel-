@@ -31,6 +31,7 @@
     clearInterval(PN.timer);
     hideSheetOverlay(o);
     PN.kind = null;
+    if (pwAsk){ var a = pwAsk; pwAsk = null; a.reject({ code: 'auth/cancelled-popup-request' }); }
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   }
 
@@ -166,6 +167,26 @@
     saveStore(); closePanel();
   }
 
+  /* ---- Password (to confirm deleting an account): replaces window.prompt. Resolves with the password, rejects if closed. ---- */
+  var pwAsk = null;
+  function askPasswordPanel(){
+    return new Promise(function(resolve, reject){
+      pwAsk = { resolve: resolve, reject: reject };
+      PN.kind = 'password';
+      openPanel('Confirm it\u2019s you',
+        '<div class="pn-name"><div class="pn-sub">Enter your password to delete your account.</div>' +
+          '<div class="pn-field"><input id="pnPw" type="password" autocomplete="current-password" placeholder="Password"></div>' +
+          '<button type="button" class="btn-primary pn-save" data-action="panel-save">Continue</button></div>');
+      setTimeout(function(){ var i = document.getElementById('pnPw'); if (i && PN.kind === 'password') i.focus(); }, prefersReducedMotion() ? 0 : 380);
+    });
+  }
+  function savePasswordPanel(){
+    var i = document.getElementById('pnPw'); if (!i || !i.value) return;
+    var a = pwAsk; pwAsk = null; var v = i.value;
+    closePanel();
+    if (a) a.resolve(v);
+  }
+
   /* ---- Name ---- */
   function openNamePanel(){
     PN.kind = 'name';
@@ -194,7 +215,7 @@
     else if (a === 'panel-unit') pnSetUnit(el.getAttribute('data-u'));
     else if (a === 'goals-update') applyGoalsPrompt();
     else if (a === 'goals-keep') keepGoalsPrompt();
-    else if (a === 'panel-save'){ if (PN.kind === 'weight') saveWeightPanel(); else if (PN.kind === 'name') saveNamePanel(); }
+    else if (a === 'panel-save'){ if (PN.kind === 'weight') saveWeightPanel(); else if (PN.kind === 'name') saveNamePanel(); else if (PN.kind === 'password') savePasswordPanel(); }
   });
   // hold + or - to keep stepping
   document.addEventListener('pointerdown', function(e){
@@ -207,7 +228,7 @@
     document.addEventListener('pointerup', stop); document.addEventListener('pointercancel', stop);
   });
   document.addEventListener('keydown', function(e){
-    if (e.key === 'Enter' && e.target && (e.target.id === 'pnNum' || e.target.id === 'pnName')){ e.preventDefault(); if (PN.kind === 'weight') saveWeightPanel(); else saveNamePanel(); }
+    if (e.key === 'Enter' && e.target && (e.target.id === 'pnNum' || e.target.id === 'pnName' || e.target.id === 'pnPw')){ e.preventDefault(); if (PN.kind === 'weight') saveWeightPanel(); else if (PN.kind === 'password') savePasswordPanel(); else saveNamePanel(); }
     else if (e.key === 'Escape' && PN.kind) closePanel();
   });
   document.addEventListener('input', function(e){

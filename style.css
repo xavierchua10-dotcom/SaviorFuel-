@@ -2296,3 +2296,9 @@ body[data-theme="light"] .log-empty button{color:#fff;}
 .pn-grow b{font:700 20px 'Oswald',sans-serif; min-width:74px; text-align:right;}
 .pn-goals .pn-save{margin-top:18px;}
 .pn-quiet{display:block; width:100%; background:none; border:none; color:var(--text-dim); padding:14px; font:600 14px 'Inter',sans-serif; cursor:pointer;}
+
+/* v137: confirm sheet sits above every other screen; softer look for non-delete questions; day-one note */
+#confirmOverlay{position:fixed; z-index:420;}
+#confirmOverlay.soft .confirm-icon{background:rgba(166,227,107,.14); color:var(--accent);}
+#confirmOverlay.soft .confirm-yes{background:var(--accent); color:#0b1a10;}
+.pf-stats-note{text-align:center; color:var(--text-faint); font-size:12.5px; margin:10px 0 2px;}

@@ -15,11 +15,13 @@
     }
     var avg = logged ? Math.round(sum / logged) : 0;
     var bestLabel = best ? new Date(best.key + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' }) : '—';
+    // With under 3 days logged "0 / 1 days on goal" just reads like failing, so wait until there's something to judge.
+    var daysEver = Object.keys(map).length, early = daysEver < 3;
     var statsHtml = '<div class="pf-stats three">' +
         statCardHtml(avg.toLocaleString(), '', 'kcal daily avg', 'accent') +
-        statCardHtml(onGoal + ' / ' + logged, '', 'days on goal', '') +
+        statCardHtml(early ? '\u2013' : onGoal + ' / ' + logged, '', 'days on goal', '') +
         statCardHtml(String(streak.current), '', 'day streak', '') +
-      '</div>';
+      '</div>' + (early ? '<div class="pf-stats-note">Days on goal appears after 3 days of logging.</div>' : '');
     return { stats: statsHtml };
   }
 
