@@ -2661,7 +2661,11 @@
     // Remember this food locally (name + macros) so searching for it
     // again works even offline — skip re-caching an item that was
     // itself picked from the cache, nothing new to learn from that.
-    if (p._source !== 'saved') saveFoodToCache(ui.selectedFood);
+    // Built-in foods count too, so what you log shows up under Recent (flagged so they keep their "estimate" label).
+    if (p._source !== 'saved' || p._builtin){
+      saveFoodToCache(ui.selectedFood);
+      if (p._builtin && STORE.savedFoods[0]){ STORE.savedFoods[0]._builtin = true; saveStore(); }
+    }
     initServing();
     applySelectedFoodToForm();
     if (ui.replaceAiIdx != null){ aiReplaceFromSelected(); return; }
