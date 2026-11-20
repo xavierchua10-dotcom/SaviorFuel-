@@ -190,10 +190,8 @@
     var chg = ' data-action-change="save-profile"';
     return '<div class="settings-section"><div class="plan-h">Your details</div><div class="card">' +
       '<div class="settings-goal-row"><label for="profSex">Sex</label>' +
-        '<select id="profSex"' + chg + '>' +
-          '<option value="male"' + (p.sex === 'male' ? ' selected' : '') + '>Male</option>' +
-          '<option value="female"' + (p.sex === 'female' ? ' selected' : '') + '>Female</option>' +
-        '</select>' +
+        pickSelectHtml('profSex', '<option value="male"' + (p.sex === 'male' ? ' selected' : '') + '>Male</option>' +
+          '<option value="female"' + (p.sex === 'female' ? ' selected' : '') + '>Female</option>', chg, p.sex === 'female' ? 'Female' : 'Male') +
       '</div>' +
       '<div class="settings-goal-row"><label for="profAge">Age</label>' +
         '<input type="number" inputmode="numeric" id="profAge" min="10" max="100" value="' + p.age + '"' + chg + '></div>' +
@@ -202,10 +200,10 @@
       '<div class="settings-goal-row"><label for="profWeight">Bodyweight (' + (imperial ? 'lb' : 'kg') + ')</label>' +
         '<input type="number" inputmode="decimal" id="profWeight" value="' + weightVal + '"' + chg + '></div>' +
       '<div class="settings-goal-row"><label for="profActivity">Activity level</label>' +
-        '<select id="profActivity"' + chg + '>' + selectOptionsHtml(ACTIVITY_LEVELS, p.activityLevel) + '</select>' +
+        pickSelectHtml('profActivity', selectOptionsHtml(ACTIVITY_LEVELS, p.activityLevel), chg, (ACTIVITY_LEVELS.filter(function(a){ return a.id === p.activityLevel; })[0] || ACTIVITY_LEVELS[2]).label) +
       '</div>' +
       '<div class="settings-goal-row"><label for="profGoal">Goal</label>' +
-        '<select id="profGoal"' + chg + '>' + selectOptionsHtml(GOAL_OPTIONS, p.goal) + '</select>' +
+        pickSelectHtml('profGoal', selectOptionsHtml(GOAL_OPTIONS, p.goal), chg, goalById(p.goal).label) +
       '</div>' +
       '<div class="plan-hint" id="profGoalDesc">' + esc(goalById(p.goal).desc) + '</div>' +
       '<button class="btn-primary" data-action="calculate-plan" style="margin-top:10px;">Set my daily goals</button>' +

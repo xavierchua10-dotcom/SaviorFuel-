@@ -231,9 +231,9 @@
           return '<button data-w="goal" data-v="' + o.id + '" class="' + (welcome.goal === o.id ? 'active' : '') + '"><b>' + o.label + '</b><span>' +
             esc(o.desc) + '</span></button>';
         }).join('') + '</div>' +
-        '<div class="welcome-field"><label for="wActivity">Activity level</label><select id="wActivity">' +
-          ACTIVITY_LEVELS.map(function(a){ return '<option value="' + a.id + '"' + (welcome.activity === a.id ? ' selected' : '') + '>' + a.label + '</option>'; }).join('') +
-        '</select></div>';
+        '<div class="welcome-field"><label>Activity level</label>' +
+          pickSelectHtml('wActivity', ACTIVITY_LEVELS.map(function(a){ return '<option value="' + a.id + '"' + (welcome.activity === a.id ? ' selected' : '') + '>' + a.label + '</option>'; }).join(''), '',
+            (ACTIVITY_LEVELS.filter(function(a){ return a.id === welcome.activity; })[0] || ACTIVITY_LEVELS[2]).label) + '</div>';
       footer = '<button class="welcome-primary" data-w="next">See my plan</button><button class="welcome-skip" data-w="skip">Skip for now</button>';
     } else {
       var pl = welcome.plan;
@@ -283,6 +283,6 @@
      close/cancel button. With nothing open, back on another tab returns to
      Log, and on Log the first press shows "Press back again to exit". */
   var BACK_LAYER_IDS = ['aiZoom', 'recentOverlay', 'accountOverlay', 'signInOverlay', 'foodSearchOverlay', 'scanOverlay', 'photoOverlay', 'nutrientInfoOverlay',
-    'addMealOverlay', 'aiScanOverlay', 'confirmOverlay', 'foodSheet', 'mealMenu', 'calSheet', 'dayOverlay'];
-  var BACK_NEEDS_OPEN = { addMealOverlay: 1, aiScanOverlay: 1, recentOverlay: 1, confirmOverlay: 1 };
+    'addMealOverlay', 'aiScanOverlay', 'confirmOverlay', 'panelOverlay', 'foodSheet', 'mealMenu', 'calSheet', 'dayOverlay'];
+  var BACK_NEEDS_OPEN = { addMealOverlay: 1, aiScanOverlay: 1, recentOverlay: 1, confirmOverlay: 1, panelOverlay: 1 };
   var backDepth = 0, backIgnorePops = 0, backSyncQueued = false, exitArmed = false, exitArmTimer = null;

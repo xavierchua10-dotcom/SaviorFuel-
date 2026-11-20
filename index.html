@@ -224,6 +224,20 @@
   </button>
 </div>
 
+<div class="add-meal-overlay hidden" id="panelOverlay" role="dialog" aria-modal="true">
+  <div class="add-meal-backdrop" data-action="close-panel"></div>
+  <div class="add-meal-sheet">
+    <div class="sheet-grab" id="panelGrab" aria-hidden="true"><i></i></div>
+    <div class="add-meal-head">
+      <h2 id="panelTitle"></h2>
+      <button class="add-meal-close" data-action="close-panel" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="add-meal-body" id="panelBody"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="confirm-overlay hidden" id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
@@ -269,25 +283,26 @@
   </div>
 </div>
 
-<script defer src="js/app/01-state-helpers.js?v=134"></script>
-<script defer src="js/app/02-hero-ring.js?v=134"></script>
-<script defer src="js/app/03-log-view.js?v=134"></script>
-<script defer src="js/app/04-add-meal-overlay.js?v=134"></script>
-<script defer src="js/app/05-food-sources.js?v=134"></script>
-<script defer src="js/app/06-my-foods-water.js?v=134"></script>
-<script defer src="js/app/07-food-search.js?v=134"></script>
-<script defer src="js/app/08-scanner.js?v=134"></script>
-<script defer src="js/app/09-ai-scan.js?v=134"></script>
-<script defer src="js/app/10-meal-actions.js?v=134"></script>
-<script defer src="js/app/11-history.js?v=134"></script>
-<script defer src="js/app/12-insights.js?v=134"></script>
-<script defer src="js/app/13-overview-goals.js?v=134"></script>
-<script defer src="js/app/14-profile-settings.js?v=134"></script>
-<script defer src="js/app/15-render-nav.js?v=134"></script>
-<script defer src="js/app/16-install-welcome-gate.js?v=134"></script>
-<script defer src="js/app/17-sync.js?v=134"></script>
-<script defer src="js/app/18-signin-welcome.js?v=134"></script>
-<script defer src="js/app/19-back-init.js?v=134"></script>
-<script defer src="js/app/20-tap-feedback.js?v=134"></script>
+<script defer src="js/app/01-state-helpers.js?v=135"></script>
+<script defer src="js/app/02-hero-ring.js?v=135"></script>
+<script defer src="js/app/03-log-view.js?v=135"></script>
+<script defer src="js/app/04-add-meal-overlay.js?v=135"></script>
+<script defer src="js/app/04b-panels.js?v=135"></script>
+<script defer src="js/app/05-food-sources.js?v=135"></script>
+<script defer src="js/app/06-my-foods-water.js?v=135"></script>
+<script defer src="js/app/07-food-search.js?v=135"></script>
+<script defer src="js/app/08-scanner.js?v=135"></script>
+<script defer src="js/app/09-ai-scan.js?v=135"></script>
+<script defer src="js/app/10-meal-actions.js?v=135"></script>
+<script defer src="js/app/11-history.js?v=135"></script>
+<script defer src="js/app/12-insights.js?v=135"></script>
+<script defer src="js/app/13-overview-goals.js?v=135"></script>
+<script defer src="js/app/14-profile-settings.js?v=135"></script>
+<script defer src="js/app/15-render-nav.js?v=135"></script>
+<script defer src="js/app/16-install-welcome-gate.js?v=135"></script>
+<script defer src="js/app/17-sync.js?v=135"></script>
+<script defer src="js/app/18-signin-welcome.js?v=135"></script>
+<script defer src="js/app/19-back-init.js?v=135"></script>
+<script defer src="js/app/20-tap-feedback.js?v=135"></script>
 </body>
 </html>

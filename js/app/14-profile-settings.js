@@ -27,33 +27,10 @@
              avg: avgN ? Math.round(avgSum / avgN) : 0, top: top, since: since };
   }
 
-  // Tap the weight tile on Profile: update bodyweight in one step (daily goals only change if you press Set my daily goals).
-  function editWeight(){
-    var imperial = STORE.appSettings.unit === 'imperial';
-    var cur = imperial ? Math.round(kgToLb(STORE.profile.weightKg)) : STORE.profile.weightKg;
-    var v = window.prompt('Your weight (' + (imperial ? 'lb' : 'kg') + ')', cur);
-    if (v === null) return;
-    var n = parseFloat(String(v).replace(',', '.'));
-    var kg = imperial ? lbToKg(n) : n;
-    var L = PLAN_LIMITS.weightKg;
-    if (!(kg >= L[0] && kg <= L[1])){
-      showToast('Weight should be between ' + (imperial ? Math.ceil(kgToLb(L[0])) + ' and ' + Math.floor(kgToLb(L[1])) + ' lb' : L[0] + ' and ' + L[1] + ' kg') + '.');
-      return;
-    }
-    STORE.profile.weightKg = Math.round(kg * 10) / 10;
-    saveStore();
-    renderApp();
-    showToast('Weight saved');
-  }
+  // Tap the weight tile on Profile: opens the weight panel (daily goals only change if you press Set my daily goals).
+  function editWeight(){ openWeightPanel(); }
 
-  function editProfileName(){
-    var cur = (STORE.appSettings.name || '').trim();
-    var v = window.prompt('Your name', cur);
-    if (v === null) return;
-    STORE.appSettings.name = v.trim().slice(0, 24);
-    saveStore();
-    renderApp();
-  }
+  function editProfileName(){ openNamePanel(); }
 
   // Share profile: draws the stats on a canvas and opens the share sheet
   // (or downloads the picture where sharing files isn't supported).
