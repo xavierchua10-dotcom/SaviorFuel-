@@ -33,6 +33,11 @@
     if (pts.length < 2) pts = all.slice(-8);
     var conv = function(kg){ return imperial ? kgToLb(kg) : kg; };
     var unit = imperial ? 'lb' : 'kg';
+    if (!pts.length){
+      return '<div class="card wt-card"><div class="wt-top"><div><div class="wt-l">Weight</div>' +
+        '<div class="wt-v">\u2013 <small>' + unit + '</small></div><div class="wt-note">Add your weight to see your trend.</div></div>' +
+        '<button type="button" class="wt-log" data-action="edit-weight">+ Add weight</button></div></div>';
+    }
     var cur = pts[pts.length - 1], first = pts[0];
     var curTxt = (Math.round(conv(cur.kg) * 10) / 10).toFixed(1);
     var note = 'Log your weight now and then to see your trend.';

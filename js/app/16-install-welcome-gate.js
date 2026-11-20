@@ -71,9 +71,8 @@
     if (STORE.appSettings.welcomed) return;
     if (STORE.meals.length > 0){ STORE.appSettings.welcomed = true; saveStore(); return; } // existing user
     welcome.unit = STORE.appSettings.unit === 'imperial' ? 'imperial' : 'metric';
-    welcome.step = 1;            // the sign-in screen below is the intro
+    welcome.step = 0;            // intro, then the 3 setup screens; sign-in is offered after the first meal (or via "Already have an account")
     renderWelcome();
-    openSignIn(true);
   }
 
   /* =========================================================

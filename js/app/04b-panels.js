@@ -119,6 +119,7 @@
     STORE.profile.weightKg = Math.round(kg * 10) / 10;
     STORE.appSettings.unit = PN.unit;
     // goals count as "worked out at" the previous weight when a plan was calculated before this feature existed
+    goalsPromptAssumed = !!STORE.appSettings.weightAssumed;   // the setup screen used a placeholder weight, so offer to match the real one
     if (!STORE.goalsWeightKg && STORE.lastPlanTdee) STORE.goalsWeightKg = prevKg;
     recordWeight(STORE.profile.weightKg);
     saveStore();
@@ -130,7 +131,7 @@
 
   /* ---- "Update your goals?" — offered after a weight change of 2 kg or more since the goals were last worked out.
      Nothing changes unless the person taps Update. Keep also resets the baseline so it doesn't ask again for the same change. */
-  var GOALS_PROMPT_KG = 2;
+  var GOALS_PROMPT_KG = 2, goalsPromptAssumed = false;
   function goalsPromptNeeded(){
     var base = STORE.goalsWeightKg; if (!base) return false;
     if (Math.abs(STORE.profile.weightKg - base) < GOALS_PROMPT_KG) return false;
@@ -146,7 +147,9 @@
       return '<div class="pn-grow"><span class="pn-gl">' + label + '</span><s>' + Math.round(oldV).toLocaleString() + (unit || '') + '</s><b>' + Math.round(newV).toLocaleString() + (unit || '') + '</b></div>';
     }
     openPanel('Update your goals?',
-      '<div class="pn-goals"><div class="pn-sub">You\u2019re ' + (diff < 0 ? 'down ' : 'up ') + pnFmtMass(Math.abs(diff)) + ' since you set your goals. Want your targets to match ' + pnFmtMass(STORE.profile.weightKg) + '?</div>' +
+      '<div class="pn-goals"><div class="pn-sub">' + (goalsPromptAssumed
+          ? 'Your goals were based on a typical ' + pnFmtMass(base) + ' because setup was skipped. Want your targets to match ' + pnFmtMass(STORE.profile.weightKg) + '?'
+          : 'You\u2019re ' + (diff < 0 ? 'down ' : 'up ') + pnFmtMass(Math.abs(diff)) + ' since you set your goals. Want your targets to match ' + pnFmtMass(STORE.profile.weightKg) + '?') + '</div>' +
         row('Calories', g.calories, plan.calories) + row('Protein', g.protein, plan.protein, ' g') + row('Carbs', g.carbs, plan.carbs, ' g') + row('Fat', g.fat, plan.fat, ' g') +
         '<button type="button" class="btn-primary pn-save" data-action="goals-update">Update my goals</button>' +
         '<button type="button" class="pn-quiet" data-action="goals-keep">Keep my current goals</button></div>');

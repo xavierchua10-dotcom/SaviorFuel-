@@ -135,8 +135,9 @@
     // SaviorFit Logger's custom-exercise option — so a genuinely
     // uncommon or local dish can still be added in one tap even
     // when none of the sources have it.
+    // With real results it sits below them (it used to look like the first result); with none it's the main option.
     var customBtn = exactMatch ? '' :
-      '<button type="button" class="food-suggest-custom" data-action="use-custom-food-name" data-name="' + esc(trimmed) + '">Use \u201c' + esc(trimmed) + '\u201d</button>';
+      '<button type="button" class="food-suggest-custom" data-action="use-custom-food-name" data-name="' + esc(trimmed) + '">' + (products.length ? 'Not listed? Add \u201c' : 'Add \u201c') + esc(trimmed) + (products.length ? '\u201d as your own food' : '\u201d as a custom food') + '</button>';
 
     rowHl = trimmed;
     var rows = products.map(foodRowHtml).join('');
@@ -146,7 +147,7 @@
     if (foodSearch.pending > 0) status = '<div class="food-suggest-status">' + (products.length ? 'Searching more...' : 'Searching...') + '</div>';
     else if (products.length === 0) status = '<div class="food-suggest-status">No matches — add it as a custom food above, or type it in manually.</div>';
 
-    resultsEl.innerHTML = customBtn + rows + status;
+    resultsEl.innerHTML = (products.length ? rows + status + customBtn : customBtn + rows + status);
     ui.lastSearchProducts = products; // stashed so pick-food can look up by index without re-fetching
   }
 

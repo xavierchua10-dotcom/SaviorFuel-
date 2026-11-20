@@ -134,12 +134,13 @@
   function recordWeight(kg){
     if (!STORE.weights || typeof STORE.weights !== 'object') STORE.weights = {};
     STORE.weights[todayKey()] = Math.round(kg * 10) / 10;
+    if (STORE.appSettings) delete STORE.appSettings.weightAssumed;   // a real weight now exists
   }
   // [{ key, kg }] oldest first. With nothing logged yet, the profile weight counts as today's point.
   function weightSeries(){
     var w = STORE.weights || {};
     var keys = Object.keys(w).sort();
-    if (!keys.length) return STORE.profile && STORE.profile.weightKg ? [{ key: todayKey(), kg: STORE.profile.weightKg }] : [];
+    if (!keys.length) return STORE.profile && STORE.profile.weightKg && !(STORE.appSettings && STORE.appSettings.weightAssumed) ? [{ key: todayKey(), kg: STORE.profile.weightKg }] : [];
     return keys.map(function(k){ return { key: k, kg: w[k] }; });
   }
 

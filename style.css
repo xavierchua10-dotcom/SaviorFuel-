@@ -2302,3 +2302,6 @@ body[data-theme="light"] .log-empty button{color:#fff;}
 #confirmOverlay.soft .confirm-icon{background:rgba(166,227,107,.14); color:var(--accent);}
 #confirmOverlay.soft .confirm-yes{background:var(--accent); color:#0b1a10;}
 .pf-stats-note{text-align:center; color:var(--text-faint); font-size:12.5px; margin:10px 0 2px;}
+
+/* v138 */
+.welcome-skip.dim{font-size:12px; opacity:.7;}

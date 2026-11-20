@@ -28,33 +28,37 @@
       heroTitle = overCal ? 'Over goal' : 'Goal reached';
       heroTip = overCal ? 'You are ' + Math.abs(Math.round(left)).toLocaleString() + ' kcal over. A lighter next meal evens it out.' : 'You hit your calories for today. Nice.';
     } else {
-      var nextCat = suggestCategoryForNow();
+      var nextCat = suggestCategoryForNow(), noneAhead = false;
       // If this slot is already covered but the day isn't finished, point at the next meal that still has room
       // (so the card never says "covered" while hundreds of kcal are left).
       if (g.calories > 0){
         var startAt = 0;
         MEAL_CATEGORIES.forEach(function(c, ci){ if (c.id === nextCat) startAt = ci; });
-        for (var si = 0; si < MEAL_CATEGORIES.length; si++){
-          var cand = MEAL_CATEGORIES[(startAt + si) % MEAL_CATEGORIES.length].id;
+        // Only look forward from the current time slot: pointing a 9 pm user back at "Breakfast" made no sense.
+        var found = false;
+        for (var si = startAt; si < MEAL_CATEGORIES.length; si++){
+          var cand = MEAL_CATEGORIES[si].id;
           var ct = mealTarget(cand, 1);
           if (ct.cal <= 0) continue;
           var cg = totalsFor(dayMeals.filter(function(m){ return m.category === cand; }));
-          if (ct.cal - cg.calories > 0){ nextCat = cand; break; }
+          if (ct.cal - cg.calories > 0){ nextCat = cand; found = true; break; }
         }
+        noneAhead = !found;
       }
-      heroLab = 'NEXT UP';
-      heroTitle = CATEGORY_LABELS[nextCat] || 'Next meal';
+      heroLab = noneAhead ? 'ANYTIME' : 'NEXT UP';
+      heroTitle = noneAhead ? Math.round(left).toLocaleString() + ' kcal left' : (CATEGORY_LABELS[nextCat] || 'Next meal');
       var tg = mealTarget(nextCat, 1);
       var got = totalsFor(dayMeals.filter(function(m){ return m.category === nextCat; }));
       var remK = tg.cal - got.calories, remP = tg.p - got.protein;
-      if (g.calories <= 0) heroTip = 'Log what you eat to see how your day adds up.';
+      if (noneAhead) heroTip = 'Add a snack, or log anything you missed earlier today.';
+      else if (g.calories <= 0) heroTip = 'Log what you eat to see how your day adds up.';
       else if (tg.cal <= 0) heroTip = 'No target set for this meal. Change it in My plan.';
       else if (remK <= 0) heroTip = 'You\u2019ve covered your ' + heroTitle.toLowerCase() + ' target.';
       else heroTip = 'Aim for about ' + Math.round(remK / 10) * 10 + ' kcal' + (remP > 0 ? ' and ' + Math.round(remP) + 'g protein' : '') + '.';
     }
     var mc = function(l, v, gl){ return '<span class="mc">' + l + ' <b>' + Math.round(v) + '/' + gl + '</b></span>'; };
 
-    var html = installBannerHtml() +
+    var html = (signinNudgeHtml() || installBannerHtml()) +
       '<div class="log-top">' +
         '<div class="log-greet">' + greet + '</div>' +
         '<h2 class="log-headline"><span class="hl-num' + (overCal ? ' over' : '') + '">' + bigNum + '</span> kcal <em class="' + (overCal ? 'over' : '') + '">' + headWord + '</em></h2>' +

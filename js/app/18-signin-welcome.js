@@ -154,6 +154,16 @@
     }
   });
 
+  /* After the first meal: a small, dismissible card on Log offering to back the log up. Replaces the sign-in wall at first launch. */
+  function signinNudgeHtml(){
+    if (sync.user || !syncEnabled() || STORE.appSettings.signinNudgeDismissed || STORE.meals.length === 0 || !STORE.appSettings.welcomed) return '';
+    return '<div class="install-banner">' +
+      '<div class="install-banner-text"><b>Save your log</b><span>Sign in to back it up and use it on any phone</span></div>' +
+      '<button type="button" class="install-banner-btn" data-action="open-sign-in">Sign in</button>' +
+      '<button type="button" class="install-banner-x" data-action="dismiss-signin-nudge" aria-label="Not now">\u00d7</button>' +
+      '</div>';
+  }
+
   function closeWelcome(){
     var el = document.getElementById('welcomeOverlay');
     if (el) el.remove();
@@ -165,8 +175,8 @@
       STORE.profile = welcome.plan.profile;
       STORE.goals = Object.assign({}, STORE.goals, { calories: welcome.plan.calories, protein: welcome.plan.protein, carbs: welcome.plan.carbs, fat: welcome.plan.fat });
       STORE.lastPlanTdee = Math.round(welcome.plan.tdee);
-      STORE.goalsWeightKg = welcome.plan.profile.weightKg;
-      recordWeight(welcome.plan.profile.weightKg);
+      if (welcome.weightAssumed) STORE.appSettings.weightAssumed = true;   // 70 kg was a placeholder, not their weight
+      else { STORE.goalsWeightKg = welcome.plan.profile.weightKg; recordWeight(welcome.plan.profile.weightKg); }
       STORE.appSettings.unit = welcome.unit;
     }
     saveStore();
@@ -188,6 +198,11 @@
   function welcomeBuildPlan(){
     var imperial = welcome.unit === 'imperial';
     var h = parseFloat(welcome.height), w = parseFloat(welcome.weight), age = parseInt(welcome.age, 10);
+    welcome.assumed = [];
+    if (!(age >= PLAN_LIMITS.age[0] && age <= PLAN_LIMITS.age[1])) welcome.assumed.push('age ' + DEFAULT_PROFILE.age);
+    if (!inRange(imperial ? inToCm(h) : h, PLAN_LIMITS.heightCm)) welcome.assumed.push(imperial ? Math.round(cmToIn(DEFAULT_PROFILE.heightCm)) + ' in' : DEFAULT_PROFILE.heightCm + ' cm');
+    welcome.weightAssumed = !inRange(imperial ? lbToKg(w) : w, PLAN_LIMITS.weightKg);
+    if (welcome.weightAssumed) welcome.assumed.push(imperial ? Math.round(kgToLb(DEFAULT_PROFILE.weightKg)) + ' lb' : DEFAULT_PROFILE.weightKg + ' kg');
     var profile = {
       sex: welcome.sex,
       age: (age >= PLAN_LIMITS.age[0] && age <= PLAN_LIMITS.age[1]) ? age : DEFAULT_PROFILE.age,
@@ -218,7 +233,7 @@
       body = '<img class="welcome-logo" src="images/logo-mark.png" alt="SaviorFuel">' +
         '<h2>Welcome to SaviorFuel</h2>' +
         '<p>Log your meals, see your macros and hit your daily goals. Let’s set your target in 30 seconds.</p>';
-      footer = '<button class="welcome-primary" data-w="next">Get started</button><button class="welcome-skip" data-w="skip">Skip for now</button>';
+      footer = '<button class="welcome-primary" data-w="next">Get started</button>' + (syncEnabled() ? '<button class="welcome-skip" data-w="signin">Already have an account? Sign in</button>' : '') + '<button class="welcome-skip dim" data-w="skip">Skip setup</button>';
     } else if (st === 1){
       body = '<h2>About you</h2><p>Used only to estimate your daily calories. It stays on this device.</p>' +
         '<div class="welcome-field"><label>Units</label><div class="welcome-seg">' +
@@ -252,7 +267,9 @@
           macroTileHtml('Carbs', pl.carbs, pl.carbs, 'carbs').replace(/<span>\/\d+g<\/span>/, '<span>g</span>') +
           macroTileHtml('Fat', pl.fat, pl.fat, 'fat').replace(/<span>\/\d+g<\/span>/, '<span>g</span>') +
         '</div>' +
-        '<p class="welcome-note">An estimate to start from. Adjust any number later in Settings.</p>';
+        '<p class="welcome-note">' + (welcome.assumed && welcome.assumed.length
+          ? 'A rough start: you skipped some details, so we used typical values (' + welcome.assumed.join(', ') + '). Add yours in Profile for a better number.'
+          : 'An estimate to start from. Adjust any number later in Settings.') + '</p>';
       footer = '<button class="welcome-primary" data-w="finish">Start logging</button><button class="welcome-skip" data-w="back">Back</button>';
     }
     el.innerHTML = '<div class="welcome-card">' + dots + '<div class="welcome-body">' + body + '</div><div class="welcome-footer">' + footer + '</div></div>';
@@ -263,6 +280,7 @@
     if (!b || !document.getElementById('welcomeOverlay')) return;
     var w = b.dataset.w;
     welcomeCapture();
+    if (w === 'signin'){ openSignIn(false); return; }
     if (w === 'skip'){ welcomeDone(false); return; }
     if (w === 'finish'){ welcomeDone(true); return; }
     if (w === 'unit'){

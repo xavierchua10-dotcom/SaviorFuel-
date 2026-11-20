@@ -569,6 +569,10 @@
       closeFoodSearchOverlay();
     } else if (action === 'install-app'){
       installApp();
+    } else if (action === 'dismiss-signin-nudge'){
+      STORE.appSettings.signinNudgeDismissed = true;
+      saveStore();
+      renderApp();
     } else if (action === 'dismiss-install'){
       STORE.appSettings.installDismissed = true;
       saveStore();

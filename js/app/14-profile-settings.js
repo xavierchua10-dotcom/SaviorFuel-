@@ -206,7 +206,7 @@
       statT(ps.meals, 'Meals logged', '', '') +
       '<button type="button" class="pf-stat pf-stat-btn" data-action="edit-weight" aria-label="Update weight">' +
         '<span class="pf-stat-pen">' + SET_ICONS.edit + '</span>' +
-        '<div class="pf-stat-v">' + (imperial ? Math.round(kgToLb(p.weightKg)) : p.weightKg) + ' <small>' + (imperial ? 'lb' : 'kg') + '</small></div>' +
+        '<div class="pf-stat-v">' + (STORE.appSettings.weightAssumed ? '\u2013' : (imperial ? Math.round(kgToLb(p.weightKg)) : p.weightKg)) + ' <small>' + (imperial ? 'lb' : 'kg') + '</small></div>' +
         '<div class="pf-stat-l">Weight</div></button>' +
     '</div>';
     var signedIn = !!sync.user;
