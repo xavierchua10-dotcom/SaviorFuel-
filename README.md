@@ -2,7 +2,7 @@
 
 Free food and macro tracker by Savior. Log meals, hit your daily goals, see where your calories come from. Companion to [SaviorFit Logger](https://github.com/xavierchua10-dotcom/IronLedger).
 
-Single-file web app (`index.html`), installable as a PWA. No account, no backend: your log lives on your device.
+Plain HTML, CSS and JavaScript (no build step), installable as a PWA. No account, no backend: your log lives on your device.
 
 ## Features
 
@@ -19,11 +19,13 @@ Single-file web app (`index.html`), installable as a PWA. No account, no backend
 
 | Path | What it is |
 |---|---|
-| `index.html` | The whole app |
+| `index.html`, `style.css` | The page shell and styles |
+| `js/app/*.js` | The app code, 20 plain scripts that share one scope and load in order (state, log, food search, scanner, AI scan, history, insights, settings, sync, sign-in, startup) |
+| `tools/bump.py` | Release bump: `python3 tools/bump.py N` sets the version on every script and the service worker cache |
 | `sw.js`, `manifest.json`, `icons/` | PWA service worker, manifest and icons |
 | `models/` | GLB models for the Insights tab |
 | `images/` | Background and guide illustrations |
-| `ai-proxy/` | Optional proxy for a Gemini photo scan (Cloudflare Worker or Netlify). Built and tested, not switched on yet: `AI_SCAN_URL` in `index.html` is empty. See [`ai-proxy/README.md`](ai-proxy/README.md) |
+| `ai-proxy/` | Optional proxy for a Gemini photo scan (Cloudflare Worker or Netlify). Built and tested, not switched on yet: `AI_SCAN_URL` in `js/app/09-ai-scan.js` is empty. See [`ai-proxy/README.md`](ai-proxy/README.md) |
 
 ## Run it
 
