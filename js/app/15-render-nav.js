@@ -460,6 +460,8 @@
       shareWeek();
     } else if (action === 'edit-profile-name'){
       editProfileName();
+    } else if (action === 'edit-weight'){
+      editWeight();
     } else if (action === 'open-quick-add'){
       openFoodSheet('quick');
     } else if (action === 'open-my-food'){

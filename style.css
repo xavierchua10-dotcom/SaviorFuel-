@@ -2232,3 +2232,10 @@ body[data-theme="light"] .log-empty button{color:#fff;}
 .meal-badge.emo{font-size:22px; line-height:1;}
 #view .mr-w .meal-badge.ico{background:transparent;}
 .meal-badge.ico img{width:100%; height:100%; object-fit:contain; display:block;}
+
+/* v134: Profile quick stats strip (weight tile is a button) */
+.pf-strip{margin:12px 0 12px;}
+.pf-stat-btn{position:relative;text-align:left;font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.pf-stat-btn:active{transform:scale(.97);}
+.pf-stat-pen{position:absolute;top:8px;right:8px;width:14px;height:14px;color:var(--accent);opacity:.9;}
+.pf-stat-pen svg{width:14px;height:14px;display:block;}

@@ -27,6 +27,25 @@
              avg: avgN ? Math.round(avgSum / avgN) : 0, top: top, since: since };
   }
 
+  // Tap the weight tile on Profile: update bodyweight in one step (daily goals only change if you press Set my daily goals).
+  function editWeight(){
+    var imperial = STORE.appSettings.unit === 'imperial';
+    var cur = imperial ? Math.round(kgToLb(STORE.profile.weightKg)) : STORE.profile.weightKg;
+    var v = window.prompt('Your weight (' + (imperial ? 'lb' : 'kg') + ')', cur);
+    if (v === null) return;
+    var n = parseFloat(String(v).replace(',', '.'));
+    var kg = imperial ? lbToKg(n) : n;
+    var L = PLAN_LIMITS.weightKg;
+    if (!(kg >= L[0] && kg <= L[1])){
+      showToast('Weight should be between ' + (imperial ? Math.ceil(kgToLb(L[0])) + ' and ' + Math.floor(kgToLb(L[1])) + ' lb' : L[0] + ' and ' + L[1] + ' kg') + '.');
+      return;
+    }
+    STORE.profile.weightKg = Math.round(kg * 10) / 10;
+    saveStore();
+    renderApp();
+    showToast('Weight saved');
+  }
+
   function editProfileName(){
     var cur = (STORE.appSettings.name || '').trim();
     var v = window.prompt('Your name', cur);
@@ -203,6 +222,15 @@
         '<div class="pf-since">' + (ps.since ? 'Logging since <b>' + esc(ps.since) + '</b>' : 'Ready to log your first meal') + '</div></div></div>' +
       '<div class="pf-acts"><button type="button" class="pf-share" data-action="share-profile">Share profile</button>' +
         '<button type="button" class="pf-edit" data-action="edit-profile-name" aria-label="Edit name">' + SET_ICONS.edit + '</button></div>' +
+    '</div>';
+    // ---- quick stats + weight shortcut (tap weight to update it without opening My Plan)
+    html += '<div class="pf-stats three pf-strip">' +
+      statT(ps.streak, 'Day streak', '', 'accent') +
+      statT(ps.meals, 'Meals logged', '', '') +
+      '<button type="button" class="pf-stat pf-stat-btn" data-action="edit-weight" aria-label="Update weight">' +
+        '<span class="pf-stat-pen">' + SET_ICONS.edit + '</span>' +
+        '<div class="pf-stat-v">' + (imperial ? Math.round(kgToLb(p.weightKg)) : p.weightKg) + ' <small>' + (imperial ? 'lb' : 'kg') + '</small></div>' +
+        '<div class="pf-stat-l">Weight</div></button>' +
     '</div>';
     var signedIn = !!sync.user;
     html += '<button type="button" class="pf-account" data-action="' + (signedIn ? 'open-account' : 'open-sign-in') + '">' +
