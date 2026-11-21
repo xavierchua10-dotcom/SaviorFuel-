@@ -2310,3 +2310,13 @@ body[data-theme="light"] .log-empty button{color:#fff;}
 .add-to-cat{display:flex; align-items:center; gap:8px; width:100%; margin:2px 0 6px; padding:10px 14px; border:none; background:none; color:var(--accent); font:600 13.5px 'Inter',sans-serif; cursor:pointer; text-align:left;}
 .add-to-cat span{font-size:18px; line-height:1; font-weight:700;}
 .add-to-cat:active{opacity:.6;}
+
+/* v140: "Adding to <meal>" banner on the Add page */
+.meal-banner{display:flex; align-items:center; gap:12px; width:100%; margin:2px 0 4px; padding:12px 14px; border:0; border-radius:18px; text-align:left; cursor:pointer;
+  background:linear-gradient(135deg,#2f8a2f,#1f6b2a); color:#fff; box-shadow:0 6px 16px rgba(31,107,42,.28); -webkit-tap-highlight-color:transparent;}
+.meal-banner:active{transform:scale(.985);}
+.mb-ic{flex:none; width:44px; height:44px; border-radius:14px; background:rgba(255,255,255,.2); display:grid; place-items:center; font-size:24px;}
+.mb-tx{flex:1; min-width:0;}
+.mb-tx small{display:block; font:600 11px 'Oswald',sans-serif; letter-spacing:.14em; text-transform:uppercase; opacity:.85;}
+.mb-tx b{display:block; font:700 24px/1.15 'Oswald',sans-serif; letter-spacing:.02em; text-transform:uppercase;}
+.mb-chg{flex:none; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.35); font:700 12px 'Inter',sans-serif;}

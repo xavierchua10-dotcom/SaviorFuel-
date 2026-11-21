@@ -29,6 +29,7 @@
     { id: 'evening-snack', label: 'Evening Snacks' },
     { id: 'dinner', label: 'Dinner' }
   ];
+  var CATEGORY_EMOJI = { 'breakfast': '\ud83c\udf73', 'morning-snack': '\ud83c\udf4e', 'lunch': '\ud83c\udf71', 'evening-snack': '\u2615', 'dinner': '\ud83c\udf5b' };
   var CATEGORY_LABELS = MEAL_CATEGORIES.reduce(function(acc, c){ acc[c.id] = c.label; return acc; }, {});
 
   // Sensible default for whichever category button is pre-selected

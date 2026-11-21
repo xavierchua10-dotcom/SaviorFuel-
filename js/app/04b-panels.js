@@ -54,6 +54,19 @@
     openPanel(PANEL_TITLES[selId] || 'Choose', '<div class="pn-list">' + rows + '</div>');
   }
 
+  // "Adding to <meal>" banner on the Add page: pick which meal the next food goes to.
+  function openMealPickerPanel(){
+    PN.kind = 'meal';
+    var cur = addCategoryNow();
+    var rows = MEAL_CATEGORIES.map(function(c){
+      var on = c.id === cur;
+      return '<button type="button" class="pn-opt' + (on ? ' on' : '') + '" data-action="pick-add-meal" data-category="' + c.id + '">' +
+        '<span class="pn-opt-tx"><b>' + (CATEGORY_EMOJI[c.id] || '') + '&nbsp; ' + esc(c.label) + '</b></span>' +
+        '<span class="pn-radio">' + (on ? '\u2713' : '') + '</span></button>';
+    }).join('');
+    openPanel('Add food to', '<div class="pn-list">' + rows + '</div>');
+  }
+
   function chooseOption(value){
     var sel = PN.sel; if (!sel) return;
     var opt = Array.prototype.filter.call(sel.options, function(o){ return o.value === value; })[0];
@@ -215,6 +228,8 @@
     if (a === 'close-panel') closePanel();
     else if (a === 'pick-option') openOptionPanel(el.getAttribute('data-for'), el);
     else if (a === 'panel-opt') chooseOption(el.getAttribute('data-v'));
+    else if (a === 'change-add-meal') openMealPickerPanel();
+    else if (a === 'pick-add-meal'){ ui.addCategory = el.getAttribute('data-category'); closePanel(); renderApp(); }
     else if (a === 'panel-unit') pnSetUnit(el.getAttribute('data-u'));
     else if (a === 'goals-update') applyGoalsPrompt();
     else if (a === 'goals-keep') keepGoalsPrompt();
