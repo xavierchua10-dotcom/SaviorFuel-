@@ -293,7 +293,16 @@
     aiUpdateRowNumbers(i);
     renderAiScanTotal();
   }
+  // Scanned meals use the AI's own estimate. Flip this to true to look each item up in USDA / Open Food Facts again
+  // (you can still tap "AI estimate" on any item to pick a database match yourself).
+  var AI_AUTO_MATCH = false;
   function startAiMatching(){
+    if (!AI_AUTO_MATCH){
+      aiScan.items.forEach(function(it, i){
+        if (it.state === 'pending'){ it.state = 'estimate'; it.match = null; it.cands = it.cands || []; aiRefreshItem(i); }
+      });
+      return;
+    }
     var token = aiScan.token = (aiScan.token || 0) + 1;
     if (aiScan.abort){ try { aiScan.abort.abort(); } catch (e){} }
     var ctrl = aiScan.abort = new AbortController();
