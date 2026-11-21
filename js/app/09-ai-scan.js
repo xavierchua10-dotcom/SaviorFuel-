@@ -245,12 +245,19 @@
     out.sort(function(a, b){ return b.score - a.score; });
     return out.slice(0, 4).map(function(x){ return x.p; });
   }
+  // A database food is only trusted when it looks like what the AI saw: similar calories per
+  // 100 g AND a similar protein / carbs / fat profile. (A packaged "Fire grilled steak" meal with
+  // rice or sauce has the right calories but 20 g of carbs per 100 g, so plain steak must not use it.)
   function aiSane(it, p){
-    var ai100 = it.ai && it.ai.grams > 0 ? it.ai.calories / it.ai.grams * 100 : 0;
-    var c100 = aiPer100(p).calories;
-    if (!(ai100 > 0)) return c100 > 0;
-    var r = c100 / ai100;
-    return r >= 0.5 && r <= 2;
+    var per = aiPer100(p);
+    var g = it.ai && it.ai.grams > 0 ? it.ai.grams : 0;
+    var ai100 = g ? it.ai.calories / g * 100 : 0;
+    if (!(ai100 > 0)) return per.calories > 0;
+    var r = per.calories / ai100;
+    if (r < 0.6 || r > 1.7) return false;
+    var near = function(db, ai, floor, rel){ return Math.abs(db - ai) <= Math.max(floor, rel * ai); };
+    var aiP = (Number(it.ai.protein) || 0) / g * 100, aiC = (Number(it.ai.carbs) || 0) / g * 100, aiF = (Number(it.ai.fat) || 0) / g * 100;
+    return near(per.protein, aiP, 8, 0.5) && near(per.carbs, aiC, 8, 0.5) && near(per.fat, aiF, 6, 0.6);
   }
   function aiApplyMatch(it, p){
     var per = aiPer100(p), g = it.grams > 0 ? it.grams : (it.ai ? it.ai.grams : 100), f = g / 100;
